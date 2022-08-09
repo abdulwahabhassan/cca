@@ -2,12 +2,29 @@ package com.smartflowtech.cupidcustomerapp.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.smartflowtech.cupidcustomerapp.R
+
+val AthleticsFontFamily = FontFamily(
+    Font(R.font.athletics_regular),
+    Font(R.font.athletics_regular_italic),
+    Font(R.font.athletics_medium),
+    Font(R.font.athletics_medium_italic),
+    Font(R.font.athletics_bold),
+    Font(R.font.athletics_bold_italic),
+    Font(R.font.athletics_extra_bold),
+    Font(R.font.athletics_extrabold_italic),
+    Font(R.font.athletics_black),
+    Font(R.font.athletics_black_italic),
+
+    )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+    defaultFontFamily = AthleticsFontFamily,
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
