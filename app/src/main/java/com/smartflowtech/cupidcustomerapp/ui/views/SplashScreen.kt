@@ -11,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
+fun SplashScreen(goToHomeScreen: () -> Unit, goToGetStartedScreen: () -> Unit, goToLoginScreen: () -> Unit,) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,10 +39,15 @@ fun SplashScreen(navController: NavHostController) {
 
         LaunchedEffect(key1 = Unit) {
             delay(2000)
-            navController.navigate(
-                Screen.Home.route,
-                NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
-            )
+            goToGetStartedScreen()
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFF1B6A)
+@Composable
+fun SplashScreenPreview() {
+    CupidCustomerAppTheme {
+        SplashScreen({}, {}, {})
     }
 }

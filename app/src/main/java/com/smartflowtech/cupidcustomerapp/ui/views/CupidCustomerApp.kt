@@ -8,29 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun CupidCustomerApp() {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Splash.route
-    ) {
-        composable(route = Screen.Splash.route) {
-            SplashScreen(navController = navController)
-        }
-        composable(route = Screen.Home.route) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Hello World", color = Color.White)
-            }
-        }
-    }
+    CupidCustomerAppNavigation(navController = rememberNavController())
 }
