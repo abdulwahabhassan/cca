@@ -105,6 +105,12 @@ fun LoginScreen(goToHomeScreen: () -> Unit, goToForgotPasswordScreen: () -> Unit
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = "Login")
             }
+            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(
+                Modifier
+                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                    .fillMaxWidth()
+            )
         }
     }
 }

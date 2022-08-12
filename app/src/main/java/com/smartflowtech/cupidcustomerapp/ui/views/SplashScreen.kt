@@ -41,6 +41,11 @@ fun SplashScreen(goToHomeScreen: () -> Unit, goToGetStartedScreen: () -> Unit, g
             delay(2000)
             goToGetStartedScreen()
         }
+        Spacer(
+            Modifier
+                .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                .fillMaxWidth()
+        )
     }
 }
 

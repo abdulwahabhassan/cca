@@ -50,10 +50,13 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
             ) {
                 Text(text = "Get Started")
             }
-            Spacer(modifier = Modifier.height(40.dp))
         }
-
-
+        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(
+            Modifier
+                .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                .fillMaxWidth()
+        )
     }
 }
 

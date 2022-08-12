@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import com.google.accompanist.insets.navigationBarsHeight
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
@@ -43,17 +44,22 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(40.dp))
             Button(
-                modifier = Modifier.fillMaxWidth().height(54.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
                 onClick = { goToGetStartedSecondScreen() },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(text = "Get Started")
             }
-            Spacer(modifier = Modifier.height(40.dp))
         }
-
-
+        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(
+            Modifier
+                .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                .fillMaxWidth()
+        )
     }
 }
 
