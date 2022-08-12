@@ -36,7 +36,7 @@ fun GradientButton(
                 .then(modifier),
             contentAlignment = Alignment.Center,
         ) {
-            Text(text = text, color = Color.White, fontSize = 12.sp)
+            Text(text = text, color = Color.White)
         }
     }
 }
