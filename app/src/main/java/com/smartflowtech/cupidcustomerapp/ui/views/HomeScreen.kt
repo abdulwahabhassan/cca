@@ -8,19 +8,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.material.icons.sharp.Visibility
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -28,91 +24,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class, ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(goTo: () -> Unit) {
+fun HomeScreen(
+    navHostController: NavHostController,
+    goTo: () -> Unit,
+    isNavDestinationSelected: (String) -> Boolean,
+    onBottomNavItemClicked: (String) -> Unit
+) {
 
+    val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+        bottomSheetState = bottomSheetState
     )
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
-    val navPaddingValues = WindowInsets.navigationBars.asPaddingValues()
 
     Scaffold(
         bottomBar = {
-            BottomAppBar(
-                backgroundColor = Color.White,
-                modifier = Modifier.padding(navPaddingValues)
-            ) {
-                BottomNavigationItem(
-                    selected = true,
-                    label = { Text(text = "Home") },
-                    alwaysShowLabel = true,
-                    onClick = {
+            CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                HomeBottomAppBar(
+                    isSelected = isNavDestinationSelected,
+                    onClicked = onBottomNavItemClicked.also { route ->
                         coroutineScope.launch {
-                            if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+                            if (navHostController.currentDestination?.route == HomeScreen.Home.route) {
                                 bottomSheetScaffoldState.bottomSheetState.collapse()
-                            }
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_home),
-                            contentDescription = "Home icon"
-                        )
-                    })
-                BottomNavigationItem(
-                    selected = false,
-                    label = { Text(text = "Transactions") },
-                    alwaysShowLabel = true,
-                    onClick = {
-                        coroutineScope.launch {
-                            if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                            } else {
                                 bottomSheetScaffoldState.bottomSheetState.expand()
                             }
                         }
-                    },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_receipt),
-                            contentDescription = "Receipt icon"
-                        )
-                    })
-                BottomNavigationItem(
-                    selected = false,
-                    label = { Text(text = "Location") },
-                    alwaysShowLabel = true,
-                    onClick = { },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_location),
-                            contentDescription = "Location icon"
-                        )
-                    })
-
-                BottomNavigationItem(
-                    selected = false,
-                    label = { Text(text = "Settings") },
-                    alwaysShowLabel = true,
-                    onClick = { },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_settings),
-                            contentDescription = "Settings icon"
-                        )
-                    })
+                    }
+                )
             }
         }
     ) { paddingValues: PaddingValues ->
@@ -130,12 +80,13 @@ fun HomeScreen(goTo: () -> Unit) {
                         .windowInsetsTopHeight(WindowInsets.statusBars)
                         .fillMaxWidth()
                 )
-
                 Column(
-                    Modifier.background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-                    )
+                    Modifier
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                        )
+                        .fillMaxWidth()
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Icon(
@@ -146,33 +97,7 @@ fun HomeScreen(goTo: () -> Unit) {
                         contentDescription = "Bottom sheet handle",
                         tint = Color.Unspecified
                     )
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .padding(horizontal = 16.dp, vertical = 24.dp),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(text = "Transactions History", color = Color.Black)
-                        //No transaction history column
-                        Column(
-                            Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.5f),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                modifier = Modifier
-                                    .size(80.dp),
-                                painter = painterResource(id = R.drawable.ic_no_transactions),
-                                contentDescription = "Bottom sheet handle",
-                                tint = Color.Unspecified
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(text = "You have no transaction history yet", color = Color.Black)
-                        }
-                    }
+                    HomeScreenBottomNavBarNavigation(bottomNavHostController = navHostController)
                 }
             }) { paddingValues ->
             Column(
@@ -335,6 +260,6 @@ fun HomeScreen(goTo: () -> Unit) {
 @Composable
 fun HomeScreenPreview() {
     CupidCustomerAppTheme {
-        HomeScreen({})
+        //HomeScreen({}, {}, { true }, {})
     }
 }
