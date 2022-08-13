@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 fun CupidCustomerAppNavigation(navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.Home.route
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(goToHomeScreen = {

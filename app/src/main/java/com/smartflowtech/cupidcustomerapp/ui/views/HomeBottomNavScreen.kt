@@ -20,25 +20,8 @@ fun Home() {
             .padding(horizontal = 16.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        Text(text = "Home", color = Color.Black)
-        //No transaction history column
-//        Column(
-//            Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight(0.5f),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Icon(
-//                modifier = Modifier
-//                    .size(80.dp),
-//                painter = painterResource(id = R.drawable.ic_no_transactions),
-//                contentDescription = "Bottom sheet handle",
-//                tint = Color.Unspecified
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
-//            Text(text = "You have no transaction history yet", color = Color.Black)
-//        }
+        Text(text = "Transaction History", color = Color.Black)
+
     }
 }
 
