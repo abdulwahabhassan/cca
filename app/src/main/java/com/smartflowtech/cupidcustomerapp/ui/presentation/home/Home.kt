@@ -36,7 +36,7 @@ fun Home(goToTransactions: () -> Unit) {
             itemSpacing = 20.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, bottom = 32.dp)
+                .padding(bottom = 32.dp)
         ) { page: Int ->
             AdsCard(page)
         }

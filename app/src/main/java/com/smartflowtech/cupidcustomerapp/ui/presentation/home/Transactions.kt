@@ -54,7 +54,7 @@ fun Transactions() {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(count = 9) {
+            items(count = 19) {
                 Transaction("Completed", "11:24PM", "Transaction", "₦167,000.00")
             }
         }

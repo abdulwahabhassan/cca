@@ -10,13 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import com.smartflowtech.cupidcustomerapp.ui.presentation.*
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.*
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
 
 @Composable
 fun CupidCustomerAppNavigation(navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.GetStartedSecond.route
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(goToHomeScreen = {

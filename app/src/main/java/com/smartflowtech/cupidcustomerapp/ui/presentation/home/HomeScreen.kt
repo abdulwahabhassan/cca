@@ -97,7 +97,8 @@ fun HomeScreen(
                     Icon(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .width(40.dp),
+                            .width(40.dp)
+                            .padding(bottom = 24.dp),
                         painter = painterResource(id = R.drawable.ic_bottom_sheet_handle_inactive),
                         contentDescription = "Bottom sheet handle",
                         tint = Color.Unspecified
