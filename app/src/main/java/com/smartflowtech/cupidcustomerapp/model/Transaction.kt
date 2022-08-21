@@ -1,8 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.model
 
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Transactions
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transaction
-
 data class Transaction(
     val status: String,
     val time: String,

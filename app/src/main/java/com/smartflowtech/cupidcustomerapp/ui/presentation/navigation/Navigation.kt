@@ -12,6 +12,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
 @Composable
 fun CupidCustomerAppNavigation(navHostController: NavHostController) {
