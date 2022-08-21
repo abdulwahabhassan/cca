@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -9,18 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeBottomAppBar(isSelected : (String) -> Boolean, onClicked: (String) -> Unit) {
 
     val items = listOf(
-        HomeScreen.Home,
-        HomeScreen.Transactions,
-        HomeScreen.Location,
-        HomeScreen.Settings,
+        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home,
+        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Transactions,
+        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location,
+        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings,
     )
     val navPaddingValues = WindowInsets.navigationBars.asPaddingValues()
 

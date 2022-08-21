@@ -1,28 +1,22 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
-import com.google.accompanist.insets.navigationBarsHeight
-import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
-import kotlinx.coroutines.delay
 
 @Composable
-fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
+fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,7 +26,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
     ) {
         Column(Modifier.padding(horizontal = 16.dp)) {
             Text(
-                text = "Payments made easy",
+                text = "Second start screen",
                 color = Color.White,
                 style = MaterialTheme.typography.h6
             )
@@ -44,10 +38,8 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(40.dp))
             Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                onClick = { goToGetStartedSecondScreen() },
+                modifier = Modifier.fillMaxWidth().height(54.dp),
+                onClick = { goToLoginScreen() },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
@@ -65,8 +57,8 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
 
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFF1B6A)
 @Composable
-fun GetStartedFirstScreenPreview() {
+fun GetStartedSecondScreenPreview() {
     CupidCustomerAppTheme {
-        GetStartedFirstScreen({})
+        GetStartedSecondScreen ({})
     }
 }

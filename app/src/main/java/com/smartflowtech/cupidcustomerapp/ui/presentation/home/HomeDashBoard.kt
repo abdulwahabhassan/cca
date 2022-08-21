@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
@@ -26,6 +26,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.*
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -136,7 +138,7 @@ fun HomeDashBoard(
                         targetOffsetY = { screenHeight }) + shrinkVertically() + fadeOut()
                 ) {
 
-                    if (currentBottomNavDestinationTitle != HomeScreen.Home.title) {
+                    if (currentBottomNavDestinationTitle != Home.title) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Row(
                             modifier = Modifier
@@ -158,7 +160,7 @@ fun HomeDashBoard(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
-                            if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
+                            if (currentBottomNavDestinationTitle == Transactions.title) {
                                 IconButton(onClick = { }) {
                                     Icon(
                                         imageVector = Icons.Rounded.FilterList,

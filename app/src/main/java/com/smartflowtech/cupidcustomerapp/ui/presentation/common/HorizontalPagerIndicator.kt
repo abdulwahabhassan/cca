@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,11 +7,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.ui.theme.indicatorGreyActive
 import com.smartflowtech.cupidcustomerapp.ui.theme.indicatorGreyInactive
-import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 
 @Composable
 fun HorizontalPagerIndicator(

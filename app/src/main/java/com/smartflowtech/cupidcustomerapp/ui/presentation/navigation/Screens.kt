@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import com.smartflowtech.cupidcustomerapp.R
 

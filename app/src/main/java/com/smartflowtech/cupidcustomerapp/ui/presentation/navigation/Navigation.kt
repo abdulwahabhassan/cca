@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -7,6 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.smartflowtech.cupidcustomerapp.ui.presentation.*
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.*
+import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
 
 @Composable
 fun CupidCustomerAppNavigation(navHostController: NavHostController) {
@@ -85,7 +89,18 @@ fun CupidCustomerAppNavigation(navHostController: NavHostController) {
 fun HomeScreenBottomNavBarNavigation(bottomNavHostController: NavHostController) {
     NavHost(bottomNavHostController, startDestination = HomeScreen.Home.route) {
         composable(HomeScreen.Home.route) {
-            Home()
+            Home(goToTransactions = {
+                bottomNavHostController.navigate(HomeScreen.Transactions.route) {
+                    bottomNavHostController.graph.startDestinationRoute
+                        ?.let { startDestinationRoute ->
+                            popUpTo(startDestinationRoute) {
+                                saveState = true
+                            }
+                        }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            })
         }
         composable(HomeScreen.Transactions.route) {
             Transactions()

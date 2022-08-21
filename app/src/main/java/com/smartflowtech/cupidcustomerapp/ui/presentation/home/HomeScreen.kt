@@ -1,6 +1,5 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,13 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenBottomNavBarNavigation
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
@@ -35,7 +34,7 @@ fun HomeScreen(
         bottomSheetState = bottomSheetState
     )
     val coroutineScope = rememberCoroutineScope()
-    var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(HomeScreen.Home.title) }
+    var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.title) }
 
     Scaffold(
         bottomBar = {
@@ -44,21 +43,21 @@ fun HomeScreen(
                     isSelected = isNavDestinationSelected,
                     onClicked = onBottomNavItemClicked.also { route ->
                         when (navHostController.currentDestination?.route) {
-                            HomeScreen.Home.route -> {
-                                currentBottomNavDestinationTitle = HomeScreen.Home.title
+                            com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.route -> {
+                                currentBottomNavDestinationTitle = com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.title
                             }
-                            HomeScreen.Transactions.route -> {
-                                currentBottomNavDestinationTitle = HomeScreen.Transactions.title
+                            com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Transactions.route -> {
+                                currentBottomNavDestinationTitle = com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Transactions.title
                             }
-                            HomeScreen.Location.route -> {
-                                currentBottomNavDestinationTitle = HomeScreen.Location.title
+                            com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location.route -> {
+                                currentBottomNavDestinationTitle = com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location.title
                             }
-                            HomeScreen.Settings.route -> {
-                                currentBottomNavDestinationTitle = HomeScreen.Settings.title
+                            com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings.route -> {
+                                currentBottomNavDestinationTitle = com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings.title
                             }
                         }
                         coroutineScope.launch {
-                            if (navHostController.currentDestination?.route == HomeScreen.Home.route) {
+                            if (navHostController.currentDestination?.route == com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.route) {
                                 bottomSheetScaffoldState.bottomSheetState.collapse()
                             } else {
                                 bottomSheetScaffoldState.bottomSheetState.expand()
@@ -76,7 +75,6 @@ fun HomeScreen(
             sheetElevation = 0.dp,
             sheetBackgroundColor = Color.Transparent,
             sheetPeekHeight = LocalConfiguration.current.screenHeightDp.dp * 0.60f,
-            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             sheetContent = {
                 Spacer(
                     modifier = Modifier
@@ -91,7 +89,7 @@ fun HomeScreen(
                     Modifier
                         .background(
                             color = Color.White,
-                            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                         )
                         .fillMaxWidth()
                 ) {

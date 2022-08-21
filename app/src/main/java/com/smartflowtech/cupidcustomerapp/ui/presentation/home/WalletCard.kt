@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +13,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.ui.theme.blue
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.GradientButton
+import com.smartflowtech.cupidcustomerapp.ui.theme.brightBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.gradientBluePurple
 import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.theme.skyBlue
@@ -53,7 +54,8 @@ fun WalletCard() {
                         Row {
                             Text(
                                 text = "Wallet Balance",
-                                color = Color.Black
+                                color = Color.Black,
+                                fontSize = 14.sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Icon(
@@ -93,7 +95,7 @@ fun WalletCard() {
                     Text(
                         text = "Loyalty Points: 406",
                         fontSize = 12.sp,
-                        color = blue
+                        color = brightBlue
                     )
                 }
 

@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.views
+package com.smartflowtech.cupidcustomerapp.ui.presentation.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

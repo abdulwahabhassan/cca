@@ -10,8 +10,8 @@ import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 
 val AthleticsFontFamily = FontFamily(
-//    Font(R.font.athletics_regular),
-//    Font(R.font.athletics_regular_italic),
+    Font(R.font.athletics_regular),
+    Font(R.font.athletics_regular_italic),
     Font(R.font.athletics_medium),
     Font(R.font.athletics_medium_italic),
     Font(R.font.athletics_bold),
