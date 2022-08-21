@@ -1,29 +1,50 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation
+package com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
+import com.smartflowtech.cupidcustomerapp.ui.theme.gradientWhiteBlue
 
 @Composable
 fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.primary),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.Start
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter,
     ) {
-        Column(Modifier.padding(horizontal = 16.dp)) {
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    color = darkBlue
+                )
+        ) {
+
+        }
+
+        Column(
+            Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.Bottom,
+        ) {
             Text(
-                text = "Payments made easy",
+                text = "Second start screen",
                 color = Color.White,
                 style = MaterialTheme.typography.h6
             )
@@ -38,19 +59,19 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
-                onClick = { goToGetStartedSecondScreen() },
+                onClick = { goToGetStartedSecondScreen },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(text = "Get Started")
             }
+            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(
+                Modifier
+                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                    .fillMaxWidth()
+            )
         }
-        Spacer(modifier = Modifier.height(40.dp))
-        Spacer(
-            Modifier
-                .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                .fillMaxWidth()
-        )
     }
 }
 

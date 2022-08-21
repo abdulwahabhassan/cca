@@ -27,69 +27,62 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.gradientWhiteBlue
 @Composable
 fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter,
     ) {
-
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(id = R.drawable.img_person_6),
+            contentDescription = "background",
+            contentScale = ContentScale.FillWidth
+        )
         Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter,
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.img_person_6),
-                contentDescription = "background",
-                contentScale = ContentScale.FillWidth
-            )
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            gradientWhiteBlue,
-                            endY = LocalConfiguration.current.screenHeightDp.toFloat() / 0.45f
-                        )
+                .matchParentSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        gradientWhiteBlue,
+                        endY = LocalConfiguration.current.screenHeightDp.toFloat() / 0.45f
                     )
+                )
+        )
+
+        Column(
+            Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.Bottom,
+        ) {
+            Text(
+                text = "Second start screen",
+                color = Color.White,
+                style = MaterialTheme.typography.h6
             )
-
-            Column(
-                Modifier.padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.Bottom,
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Enjoy seamless payments with all from a single mobile app",
+                color = Color.White,
+                style = MaterialTheme.typography.body1,
+            )
+            Spacer(modifier = Modifier.height(40.dp))
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
+                onClick = { goToLoginScreen() },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
-                Text(
-                    text = "Second start screen",
-                    color = Color.White,
-                    style = MaterialTheme.typography.h6
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Enjoy seamless payments with all from a single mobile app",
-                    color = Color.White,
-                    style = MaterialTheme.typography.body1,
-                )
-                Spacer(modifier = Modifier.height(40.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(54.dp),
-                    onClick = { goToLoginScreen() },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-                ) {
-                    Text(text = "Get Started")
-                }
-                Spacer(modifier = Modifier.height(40.dp))
-                Spacer(
-                    Modifier
-                        .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                        .fillMaxWidth()
-                )
+                Text(text = "Get Started")
             }
+            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(
+                Modifier
+                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                    .fillMaxWidth()
+            )
         }
-
     }
 }
 
