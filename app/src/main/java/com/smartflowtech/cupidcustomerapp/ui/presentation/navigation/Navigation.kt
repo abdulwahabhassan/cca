@@ -1,24 +1,46 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
+import android.util.Log
+import androidx.compose.animation.*
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.SnapSpec
+import androidx.compose.animation.core.snap
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.*
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Location
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CupidCustomerAppNavigation(navHostController: NavHostController) {
-    NavHost(
+    AnimatedNavHost(
         navController = navHostController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Splash.route,
+        enterTransition = {
+            slideInHorizontally { it }
+        },
+        exitTransition = {
+            slideOutHorizontally { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally { it }
+        }
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(goToHomeScreen = {
@@ -61,7 +83,7 @@ fun CupidCustomerAppNavigation(navHostController: NavHostController) {
         }
 
         composable(route = Screen.Home.route) {
-            val bottomNavHostController = rememberNavController()
+            val bottomNavHostController = rememberAnimatedNavController()
             val currentRoute =
                 bottomNavHostController.currentBackStackEntryAsState().value?.destination?.route
             HomeScreen(
@@ -70,7 +92,12 @@ fun CupidCustomerAppNavigation(navHostController: NavHostController) {
                 isNavDestinationSelected = { route ->
                     currentRoute == route
                 },
+                onBackPressed = {
+                    Log.d("Pri", "Pressed")
+                    bottomNavHostController.navigate(Screen.Home.route)
+                },
                 onBottomNavItemClicked = { route ->
+                    Log.d("Pri", "Pressed")
                     bottomNavHostController.navigate(route) {
                         bottomNavHostController.graph.startDestinationRoute
                             ?.let { startDestinationRoute ->
@@ -81,15 +108,41 @@ fun CupidCustomerAppNavigation(navHostController: NavHostController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                })
+                }
+            )
         }
     }
 
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeScreenBottomNavBarNavigation(bottomNavHostController: NavHostController) {
-    NavHost(bottomNavHostController, startDestination = HomeScreen.Home.route) {
+    AnimatedNavHost(bottomNavHostController,
+        startDestination = HomeScreen.Home.route,
+        enterTransition = {
+            if (targetState.destination.route == HomeScreen.Transactions.route) {
+                slideInVertically { it }
+            } else {
+                slideInHorizontally { it }
+            }
+        },
+        exitTransition = {
+            if (initialState.destination.route == HomeScreen.Home.route ||
+                targetState.destination.route == HomeScreen.Transactions.route
+            ) {
+                fadeOut(animationSpec = snap())
+            } else {
+                slideOutHorizontally { -it }
+            }
+        },
+        popEnterTransition = {
+            slideInHorizontally { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally { it }
+        }
+    ) {
         composable(HomeScreen.Home.route) {
             Home(goToTransactions = {
                 bottomNavHostController.navigate(HomeScreen.Transactions.route) {

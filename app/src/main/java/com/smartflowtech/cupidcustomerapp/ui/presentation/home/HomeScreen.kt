@@ -26,7 +26,8 @@ fun HomeScreen(
     navHostController: NavHostController,
     goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
-    onBottomNavItemClicked: (String) -> Unit
+    onBackPressed: () -> Unit,
+    onBottomNavItemClicked: (String) -> Unit,
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -107,7 +108,7 @@ fun HomeScreen(
                 }
             }) { paddingValues ->
 
-            HomeDashBoard(bottomSheetState = bottomSheetState, currentBottomNavDestinationTitle)
+            HomeDashBoard(bottomSheetState = bottomSheetState, currentBottomNavDestinationTitle, onBackPressed)
 
         }
 

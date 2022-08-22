@@ -103,7 +103,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
-                onClick = { goToGetStartedSecondScreen },
+                onClick = { goToGetStartedSecondScreen() },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {

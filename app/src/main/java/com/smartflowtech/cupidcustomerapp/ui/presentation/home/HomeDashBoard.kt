@@ -33,7 +33,8 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPager
 @Composable
 fun HomeDashBoard(
     bottomSheetState: BottomSheetState,
-    currentBottomNavDestinationTitle: String
+    currentBottomNavDestinationTitle: String,
+    onBackArrowPressed: () -> Unit
 ) {
     val pagerState = rememberPagerState()
     var visible by remember { mutableStateOf(true) }
@@ -147,7 +148,7 @@ fun HomeDashBoard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            IconButton(onClick = { }) {
+                            IconButton(onClick = onBackArrowPressed ) {
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowBack,
                                     contentDescription = "Back arrow",
