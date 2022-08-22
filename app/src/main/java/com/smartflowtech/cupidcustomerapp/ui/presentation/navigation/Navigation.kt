@@ -94,10 +94,9 @@ fun CupidCustomerAppNavigation(navHostController: NavHostController) {
                 },
                 onBackPressed = {
                     Log.d("Pri", "Pressed")
-                    bottomNavHostController.navigate(Screen.Home.route)
+                    bottomNavHostController.popBackStack()
                 },
                 onBottomNavItemClicked = { route ->
-                    Log.d("Pri", "Pressed")
                     bottomNavHostController.navigate(route) {
                         bottomNavHostController.graph.startDestinationRoute
                             ?.let { startDestinationRoute ->
@@ -121,7 +120,8 @@ fun HomeScreenBottomNavBarNavigation(bottomNavHostController: NavHostController)
     AnimatedNavHost(bottomNavHostController,
         startDestination = HomeScreen.Home.route,
         enterTransition = {
-            if (targetState.destination.route == HomeScreen.Transactions.route) {
+            if (targetState.destination.route == HomeScreen.Transactions.route ||
+                initialState.destination.route == HomeScreen.Home.route) {
                 slideInVertically { it }
             } else {
                 slideInHorizontally { it }
