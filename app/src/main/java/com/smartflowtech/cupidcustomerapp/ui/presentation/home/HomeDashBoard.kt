@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -148,13 +149,17 @@ fun HomeDashBoard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            IconButton(onClick = onBackArrowPressed ) {
+                            IconButton(onClick = {
+                                Log.d("Pri", "Back Pressed")
+                                onBackArrowPressed()
+                            }) {
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowBack,
                                     contentDescription = "Back arrow",
                                     tint = Color.White,
                                 )
                             }
+
                             Text(
                                 text = currentBottomNavDestinationTitle,
                                 color = Color.White,
@@ -162,7 +167,9 @@ fun HomeDashBoard(
                                 fontWeight = FontWeight.SemiBold
                             )
                             if (currentBottomNavDestinationTitle == Transactions.title) {
-                                IconButton(onClick = { }) {
+                                IconButton(onClick = {
+                                    Log.d("Pri", "Filter")
+                                }) {
                                     Icon(
                                         imageVector = Icons.Rounded.FilterList,
                                         contentDescription = "Filter",
@@ -170,7 +177,7 @@ fun HomeDashBoard(
                                     )
                                 }
                             } else {
-                                IconButton(onClick = { }) {}
+                                IconButton(onClick = {  }) {}
                             }
                         }
                     } else {

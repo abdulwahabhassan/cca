@@ -18,7 +18,13 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(goToHomeScreen: () -> Unit, goToGetStartedScreen: () -> Unit, goToLoginScreen: () -> Unit,) {
+fun SplashScreen(
+    onboarded: Boolean,
+    loggedIn: Boolean,
+    goToHomeScreen: () -> Unit,
+    goToGetStartedScreen: () -> Unit,
+    goToLoginScreen: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,10 +42,13 @@ fun SplashScreen(goToHomeScreen: () -> Unit, goToGetStartedScreen: () -> Unit, g
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-
-        LaunchedEffect(key1 = Unit) {
-            delay(2000)
-            goToGetStartedScreen()
+        LaunchedEffect(key1 = onboarded) {
+            delay(1000)
+            if (onboarded) {
+                goToLoginScreen()
+            } else {
+                goToGetStartedScreen()
+            }
         }
         Spacer(
             Modifier
@@ -53,6 +62,6 @@ fun SplashScreen(goToHomeScreen: () -> Unit, goToGetStartedScreen: () -> Unit, g
 @Composable
 fun SplashScreenPreview() {
     CupidCustomerAppTheme {
-        SplashScreen({}, {}, {})
+//        SplashScreen(false, {}, {}, {})
     }
 }

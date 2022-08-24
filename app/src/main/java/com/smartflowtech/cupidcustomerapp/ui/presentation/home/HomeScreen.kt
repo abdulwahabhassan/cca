@@ -17,13 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
-import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenBottomNavBarNavigation
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
-    navHostController: NavHostController,
+    viewModel: HomeScreenViewModel,
+    bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
@@ -43,7 +45,7 @@ fun HomeScreen(
                 HomeBottomAppBar(
                     isSelected = isNavDestinationSelected,
                     onClicked = onBottomNavItemClicked.also { route ->
-                        when (navHostController.currentDestination?.route) {
+                        when (bottomNavBarNavHostController.currentDestination?.route) {
                             com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.route -> {
                                 currentBottomNavDestinationTitle = com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.title
                             }
@@ -58,7 +60,7 @@ fun HomeScreen(
                             }
                         }
                         coroutineScope.launch {
-                            if (navHostController.currentDestination?.route == com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.route) {
+                            if (bottomNavBarNavHostController.currentDestination?.route == com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home.route) {
                                 bottomSheetScaffoldState.bottomSheetState.collapse()
                             } else {
                                 bottomSheetScaffoldState.bottomSheetState.expand()
@@ -104,7 +106,7 @@ fun HomeScreen(
                         contentDescription = "Bottom sheet handle",
                         tint = Color.Unspecified
                     )
-                    HomeScreenBottomNavBarNavigation(bottomNavHostController = navHostController)
+                    BottomNavBarNavigation(bottomNavHostController = bottomNavBarNavHostController)
                 }
             }) { paddingValues ->
 

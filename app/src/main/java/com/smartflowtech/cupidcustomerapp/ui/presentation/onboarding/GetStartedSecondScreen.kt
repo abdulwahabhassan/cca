@@ -23,7 +23,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.gradientWhiteBlue
 
 @Composable
-fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
+fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, onGetStartedClicked: () -> Unit) {
 
     Box(
         modifier = Modifier
@@ -68,7 +68,10 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
-                onClick = { goToLoginScreen() },
+                onClick = {
+                    onGetStartedClicked()
+                    goToLoginScreen()
+                          },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
@@ -88,6 +91,6 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
 @Composable
 fun GetStartedSecondScreenPreview() {
     CupidCustomerAppTheme {
-        GetStartedSecondScreen({})
+        GetStartedSecondScreen({}, {})
     }
 }
