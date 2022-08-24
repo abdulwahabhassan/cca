@@ -23,16 +23,18 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedF
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
+import timber.log.Timber
 
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BottomNavBarNavigation(bottomNavHostController: NavHostController) {
+fun BottomNavBarNavigation(bottomNavHostController: NavHostController, onBackPressed: () -> Unit) {
     AnimatedNavHost(bottomNavHostController,
         startDestination = HomeScreen.Home.route,
         enterTransition = {
             if (targetState.destination.route == HomeScreen.Transactions.route ||
-                initialState.destination.route == HomeScreen.Home.route) {
+                initialState.destination.route == HomeScreen.Home.route
+            ) {
                 slideInVertically { it }
             } else {
                 slideInHorizontally { it }
@@ -55,18 +57,21 @@ fun BottomNavBarNavigation(bottomNavHostController: NavHostController) {
         }
     ) {
         composable(HomeScreen.Home.route) {
-            Home(goToTransactions = {
-                bottomNavHostController.navigate(HomeScreen.Transactions.route) {
-                    bottomNavHostController.graph.startDestinationRoute
-                        ?.let { startDestinationRoute ->
-                            popUpTo(startDestinationRoute) {
-                                saveState = true
+            Home(
+                goToTransactions = {
+                    bottomNavHostController.navigate(HomeScreen.Transactions.route) {
+                        bottomNavHostController.graph.startDestinationRoute
+                            ?.let { startDestinationRoute ->
+                                popUpTo(startDestinationRoute) {
+                                    saveState = true
+                                }
                             }
-                        }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            })
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onBackPressed = onBackPressed
+            )
         }
         composable(HomeScreen.Transactions.route) {
             Transactions()

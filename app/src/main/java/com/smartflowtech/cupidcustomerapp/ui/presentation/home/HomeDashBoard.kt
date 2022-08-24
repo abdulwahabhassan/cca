@@ -29,15 +29,16 @@ import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.*
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
+import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeDashBoard(
     bottomSheetState: BottomSheetState,
-    currentBottomNavDestinationTitle: String,
-    onBackArrowPressed: () -> Unit
 ) {
     val pagerState = rememberPagerState()
+
+    //Animation params
     var visible by remember { mutableStateOf(true) }
     visible =
         bottomSheetState.direction >= 0f && bottomSheetState.currentValue == BottomSheetValue.Collapsed
@@ -126,64 +127,6 @@ fun HomeDashBoard(
                     }
                 }
 
-                AnimatedVisibility(visible = !visible, enter = slideInVertically {
-                    // Slide in from 40 dp from the top.
-                    with(density) { -40.dp.roundToPx() }
-                } + expandVertically(
-                    // Expand from the top.
-                    expandFrom = Alignment.Top
-                ) + fadeIn(
-                    // Fade in with the initial alpha of 0.3f.
-                    initialAlpha = 0.3f
-                ),
-                    exit = slideOutVertically(
-                        targetOffsetY = { screenHeight }) + shrinkVertically() + fadeOut()
-                ) {
-
-                    if (currentBottomNavDestinationTitle != Home.title) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp, end = 8.dp, top = 22.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            IconButton(onClick = {
-                                Log.d("Pri", "Back Pressed")
-                                onBackArrowPressed()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.ArrowBack,
-                                    contentDescription = "Back arrow",
-                                    tint = Color.White,
-                                )
-                            }
-
-                            Text(
-                                text = currentBottomNavDestinationTitle,
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            if (currentBottomNavDestinationTitle == Transactions.title) {
-                                IconButton(onClick = {
-                                    Log.d("Pri", "Filter")
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.FilterList,
-                                        contentDescription = "Filter",
-                                        tint = Color.White,
-                                    )
-                                }
-                            } else {
-                                IconButton(onClick = {  }) {}
-                            }
-                        }
-                    } else {
-                        Row() {}
-                    }
-                }
             }
         }
     }

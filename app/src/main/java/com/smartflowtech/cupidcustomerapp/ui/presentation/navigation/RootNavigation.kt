@@ -1,8 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -26,22 +24,41 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 @Composable
 fun RootNavigation(
     rootNavHostController: NavHostController,
+    finishActivity: () -> Unit
 ) {
 
     AnimatedNavHost(
         navController = rootNavHostController,
         startDestination = Screen.Splash.route,
         enterTransition = {
-            slideInHorizontally { it }
+            if (targetState.destination.route != Screen.Home.route) {
+                slideInHorizontally { it }
+            } else {
+                fadeIn()
+            }
         },
         exitTransition = {
-            slideOutHorizontally { -it }
+            if (targetState.destination.route != Screen.Home.route) {
+                slideOutHorizontally { -it }
+            } else {
+                fadeOut()
+            }
+
         },
         popEnterTransition = {
-            slideInHorizontally { -it }
+            if (targetState.destination.route != Screen.Home.route) {
+                slideInHorizontally { -it }
+            } else {
+                fadeIn()
+            }
         },
         popExitTransition = {
-            slideOutHorizontally { it }
+            if (targetState.destination.route != Screen.Home.route) {
+                slideOutHorizontally { it }
+            } else {
+                fadeOut()
+            }
+
         }
     ) {
 
@@ -104,7 +121,7 @@ fun RootNavigation(
             )
         }
 
-        composable(route = Screen.Home.route) {
+        composable(route = Screen.Home.route) { back ->
             val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
             val bottomNavBarNavHostController = rememberAnimatedNavController()
             val currentRoute =
@@ -117,7 +134,11 @@ fun RootNavigation(
                     currentRoute == route
                 },
                 onBackPressed = {
-                    bottomNavBarNavHostController.popBackStack()
+                    if (currentRoute == HomeScreen.Home.route) {
+                        finishActivity()
+                    } else {
+                        bottomNavBarNavHostController.popBackStack()
+                    }
                 },
                 onBottomNavItemClicked = { route ->
                     bottomNavBarNavHostController.navigate(route) {

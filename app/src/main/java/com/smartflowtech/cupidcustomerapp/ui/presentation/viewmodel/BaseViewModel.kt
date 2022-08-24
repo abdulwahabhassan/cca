@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
+
 open class BaseViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository
 ) : ViewModel() {

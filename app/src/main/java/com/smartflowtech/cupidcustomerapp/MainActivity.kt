@@ -32,13 +32,19 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     RootNavigation(
-                        rootNavHostController = rememberAnimatedNavController()
+                        rootNavHostController = rememberAnimatedNavController(),
+                        finishActivity = { finishActivity() }
                     )
                 }
             }
         }
     }
+
+    private fun finishActivity() {
+        finish()
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable
