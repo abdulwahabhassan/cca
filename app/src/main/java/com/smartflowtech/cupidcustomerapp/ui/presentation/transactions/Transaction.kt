@@ -23,42 +23,41 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 fun Transaction(data: Transaction) {
     Column(
         modifier = Modifier
+            .padding(horizontal = 16.dp)
             .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp),
+                .padding(8.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = {}) {
-                Icon(
-                    modifier = Modifier
-                        .background(
-                            when (data.status) {
-                                "Completed" -> transparentBlue
-                                "Pending" -> transparentYellow
-                                "Failed" -> transparentPink
-                                else -> transparentAsh
-                            }, shape = RoundedCornerShape(50)
-                        )
-                        .padding(8.dp),
-                    painter = painterResource(id = when(data.type) {
-                        "Credit" -> R.drawable.ic_transaction_credit
-                        "Debit" -> R.drawable.ic_transaction_debit
-                        else -> R.drawable.ic_wallet
-                    }),
-                    contentDescription = "Diagonal arrow",
-                    tint = when (data.status) {
-                        "Completed" -> blue
-                        "Pending" -> yellow
-                        "Failed" -> red
-                        else -> black
-                    }
-                )
-            }
+            Icon(
+                modifier = Modifier
+                    .background(
+                        when (data.status) {
+                            "Completed" -> transparentBlue
+                            "Pending" -> transparentYellow
+                            "Failed" -> transparentPink
+                            else -> transparentAsh
+                        }, shape = RoundedCornerShape(50)
+                    )
+                    .padding(8.dp),
+                painter = painterResource(id = when(data.type) {
+                    "Credit" -> R.drawable.ic_transaction_credit
+                    "Debit" -> R.drawable.ic_transaction_debit
+                    else -> R.drawable.ic_wallet
+                }),
+                contentDescription = "Diagonal arrow",
+                tint = when (data.status) {
+                    "Completed" -> blue
+                    "Pending" -> yellow
+                    "Failed" -> red
+                    else -> black
+                }
+            )
 
             Column(
                 Modifier

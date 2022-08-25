@@ -31,6 +31,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
@@ -97,10 +98,10 @@ fun HomeScreen(
                 )
             }
         }
-    ) { paddingValues: PaddingValues ->
+    ) { paddingValues ->
 
         BottomSheetScaffold(
-            modifier = Modifier.padding(paddingValues = paddingValues),
+            modifier = Modifier.padding(paddingValues),
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
             sheetBackgroundColor = Color.Transparent,
@@ -152,11 +153,6 @@ fun HomeScreen(
                             }
                         }
 
-                    } else {
-                        Spacer(
-                            modifier = Modifier
-                                .height(56.dp)
-                        )
                     }
                 }
 
@@ -167,7 +163,7 @@ fun HomeScreen(
                             color = Color.White,
                             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                         )
-                        .fillMaxWidth()
+                        .fillMaxSize()
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Icon(
@@ -181,7 +177,12 @@ fun HomeScreen(
                     )
                     BottomNavBarNavigation(
                         bottomNavHostController = bottomNavBarNavHostController,
-                        onBackPressed = onBackPressed
+                        onBackPressed = onBackPressed,
+                        onSearchBarClicked = {
+                            coroutineScope.launch {
+                                bottomSheetState.expand()
+                            }
+                        }
                     )
                 }
             }) { paddingValues ->

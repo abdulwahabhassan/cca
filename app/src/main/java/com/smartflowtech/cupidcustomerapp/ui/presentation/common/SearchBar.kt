@@ -1,9 +1,9 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.common
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -25,7 +25,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
+fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked: () -> Unit) {
 
     TextField(
         modifier = Modifier
@@ -56,12 +56,22 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
-        )
+        ),
+        interactionSource = remember { MutableInteractionSource() }
+            .also { interactionSource ->
+                LaunchedEffect(interactionSource) {
+                    interactionSource.interactions.collect {
+                        if (it is PressInteraction.Press) {
+                            onSearchBarClicked()
+                        }
+                    }
+                }
+            }
     )
 }
 
 @Composable
 @Preview(showBackground = true)
 fun SearchBarPreview() {
-    SearchBar("", {})
+    SearchBar("", {}, {})
 }

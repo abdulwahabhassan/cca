@@ -91,7 +91,7 @@ data class Transaction(
                 type = "Debit"
             ),
             Transaction(
-                "",
+                "Pending",
                 "11:24PM",
                 "Transaction",
                 "₦144,000.00",

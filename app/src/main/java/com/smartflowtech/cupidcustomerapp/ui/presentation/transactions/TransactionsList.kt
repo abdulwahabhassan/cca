@@ -31,8 +31,7 @@ fun TransactionsList(list: List<Transaction>) {
     Column(
         Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(horizontal = 16.dp),
+            .fillMaxHeight(),
         horizontalAlignment = Alignment.Start
     ) {
 

@@ -27,6 +27,7 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, onGetStartedClicked: () 
 
     Box(
         modifier = Modifier
+            .navigationBarsPadding()
             .fillMaxSize(),
         contentAlignment = Alignment.BottomCenter,
     ) {
@@ -78,11 +79,11 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, onGetStartedClicked: () 
                 Text(text = "Get Started")
             }
             Spacer(modifier = Modifier.height(40.dp))
-            Spacer(
-                Modifier
-                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                    .fillMaxWidth()
-            )
+//            Spacer(
+//                Modifier
+//                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
+//                    .fillMaxWidth()
+//            )
         }
     }
 }

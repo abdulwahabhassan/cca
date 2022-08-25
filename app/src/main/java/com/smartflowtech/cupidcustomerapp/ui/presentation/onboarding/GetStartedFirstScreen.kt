@@ -27,6 +27,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.gradientWhiteBlue
 fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
     Column(
         modifier = Modifier
+            .navigationBarsPadding()
             .fillMaxSize()
             .background(color = darkBlue),
         verticalArrangement = Arrangement.SpaceBetween
@@ -110,11 +111,11 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 Text(text = "Get Started")
             }
             Spacer(modifier = Modifier.height(40.dp))
-            Spacer(
-                Modifier
-                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                    .fillMaxWidth()
-            )
+//            Spacer(
+//                Modifier
+//                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
+//                    .fillMaxWidth()
+//            )
         }
     }
 

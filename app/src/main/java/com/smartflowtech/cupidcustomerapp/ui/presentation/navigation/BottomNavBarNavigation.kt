@@ -10,12 +10,15 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionsList
 
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BottomNavBarNavigation(bottomNavHostController: NavHostController, onBackPressed: () -> Unit) {
+fun BottomNavBarNavigation(
+    bottomNavHostController: NavHostController,
+    onBackPressed: () -> Unit,
+    onSearchBarClicked: () -> Unit
+) {
     AnimatedNavHost(bottomNavHostController,
         startDestination = HomeScreen.Home.route,
         enterTransition = {
@@ -81,7 +84,7 @@ fun BottomNavBarNavigation(bottomNavHostController: NavHostController, onBackPre
             )
         }
         composable(HomeScreen.Transactions.route) {
-            Transactions({})
+            Transactions({}, onSearchBarClicked = onSearchBarClicked)
         }
         composable(HomeScreen.Location.route) {
             Location()

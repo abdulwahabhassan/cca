@@ -27,6 +27,7 @@ fun SplashScreen(
 ) {
     Column(
         modifier = Modifier
+            .navigationBarsPadding()
             .fillMaxSize()
             .background(MaterialTheme.colors.primary),
         verticalArrangement = Arrangement.Bottom,
@@ -54,11 +55,11 @@ fun SplashScreen(
                 goToGetStartedScreen()
             }
         }
-        Spacer(
-            Modifier
-                .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                .fillMaxWidth()
-        )
+//        Spacer(
+//            Modifier
+//                .windowInsetsBottomHeight(WindowInsets.navigationBars)
+//                .fillMaxWidth()
+//        )
     }
 }
 

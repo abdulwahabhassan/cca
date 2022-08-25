@@ -1,15 +1,9 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
-import com.smartflowtech.cupidcustomerapp.R
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CloudDownload
-import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.CloudDownload
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,13 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 
 @Composable
-fun Transactions(downloadTransactions: () -> Unit) {
+fun Transactions(downloadTransactions: () -> Unit, onSearchBarClicked: () -> Unit) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
 
@@ -40,9 +35,13 @@ fun Transactions(downloadTransactions: () -> Unit) {
         horizontalAlignment = Alignment.Start
     ) {
 
-        SearchBar(query = queryText) { searchText ->
-            queryText = searchText
-        }
+        SearchBar(
+            query = queryText,
+            onQueryChange = { searchText ->
+                queryText = searchText
+            },
+            onSearchBarClicked = onSearchBarClicked
+        )
 
         Row(
             modifier = Modifier
@@ -76,6 +75,6 @@ fun Transactions(downloadTransactions: () -> Unit) {
 @Preview(showBackground = true)
 fun TransactionsPreview() {
     CupidCustomerAppTheme {
-        Transactions({})
+        Transactions({}, {})
     }
 }

@@ -1,9 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -12,7 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 
 @Composable
-fun HomeBottomAppBar(isSelected : (String) -> Boolean, onClicked: (String) -> Unit) {
+fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Unit) {
 
     val items = listOf(
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home,
@@ -20,11 +17,12 @@ fun HomeBottomAppBar(isSelected : (String) -> Boolean, onClicked: (String) -> Un
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location,
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings,
     )
-    val navPaddingValues = WindowInsets.navigationBars.asPaddingValues()
+    //val navPaddingValues = WindowInsets.navigationBars.asPaddingValues()
 
     BottomAppBar(
         backgroundColor = Color.White,
-        modifier = androidx.compose.ui.Modifier.padding(navPaddingValues)
+        modifier = androidx.compose.ui.Modifier
+            .navigationBarsPadding()
     ) {
 
         items.forEach { item ->
