@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -12,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,9 +18,10 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
+import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionsList
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import timber.log.Timber
+import com.smartflowtech.cupidcustomerapp.ui.theme.black
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -65,11 +64,15 @@ fun Home(goToTransactions: () -> Unit, onBackPressed: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             IconButton(onClick = { goToTransactions() }) {
-                Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = "Forward arrow")
+                Icon(
+                    imageVector = Icons.Rounded.ArrowForward,
+                    contentDescription = "Forward arrow",
+                    tint = black
+                )
             }
         }
 
-        Transactions()
+        TransactionsList(Transaction.transactions)
     }
 }
 

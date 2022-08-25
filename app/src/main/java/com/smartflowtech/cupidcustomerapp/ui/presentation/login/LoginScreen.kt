@@ -234,11 +234,11 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 //Not me, Login
-                Row(Modifier.padding(bottom = 24.dp)) {
-                    Text(text = "Not me?")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = "Login")
-                }
+//                Row(Modifier.padding(bottom = 24.dp)) {
+//                    Text(text = "Not me?")
+//                    Spacer(modifier = Modifier.width(4.dp))
+//                    Text(text = "Login")
+//                }
 
             }
         }

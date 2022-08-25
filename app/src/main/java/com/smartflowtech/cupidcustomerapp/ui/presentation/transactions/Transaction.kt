@@ -16,10 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
-fun Transaction(status: String, time: String, title: String, amount: String) {
+fun Transaction(data: Transaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,11 +36,27 @@ fun Transaction(status: String, time: String, title: String, amount: String) {
             IconButton(onClick = {}) {
                 Icon(
                     modifier = Modifier
-                        .background(transparentBlue, shape = RoundedCornerShape(50))
+                        .background(
+                            when (data.status) {
+                                "Completed" -> transparentBlue
+                                "Pending" -> transparentYellow
+                                "Failed" -> transparentPink
+                                else -> transparentAsh
+                            }, shape = RoundedCornerShape(50)
+                        )
                         .padding(8.dp),
-                    painter = painterResource(id = R.drawable.ic_arrow_diagonal),
+                    painter = painterResource(id = when(data.type) {
+                        "Credit" -> R.drawable.ic_transaction_credit
+                        "Debit" -> R.drawable.ic_transaction_debit
+                        else -> R.drawable.ic_wallet
+                    }),
                     contentDescription = "Diagonal arrow",
-                    tint = blue
+                    tint = when (data.status) {
+                        "Completed" -> blue
+                        "Pending" -> yellow
+                        "Failed" -> red
+                        else -> black
+                    }
                 )
             }
 
@@ -48,20 +65,20 @@ fun Transaction(status: String, time: String, title: String, amount: String) {
                     .weight(2f, true)
                     .padding(start = 16.dp)
             ) {
-                Text(text = title, fontFamily = AthleticsFontFamily, fontWeight = FontWeight.W400)
+                Text(text = data.title, fontFamily = AthleticsFontFamily, fontWeight = FontWeight.W400)
                 Row {
                     Text(
-                        text = status,
+                        text = data.status,
                         modifier = Modifier.padding(end = 4.dp),
                         fontSize = 12.sp,
                         color = grey,
                         fontFamily = AthleticsFontFamily
                     )
-                    Text(text = time, fontSize = 12.sp, color = grey)
+                    Text(text = data.time, fontSize = 12.sp, color = grey)
                 }
             }
             Text(
-                amount,
+                data.amount,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = AthleticsFontFamily,
                 modifier = Modifier.padding(end = 6.dp)
@@ -80,5 +97,5 @@ fun Transaction(status: String, time: String, title: String, amount: String) {
 @Preview(showBackground = true)
 @Composable
 fun TransactionPreview() {
-    Transaction("Completed", "11:24PM", "Transaction", "₦167,000.00")
+    Transaction("Completed", "11:24PM", "Transaction", "₦167,000.00", "", "Credit")
 }

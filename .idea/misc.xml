@@ -88,13 +88,30 @@
         <entry key="../../../../layout/compose-model-1661425596581.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1661425597524.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1661425678253.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1661427321007.xml" value="0.165" />
+        <entry key="../../../../layout/compose-model-1661429785029.xml" value="0.15925925925925927" />
+        <entry key="../../../../layout/compose-model-1661429814859.xml" value="0.15925925925925927" />
+        <entry key="../../../../layout/compose-model-1661429979843.xml" value="0.335" />
+        <entry key="../../../../layout/compose-model-1661431072172.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1661431213745.xml" value="0.165" />
+        <entry key="../../../../layout/compose-model-1661431362056.xml" value="0.375" />
+        <entry key="../../../../layout/compose-model-1661436511936.xml" value="0.5" />
+        <entry key="../../../../layout/compose-model-1661437384738.xml" value="0.1425925925925926" />
+        <entry key="../../../../layout/compose-model-1661437468724.xml" value="0.1425925925925926" />
+        <entry key="app/src/main/res/drawable/ic_arrow_credit.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_arrow_debit.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_arrow_diagonal.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_arrow_diagonal_credit.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_arrow_diagonal_sent.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_arrow_outward.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_card_decoration.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_gift_icon.xml" value="0.116" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_location.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.108" />
         <entry key="app/src/main/res/drawable/ic_receipt.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_transaction_credit.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_transaction_debit.xml" value="0.1" />
       </map>
     </option>
   </component>
