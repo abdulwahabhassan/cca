@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -29,11 +30,15 @@ import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.*
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
+import com.smartflowtech.cupidcustomerapp.ui.theme.lightPink
+import com.smartflowtech.cupidcustomerapp.ui.theme.lightYellow
+import com.smartflowtech.cupidcustomerapp.ui.theme.skyBlue
 import timber.log.Timber
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeDashBoard(
+    horizontalPagerHeight: Dp,
     bottomSheetState: BottomSheetState,
 ) {
     val pagerState = rememberPagerState()
@@ -59,7 +64,7 @@ fun HomeDashBoard(
                 contentDescription = "background"
             )
             Column {
-                AnimatedVisibility(visible = visible, enter = slideInVertically {
+                AnimatedVisibility(visible = visible, enter = slideInVertically() {
                     with(density) { -40.dp.roundToPx() }
                 } + expandVertically(
                     expandFrom = Alignment.Top
@@ -116,9 +121,10 @@ fun HomeDashBoard(
                             state = pagerState,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(horizontalPagerHeight)
                                 .padding(top = 28.dp, bottom = 16.dp)
                         ) { page: Int ->
-                            WalletCard()
+                            WalletCard(listOf(lightPink, lightYellow, skyBlue)[page])
                         }
                         HorizontalPagerIndicator(
                             totalDots = 3,

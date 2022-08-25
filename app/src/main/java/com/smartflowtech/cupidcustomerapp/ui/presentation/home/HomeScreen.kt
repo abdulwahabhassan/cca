@@ -1,6 +1,8 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,20 +17,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.*
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
+import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
@@ -48,42 +49,51 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(HomeScreen.Home.title) }
 
-    var visible by remember { mutableStateOf(true) }
+    var visible by rememberSaveable { mutableStateOf(true) }
     visible =
         bottomSheetState.direction >= 0f && bottomSheetState.currentValue == BottomSheetValue.Collapsed
+
+    LaunchedEffect(key1 = bottomSheetState.direction) {
+        if (bottomSheetState.direction == -1f && currentBottomNavDestinationTitle == HomeScreen.Home.title) {
+            onBottomNavItemClicked(HomeScreen.Transactions.route)
+        }
+    }
+
+    LaunchedEffect(key1 = bottomNavBarNavHostController.currentDestination?.route, block = {
+        coroutineScope.launch {
+            if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                bottomSheetScaffoldState.bottomSheetState.collapse()
+            } else {
+                bottomSheetScaffoldState.bottomSheetState.expand()
+            }
+        }
+
+        when (bottomNavBarNavHostController.currentDestination?.route) {
+            HomeScreen.Home.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Home.title
+            }
+            HomeScreen.Transactions.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Transactions.title
+            }
+            HomeScreen.Location.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Location.title
+            }
+            HomeScreen.Settings.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Settings.title
+            }
+        }
+    })
 
     Scaffold(
         bottomBar = {
             CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
                 HomeBottomAppBar(
                     isSelected = isNavDestinationSelected,
-                    onClicked = onBottomNavItemClicked.also { route ->
-                        when (bottomNavBarNavHostController.currentDestination?.route) {
-                            HomeScreen.Home.route -> {
-                                currentBottomNavDestinationTitle =
-                                    HomeScreen.Home.title
-                            }
-                            HomeScreen.Transactions.route -> {
-                                currentBottomNavDestinationTitle =
-                                    HomeScreen.Transactions.title
-                            }
-                            HomeScreen.Location.route -> {
-                                currentBottomNavDestinationTitle =
-                                    HomeScreen.Location.title
-                            }
-                            HomeScreen.Settings.route -> {
-                                currentBottomNavDestinationTitle =
-                                    HomeScreen.Settings.title
-                            }
-                        }
-                        coroutineScope.launch {
-                            if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
-                                bottomSheetScaffoldState.bottomSheetState.collapse()
-                            } else {
-                                bottomSheetScaffoldState.bottomSheetState.expand()
-                            }
-                        }
-                    }
+                    onClicked = onBottomNavItemClicked
                 )
             }
         }
@@ -107,7 +117,7 @@ fun HomeScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 8.dp, end = 8.dp, top = 22.dp),
+                                .padding(start = 8.dp, end = 8.dp, top = 32.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
@@ -143,7 +153,10 @@ fun HomeScreen(
                         }
 
                     } else {
-                        Row() {}
+                        Spacer(
+                            modifier = Modifier
+                                .height(56.dp)
+                        )
                     }
                 }
 
@@ -174,11 +187,12 @@ fun HomeScreen(
             }) { paddingValues ->
 
             HomeDashBoard(
+                horizontalPagerHeight = LocalConfiguration.current.screenHeightDp.dp * 0.30f,
                 bottomSheetState = bottomSheetState,
             )
         }
-
     }
+
 }
 
 @Preview(showBackground = true)

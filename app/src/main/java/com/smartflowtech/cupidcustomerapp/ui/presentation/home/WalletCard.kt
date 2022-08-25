@@ -20,11 +20,11 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.theme.skyBlue
 
 @Composable
-fun WalletCard() {
+fun WalletCard(backgroundColor: Color) {
     Card(
         modifier = Modifier.fillMaxWidth(0.88f),
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = skyBlue
+        backgroundColor = backgroundColor
     ) {
         Column(
             modifier = Modifier

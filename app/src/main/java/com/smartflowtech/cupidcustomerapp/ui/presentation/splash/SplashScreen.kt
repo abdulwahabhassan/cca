@@ -45,7 +45,11 @@ fun SplashScreen(
         LaunchedEffect(key1 = onboarded) {
             delay(1000)
             if (onboarded) {
-                goToLoginScreen()
+                if (loggedIn) {
+                    goToHomeScreen()
+                } else {
+                    goToLoginScreen()
+                }
             } else {
                 goToGetStartedScreen()
             }

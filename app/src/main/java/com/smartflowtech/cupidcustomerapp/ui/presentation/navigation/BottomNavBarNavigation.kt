@@ -36,6 +36,8 @@ fun BottomNavBarNavigation(bottomNavHostController: NavHostController, onBackPre
                 initialState.destination.route == HomeScreen.Home.route
             ) {
                 slideInVertically { it }
+            } else if (targetState.destination.route == HomeScreen.Home.route) {
+                slideInVertically { -it }
             } else {
                 slideInHorizontally { it }
             }
@@ -45,15 +47,33 @@ fun BottomNavBarNavigation(bottomNavHostController: NavHostController, onBackPre
                 targetState.destination.route == HomeScreen.Transactions.route
             ) {
                 fadeOut(animationSpec = snap())
+            } else if (initialState.destination.route == HomeScreen.Transactions.route &&
+                targetState.destination.route == HomeScreen.Home.route
+            ) {
+                slideOutVertically { -it }
+            } else if (initialState.destination.route == HomeScreen.Transactions.route &&
+                targetState.destination.route == HomeScreen.Home.route
+            ) {
+                fadeOut(snap())
             } else {
                 slideOutHorizontally { -it }
             }
         },
         popEnterTransition = {
-            slideInHorizontally { -it }
+            if (targetState.destination.route == HomeScreen.Home.route) {
+                slideInVertically { -it }
+            } else {
+                slideInHorizontally { -it }
+            }
         },
         popExitTransition = {
-            slideOutHorizontally { it }
+            if (initialState.destination.route == HomeScreen.Transactions.route &&
+                targetState.destination.route == HomeScreen.Home.route
+            ) {
+                fadeOut(snap())
+            } else {
+                slideOutHorizontally { it }
+            }
         }
     ) {
         composable(HomeScreen.Home.route) {

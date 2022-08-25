@@ -32,7 +32,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Column(Modifier.padding(top = 32.dp)) {
+        Column(Modifier.padding(top = 40.dp)) {
             Row(
                 modifier = Modifier.height(200.dp).fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
