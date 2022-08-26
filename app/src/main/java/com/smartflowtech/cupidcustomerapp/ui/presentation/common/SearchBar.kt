@@ -43,6 +43,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked
                 modifier = Modifier.size(24.dp)
             )
         },
+        singleLine = true,
         placeholder = {
             Text(
                 text = "Search transactions",

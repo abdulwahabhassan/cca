@@ -62,7 +62,7 @@ fun HomeDashBoard(
                 modifier = Modifier.fillMaxWidth(),
                 painter = painterResource(id = R.drawable.ic_design_background),
                 contentDescription = "background",
-                contentScale = ContentScale.FillHeight
+                contentScale = ContentScale.FillBounds
             )
             Column {
                 AnimatedVisibility(visible = visible, enter = slideInVertically() {

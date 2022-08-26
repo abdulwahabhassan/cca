@@ -35,7 +35,9 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
 
         Column(Modifier.padding(top = 40.dp)) {
             Row(
-                modifier = Modifier.height(200.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .height(if (LocalConfiguration.current.screenHeightDp.dp > 700.dp) 200.dp else 130.dp)
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.Bottom
             ) {
@@ -50,8 +52,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 Image(
                     modifier = Modifier
                         .padding(end = 24.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        ,
+                        .clip(RoundedCornerShape(24.dp)),
                     painter = painterResource(id = R.drawable.img_person_2),
                     contentDescription = "image",
                 )
@@ -61,14 +62,14 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
 
             Row(
                 modifier = Modifier
-                    .height(200.dp)
+                    .height(if (LocalConfiguration.current.screenHeightDp.dp > 700.dp) 200.dp else 130.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.Top,
             ) {
                 Image(
                     modifier = Modifier
-                        .height(150.dp)
+                        .fillMaxHeight(0.75f)
                         .padding(start = 24.dp)
                         .clip(RoundedCornerShape(24.dp)),
                     painter = painterResource(id = R.drawable.img_person_1),
@@ -86,10 +87,10 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
 
         Column(
             Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.Bottom,
+            verticalArrangement = Arrangement.Top,
         ) {
             Text(
-                text = "Second start screen",
+                text = "First start screen",
                 color = Color.White,
                 style = MaterialTheme.typography.h6
             )
@@ -111,11 +112,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 Text(text = "Get Started")
             }
             Spacer(modifier = Modifier.height(40.dp))
-//            Spacer(
-//                Modifier
-//                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
-//                    .fillMaxWidth()
-//            )
+
         }
     }
 

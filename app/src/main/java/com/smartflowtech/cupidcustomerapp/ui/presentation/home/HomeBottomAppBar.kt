@@ -27,8 +27,6 @@ fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Uni
             .navigationBarsPadding()
     ) {
 
-        LocalConfiguration.current.screenWidthDp.dp > 480.dp
-
         items.forEach { item ->
             BottomNavigationItem(
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },

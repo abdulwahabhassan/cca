@@ -3,6 +3,8 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -46,7 +48,9 @@ fun LoginScreen(
     var passwordErrorLabel by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
-        modifier = Modifier.navigationBarsPadding().imePadding(),
+        modifier = Modifier
+            .navigationBarsPadding()
+            .imePadding(),
         scaffoldState = scaffoldState,
         snackbarHost = {
             SnackbarHost(it) { data ->
@@ -90,156 +94,176 @@ fun LoginScreen(
                 painter = painterResource(id = R.drawable.design_background),
                 contentDescription = "background"
             )
-            Column(
+            LazyColumn(
                 Modifier
                     .fillMaxHeight(0.7f)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
                     )
-                    .padding(horizontal = 16.dp)
                     .align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(16.dp)
             ) {
-                Spacer(modifier = Modifier.height(48.dp))
-                Text(text = "Login to your account", style = MaterialTheme.typography.h6)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "Please login to your account", style = MaterialTheme.typography.body1)
-                Spacer(modifier = Modifier.height(32.dp))
-
-                //Email
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = email,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    onValueChange = { text ->
-                        email = text
-                    },
-                    label = {
-                        if (isEmailError) {
-                            Text(text = emailErrorLabel)
-                        } else {
-                            Text(text = "Email")
-                        }
-                    },
-                    isError = isEmailError,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = lightGrey,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .height(48.dp)
+                            .align(Alignment.TopStart)
                     )
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                //Password
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = password,
-                    onValueChange = { text ->
-                        password = text
-                    },
-                    label = {
-                        if (isPasswordError) {
-                            Text(text = passwordErrorLabel)
-                        } else {
-                            Text(text = "Password")
-                        }
-                    },
-                    isError = isPasswordError,
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        val image = if (passwordVisible)
-                            Icons.Filled.Visibility
-                        else Icons.Filled.VisibilityOff
-                        val description =
-                            if (passwordVisible) "Hide password" else "Show password"
-                        IconButton(onClick = {
-                            passwordVisible =
-                                !passwordVisible
-                        }) {
-                            Icon(imageVector = image, description, tint = Color.LightGray)
-                        }
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = lightGrey,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterStart),
+                        text = "Login to your account",
+                        style = MaterialTheme.typography.h6
                     )
-                )
-                Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterStart),
+                        text = "Please login to your account",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
 
-                //Login
-                when (uiState.viewModelResult) {
-                    ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .height(54.dp),
-                            color = darkBlue
+                    //Email
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        value = email,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        onValueChange = { text ->
+                            email = text
+                        },
+                        singleLine = true,
+                        label = {
+                            if (isEmailError) {
+                                Text(text = emailErrorLabel)
+                            } else {
+                                Text(text = "Email")
+                            }
+                        },
+                        isError = isEmailError,
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = lightGrey,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Transparent
                         )
-                    }
-                    else -> {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(54.dp),
-                            enabled = email.isNotEmpty() && password.isNotEmpty(),
-                            onClick = {
-                                val trimmedEmail = email.trim()
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                                //Basic validator
-                                if (trimmedEmail.isEmpty() ||
-                                    !trimmedEmail.contains("@") ||
-                                    !trimmedEmail.contains(".")
-                                ) {
-                                    emailErrorLabel = "Input valid email"
-                                    isEmailError = true
-                                } else {
-                                    emailErrorLabel = ""
-                                    isEmailError = false
-                                }
+                    //Password
+                    TextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = password,
+                        onValueChange = { text ->
+                            password = text
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        label = {
+                            if (isPasswordError) {
+                                Text(text = passwordErrorLabel)
+                            } else {
+                                Text(text = "Password")
+                            }
+                        },
+                        singleLine = true,
+                        isError = isPasswordError,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val image = if (passwordVisible)
+                                Icons.Filled.Visibility
+                            else Icons.Filled.VisibilityOff
+                            val description =
+                                if (passwordVisible) "Hide password" else "Show password"
+                            IconButton(onClick = {
+                                passwordVisible =
+                                    !passwordVisible
+                            }) {
+                                Icon(imageVector = image, description, tint = Color.LightGray)
+                            }
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = lightGrey,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Transparent
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
 
-                                if (password.isEmpty()) {
-                                    passwordErrorLabel =
-                                        "Input valid password"
-                                    isPasswordError = true
-                                } else {
-                                    passwordErrorLabel = ""
-                                    isPasswordError = false
-                                }
+                    //Login
+                    when (uiState.viewModelResult) {
+                        ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .height(54.dp),
+                                color = darkBlue
+                            )
+                        }
+                        else -> {
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(54.dp),
+                                enabled = email.isNotEmpty() && password.isNotEmpty(),
+                                onClick = {
+                                    val trimmedEmail = email.trim()
 
-                                if (!isEmailError &&
-                                    !isPasswordError
-                                ) {
-                                    onLoginClicked(LoginRequestBody(trimmedEmail, password))
-                                }
-                            },
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-                        ) {
-                            Text(text = "Login")
+                                    //Basic validator
+                                    if (trimmedEmail.isEmpty() ||
+                                        !trimmedEmail.contains("@") ||
+                                        !trimmedEmail.contains(".")
+                                    ) {
+                                        emailErrorLabel = "Input valid email"
+                                        isEmailError = true
+                                    } else {
+                                        emailErrorLabel = ""
+                                        isEmailError = false
+                                    }
+
+                                    if (password.isEmpty()) {
+                                        passwordErrorLabel =
+                                            "Input valid password"
+                                        isPasswordError = true
+                                    } else {
+                                        passwordErrorLabel = ""
+                                        isPasswordError = false
+                                    }
+
+                                    if (!isEmailError &&
+                                        !isPasswordError
+                                    ) {
+                                        onLoginClicked(LoginRequestBody(trimmedEmail, password))
+                                    }
+                                },
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                            ) {
+                                Text(text = "Login")
+                            }
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    //Forgot password
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterStart)
+                            .padding(bottom = 16.dp),
+                        text = "Forgot password?"
+                    )
                 }
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                //Forgot password
-                Text(text = "Forgot password?")
-                Spacer(modifier = Modifier.height(32.dp))
-
-                //Not me, Login
-//                Row(Modifier.padding(bottom = 24.dp)) {
-//                    Text(text = "Not me?")
-//                    Spacer(modifier = Modifier.width(4.dp))
-//                    Text(text = "Login")
-//                }
-
+                
             }
         }
 
