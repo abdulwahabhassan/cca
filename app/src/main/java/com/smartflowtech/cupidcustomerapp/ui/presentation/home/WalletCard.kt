@@ -1,35 +1,33 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.service.quickaccesswallet.WalletCard
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.GradientButton
-import com.smartflowtech.cupidcustomerapp.ui.theme.brightBlue
-import com.smartflowtech.cupidcustomerapp.ui.theme.gradientBluePurple
-import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
-import com.smartflowtech.cupidcustomerapp.ui.theme.skyBlue
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
 fun WalletCard(backgroundColor: Color) {
     Card(
-        modifier = Modifier.fillMaxWidth(0.88f),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         backgroundColor = backgroundColor
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
+        Column{
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
@@ -41,17 +39,23 @@ fun WalletCard(backgroundColor: Color) {
                     tint = Color.Unspecified
                 )
             }
+
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 28.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Row {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
                                 text = "Wallet Balance",
                                 color = Color.Black,
@@ -80,26 +84,39 @@ fun WalletCard(backgroundColor: Color) {
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                     )
                 }
-                Spacer(modifier = Modifier.height(32.dp))
                 Divider(
                     thickness = 1.dp,
                     color = lineGrey,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(24.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Card Number VLX-90345", fontSize = 12.sp)
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Loyalty Points: 406",
                         fontSize = 12.sp,
-                        color = brightBlue
+                        color = brightBlue,
+
                     )
                 }
 
             }
         }
+    }
+}
+
+@Composable
+@Preview()
+fun WalletCardPreview() {
+    CupidCustomerAppTheme {
+        WalletCard(backgroundColor = transparentBlue)
     }
 }

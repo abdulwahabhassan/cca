@@ -76,12 +76,13 @@ fun HomeDashBoard(
                         targetOffsetY = { screenHeight }) + shrinkVertically() + fadeOut()
                 ) {
 
-                    Column {
+                    Column(
+                    ) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 24.dp, end = 24.dp, top = 32.dp),
+                                .padding(start = 20.dp, end = 20.dp, top = 32.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Image(
@@ -120,10 +121,12 @@ fun HomeDashBoard(
                         HorizontalPager(
                             count = 3,
                             state = pagerState,
+                            itemSpacing = 20.dp,
+                            contentPadding = PaddingValues(horizontal = 20.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(horizontalPagerHeight)
-                                .padding(top = 28.dp, bottom = 16.dp)
+                                .padding(top = 16.dp, bottom = 16.dp)
                         ) { page: Int ->
                             WalletCard(listOf(lightPink, lightYellow, skyBlue)[page])
                         }

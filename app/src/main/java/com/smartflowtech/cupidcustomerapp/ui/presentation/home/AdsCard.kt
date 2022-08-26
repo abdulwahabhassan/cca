@@ -31,7 +31,7 @@ fun AdsCard(page: Int) {
             Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, top = 24.dp)
-                .height(120.dp),
+                .height(90.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(

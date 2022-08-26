@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun GradientButton(
@@ -35,7 +36,7 @@ fun GradientButton(
                 .then(modifier),
             contentAlignment = Alignment.Center,
         ) {
-            Text(text = text, color = Color.White)
+            Text(text = text, color = Color.White, fontSize = 14.sp)
         }
     }
 }

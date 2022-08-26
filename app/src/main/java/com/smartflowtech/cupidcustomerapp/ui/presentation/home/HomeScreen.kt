@@ -105,7 +105,7 @@ fun HomeScreen(
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
             sheetBackgroundColor = Color.Transparent,
-            sheetPeekHeight = LocalConfiguration.current.screenHeightDp.dp * 0.50f,
+            sheetPeekHeight = LocalConfiguration.current.screenHeightDp.dp * 0.40f,
             sheetContent = {
 
                 AnimatedVisibility(

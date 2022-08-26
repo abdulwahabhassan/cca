@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 
@@ -25,13 +27,21 @@ fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Uni
             .navigationBarsPadding()
     ) {
 
+        LocalConfiguration.current.screenWidthDp.dp > 480.dp
+
         items.forEach { item ->
             BottomNavigationItem(
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title, fontSize = 11.sp) },
+                label = {
+                    Text(
+                        text = if (LocalConfiguration.current.screenWidthDp.dp <= 320.dp && item.title == "Transactions") "Trans" else item.title,
+                        fontSize = 11.sp
+                    )
+
+                },
                 selectedContentColor = MaterialTheme.colors.primary,
                 unselectedContentColor = grey,
-                alwaysShowLabel = true,
+                alwaysShowLabel = LocalConfiguration.current.screenWidthDp.dp > 320.dp,
                 selected = isSelected(item.route),
                 onClick = { onClicked(item.route) }
             )
