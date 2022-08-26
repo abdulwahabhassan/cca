@@ -31,7 +31,7 @@ fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Uni
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
                 label = {
                     Text(
-                        text = if (LocalConfiguration.current.screenWidthDp.dp <= 320.dp && item.title == "Transactions") "History" else item.title,
+                        text = if (item.title == "Transactions") "History" else item.title,
                         fontSize = 11.sp
                     )
 

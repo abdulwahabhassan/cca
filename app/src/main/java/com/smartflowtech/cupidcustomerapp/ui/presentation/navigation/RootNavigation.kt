@@ -9,8 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.OverallHomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenModelBottomSheetLayer
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
@@ -19,7 +18,6 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.GetStartedVi
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SplashScreenViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -122,12 +120,12 @@ fun RootNavigation(
             )
         }
 
-        composable(route = Screen.Home.route) { back ->
+        composable(route = Screen.Home.route) {
             val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
             val bottomNavBarNavHostController = rememberAnimatedNavController()
             val currentRoute =
                 bottomNavBarNavHostController.currentBackStackEntryAsState().value?.destination?.route
-            OverallHomeScreen(
+            HomeScreenModelBottomSheetLayer(
                 viewModel = homeScreenViewModel,
                 bottomNavBarNavHostController = bottomNavBarNavHostController,
                 goTo = {},
@@ -155,34 +153,6 @@ fun RootNavigation(
                 }
             )
 
-
-//            HomeScreen(
-//                viewModel = homeScreenViewModel,
-//                bottomNavBarNavHostController = bottomNavBarNavHostController,
-//                goTo = {},
-//                isNavDestinationSelected = { route ->
-//                    currentRoute == route
-//                },
-//                onBackPressed = {
-//                    if (currentRoute == HomeScreen.Home.route) {
-//                        finishActivity()
-//                    } else {
-//                        bottomNavBarNavHostController.popBackStack()
-//                    }
-//                },
-//                onBottomNavItemClicked = { route ->
-//                    bottomNavBarNavHostController.navigate(route) {
-//                        bottomNavBarNavHostController.graph.startDestinationRoute
-//                            ?.let { startDestinationRoute ->
-//                                popUpTo(startDestinationRoute) {
-//                                    saveState = true
-//                                }
-//                            }
-//                        launchSingleTop = true
-//                        restoreState = true
-//                    }
-//                }
-//            )
         }
 
     }

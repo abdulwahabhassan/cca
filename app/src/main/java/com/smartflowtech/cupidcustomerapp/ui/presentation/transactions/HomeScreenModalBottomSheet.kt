@@ -15,31 +15,24 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FilterTransactionsModalBottomSheet(
+fun HomeScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
-    onBackPressedFromFilterScreen: () -> Unit,
     bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit
-    ) {
-
-    BackHandler(modalBottomSheetState.isVisible) {
-        onBackPressedFromFilterScreen()
-    }
+) {
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = Color.White,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContentColor = Color.Transparent,
-        //scrimColor = Color.Transparent,
         sheetContent = {
             Column(
                 Modifier
@@ -67,7 +60,9 @@ fun FilterTransactionsModalBottomSheet(
             bottomNavBarNavHostController = bottomNavBarNavHostController,
             goTo = {},
             isNavDestinationSelected = isNavDestinationSelected,
-            onBackPressed = onBackPressedFromFilterScreen,
+            onBackPressed = {
+                onBackPressed()
+            },
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked
         )

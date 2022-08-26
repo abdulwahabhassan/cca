@@ -86,7 +86,7 @@ fun BottomNavBarNavigation(
             )
         }
         composable(HomeScreen.Transactions.route) {
-            Transactions({}, onSearchBarClicked = onSearchBarClicked)
+            Transactions({}, onSearchBarClicked = onSearchBarClicked, onBackPressed = onBackPressed)
         }
         composable(HomeScreen.Location.route) {
             Location()

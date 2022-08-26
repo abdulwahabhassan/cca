@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -20,20 +21,18 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Transactions(
     downloadTransactions: () -> Unit,
-    onSearchBarClicked: () -> Unit
+    onSearchBarClicked: () -> Unit,
+    onBackPressed: () -> Unit
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
-    val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.HalfExpanded,
-        animationSpec = spring()
-    )
 
-    val coroutineScope = rememberCoroutineScope()
+    BackHandler(true) {
+        onBackPressed()
+    }
 
     Column(
         Modifier
@@ -76,18 +75,12 @@ fun Transactions(
         TransactionsList(com.smartflowtech.cupidcustomerapp.model.Transaction.transactions)
 
     }
-//    FilterTransactionsModalBottomSheet(modalBottomSheetState = modalBottomSheetState) {
-//        coroutineScope.launch {
-//            if (modalBottomSheetState.isVisible) modalBottomSheetState.hide()
-//        }
-//    }
-
 }
 
 @Composable
 @Preview(showBackground = true)
 fun TransactionsPreview() {
     CupidCustomerAppTheme {
-        Transactions({}, {})
+        Transactions({}, {}, {})
     }
 }
