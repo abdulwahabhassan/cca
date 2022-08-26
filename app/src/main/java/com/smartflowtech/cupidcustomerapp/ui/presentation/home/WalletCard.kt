@@ -25,6 +25,7 @@ fun WalletCard(backgroundColor: Color) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
         backgroundColor = backgroundColor
     ) {
         Column{

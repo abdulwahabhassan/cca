@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -12,13 +13,14 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BottomNavBarNavigation(
     bottomNavHostController: NavHostController,
     onBackPressed: () -> Unit,
     onSearchBarClicked: () -> Unit
 ) {
+
     AnimatedNavHost(bottomNavHostController,
         startDestination = HomeScreen.Home.route,
         enterTransition = {

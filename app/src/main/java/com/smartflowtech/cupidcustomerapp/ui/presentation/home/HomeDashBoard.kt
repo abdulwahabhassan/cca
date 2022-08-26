@@ -82,7 +82,7 @@ fun HomeDashBoard(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp, top = 32.dp),
+                                .padding(start = 16.dp, end = 16.dp, top = 32.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Image(
@@ -121,8 +121,8 @@ fun HomeDashBoard(
                         HorizontalPager(
                             count = 3,
                             state = pagerState,
-                            itemSpacing = 20.dp,
-                            contentPadding = PaddingValues(horizontal = 20.dp),
+                            itemSpacing = 16.dp,
+                            contentPadding = PaddingValues(horizontal = 16.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(horizontalPagerHeight)

@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -26,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactionsModalBottomSheet
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.NoRippleTheme
@@ -35,12 +37,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeScreenViewModel,
     bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
+    onFilteredClicked: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -105,7 +107,10 @@ fun HomeScreen(
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
             sheetBackgroundColor = Color.Transparent,
-            sheetPeekHeight = LocalConfiguration.current.screenHeightDp.dp * 0.40f,
+            sheetPeekHeight = if (LocalConfiguration.current.screenWidthDp.dp > 320.dp)
+                LocalConfiguration.current.screenHeightDp.dp * 0.50f
+            else
+                LocalConfiguration.current.screenHeightDp.dp * 0.40f,
             sheetContent = {
 
                 AnimatedVisibility(
@@ -140,7 +145,7 @@ fun HomeScreen(
                             )
                             if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
                                 IconButton(onClick = {
-
+                                    onFilteredClicked()
                                 }) {
                                     Icon(
                                         imageVector = Icons.Rounded.FilterList,
@@ -149,7 +154,7 @@ fun HomeScreen(
                                     )
                                 }
                             } else {
-                                IconButton(onClick = { }) {}
+                                IconButton(onClick = {}) {}
                             }
                         }
 

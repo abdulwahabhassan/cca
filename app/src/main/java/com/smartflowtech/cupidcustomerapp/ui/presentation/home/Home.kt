@@ -41,8 +41,8 @@ fun Home(goToTransactions: () -> Unit, onBackPressed: () -> Unit) {
         HorizontalPager(
             count = 2,
             state = pagerState,
-            contentPadding = PaddingValues(start = 20.dp, end = 60.dp),
-            itemSpacing = 20.dp,
+            contentPadding = PaddingValues(start = 16.dp, end = 32.dp),
+            itemSpacing = 16.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 32.dp)

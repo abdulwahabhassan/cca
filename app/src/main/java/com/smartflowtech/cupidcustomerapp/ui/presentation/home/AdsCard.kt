@@ -25,6 +25,7 @@ fun AdsCard(page: Int) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
+        elevation = 2.dp,
         backgroundColor = if (page == 0) pink else skyBlue
     ) {
         Row(

@@ -10,6 +10,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.OverallHomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
@@ -29,7 +30,7 @@ fun RootNavigation(
 
     AnimatedNavHost(
         navController = rootNavHostController,
-        startDestination = Screen.Login.route,
+        startDestination = Screen.Home.route,
         enterTransition = {
             if (targetState.destination.route != Screen.Home.route) {
                 slideInHorizontally { it }
@@ -126,7 +127,7 @@ fun RootNavigation(
             val bottomNavBarNavHostController = rememberAnimatedNavController()
             val currentRoute =
                 bottomNavBarNavHostController.currentBackStackEntryAsState().value?.destination?.route
-            HomeScreen(
+            OverallHomeScreen(
                 viewModel = homeScreenViewModel,
                 bottomNavBarNavHostController = bottomNavBarNavHostController,
                 goTo = {},
@@ -153,6 +154,35 @@ fun RootNavigation(
                     }
                 }
             )
+
+
+//            HomeScreen(
+//                viewModel = homeScreenViewModel,
+//                bottomNavBarNavHostController = bottomNavBarNavHostController,
+//                goTo = {},
+//                isNavDestinationSelected = { route ->
+//                    currentRoute == route
+//                },
+//                onBackPressed = {
+//                    if (currentRoute == HomeScreen.Home.route) {
+//                        finishActivity()
+//                    } else {
+//                        bottomNavBarNavHostController.popBackStack()
+//                    }
+//                },
+//                onBottomNavItemClicked = { route ->
+//                    bottomNavBarNavHostController.navigate(route) {
+//                        bottomNavBarNavHostController.graph.startDestinationRoute
+//                            ?.let { startDestinationRoute ->
+//                                popUpTo(startDestinationRoute) {
+//                                    saveState = true
+//                                }
+//                            }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+//                }
+//            )
         }
 
     }

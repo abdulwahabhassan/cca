@@ -1,14 +1,10 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,11 +18,22 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Transactions(downloadTransactions: () -> Unit, onSearchBarClicked: () -> Unit) {
+fun Transactions(
+    downloadTransactions: () -> Unit,
+    onSearchBarClicked: () -> Unit
+) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
+    val modalBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.HalfExpanded,
+        animationSpec = spring()
+    )
+
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         Modifier
@@ -67,7 +74,13 @@ fun Transactions(downloadTransactions: () -> Unit, onSearchBarClicked: () -> Uni
         }
 
         TransactionsList(com.smartflowtech.cupidcustomerapp.model.Transaction.transactions)
+
     }
+//    FilterTransactionsModalBottomSheet(modalBottomSheetState = modalBottomSheetState) {
+//        coroutineScope.launch {
+//            if (modalBottomSheetState.isVisible) modalBottomSheetState.hide()
+//        }
+//    }
 
 }
 

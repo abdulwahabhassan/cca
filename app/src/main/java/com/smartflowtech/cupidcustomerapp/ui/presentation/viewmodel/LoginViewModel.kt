@@ -31,11 +31,11 @@ class LoginViewModel @Inject constructor(
             when (val repositoryResult = loginRepository.login(loginRequestBody)) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
-                        dataStorePrefsRepository.updateLoggedIn(
-                            true,
-                            data.fullname ?: "",
-                            data.email ?: ""
-                        )
+//                        dataStorePrefsRepository.updateLoggedIn(
+//                            true,
+//                            data.fullname ?: "",
+//                            data.email ?: ""
+//                        )
                         loginScreenUiState =
                             LoginScreenUiState(
                                 viewModelResult = ViewModelResult.SUCCESS,

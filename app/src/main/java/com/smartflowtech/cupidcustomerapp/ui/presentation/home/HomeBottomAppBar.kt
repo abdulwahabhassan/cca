@@ -19,7 +19,6 @@ fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Uni
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location,
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings,
     )
-    //val navPaddingValues = WindowInsets.navigationBars.asPaddingValues()
 
     BottomAppBar(
         backgroundColor = Color.White,
@@ -32,7 +31,7 @@ fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Uni
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
                 label = {
                     Text(
-                        text = if (LocalConfiguration.current.screenWidthDp.dp <= 320.dp && item.title == "Transactions") "Trans" else item.title,
+                        text = if (LocalConfiguration.current.screenWidthDp.dp <= 320.dp && item.title == "Transactions") "History" else item.title,
                         fontSize = 11.sp
                     )
 

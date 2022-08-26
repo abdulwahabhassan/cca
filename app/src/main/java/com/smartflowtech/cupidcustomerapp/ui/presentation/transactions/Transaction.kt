@@ -45,11 +45,13 @@ fun Transaction(data: Transaction) {
                         }, shape = RoundedCornerShape(50)
                     )
                     .padding(8.dp),
-                painter = painterResource(id = when(data.type) {
-                    "Credit" -> R.drawable.ic_transaction_credit
-                    "Debit" -> R.drawable.ic_transaction_debit
-                    else -> R.drawable.ic_wallet
-                }),
+                painter = painterResource(
+                    id = when (data.type) {
+                        "Credit" -> R.drawable.ic_transaction_credit
+                        "Debit" -> R.drawable.ic_transaction_debit
+                        else -> R.drawable.ic_wallet
+                    }
+                ),
                 contentDescription = "Diagonal arrow",
                 tint = when (data.status) {
                     "Completed" -> blue
@@ -64,7 +66,11 @@ fun Transaction(data: Transaction) {
                     .weight(2f, true)
                     .padding(start = 16.dp)
             ) {
-                Text(text = data.title, fontFamily = AthleticsFontFamily, fontWeight = FontWeight.W400)
+                Text(
+                    text = data.title,
+                    fontFamily = AthleticsFontFamily,
+                    fontWeight = FontWeight.W400
+                )
                 Row {
                     Text(
                         text = data.status,
@@ -79,6 +85,7 @@ fun Transaction(data: Transaction) {
             Text(
                 data.amount,
                 fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp,
                 fontFamily = AthleticsFontFamily,
                 modifier = Modifier.padding(end = 6.dp)
             )
