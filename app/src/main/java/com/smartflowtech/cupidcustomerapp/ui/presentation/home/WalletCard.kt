@@ -5,8 +5,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,7 +33,9 @@ fun WalletCard(backgroundColor: Color) {
         elevation = 4.dp,
         backgroundColor = backgroundColor
     ) {
-        Column{
+
+        var walletBalanceVisibility by rememberSaveable { mutableStateOf(true) }
+        Column {
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
@@ -63,14 +70,21 @@ fun WalletCard(backgroundColor: Color) {
                                 fontSize = 14.sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
-                            Icon(
-                                imageVector = Icons.Outlined.VisibilityOff,
-                                contentDescription = "Balance Visibility"
-                            )
+                            IconButton(
+                                onClick = {
+                                    walletBalanceVisibility = !walletBalanceVisibility
+                                }) {
+                                Icon(
+                                    imageVector = if (walletBalanceVisibility) Icons.Outlined.VisibilityOff
+                                    else Icons.Outlined.Visibility,
+                                    contentDescription = "Balance Visibility",
+                                )
+                            }
+
                         }
-                        Spacer(modifier = Modifier.height(4.dp))
+
                         Text(
-                            text = "₦0.00",
+                            text = if (walletBalanceVisibility) "₦0.00" else "",
                             color = Color.Black,
                             style = MaterialTheme.typography.h6
                         )
@@ -106,7 +120,7 @@ fun WalletCard(backgroundColor: Color) {
                         fontSize = 12.sp,
                         color = brightBlue,
 
-                    )
+                        )
                 }
 
             }
