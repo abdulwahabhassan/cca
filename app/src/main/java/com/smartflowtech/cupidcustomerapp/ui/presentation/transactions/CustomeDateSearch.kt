@@ -1,32 +1,33 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
-import kotlinx.coroutines.launch
 
 @Composable
-fun CustomDateSearch() {
+fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> Unit) {
 
     var startDate by rememberSaveable { mutableStateOf("") }
     var endDate by rememberSaveable { mutableStateOf("") }
@@ -137,7 +138,7 @@ fun CustomDateSearch() {
                     colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
                 )
                 Spacer(modifier = Modifier.width(2.dp))
-                Text(text = "PDF")
+                Text(text = "PDF", color = darkBlue)
             }
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -164,7 +165,7 @@ fun CustomDateSearch() {
                     colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
                 )
                 Spacer(modifier = Modifier.width(2.dp))
-                Text(text = "Excel")
+                Text(text = "Excel", color = darkBlue)
             }
         }
 
@@ -181,7 +182,7 @@ fun CustomDateSearch() {
 
                 //Basic validator
                 if (trimmedStartDate.isEmpty() ||
-                    !trimmedStartDate.matches(Regex("\\d{2}-\\d{2}-\\d{4}"))
+                    !trimmedStartDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
                 ) {
                     startDateErrorLabel = "Input valid date format"
                     isStartDateError = true
@@ -191,7 +192,7 @@ fun CustomDateSearch() {
                 }
 
                 if (trimmedEndDate.isEmpty() ||
-                    !trimmedEndDate.matches(Regex("\\d{2}-\\d{2}-\\d{4}"))
+                    !trimmedEndDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
                 ) {
                     endDateErrorLabel = "Input valid date format"
                     isEndDateError = true
@@ -201,13 +202,39 @@ fun CustomDateSearch() {
                 }
 
                 if (!isStartDateError && !isEndDateError) {
-
+                    onShowSuccess()
                 }
             },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
         ) {
-            Text(text = "Login")
+            Text(text = "Print")
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = {
+                onGoBackToFilterPressed()
+            }) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "Back arrow",
+                    tint = darkBlue,
+                )
+            }
+            Spacer(modifier = Modifier.width(2.dp))
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "Go back",
+                color = darkBlue,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
@@ -216,6 +243,6 @@ fun CustomDateSearch() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 fun CustomDateSearchPreview() {
     CupidCustomerAppTheme {
-        CustomDateSearch()
+        CustomDateSearch({}, {})
     }
 }

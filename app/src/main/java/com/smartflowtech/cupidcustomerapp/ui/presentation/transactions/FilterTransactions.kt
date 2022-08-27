@@ -28,23 +28,22 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FilterTransactions() {
+fun FilterTransactions(
+    dateSelection: String,
+    statusSelection: String,
+    productSelection: String,
+    onCustomSearchClicked: () -> Unit,
+    onDateSelection: (String) -> Unit,
+    onStatusSelection: (String) -> Unit,
+    onProductSelection: (String) -> Unit
+) {
 
-    var dateSelection by rememberSaveable {
-        mutableStateOf("")
-    }
-    var statusSelection by rememberSaveable {
-        mutableStateOf("")
-    }
-    var productSelection by rememberSaveable {
-        mutableStateOf("")
-    }
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
     ) {
         Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = "Filter Transactions",
             color = Color.Black,
             fontFamily = AthleticsFontFamily,
@@ -52,9 +51,9 @@ fun FilterTransactions() {
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(24.dp))
-        LazyColumn() {
+        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp)) {
             mapOf(
-                "Date" to listOf("7 days ago", "30 days ago"),
+                "Date" to listOf("Today", "7 days ago", "15 days ago", "30 days ago"),
                 "Status" to listOf("Completed", "Pending", "Failed"),
                 "Product" to listOf("AGO", "DPK", "PMS")
             ).forEach { (category, filters) ->
@@ -62,6 +61,7 @@ fun FilterTransactions() {
                 stickyHeader {
                     Text(
                         modifier = Modifier
+                            .fillMaxWidth()
                             .background(color = Color.White)
                             .padding(vertical = 16.dp),
                         text = category,
@@ -90,9 +90,9 @@ fun FilterTransactions() {
                             },
                             onClick = {
                                 when (category) {
-                                    "Date" -> dateSelection = filter
-                                    "Status" -> statusSelection = filter
-                                    "Product" -> productSelection = filter
+                                    "Date" -> onDateSelection(filter)
+                                    "Status" -> onStatusSelection(filter)
+                                    "Product" -> onProductSelection(filter)
                                 }
                             },
                             colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
@@ -122,7 +122,9 @@ fun FilterTransactions() {
                                 fontFamily = AthleticsFontFamily
                             )
                             Spacer(modifier = Modifier.width(4.dp))
-                            IconButton(onClick = { }) {
+                            IconButton(onClick = {
+                                onCustomSearchClicked()
+                            }) {
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowForward,
                                     contentDescription = "Forward arrow",
@@ -143,5 +145,5 @@ fun FilterTransactions() {
 @Composable
 @Preview(showBackground = true)
 fun FilterTransactionsPreview() {
-    FilterTransactions()
+    FilterTransactions("", "", "", {}, {}, {}, {})
 }

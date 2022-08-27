@@ -6,7 +6,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +16,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -29,7 +32,34 @@ fun HomeScreenModalBottomSheet(
     onFilteredClicked: () -> Unit
 ) {
 
+    var dateSelection by rememberSaveable {
+        mutableStateOf("")
+    }
+    var statusSelection by rememberSaveable {
+        mutableStateOf("")
+    }
+    var productSelection by rememberSaveable {
+        mutableStateOf("")
+    }
+    var showCustomSearch: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var showSuccess: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+
+    LaunchedEffect(key1 = modalBottomSheetState) {
+        if (!modalBottomSheetState.isVisible) {
+            showCustomSearch = false
+            dateSelection = ""
+            statusSelection = ""
+            productSelection = ""
+        }
+    }
+
     ModalBottomSheetLayout(
+        modifier = Modifier.navigationBarsPadding(),
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = Color.Transparent,
         sheetElevation = 0.dp,
@@ -61,7 +91,7 @@ fun HomeScreenModalBottomSheet(
                     ) {
 
                         IconButton(
-                            onClick = {  },
+                            onClick = { },
                             modifier = Modifier
                                 .padding(end = 8.dp),
                             enabled = false
@@ -75,8 +105,16 @@ fun HomeScreenModalBottomSheet(
                             tint = Color.Unspecified
                         )
 
+                        //Close button
                         IconButton(
-                            onClick = { onBackPressed() },
+                            onClick = {
+                                onBackPressed()
+                                dateSelection = ""
+                                statusSelection = ""
+                                productSelection = ""
+                                showCustomSearch = false
+                                showSuccess = false
+                            },
                             modifier = Modifier
                                 .padding(end = 8.dp),
                         ) {
@@ -88,12 +126,50 @@ fun HomeScreenModalBottomSheet(
                         }
                     }
 
-                    //FilterTransactions()
-                    CustomDateSearch()
+                    if (showCustomSearch) {
+                        CustomDateSearch(
+                            onGoBackToFilterPressed = {
+                                showCustomSearch = false
+                            },
+                            onShowSuccess = {
+                                showCustomSearch = false
+                                showSuccess = true
+                            }
+                        )
+                    } else if (showSuccess) {
+                        Success(
+                            message = "Sent",
+                            info = "We've sent the requested statements to your email",
+                            onOkayPressed = {
+                                onBackPressed()
+                                dateSelection = ""
+                                statusSelection = ""
+                                productSelection = ""
+                                showCustomSearch = false
+                                showSuccess = false
+                            }
+                        )
+                    } else {
+                        FilterTransactions(
+                            dateSelection = dateSelection,
+                            statusSelection = statusSelection,
+                            productSelection = productSelection,
+                            onCustomSearchClicked = {
+                                showCustomSearch = !showCustomSearch
+                            },
+                            onDateSelection = { filter ->
+                                dateSelection = filter
+                            },
+                            onStatusSelection = { filter ->
+                                statusSelection = filter
+                            },
+                            onProductSelection = { filter ->
+                                productSelection = filter
+                            }
+                        )
+                    }
                 }
             }
-
-
         }
     ) {
         HomeScreen(
