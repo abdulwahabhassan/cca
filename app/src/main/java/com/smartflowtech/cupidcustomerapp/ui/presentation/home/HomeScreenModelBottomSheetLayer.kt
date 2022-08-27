@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.spring
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -8,7 +7,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenModalBottomSheet
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
 
@@ -47,7 +45,7 @@ fun HomeScreenModelBottomSheetLayer(
         onFilteredClicked = {
             if (!modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
-                    modalBottomSheetState.show()
+                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
                 }
             }
         }
