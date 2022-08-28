@@ -40,6 +40,7 @@ import timber.log.Timber
 fun HomeDashBoard(
     horizontalPagerHeight: Dp,
     bottomSheetState: BottomSheetState,
+    onAddFundsClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -128,7 +129,10 @@ fun HomeDashBoard(
                                 .height(horizontalPagerHeight)
                                 .padding(top = 16.dp, bottom = 16.dp)
                         ) { page: Int ->
-                            WalletCard(listOf(lightPink, lightYellow, skyBlue)[page])
+                            WalletCard(
+                                listOf(lightPink, lightYellow, skyBlue)[page],
+                                onAddFundsClicked = onAddFundsClicked
+                            )
                         }
                         HorizontalPagerIndicator(
                             totalDots = 3,

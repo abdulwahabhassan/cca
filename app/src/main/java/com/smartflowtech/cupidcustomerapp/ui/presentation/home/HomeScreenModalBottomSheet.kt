@@ -32,7 +32,8 @@ fun HomeScreenModalBottomSheet(
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
-    onDownloadTransactionPressed: (transaction: Transaction) -> Unit
+    onDownloadTransactionPressed: (transaction: Transaction) -> Unit,
+    onAddFundsClicked: () -> Unit
 ) {
 
     var dateSelection by rememberSaveable {
@@ -182,7 +183,8 @@ fun HomeScreenModalBottomSheet(
             onBackPressed = onBackPressed,
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
-            onDownloadTransactionPressed = onDownloadTransactionPressed
+            onDownloadTransactionPressed = onDownloadTransactionPressed,
+            onAddFundsClicked = onAddFundsClicked
         )
     }
 }

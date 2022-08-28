@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -22,17 +21,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.data.repo.LoginRepository
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
 fun LoginScreen(
-    onLoginClicked: (LoginRequestBody) -> Unit,
+    login: (LoginRequestBody) -> Unit,
     uiState: LoginScreenUiState,
     goToHomeScreen: () -> Unit,
     goToForgotPasswordScreen: () -> Unit
@@ -241,7 +237,7 @@ fun LoginScreen(
                                     if (!isEmailError &&
                                         !isPasswordError
                                     ) {
-                                        onLoginClicked(LoginRequestBody(trimmedEmail, password))
+                                        login(LoginRequestBody(trimmedEmail, password))
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),

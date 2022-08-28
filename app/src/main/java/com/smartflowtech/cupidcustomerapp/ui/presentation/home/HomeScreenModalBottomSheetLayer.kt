@@ -12,13 +12,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreenModelBottomSheetLayer(
+fun HomeScreenModalBottomSheetLayer(
     viewModel: HomeScreenViewModel,
     bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
-    onBackPressed: () -> Unit,
-    onBottomNavItemClicked: (String) -> Unit,
+    popBackStackOrFinishActivity: () -> Unit,
+    goToDestination: (String) -> Unit,
+    goToAddFundsScreen: () -> Unit
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -38,10 +39,10 @@ fun HomeScreenModelBottomSheetLayer(
                     modalBottomSheetState.hide()
                 }
             } else {
-                onBackPressed()
+                popBackStackOrFinishActivity()
             }
         },
-        onBottomNavItemClicked = onBottomNavItemClicked,
+        onBottomNavItemClicked = goToDestination,
         onFilteredClicked = {
             if (!modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
@@ -51,6 +52,7 @@ fun HomeScreenModelBottomSheetLayer(
         },
         onDownloadTransactionPressed = {
 
-        }
+        },
+        onAddFundsClicked = goToAddFundsScreen
     )
 }

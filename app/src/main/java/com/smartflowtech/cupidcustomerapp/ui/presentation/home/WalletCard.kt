@@ -26,7 +26,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.common.GradientButton
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
-fun WalletCard(backgroundColor: Color) {
+fun WalletCard(backgroundColor: Color, onAddFundsClicked: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -96,7 +96,8 @@ fun WalletCard(backgroundColor: Color) {
                         ),
                         modifier = Modifier
                             .wrapContentWidth()
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                        onClick = onAddFundsClicked
                     )
                 }
                 Divider(
@@ -132,6 +133,6 @@ fun WalletCard(backgroundColor: Color) {
 @Preview(heightDp = 200)
 fun WalletCardPreview() {
     CupidCustomerAppTheme {
-        WalletCard(backgroundColor = transparentBlue)
+        WalletCard(backgroundColor = transparentBlue, {})
     }
 }

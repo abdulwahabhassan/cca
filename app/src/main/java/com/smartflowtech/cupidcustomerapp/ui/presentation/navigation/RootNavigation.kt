@@ -9,15 +9,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenModelBottomSheetLayer
+import com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds.AddFundsScreenModalBottomSheetLayer
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenModalBottomSheetLayer
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.GetStartedViewModel
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SplashScreenViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -71,12 +69,14 @@ fun RootNavigation(
                         Screen.Home.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
                     )
-                }, goToGetStartedScreen = {
+                },
+                goToGetStartedScreen = {
                     rootNavHostController.navigate(
                         Screen.GetStartedFirst.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
                     )
-                }, goToLoginScreen = {
+                },
+                goToLoginScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
@@ -98,7 +98,7 @@ fun RootNavigation(
                         Screen.Login.route
                     )
                 },
-                onGetStartedClicked = {
+                getStarted = {
                     getStartedViewModel.updateStarted(true)
                 }
             )
@@ -106,7 +106,7 @@ fun RootNavigation(
         composable(route = Screen.Login.route) {
             val loginViewModel = hiltViewModel<LoginViewModel>()
             LoginScreen(
-                onLoginClicked = { loginRequestBody ->
+                login = { loginRequestBody ->
                     loginViewModel.login(loginRequestBody)
                 },
                 uiState = loginViewModel.loginScreenUiState,
@@ -125,21 +125,21 @@ fun RootNavigation(
             val bottomNavBarNavHostController = rememberAnimatedNavController()
             val currentRoute =
                 bottomNavBarNavHostController.currentBackStackEntryAsState().value?.destination?.route
-            HomeScreenModelBottomSheetLayer(
+            HomeScreenModalBottomSheetLayer(
                 viewModel = homeScreenViewModel,
                 bottomNavBarNavHostController = bottomNavBarNavHostController,
                 goTo = {},
                 isNavDestinationSelected = { route ->
                     currentRoute == route
                 },
-                onBackPressed = {
+                popBackStackOrFinishActivity = {
                     if (currentRoute == HomeScreen.Home.route) {
                         finishActivity()
                     } else {
                         bottomNavBarNavHostController.popBackStack()
                     }
                 },
-                onBottomNavItemClicked = { route ->
+                goToDestination = { route ->
                     bottomNavBarNavHostController.navigate(route) {
                         bottomNavBarNavHostController.graph.startDestinationRoute
                             ?.let { startDestinationRoute ->
@@ -150,6 +150,22 @@ fun RootNavigation(
                         launchSingleTop = true
                         restoreState = true
                     }
+                },
+                goToAddFundsScreen = {
+                    rootNavHostController.navigate(
+                        Screen.AddFunds.route
+                    )
+                }
+            )
+
+        }
+
+        composable(route = Screen.AddFunds.route) {
+            val addFundsScreenViewModel = hiltViewModel<AddFundsScreenViewModel>()
+            AddFundsScreenModalBottomSheetLayer(
+                viewModel = addFundsScreenViewModel,
+                goBackToHomeScreen = {
+                    rootNavHostController.popBackStack()
                 }
             )
 

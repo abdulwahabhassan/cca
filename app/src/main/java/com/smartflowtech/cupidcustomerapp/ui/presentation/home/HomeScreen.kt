@@ -41,7 +41,8 @@ fun HomeScreen(
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
-    onDownloadTransactionPressed: (Transaction) -> Unit
+    onDownloadTransactionPressed: (Transaction) -> Unit,
+    onAddFundsClicked: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -195,6 +196,7 @@ fun HomeScreen(
             HomeDashBoard(
                 horizontalPagerHeight = LocalConfiguration.current.screenHeightDp.dp * 0.30f,
                 bottomSheetState = bottomSheetState,
+                onAddFundsClicked = onAddFundsClicked
             )
         }
     }
