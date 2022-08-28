@@ -48,6 +48,9 @@ fun HomeScreenModelBottomSheetLayer(
                     modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
                 }
             }
+        },
+        onDownloadTransactionPressed = {
+
         }
     )
 }

@@ -171,6 +171,7 @@ fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> U
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        //Print button
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -211,6 +212,7 @@ fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> U
             Text(text = "Print")
         }
 
+        //Go back arrow
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -16,9 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -29,7 +31,8 @@ fun HomeScreenModalBottomSheet(
     isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
-    onFilteredClicked: () -> Unit
+    onFilteredClicked: () -> Unit,
+    onDownloadTransactionPressed: (transaction: Transaction) -> Unit
 ) {
 
     var dateSelection by rememberSaveable {
@@ -178,7 +181,8 @@ fun HomeScreenModalBottomSheet(
             isNavDestinationSelected = isNavDestinationSelected,
             onBackPressed = onBackPressed,
             onBottomNavItemClicked = onBottomNavItemClicked,
-            onFilteredClicked = onFilteredClicked
+            onFilteredClicked = onFilteredClicked,
+            onDownloadTransactionPressed = onDownloadTransactionPressed
         )
     }
 }

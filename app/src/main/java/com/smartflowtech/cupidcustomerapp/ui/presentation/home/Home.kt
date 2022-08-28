@@ -72,7 +72,7 @@ fun Home(goToTransactions: () -> Unit, onBackPressed: () -> Unit) {
             }
         }
 
-        TransactionsList(Transaction.transactions)
+        TransactionsList(Transaction.transactions) { goToTransactions() }
     }
 }
 

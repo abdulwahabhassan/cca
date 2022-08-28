@@ -129,7 +129,7 @@ fun WalletCard(backgroundColor: Color) {
 }
 
 @Composable
-@Preview()
+@Preview(heightDp = 200)
 fun WalletCardPreview() {
     CupidCustomerAppTheme {
         WalletCard(backgroundColor = transparentBlue)

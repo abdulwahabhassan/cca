@@ -1,7 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -15,72 +14,109 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
-import kotlinx.coroutines.launch
 
 @Composable
 fun Transactions(
     downloadTransactions: () -> Unit,
     onSearchBarClicked: () -> Unit,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onDownloadTransactionPressed: (transaction: Transaction) -> Unit
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
+    var selectedTransaction: Transaction by remember {
+        mutableStateOf(
+            Transaction(
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            )
+        )
+    }
+
+    var showReceipt: Boolean by remember {
+        mutableStateOf(false)
+    }
 
     BackHandler(true) {
         onBackPressed()
     }
 
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        horizontalAlignment = Alignment.Start
-    ) {
-
-        SearchBar(
-            query = queryText,
-            onQueryChange = { searchText ->
-                queryText = searchText
+    if (showReceipt) {
+        Receipt(
+            transaction = selectedTransaction,
+            onGoBackToTransactionListPressed = {
+                showReceipt = false
             },
-            onSearchBarClicked = onSearchBarClicked
+            onDownloadTransactionPressed = onDownloadTransactionPressed
         )
-
-        Row(
-            modifier = Modifier
-                .padding(start = 16.dp, end = 4.dp, top = 16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+    } else {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                text = "Transaction History",
-                color = Color.Black,
-                fontFamily = AthleticsFontFamily,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+
+            SearchBar(
+                query = queryText,
+                onQueryChange = { searchText ->
+                    queryText = searchText
+                },
+                onSearchBarClicked = onSearchBarClicked
             )
-            IconButton(onClick = { downloadTransactions() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_download),
-                    contentDescription = "Forward arrow",
-                    tint = black
+
+            Row(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 4.dp, top = 16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Transaction History",
+                    color = Color.Black,
+                    fontFamily = AthleticsFontFamily,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
                 )
+                IconButton(onClick = { downloadTransactions() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_download),
+                        contentDescription = "Forward arrow",
+                        tint = black
+                    )
+                }
             }
+
+            TransactionsList(
+                Transaction.transactions,
+                onTransactionClicked = { transaction: Transaction ->
+                    showReceipt = true
+                    selectedTransaction = transaction
+                }
+            )
+
         }
-
-        TransactionsList(com.smartflowtech.cupidcustomerapp.model.Transaction.transactions)
-
     }
+
+
 }
 
 @Composable
 @Preview(showBackground = true)
 fun TransactionsPreview() {
     CupidCustomerAppTheme {
-        Transactions({}, {}, {})
+        Transactions({}, {}, {}, {})
     }
 }

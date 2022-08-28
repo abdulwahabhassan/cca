@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -20,16 +21,18 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
-fun Transaction(data: Transaction) {
+fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
             .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
+                .clickable {
+                    onClick(data)
+                }
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 24.dp, vertical = 8.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -94,7 +97,7 @@ fun Transaction(data: Transaction) {
         Divider(
             color = lineGrey,
             thickness = 0.5.dp,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
         )
     }
 
@@ -103,5 +106,14 @@ fun Transaction(data: Transaction) {
 @Preview(showBackground = true)
 @Composable
 fun TransactionPreview() {
-    Transaction("Completed", "11:24PM", "Transaction", "₦167,000.00", "", "Credit")
+    Transaction(
+        "Completed",
+        "11:24PM",
+        "Transaction",
+        "₦167,000.00",
+        "",
+        "Credit",
+        "TRS283883920",
+        "Wallet Top-Up"
+    )
 }

@@ -6,7 +6,9 @@ data class Transaction(
     val title: String,
     val amount: String,
     val date: String,
-    val type: String
+    val type: String,
+    val referenceNumber: String,
+    val description: String,
 ) {
     companion object {
         val transactions = listOf(
@@ -16,7 +18,9 @@ data class Transaction(
                 "Transaction",
                 "₦67,000.00",
                 date = "Jul 10, 2019",
-                type = "Credit"
+                type = "Credit",
+                referenceNumber = "TRS90399291",
+                description = "Purchase on Cupid",
             ),
             Transaction(
                 "Pending",
@@ -24,7 +28,9 @@ data class Transaction(
                 "Transaction",
                 "₦30,000.00",
                 date = "Jun 24, 2018",
-                type = "Credit"
+                type = "Credit",
+                referenceNumber = "TRS765599291",
+                description = "Wallet Top-Up",
             ),
             Transaction(
                 "Completed",
@@ -32,7 +38,9 @@ data class Transaction(
                 "Transaction",
                 "₦12,000.00",
                 date = "Jun 24, 2022",
-                type = "Credit"
+                type = "Credit",
+                referenceNumber = "TRS765599291",
+                description = "Wallet Top-Up",
             ),
             Transaction(
                 "Failed",
@@ -40,7 +48,9 @@ data class Transaction(
                 "Transaction",
                 "₦17,000.00",
                 date = "Jul 24, 2022",
-                type = "Credit"
+                type = "Debit",
+                referenceNumber = "TRS723599291",
+                description = "Mobile Transfer",
             ),
             Transaction(
                 "Completed",
@@ -48,7 +58,9 @@ data class Transaction(
                 "Transaction",
                 "₦65,000.00",
                 date = "Feb 02, 2020",
-                type = "Debit"
+                type = "Debit",
+                referenceNumber = "TRS0949482392",
+                description = "Mobile Transfer",
             ),
             Transaction(
                 "Completed",
@@ -56,7 +68,9 @@ data class Transaction(
                 "Transaction",
                 "₦7,000.00",
                 date = "Jul 24, 2022",
-                type = "Credit"
+                type = "Debit",
+                referenceNumber = "TRS501499291",
+                description = "Purchase on Cupid",
             ),
             Transaction(
                 "Pending",
@@ -64,7 +78,9 @@ data class Transaction(
                 "Transaction",
                 "₦167,000.00",
                 date = "Mar 10, 2022",
-                type = "Debit"
+                type = "Credit",
+                referenceNumber = "TRS501499291",
+                description = "Wallet Top-Up",
             ),
             Transaction(
                 "Failed",
@@ -72,7 +88,9 @@ data class Transaction(
                 "Transaction",
                 "₦1,000.00",
                 date = "Oct 02, 2021",
-                type = "Debit"
+                type = "Debit",
+                referenceNumber = "TRS97814937841",
+                description = "Purchase on Cupid",
             ),
             Transaction(
                 "Completed",
@@ -80,7 +98,9 @@ data class Transaction(
                 "Transaction",
                 "₦10,000.00",
                 date = "Jul 24, 2021",
-                type = "Credit"
+                type = "Debit",
+                referenceNumber = "TRS501499291",
+                description = "Purchase on Cupid",
             ),
             Transaction(
                 "Pending",
@@ -88,7 +108,9 @@ data class Transaction(
                 "Transaction",
                 "₦99,000.00",
                 date = "Dec 24, 2022",
-                type = "Debit"
+                type = "Debit",
+                referenceNumber = "TRS5011235591",
+                description = "Purchase on Cupid",
             ),
             Transaction(
                 "Pending",
@@ -96,15 +118,19 @@ data class Transaction(
                 "Transaction",
                 "₦144,000.00",
                 date = "Jul 24, 2019",
-                type = "Credit"
+                type = "Credit",
+                referenceNumber = "TRS504299291",
+                description = "Cash Back",
             ),
             Transaction(
                 "Pending",
                 "05:30PM",
                 "Transaction",
-                "₦57,000.00",
+                "₦1.00",
                 date = "Sep 15, 2022",
-                type = "Debit"
+                type = "Debit",
+                referenceNumber = "TRS3819499291",
+                description = "Transaction Fee",
             ),
 
             )

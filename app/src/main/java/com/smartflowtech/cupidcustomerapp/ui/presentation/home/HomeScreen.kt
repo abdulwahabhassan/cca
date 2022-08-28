@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -39,7 +40,8 @@ fun HomeScreen(
     isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
-    onFilteredClicked: () -> Unit
+    onFilteredClicked: () -> Unit,
+    onDownloadTransactionPressed: (Transaction) -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -184,7 +186,8 @@ fun HomeScreen(
                             coroutineScope.launch {
                                 bottomSheetState.expand()
                             }
-                        }
+                        },
+                        onDownloadTransactionPressed = onDownloadTransactionPressed
                     )
                 }
             }) { paddingValues ->

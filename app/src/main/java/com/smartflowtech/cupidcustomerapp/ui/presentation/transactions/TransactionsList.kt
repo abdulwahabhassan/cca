@@ -26,7 +26,10 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TransactionsList(list: List<Transaction>) {
+fun TransactionsList(
+    list: List<Transaction>,
+    onTransactionClicked: (transaction: Transaction) -> Unit
+) {
 
     Column(
         Modifier
@@ -73,7 +76,9 @@ fun TransactionsList(list: List<Transaction>) {
                 items(transactions) { transaction ->
                     Transaction(
                         transaction
-                    )
+                    ) { data: Transaction ->
+                        onTransactionClicked(data)
+                    }
                 }
 
             }
@@ -85,6 +90,6 @@ fun TransactionsList(list: List<Transaction>) {
 @Preview(showBackground = true)
 fun TransactionsListPreview() {
     CupidCustomerAppTheme {
-        TransactionsList(Transaction.transactions)
+        TransactionsList(Transaction.transactions, {})
     }
 }
