@@ -65,10 +65,9 @@ fun AddFundsKeyPad() {
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
-            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp),
+                    .padding(start = 8.dp, end = 8.dp),
                 text = amount,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
