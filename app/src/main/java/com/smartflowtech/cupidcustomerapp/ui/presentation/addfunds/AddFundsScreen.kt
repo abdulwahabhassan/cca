@@ -22,13 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
-import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.gradientBluePurple
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun AddFundsScreen(onBackPressed: () -> Unit) {
+
+    var amount by rememberSaveable { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -48,6 +50,15 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
             sheetElevation = 0.dp,
             sheetBackgroundColor = Color.Transparent,
             sheetPeekHeight = 0.dp,
+            snackbarHost = {
+                SnackbarHost(it) { data ->
+                    Snackbar(
+                        backgroundColor = transparentPurple,
+                        contentColor = darkBlue,
+                        snackbarData = data
+                    )
+                }
+            },
             sheetContent = {
 
                 AnimatedVisibility(
@@ -137,17 +148,42 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
 
                 }
 
-                AddFundsKeyPad()
+                AddFundsKeyPad(
+                    displayValue = amount,
+                    onDisplayValueUpdated = { newValue ->
+                        amount = newValue
+                    },
+                    showSnackBar = { message ->
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                                message = message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
 
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp)
                         .padding(horizontal = 16.dp),
                     onClick = {
-                        coroutineScope.launch {
-                            bottomSheetState.expand()
+                        if (amount.isNotEmpty() && amount != "0") {
+                            coroutineScope.launch {
+                                bottomSheetState.expand()
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                                    message = "Invalid amount",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         }
+
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)

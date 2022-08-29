@@ -1,15 +1,11 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,27 +16,27 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
-import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.*
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightPink
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightYellow
 import com.smartflowtech.cupidcustomerapp.ui.theme.skyBlue
-import timber.log.Timber
+import java.util.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeDashBoard(
     horizontalPagerHeight: Dp,
     bottomSheetState: BottomSheetState,
-    onAddFundsClicked: () -> Unit
+    onAddFundsClicked: () -> Unit,
+    userName: String,
 ) {
     val pagerState = rememberPagerState()
 
@@ -105,9 +101,17 @@ fun HomeDashBoard(
                             ) {
                                 Column {
                                     Text(
-                                        text = "Hi Anayo",
+                                        text = "Hi ${
+                                            userName.replaceFirstChar {
+                                                if (it.isLowerCase()) it.titlecase(
+                                                    Locale.getDefault()
+                                                ) else it.toString()
+                                            }
+                                        }",
                                         color = Color.White,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                     Text(text = "Trust you are good", color = Color.White)
                                 }

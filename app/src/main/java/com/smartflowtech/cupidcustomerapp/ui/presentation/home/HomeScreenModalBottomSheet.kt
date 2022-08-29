@@ -20,7 +20,6 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -33,7 +32,8 @@ fun HomeScreenModalBottomSheet(
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
     onDownloadTransactionPressed: (transaction: Transaction) -> Unit,
-    onAddFundsClicked: () -> Unit
+    onAddFundsClicked: () -> Unit,
+    userName: String,
 ) {
 
     var dateSelection by rememberSaveable {
@@ -184,7 +184,8 @@ fun HomeScreenModalBottomSheet(
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
             onDownloadTransactionPressed = onDownloadTransactionPressed,
-            onAddFundsClicked = onAddFundsClicked
+            onAddFundsClicked = onAddFundsClicked,
+            userName = userName,
         )
     }
 }

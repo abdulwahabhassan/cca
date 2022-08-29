@@ -26,7 +26,7 @@ fun RootNavigation(
 
     AnimatedNavHost(
         navController = rootNavHostController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Splash.route,
         enterTransition = {
             if (targetState.destination.route != Screen.Home.route) {
                 slideInHorizontally { it }

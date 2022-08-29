@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +32,8 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
             .background(color = darkBlue),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+
+        var enabled by remember { mutableStateOf(true) }
 
         Column(Modifier.padding(top = 40.dp)) {
             Row(
@@ -105,7 +107,11 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
-                onClick = { goToGetStartedSecondScreen() },
+                enabled = enabled,
+                onClick = {
+                    enabled = false
+                    goToGetStartedSecondScreen()
+                          },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {

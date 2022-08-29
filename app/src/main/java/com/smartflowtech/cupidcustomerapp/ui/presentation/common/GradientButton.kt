@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -19,16 +19,22 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun GradientButton(
     text: String,
-    gradient : Brush,
+    gradient: Brush,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = { },
 ) {
+    var enabled by remember { mutableStateOf(true) }
+
     Button(
         modifier = Modifier.wrapContentWidth(),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(),
-        onClick = onClick,
-        shape = RoundedCornerShape(10.dp)
+        onClick = {
+            enabled = false
+            onClick()
+        },
+        shape = RoundedCornerShape(10.dp),
+        enabled = enabled
     ) {
         Box(
             modifier = Modifier

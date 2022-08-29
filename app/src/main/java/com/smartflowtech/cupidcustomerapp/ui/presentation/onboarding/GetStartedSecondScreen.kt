@@ -25,6 +25,8 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.gradientWhiteBlue
 @Composable
 fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) {
 
+    var enabled by remember { mutableStateOf(true) }
+
     Box(
         modifier = Modifier
             .navigationBarsPadding()
@@ -69,21 +71,18 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
+                enabled = enabled,
                 onClick = {
+                    enabled = false
                     getStarted()
                     goToLoginScreen()
-                          },
+                },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(text = "Get Started")
             }
             Spacer(modifier = Modifier.height(40.dp))
-//            Spacer(
-//                Modifier
-//                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
-//                    .fillMaxWidth()
-//            )
         }
     }
 }

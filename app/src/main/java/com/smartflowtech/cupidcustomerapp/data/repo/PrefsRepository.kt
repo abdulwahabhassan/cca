@@ -16,7 +16,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val onBoarded: Boolean = false,
         val loggedIn: Boolean = false,
         val userName: String = "",
-        val userEmail: String = ""
+        val userEmail: String = "",
+        val token: String = "",
+        val phoneNumber: String = ""
     )
 
     private object PreferencesKeys {
@@ -24,6 +26,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val LOGGED_IN = booleanPreferencesKey("loggedIn")
         val USERNAME = stringPreferencesKey("userName")
         val USER_EMAIL = stringPreferencesKey("userEmail")
+        val TOKEN = stringPreferencesKey("token")
+        val PHONE_NUMBER = stringPreferencesKey("phoneNumber")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -44,7 +48,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             onBoarded = preferences[PreferencesKeys.ONBOARDED] ?: false,
             loggedIn = preferences[PreferencesKeys.LOGGED_IN] ?: false,
             userName = preferences[PreferencesKeys.USERNAME] ?: "",
-            userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: ""
+            userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: "",
+            token = preferences[PreferencesKeys.TOKEN] ?: "",
+            phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: ""
         )
     }
 
@@ -55,14 +61,18 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
     }
 
     suspend fun updateLoggedIn(
-        bool: Boolean,
+        loggedIn: Boolean,
         username: String,
         userEmail: String,
+        token: String,
+        phoneNumber: String
     ) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.LOGGED_IN] = bool
+            mutablePreferences[PreferencesKeys.LOGGED_IN] = loggedIn
             mutablePreferences[PreferencesKeys.USERNAME] = username
             mutablePreferences[PreferencesKeys.USER_EMAIL] = userEmail
+            mutablePreferences[PreferencesKeys.TOKEN] = token
+            mutablePreferences[PreferencesKeys.PHONE_NUMBER] = phoneNumber
         }
     }
 

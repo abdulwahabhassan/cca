@@ -19,7 +19,7 @@ fun HomeScreenModalBottomSheetLayer(
     isNavDestinationSelected: (String) -> Boolean,
     popBackStackOrFinishActivity: () -> Unit,
     goToDestination: (String) -> Unit,
-    goToAddFundsScreen: () -> Unit
+    goToAddFundsScreen: () -> Unit,
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -53,6 +53,7 @@ fun HomeScreenModalBottomSheetLayer(
         onDownloadTransactionPressed = {
 
         },
-        onAddFundsClicked = goToAddFundsScreen
+        onAddFundsClicked = goToAddFundsScreen,
+        userName = viewModel.appConfigPreferences.userName,
     )
 }

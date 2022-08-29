@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface CupidApiService {
 
-    @POST("pos_admin_auth")
+    @POST("auth")
     suspend fun login(
         @Body loginRequestBody: LoginRequestBody
     ): CupidApiResponse<LoginResponseData>
