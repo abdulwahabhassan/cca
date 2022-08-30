@@ -26,7 +26,12 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.common.GradientButton
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
-fun WalletCard(backgroundColor: Color, onAddFundsClicked: () -> Unit) {
+fun WalletCard(
+    backgroundColor: Color,
+    onAddFundsClicked: () -> Unit,
+    walletBalanceVisibility: Boolean,
+    updateWalletVisibility: (Boolean) -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -34,7 +39,6 @@ fun WalletCard(backgroundColor: Color, onAddFundsClicked: () -> Unit) {
         backgroundColor = backgroundColor
     ) {
 
-        var walletBalanceVisibility by rememberSaveable { mutableStateOf(true) }
         Column {
             Row(
                 horizontalArrangement = Arrangement.End,
@@ -72,7 +76,7 @@ fun WalletCard(backgroundColor: Color, onAddFundsClicked: () -> Unit) {
                             Spacer(modifier = Modifier.width(4.dp))
                             IconButton(
                                 onClick = {
-                                    walletBalanceVisibility = !walletBalanceVisibility
+                                    updateWalletVisibility(!walletBalanceVisibility)
                                 }) {
                                 Icon(
                                     imageVector = if (walletBalanceVisibility) Icons.Outlined.VisibilityOff
@@ -84,7 +88,7 @@ fun WalletCard(backgroundColor: Color, onAddFundsClicked: () -> Unit) {
                         }
 
                         Text(
-                            text = if (walletBalanceVisibility) "₦0.00" else "",
+                            text = if (walletBalanceVisibility) "₦0.00" else "******",
                             color = Color.Black,
                             style = MaterialTheme.typography.h6
                         )
@@ -133,6 +137,6 @@ fun WalletCard(backgroundColor: Color, onAddFundsClicked: () -> Unit) {
 @Preview(heightDp = 200)
 fun WalletCardPreview() {
     CupidCustomerAppTheme {
-        WalletCard(backgroundColor = transparentBlue, {})
+        WalletCard(backgroundColor = transparentBlue, {}, true, {})
     }
 }

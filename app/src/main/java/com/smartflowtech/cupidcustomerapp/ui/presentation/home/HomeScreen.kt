@@ -44,6 +44,8 @@ fun HomeScreen(
     onDownloadTransactionPressed: (Transaction) -> Unit,
     onAddFundsClicked: () -> Unit,
     userName: String,
+    walletBalanceVisibility: Boolean,
+    updateWalletVisibility: (Boolean) -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -199,6 +201,8 @@ fun HomeScreen(
                 bottomSheetState = bottomSheetState,
                 onAddFundsClicked = onAddFundsClicked,
                 userName = userName,
+                walletBalanceVisibility = walletBalanceVisibility,
+                updateWalletVisibility = updateWalletVisibility
             )
         }
     }

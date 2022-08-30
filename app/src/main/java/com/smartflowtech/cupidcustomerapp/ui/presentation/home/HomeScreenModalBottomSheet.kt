@@ -34,6 +34,8 @@ fun HomeScreenModalBottomSheet(
     onDownloadTransactionPressed: (transaction: Transaction) -> Unit,
     onAddFundsClicked: () -> Unit,
     userName: String,
+    walletBalanceVisibility: Boolean,
+    updateWalletVisibility: (Boolean) -> Unit
 ) {
 
     var dateSelection by rememberSaveable {
@@ -186,6 +188,8 @@ fun HomeScreenModalBottomSheet(
             onDownloadTransactionPressed = onDownloadTransactionPressed,
             onAddFundsClicked = onAddFundsClicked,
             userName = userName,
+            walletBalanceVisibility = walletBalanceVisibility,
+            updateWalletVisibility = updateWalletVisibility
         )
     }
 }

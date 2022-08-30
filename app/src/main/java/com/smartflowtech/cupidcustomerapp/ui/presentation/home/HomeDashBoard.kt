@@ -19,15 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
-import com.smartflowtech.cupidcustomerapp.ui.theme.lightPink
-import com.smartflowtech.cupidcustomerapp.ui.theme.lightYellow
-import com.smartflowtech.cupidcustomerapp.ui.theme.skyBlue
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import java.util.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
@@ -37,6 +35,8 @@ fun HomeDashBoard(
     bottomSheetState: BottomSheetState,
     onAddFundsClicked: () -> Unit,
     userName: String,
+    walletBalanceVisibility: Boolean,
+    updateWalletVisibility: (Boolean) -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -82,16 +82,17 @@ fun HomeDashBoard(
                                 .padding(start = 16.dp, end = 16.dp, top = 32.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Image(
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
+                            IconButton(
+                                onClick = { }, modifier = Modifier
                                     .size(50.dp)
-                                    .clip(CircleShape)
-                                    .background(color = grey),
-                                painter = painterResource(id = R.drawable.ic_profile_pic),
-                                contentDescription = "Profile image",
-                                alignment = Alignment.TopCenter
-                            )
+                                    .background(color = transparentBlue, CircleShape)
+                            ) {
+                                Text(
+                                    text = userName.first().toString() + userName.substring(1, 2),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp
+                                )
+                            }
                             Spacer(modifier = Modifier.width(16.dp))
                             Row(
                                 Modifier
@@ -135,7 +136,9 @@ fun HomeDashBoard(
                         ) { page: Int ->
                             WalletCard(
                                 listOf(lightPink, lightYellow, skyBlue)[page],
-                                onAddFundsClicked = onAddFundsClicked
+                                onAddFundsClicked = onAddFundsClicked,
+                                walletBalanceVisibility = walletBalanceVisibility,
+                                updateWalletVisibility = updateWalletVisibility
                             )
                         }
                         HorizontalPagerIndicator(

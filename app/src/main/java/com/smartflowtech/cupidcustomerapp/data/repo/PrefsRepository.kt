@@ -18,7 +18,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val userName: String = "",
         val userEmail: String = "",
         val token: String = "",
-        val phoneNumber: String = ""
+        val phoneNumber: String = "",
+        val walletBalanceVisibility: Boolean = true
     )
 
     private object PreferencesKeys {
@@ -28,6 +29,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val USER_EMAIL = stringPreferencesKey("userEmail")
         val TOKEN = stringPreferencesKey("token")
         val PHONE_NUMBER = stringPreferencesKey("phoneNumber")
+        val WALLET_BALANCE_VISIBILITY = booleanPreferencesKey("walletVisibility")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -50,7 +52,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             userName = preferences[PreferencesKeys.USERNAME] ?: "",
             userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: "",
             token = preferences[PreferencesKeys.TOKEN] ?: "",
-            phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: ""
+            phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
+            walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY] ?: true
         )
     }
 
@@ -76,5 +79,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-
+    suspend fun updateWalletBalanceVisibility(visibility: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY] = visibility
+        }
+    }
 }

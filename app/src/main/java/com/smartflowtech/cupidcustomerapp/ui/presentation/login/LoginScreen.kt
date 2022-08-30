@@ -24,11 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
 fun LoginScreen(
-    login: (LoginRequestBody) -> Unit,
+    viewModel: LoginViewModel,
     uiState: LoginScreenUiState,
     goToHomeScreen: () -> Unit,
     goToForgotPasswordScreen: () -> Unit
@@ -238,7 +239,7 @@ fun LoginScreen(
                                     if (!isEmailError &&
                                         !isPasswordError
                                     ) {
-                                        login(LoginRequestBody(trimmedEmail, password))
+                                        viewModel.login(LoginRequestBody(trimmedEmail, password))
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),
@@ -260,7 +261,7 @@ fun LoginScreen(
                         text = "Forgot password?"
                     )
                 }
-                
+
             }
         }
 

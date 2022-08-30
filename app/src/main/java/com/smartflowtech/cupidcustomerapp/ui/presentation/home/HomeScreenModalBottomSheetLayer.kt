@@ -54,6 +54,14 @@ fun HomeScreenModalBottomSheetLayer(
 
         },
         onAddFundsClicked = goToAddFundsScreen,
-        userName = viewModel.appConfigPreferences.userName,
+        userName = "John Doe"
+//        viewModel.appConfigPreferences.userName
+        ,
+        walletBalanceVisibility = true
+        //viewModel.appConfigPreferences.walletBalanceVisibility
+        ,
+        updateWalletVisibility = { visibility ->
+            viewModel.updateWalletBalanceVisibility(visibility)
+        }
     )
 }

@@ -3,6 +3,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,7 +27,7 @@ fun RootNavigation(
 
     AnimatedNavHost(
         navController = rootNavHostController,
-        startDestination = Screen.Splash.route,
+        startDestination = Screen.Home.route,
         enterTransition = {
             if (targetState.destination.route != Screen.Home.route) {
                 slideInHorizontally { it }
@@ -106,9 +107,7 @@ fun RootNavigation(
         composable(route = Screen.Login.route) {
             val loginViewModel = hiltViewModel<LoginViewModel>()
             LoginScreen(
-                login = { loginRequestBody ->
-                    loginViewModel.login(loginRequestBody)
-                },
+                viewModel = loginViewModel,
                 uiState = loginViewModel.loginScreenUiState,
                 goToHomeScreen = {
                     rootNavHostController.navigate(
