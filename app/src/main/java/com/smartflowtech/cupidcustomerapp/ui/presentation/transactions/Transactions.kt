@@ -24,8 +24,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.black
 fun Transactions(
     downloadTransactions: () -> Unit,
     onSearchBarClicked: () -> Unit,
-    onBackPressed: () -> Unit,
-    onDownloadTransactionPressed: (transaction: Transaction) -> Unit
+    onBackPressed: () -> Unit
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
@@ -57,8 +56,7 @@ fun Transactions(
             transaction = selectedTransaction,
             onGoBackToTransactionListPressed = {
                 showReceipt = false
-            },
-            onDownloadTransactionPressed = onDownloadTransactionPressed
+            }
         )
     } else {
         Column(
@@ -117,6 +115,6 @@ fun Transactions(
 @Preview(showBackground = true)
 fun TransactionsPreview() {
     CupidCustomerAppTheme {
-        Transactions({}, {}, {}, {})
+        Transactions({}, {}, {})
     }
 }

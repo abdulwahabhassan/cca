@@ -6,13 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.TransactionDateHeader
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
@@ -29,13 +22,13 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilterTransactions(
-    dateSelection: String,
-    statusSelection: String,
-    productSelection: String,
+    dateFilter: String,
+    statusFilter: String,
+    productFilter: String,
     onCustomSearchClicked: () -> Unit,
-    onDateSelection: (String) -> Unit,
-    onStatusSelection: (String) -> Unit,
-    onProductSelection: (String) -> Unit
+    onDateFilterSelected: (String) -> Unit,
+    onStatusFilterSelected: (String) -> Unit,
+    onProductFilterSelected: (String) -> Unit
 ) {
 
     Column(
@@ -81,18 +74,18 @@ fun FilterTransactions(
                     ) {
                         RadioButton(
                             selected = when (category) {
-                                "Date" -> filter == dateSelection
-                                "Status" -> filter == statusSelection
-                                "Product" -> filter == productSelection
+                                "Date" -> filter == dateFilter
+                                "Status" -> filter == statusFilter
+                                "Product" -> filter == productFilter
                                 else -> {
                                     false
                                 }
                             },
                             onClick = {
                                 when (category) {
-                                    "Date" -> onDateSelection(filter)
-                                    "Status" -> onStatusSelection(filter)
-                                    "Product" -> onProductSelection(filter)
+                                    "Date" -> onDateFilterSelected(filter)
+                                    "Status" -> onStatusFilterSelected(filter)
+                                    "Product" -> onProductFilterSelected(filter)
                                 }
                             },
                             colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
@@ -107,33 +100,33 @@ fun FilterTransactions(
                     }
                 }
 
-                if (category == "Date") {
-                    item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(vertical = 8.dp),
-                                text = "Custom search",
-                                color = grey,
-                                fontFamily = AthleticsFontFamily
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            IconButton(onClick = {
-                                onCustomSearchClicked()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.ArrowForward,
-                                    contentDescription = "Forward arrow",
-                                    tint = grey
-                                )
-                            }
-                        }
-                    }
-                }
+//                if (category == "Date") {
+//                    item {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(start = 16.dp),
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Text(
+//                                modifier = Modifier.padding(vertical = 8.dp),
+//                                text = "Custom search",
+//                                color = grey,
+//                                fontFamily = AthleticsFontFamily
+//                            )
+//                            Spacer(modifier = Modifier.width(4.dp))
+//                            IconButton(onClick = {
+//                                onCustomSearchClicked()
+//                            }) {
+//                                Icon(
+//                                    imageVector = Icons.Rounded.ArrowForward,
+//                                    contentDescription = "Forward arrow",
+//                                    tint = grey
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
 
             }
 

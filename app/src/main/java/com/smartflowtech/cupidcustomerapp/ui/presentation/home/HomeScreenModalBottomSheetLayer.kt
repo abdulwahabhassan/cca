@@ -27,7 +27,6 @@ fun HomeScreenModalBottomSheetLayer(
     )
     val coroutineScope = rememberCoroutineScope()
 
-
     HomeScreenModalBottomSheet(
         modalBottomSheetState = modalBottomSheetState,
         bottomNavBarNavHostController = bottomNavBarNavHostController,
@@ -50,18 +49,23 @@ fun HomeScreenModalBottomSheetLayer(
                 }
             }
         },
-        onDownloadTransactionPressed = {
-
-        },
         onAddFundsClicked = goToAddFundsScreen,
-        userName = "John Doe"
-//        viewModel.appConfigPreferences.userName
-        ,
-        walletBalanceVisibility = true
-        //viewModel.appConfigPreferences.walletBalanceVisibility
-        ,
+        userName = "John Doe",
+        walletBalanceVisibility = true,
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)
+        },
+        dateFilter = viewModel.appConfigPreferences.dateFilter,
+        statusFilter = viewModel.appConfigPreferences.statusFilter,
+        productFilter = viewModel.appConfigPreferences.productFilter,
+        onDateFilterSelected = { date ->
+            viewModel.updateDateFilter(date)
+        },
+        onStatusFilterSelected = { status ->
+            viewModel.updateStatusFilter(status)
+        },
+        onProductFilterSelected = { product ->
+            viewModel.updateProduct(product)
         }
     )
 }

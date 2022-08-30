@@ -35,8 +35,7 @@ import java.io.FileOutputStream
 @Composable
 fun Receipt(
     transaction: Transaction,
-    onGoBackToTransactionListPressed: () -> Unit,
-    onDownloadTransactionPressed: (transaction: Transaction) -> Unit
+    onGoBackToTransactionListPressed: () -> Unit
 ) {
     val context = LocalContext.current
     val multiplePermissionsState = rememberMultiplePermissionsState(
@@ -45,7 +44,6 @@ fun Receipt(
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
         )
     )
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -245,7 +243,7 @@ fun Receipt(
                         modifier = Modifier
                             .background(
                                 color = transparentPink,
-                                shape = RoundedCornerShape(4.dp)
+                                shape = RoundedCornerShape(10.dp)
                             )
                             .padding(8.dp),
                         textAlign = TextAlign.Center
@@ -254,6 +252,7 @@ fun Receipt(
                     Button(modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),
+                        shape = RoundedCornerShape(10.dp),
                         onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
                         Text("Grant permission")
                     }
@@ -288,12 +287,10 @@ fun Receipt(
             )
         }
     }
-
 }
 
 
 private fun createFile(fileName: String): File {
-    //Prepare file
     val title = "SFT$fileName.pdf"
     val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
     val file = File(path, title)
@@ -352,7 +349,6 @@ fun ReceiptPreview() {
                 time = "08:21AM",
                 title = "Mobile Transfer"
             ),
-            {},
             {}
         )
     }

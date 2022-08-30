@@ -19,7 +19,10 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val userEmail: String = "",
         val token: String = "",
         val phoneNumber: String = "",
-        val walletBalanceVisibility: Boolean = true
+        val walletBalanceVisibility: Boolean = true,
+        val dateFilter: String = "Today",
+        val statusFilter: String = "Completed",
+        val productFilter: String = "PMS",
     )
 
     private object PreferencesKeys {
@@ -30,6 +33,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val TOKEN = stringPreferencesKey("token")
         val PHONE_NUMBER = stringPreferencesKey("phoneNumber")
         val WALLET_BALANCE_VISIBILITY = booleanPreferencesKey("walletVisibility")
+        val DATE_FILTER = stringPreferencesKey("dateFilter")
+        val STATUS_FILTER = stringPreferencesKey("statusFilter")
+        val PRODUCT_FILTER = stringPreferencesKey("productFilter")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -38,9 +44,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         } else {
             throw exception
         }
-    }.map { preferences ->
-        mapUserPreferences(preferences)
-    }
+    }.map { preferences -> mapUserPreferences(preferences) }
 
     suspend fun getAppConfigPreferences() =
         mapUserPreferences(dataStore.data.first().toPreferences())
@@ -53,13 +57,35 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: "",
             token = preferences[PreferencesKeys.TOKEN] ?: "",
             phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
-            walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY] ?: true
+            walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY]
+                ?: true,
+            dateFilter = preferences[PreferencesKeys.DATE_FILTER] ?: "Today",
+            statusFilter = preferences[PreferencesKeys.STATUS_FILTER] ?: "Completed",
+            productFilter = preferences[PreferencesKeys.PRODUCT_FILTER] ?: "PMS",
         )
     }
 
     suspend fun updateStarted(bool: Boolean) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.ONBOARDED] = bool
+        }
+    }
+
+    suspend fun updateDateFilter(date: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.DATE_FILTER] = date
+        }
+    }
+
+    suspend fun updateStatusFilter(status: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.STATUS_FILTER] = status
+        }
+    }
+
+    suspend fun updateProductFilter(product: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.PRODUCT_FILTER] = product
         }
     }
 

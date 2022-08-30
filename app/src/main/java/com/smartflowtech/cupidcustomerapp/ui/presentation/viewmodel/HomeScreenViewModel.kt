@@ -14,6 +14,23 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             dataStorePrefsRepository.updateWalletBalanceVisibility(visibility)
         }
+    }
 
+    fun updateDateFilter(date: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateDateFilter(date)
+        }
+    }
+
+    fun updateStatusFilter(status: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateStatusFilter(status)
+        }
+    }
+
+    fun updateProduct(product: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateProductFilter(product)
+        }
     }
 }

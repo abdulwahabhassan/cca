@@ -31,22 +31,18 @@ fun HomeScreenModalBottomSheet(
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
-    onDownloadTransactionPressed: (transaction: Transaction) -> Unit,
     onAddFundsClicked: () -> Unit,
     userName: String,
     walletBalanceVisibility: Boolean,
-    updateWalletVisibility: (Boolean) -> Unit
+    updateWalletVisibility: (Boolean) -> Unit,
+    dateFilter: String,
+    statusFilter: String,
+    productFilter: String,
+    onDateFilterSelected: (String) -> Unit,
+    onStatusFilterSelected: (String) -> Unit,
+    onProductFilterSelected: (String) -> Unit
 ) {
 
-    var dateSelection by rememberSaveable {
-        mutableStateOf("")
-    }
-    var statusSelection by rememberSaveable {
-        mutableStateOf("")
-    }
-    var productSelection by rememberSaveable {
-        mutableStateOf("")
-    }
     var showCustomSearch: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
@@ -58,9 +54,6 @@ fun HomeScreenModalBottomSheet(
     LaunchedEffect(key1 = modalBottomSheetState) {
         if (!modalBottomSheetState.isVisible) {
             showCustomSearch = false
-            dateSelection = ""
-            statusSelection = ""
-            productSelection = ""
         }
     }
 
@@ -115,9 +108,6 @@ fun HomeScreenModalBottomSheet(
                         IconButton(
                             onClick = {
                                 onBackPressed()
-                                dateSelection = ""
-                                statusSelection = ""
-                                productSelection = ""
                                 showCustomSearch = false
                                 showSuccess = false
                             },
@@ -148,30 +138,21 @@ fun HomeScreenModalBottomSheet(
                             info = "We've sent the requested statements to your email",
                             onOkayPressed = {
                                 onBackPressed()
-                                dateSelection = ""
-                                statusSelection = ""
-                                productSelection = ""
                                 showCustomSearch = false
                                 showSuccess = false
                             }
                         )
                     } else {
                         FilterTransactions(
-                            dateSelection = dateSelection,
-                            statusSelection = statusSelection,
-                            productSelection = productSelection,
+                            dateFilter = dateFilter,
+                            statusFilter = statusFilter,
+                            productFilter = productFilter,
                             onCustomSearchClicked = {
                                 showCustomSearch = !showCustomSearch
                             },
-                            onDateSelection = { filter ->
-                                dateSelection = filter
-                            },
-                            onStatusSelection = { filter ->
-                                statusSelection = filter
-                            },
-                            onProductSelection = { filter ->
-                                productSelection = filter
-                            }
+                            onDateFilterSelected = onDateFilterSelected,
+                            onStatusFilterSelected = onStatusFilterSelected,
+                            onProductFilterSelected = onProductFilterSelected
                         )
                     }
                 }
@@ -185,7 +166,6 @@ fun HomeScreenModalBottomSheet(
             onBackPressed = onBackPressed,
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
-            onDownloadTransactionPressed = onDownloadTransactionPressed,
             onAddFundsClicked = onAddFundsClicked,
             userName = userName,
             walletBalanceVisibility = walletBalanceVisibility,

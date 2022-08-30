@@ -41,7 +41,6 @@ fun HomeScreen(
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
-    onDownloadTransactionPressed: (Transaction) -> Unit,
     onAddFundsClicked: () -> Unit,
     userName: String,
     walletBalanceVisibility: Boolean,
@@ -190,8 +189,7 @@ fun HomeScreen(
                             coroutineScope.launch {
                                 bottomSheetState.expand()
                             }
-                        },
-                        onDownloadTransactionPressed = onDownloadTransactionPressed
+                        }
                     )
                 }
             }) { paddingValues ->

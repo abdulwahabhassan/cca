@@ -20,7 +20,6 @@ fun BottomNavBarNavigation(
     bottomNavHostController: NavHostController,
     onBackPressed: () -> Unit,
     onSearchBarClicked: () -> Unit,
-    onDownloadTransactionPressed: (transaction: Transaction) -> Unit
 ) {
 
     var selectedTransaction: Transaction? by remember {
@@ -101,8 +100,7 @@ fun BottomNavBarNavigation(
                 onSearchBarClicked = onSearchBarClicked,
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
-                },
-                onDownloadTransactionPressed = onDownloadTransactionPressed
+                }
             )
         }
         composable(HomeScreen.Location.route) {
