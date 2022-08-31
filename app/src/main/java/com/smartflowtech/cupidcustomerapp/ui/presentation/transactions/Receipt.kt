@@ -347,7 +347,8 @@ fun ReceiptPreview() {
                 amount = "₦20,500.05",
                 status = "Successful",
                 time = "08:21AM",
-                title = "Mobile Transfer"
+                title = "Mobile Transfer",
+                product = "DPK"
             ),
             {}
         )

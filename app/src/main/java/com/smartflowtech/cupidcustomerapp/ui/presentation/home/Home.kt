@@ -2,9 +2,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
@@ -23,9 +21,14 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transacti
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun Home(goToTransactions: () -> Unit, onBackPressed: () -> Unit) {
+fun Home(
+    goToTransactions: () -> Unit,
+    onBackPressed: () -> Unit,
+    transactions: List<Transaction>,
+    bottomSheetState: BottomSheetState
+) {
     val pagerState = rememberPagerState()
 
     BackHandler {
@@ -72,7 +75,11 @@ fun Home(goToTransactions: () -> Unit, onBackPressed: () -> Unit) {
             }
         }
 
-        TransactionsList(Transaction.transactions) { goToTransactions() }
+        TransactionsList(
+            transactions = transactions,
+            onTransactionClicked = { goToTransactions() },
+            bottomSheetState = bottomSheetState
+        )
     }
 }
 

@@ -20,17 +20,21 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Transactions(
     downloadTransactions: () -> Unit,
     onSearchBarClicked: () -> Unit,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    transactions: List<Transaction>,
+    bottomSheetState: BottomSheetState
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
     var selectedTransaction: Transaction by remember {
         mutableStateOf(
             Transaction(
+                "",
                 "",
                 "",
                 "",
@@ -98,11 +102,12 @@ fun Transactions(
             }
 
             TransactionsList(
-                Transaction.transactions,
+                transactions = transactions,
                 onTransactionClicked = { transaction: Transaction ->
                     showReceipt = true
                     selectedTransaction = transaction
-                }
+                },
+                bottomSheetState = bottomSheetState
             )
 
         }
@@ -115,6 +120,6 @@ fun Transactions(
 @Preview(showBackground = true)
 fun TransactionsPreview() {
     CupidCustomerAppTheme {
-        Transactions({}, {}, {})
+        //Transactions({}, {}, {}, Transaction.transactions)
     }
 }

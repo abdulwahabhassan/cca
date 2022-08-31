@@ -16,6 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.Product
+import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
@@ -35,12 +37,17 @@ fun HomeScreenModalBottomSheet(
     userName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
-    dateFilter: String,
-    statusFilter: String,
-    productFilter: String,
-    onDateFilterSelected: (String) -> Unit,
-    onStatusFilterSelected: (String) -> Unit,
-    onProductFilterSelected: (String) -> Unit
+    daysFilter: Long,
+    completedStatusFilter: Boolean,
+    failedStatusFilter: Boolean,
+    pendingStatusFilter: Boolean,
+    dpkProductFilter: Boolean,
+    pmsProductFilter: Boolean,
+    agoProductFilter: Boolean,
+    onDaysFilterSelected: (String) -> Unit,
+    onStatusFilterSelected: (Boolean, String) -> Unit,
+    onProductFilterSelected: (Boolean, String) -> Unit,
+    transactions: List<Transaction>
 ) {
 
     var showCustomSearch: Boolean by rememberSaveable {
@@ -49,7 +56,6 @@ fun HomeScreenModalBottomSheet(
     var showSuccess: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
-
 
     LaunchedEffect(key1 = modalBottomSheetState) {
         if (!modalBottomSheetState.isVisible) {
@@ -144,15 +150,19 @@ fun HomeScreenModalBottomSheet(
                         )
                     } else {
                         FilterTransactions(
-                            dateFilter = dateFilter,
-                            statusFilter = statusFilter,
-                            productFilter = productFilter,
+                            daysFilter = daysFilter,
+                            completedStatusFilter = completedStatusFilter,
+                            failedStatusFilter = failedStatusFilter,
+                            pendingStatusFilter = pendingStatusFilter,
+                            agoProductFilter = agoProductFilter,
+                            pmsProductFilter = pmsProductFilter,
+                            dpkProductFilter = dpkProductFilter,
+                            onDaysFilterSelected = onDaysFilterSelected,
+                            onStatusFilterSelected = onStatusFilterSelected,
+                            onProductFilterSelected = onProductFilterSelected,
                             onCustomSearchClicked = {
                                 showCustomSearch = !showCustomSearch
                             },
-                            onDateFilterSelected = onDateFilterSelected,
-                            onStatusFilterSelected = onStatusFilterSelected,
-                            onProductFilterSelected = onProductFilterSelected
                         )
                     }
                 }
@@ -169,7 +179,8 @@ fun HomeScreenModalBottomSheet(
             onAddFundsClicked = onAddFundsClicked,
             userName = userName,
             walletBalanceVisibility = walletBalanceVisibility,
-            updateWalletVisibility = updateWalletVisibility
+            updateWalletVisibility = updateWalletVisibility,
+            transactions = transactions
         )
     }
 }

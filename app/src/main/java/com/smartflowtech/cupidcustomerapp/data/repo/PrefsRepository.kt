@@ -20,9 +20,13 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val token: String = "",
         val phoneNumber: String = "",
         val walletBalanceVisibility: Boolean = true,
-        val dateFilter: String = "Today",
-        val statusFilter: String = "Completed",
-        val productFilter: String = "PMS",
+        val daysFilter: Long = 1,
+        val completedStatusFilter: Boolean = false,
+        val failedStatusFilter: Boolean = false,
+        val pendingStatusFilter: Boolean = false,
+        val dpkProductFilter: Boolean = false,
+        val agoProductFilter: Boolean = false,
+        val pmsProductFilter: Boolean = false,
     )
 
     private object PreferencesKeys {
@@ -33,9 +37,13 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val TOKEN = stringPreferencesKey("token")
         val PHONE_NUMBER = stringPreferencesKey("phoneNumber")
         val WALLET_BALANCE_VISIBILITY = booleanPreferencesKey("walletVisibility")
-        val DATE_FILTER = stringPreferencesKey("dateFilter")
-        val STATUS_FILTER = stringPreferencesKey("statusFilter")
-        val PRODUCT_FILTER = stringPreferencesKey("productFilter")
+        val DAYS_FILTER = longPreferencesKey("daysFilter")
+        val COMPLETED_STATUS_FILTER = booleanPreferencesKey("completedStatusFilter")
+        val FAILED_STATUS_FILTER = booleanPreferencesKey("failedStatusFilter")
+        val PENDING_STATUS_FILTER = booleanPreferencesKey("pendingStatusFilter")
+        val DPK_PRODUCT_FILTER = booleanPreferencesKey("dpkProductFilter")
+        val PMS_PRODUCT_FILTER = booleanPreferencesKey("pmsProductFilter")
+        val AGO_PRODUCT_FILTER = booleanPreferencesKey("agoProductFilter")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -59,9 +67,13 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
             walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY]
                 ?: true,
-            dateFilter = preferences[PreferencesKeys.DATE_FILTER] ?: "Today",
-            statusFilter = preferences[PreferencesKeys.STATUS_FILTER] ?: "Completed",
-            productFilter = preferences[PreferencesKeys.PRODUCT_FILTER] ?: "PMS",
+            daysFilter = preferences[PreferencesKeys.DAYS_FILTER] ?: 1,
+            completedStatusFilter = preferences[PreferencesKeys.COMPLETED_STATUS_FILTER] ?: false,
+            failedStatusFilter = preferences[PreferencesKeys.FAILED_STATUS_FILTER] ?: false,
+            pendingStatusFilter = preferences[PreferencesKeys.PENDING_STATUS_FILTER] ?: false,
+            dpkProductFilter = preferences[PreferencesKeys.DPK_PRODUCT_FILTER] ?: false,
+            pmsProductFilter = preferences[PreferencesKeys.PMS_PRODUCT_FILTER] ?: false,
+            agoProductFilter = preferences[PreferencesKeys.AGO_PRODUCT_FILTER] ?: false,
         )
     }
 
@@ -71,21 +83,45 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-    suspend fun updateDateFilter(date: String) {
+    suspend fun updateDaysFilter(days: Long) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.DATE_FILTER] = date
+            mutablePreferences[PreferencesKeys.DAYS_FILTER] = days
         }
     }
 
-    suspend fun updateStatusFilter(status: String) {
+    suspend fun updateCompletedStatusFilter(bool: Boolean) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.STATUS_FILTER] = status
+            mutablePreferences[PreferencesKeys.COMPLETED_STATUS_FILTER] = bool
         }
     }
 
-    suspend fun updateProductFilter(product: String) {
+    suspend fun updateFailedStatusFilter(bool: Boolean) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.PRODUCT_FILTER] = product
+            mutablePreferences[PreferencesKeys.FAILED_STATUS_FILTER] = bool
+        }
+    }
+
+    suspend fun updatePendingStatusFilter(bool: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.PENDING_STATUS_FILTER] = bool
+        }
+    }
+
+    suspend fun updateDpkProductFilter(bool: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.DPK_PRODUCT_FILTER] = bool
+        }
+    }
+
+    suspend fun updatePmsProductFilter(bool: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.PMS_PRODUCT_FILTER] = bool
+        }
+    }
+
+    suspend fun updateAgoProductFilter(bool: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.AGO_PRODUCT_FILTER] = bool
         }
     }
 

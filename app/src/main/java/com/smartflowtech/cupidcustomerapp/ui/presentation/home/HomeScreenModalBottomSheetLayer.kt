@@ -7,6 +7,8 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
+import com.smartflowtech.cupidcustomerapp.model.Product
+import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
 
@@ -52,20 +54,33 @@ fun HomeScreenModalBottomSheetLayer(
         onAddFundsClicked = goToAddFundsScreen,
         userName = "John Doe",
         walletBalanceVisibility = true,
+        transactions = viewModel.transactions,
+        daysFilter = viewModel.appConfigPreferences.daysFilter,
+        completedStatusFilter = viewModel.appConfigPreferences.completedStatusFilter,
+        failedStatusFilter = viewModel.appConfigPreferences.failedStatusFilter,
+        pendingStatusFilter = viewModel.appConfigPreferences.pendingStatusFilter,
+        dpkProductFilter = viewModel.appConfigPreferences.dpkProductFilter,
+        pmsProductFilter = viewModel.appConfigPreferences.pmsProductFilter,
+        agoProductFilter = viewModel.appConfigPreferences.agoProductFilter,
+        onDaysFilterSelected = { date ->
+            viewModel.updateDateFilter(date.toLong())
+        },
+        onStatusFilterSelected = { bool, type ->
+            when (type) {
+                Status.COMPLETED.name -> viewModel.updateCompletedStatusFilter(bool)
+                Status.FAILED.name -> viewModel.updateFailedStatusFilter(bool)
+                Status.PENDING.name -> viewModel.updatePendingStatusFilter(bool)
+            }
+        },
+        onProductFilterSelected = { bool, type ->
+            when (type) {
+                Product.PMS.name -> viewModel.updatePmsProduct(bool)
+                Product.AGO.name -> viewModel.updateAgoProduct(bool)
+                Product.DPK.name -> viewModel.updateDpkProduct(bool)
+            }
+        },
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)
         },
-        dateFilter = viewModel.appConfigPreferences.dateFilter,
-        statusFilter = viewModel.appConfigPreferences.statusFilter,
-        productFilter = viewModel.appConfigPreferences.productFilter,
-        onDateFilterSelected = { date ->
-            viewModel.updateDateFilter(date)
-        },
-        onStatusFilterSelected = { status ->
-            viewModel.updateStatusFilter(status)
-        },
-        onProductFilterSelected = { product ->
-            viewModel.updateProduct(product)
-        }
     )
 }

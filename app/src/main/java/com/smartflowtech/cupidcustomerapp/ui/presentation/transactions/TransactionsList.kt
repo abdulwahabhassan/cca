@@ -1,16 +1,20 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import com.smartflowtech.cupidcustomerapp.R
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,15 +26,17 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.TransactionDateHeader
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun TransactionsList(
-    list: List<Transaction>,
-    onTransactionClicked: (transaction: Transaction) -> Unit
+    transactions: List<Transaction>,
+    onTransactionClicked: (transaction: Transaction) -> Unit,
+    bottomSheetState: BottomSheetState
 ) {
-
     Column(
         Modifier
             .fillMaxWidth()
@@ -38,27 +44,35 @@ fun TransactionsList(
         horizontalAlignment = Alignment.Start
     ) {
 
-        if (list.isEmpty()) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.2f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+        if (transactions.isEmpty()) {
+            AnimatedVisibility(
+                visible = (bottomSheetState.isCollapsed ||
+                        bottomSheetState.isExpanded) &&
+                        !bottomSheetState.isAnimationRunning,
+                enter = slideInVertically(spring()) { it / 10000 },
+                exit = slideOutVertically(spring()) { it / 10000 }
             ) {
-                Icon(
-                    modifier = Modifier
-                        .size(50.dp),
-                    painter = painterResource(id = R.drawable.ic_no_transactions),
-                    contentDescription = "Bottom sheet handle",
-                    tint = Color.Unspecified
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "You have no transaction history yet")
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(if (bottomSheetState.isCollapsed) 0.2f else 0.6f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(50.dp),
+                        painter = painterResource(id = R.drawable.ic_no_transactions),
+                        contentDescription = "No transactions icon",
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "No transactions")
+                }
             }
         }
 
-        val grouped = list.groupBy { it.date }
+        val grouped = transactions.sortedByDescending { it.date }.groupBy { it.date }
 
 
         LazyColumn(
@@ -70,7 +84,10 @@ fun TransactionsList(
         ) {
             grouped.forEach { (date, transactions) ->
                 stickyHeader {
-                    TransactionDateHeader(date)
+                    TransactionDateHeader(
+                        LocalDate.parse(date)
+                            .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
+                    )
                 }
 
                 items(transactions) { transaction ->
@@ -90,6 +107,6 @@ fun TransactionsList(
 @Preview(showBackground = true)
 fun TransactionsListPreview() {
     CupidCustomerAppTheme {
-        TransactionsList(Transaction.transactions, {})
+        //TransactionsList(Transaction.transactions, {}, )
     }
 }

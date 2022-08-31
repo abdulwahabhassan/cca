@@ -19,7 +19,7 @@ fun TransactionDateHeader(date: String) {
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.White)
-            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
         text = date,
         style = MaterialTheme.typography.caption
     )

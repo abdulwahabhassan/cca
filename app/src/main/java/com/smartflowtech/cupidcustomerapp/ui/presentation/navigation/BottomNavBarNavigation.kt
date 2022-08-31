@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
+import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
@@ -20,6 +21,8 @@ fun BottomNavBarNavigation(
     bottomNavHostController: NavHostController,
     onBackPressed: () -> Unit,
     onSearchBarClicked: () -> Unit,
+    transactions: List<Transaction>,
+    bottomSheetState: BottomSheetState
 ) {
 
     var selectedTransaction: Transaction? by remember {
@@ -91,7 +94,9 @@ fun BottomNavBarNavigation(
                 },
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
-                }
+                },
+                transactions = transactions,
+                bottomSheetState = bottomSheetState
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -100,7 +105,9 @@ fun BottomNavBarNavigation(
                 onSearchBarClicked = onSearchBarClicked,
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
-                }
+                },
+                transactions = transactions,
+                bottomSheetState = bottomSheetState
             )
         }
         composable(HomeScreen.Location.route) {

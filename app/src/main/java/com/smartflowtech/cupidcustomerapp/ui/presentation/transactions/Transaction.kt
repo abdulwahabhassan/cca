@@ -25,6 +25,7 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         Row(
             modifier = Modifier
@@ -97,7 +98,7 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
         Divider(
             color = lineGrey,
             thickness = 0.5.dp,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 24.dp)
         )
     }
 
@@ -114,6 +115,7 @@ fun TransactionPreview() {
         "",
         "Credit",
         "TRS283883920",
-        "Wallet Top-Up"
+        "Wallet Top-Up",
+        "PMS"
     )
 }

@@ -44,7 +44,8 @@ fun HomeScreen(
     onAddFundsClicked: () -> Unit,
     userName: String,
     walletBalanceVisibility: Boolean,
-    updateWalletVisibility: (Boolean) -> Unit
+    updateWalletVisibility: (Boolean) -> Unit,
+    transactions: List<Transaction>
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -189,7 +190,9 @@ fun HomeScreen(
                             coroutineScope.launch {
                                 bottomSheetState.expand()
                             }
-                        }
+                        },
+                        transactions = transactions,
+                        bottomSheetState = bottomSheetState
                     )
                 }
             }) { paddingValues ->

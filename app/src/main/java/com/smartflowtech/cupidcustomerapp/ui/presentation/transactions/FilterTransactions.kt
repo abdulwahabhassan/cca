@@ -14,21 +14,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.smartflowtech.cupidcustomerapp.model.Product
+import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilterTransactions(
-    dateFilter: String,
-    statusFilter: String,
-    productFilter: String,
+    daysFilter: Long,
     onCustomSearchClicked: () -> Unit,
-    onDateFilterSelected: (String) -> Unit,
-    onStatusFilterSelected: (String) -> Unit,
-    onProductFilterSelected: (String) -> Unit
+    completedStatusFilter: Boolean,
+    failedStatusFilter: Boolean,
+    pendingStatusFilter: Boolean,
+    dpkProductFilter: Boolean,
+    pmsProductFilter: Boolean,
+    agoProductFilter: Boolean,
+    onDaysFilterSelected: (String) -> Unit,
+    onStatusFilterSelected: (Boolean, String) -> Unit,
+    onProductFilterSelected: (Boolean, String) -> Unit
 ) {
 
     Column(
@@ -43,12 +50,12 @@ fun FilterTransactions(
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp)) {
             mapOf(
-                "Date" to listOf("Today", "7 days ago", "15 days ago", "30 days ago"),
-                "Status" to listOf("Completed", "Pending", "Failed"),
-                "Product" to listOf("AGO", "DPK", "PMS")
+                "Date" to listOf("0", "7", "15", "30"),
+                "Status" to listOf(Status.COMPLETED.name, Status.PENDING.name, Status.FAILED.name),
+                "Product" to listOf(Product.AGO.name, Product.DPK.name, Product.PMS.name)
             ).forEach { (category, filters) ->
 
                 stickyHeader {
@@ -56,7 +63,7 @@ fun FilterTransactions(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(color = Color.White)
-                            .padding(vertical = 16.dp),
+                            .padding(vertical = 12.dp),
                         text = category,
                         color = black,
                         fontFamily = AthleticsFontFamily,
@@ -72,28 +79,49 @@ fun FilterTransactions(
                             .padding(start = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(
-                            selected = when (category) {
-                                "Date" -> filter == dateFilter
-                                "Status" -> filter == statusFilter
-                                "Product" -> filter == productFilter
-                                else -> {
-                                    false
-                                }
-                            },
-                            onClick = {
-                                when (category) {
-                                    "Date" -> onDateFilterSelected(filter)
-                                    "Status" -> onStatusFilterSelected(filter)
-                                    "Product" -> onProductFilterSelected(filter)
-                                }
-                            },
-                            colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
-                        )
+                        if (category == "Status" || category == "Product") {
+                            Checkbox(
+                                checked = when (filter) {
+                                    Status.COMPLETED.name -> completedStatusFilter
+                                    Status.FAILED.name -> failedStatusFilter
+                                    Status.PENDING.name -> pendingStatusFilter
+                                    Product.DPK.name -> dpkProductFilter
+                                    Product.AGO.name -> agoProductFilter
+                                    Product.PMS.name -> pmsProductFilter
+                                    else -> false
+                                },
+                                onCheckedChange = { bool ->
+                                    when (category) {
+                                        "Status" -> onStatusFilterSelected(bool, filter)
+                                        "Product" -> onProductFilterSelected(bool, filter)
+                                    }
+                                },
+                                colors = CheckboxDefaults.colors(checkedColor = darkBlue)
+                            )
+                        } else {
+                            RadioButton(
+                                selected = filter == daysFilter.toString(),
+                                onClick = {
+                                    onDaysFilterSelected(filter)
+                                },
+                                colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
+                            )
+                        }
+
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             modifier = Modifier.padding(vertical = 8.dp),
-                            text = filter,
+                            text = if (category == "Date") {
+                                if (filter.toLong() == 0L) {
+                                    "Today"
+                                } else {
+                                    filter + " day${if (filter.toLong() > 1) "s" else ""} ago"
+                                }
+                            } else if (category == "Status") {
+                                filter.capitalizeFirstLetter()
+                            } else {
+                                filter
+                            },
                             color = grey,
                             fontFamily = AthleticsFontFamily
                         )
@@ -138,5 +166,5 @@ fun FilterTransactions(
 @Composable
 @Preview(showBackground = true)
 fun FilterTransactionsPreview() {
-    FilterTransactions("", "", "", {}, {}, {}, {})
+    //FilterTransactions(1, "", "", {}, {}, {}, {})
 }
