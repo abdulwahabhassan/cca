@@ -118,7 +118,7 @@ fun RootNavigation(
                     )
 
                     rootNavHostController.navigate(
-                        Screen.Home.route
+                        Screen.Home.route,
                     )
 
                 },
@@ -142,7 +142,6 @@ fun RootNavigation(
                         Screen.Login.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
                     )
-
                 },
                 isNavDestinationSelected = { route ->
                     currentRoute == route

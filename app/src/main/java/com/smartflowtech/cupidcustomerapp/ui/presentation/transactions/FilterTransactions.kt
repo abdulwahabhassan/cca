@@ -5,15 +5,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.model.Product
 import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
@@ -25,18 +29,20 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLett
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilterTransactions(
-    daysFilter: Long,
+//    daysFilter: Long,
     onCustomSearchClicked: () -> Unit,
-    completedStatusFilter: Boolean,
-    failedStatusFilter: Boolean,
-    pendingStatusFilter: Boolean,
-    dpkProductFilter: Boolean,
-    pmsProductFilter: Boolean,
-    agoProductFilter: Boolean,
+//    completedStatusFilter: Boolean,
+//    failedStatusFilter: Boolean,
+//    pendingStatusFilter: Boolean,
+//    dpkProductFilter: Boolean,
+//    pmsProductFilter: Boolean,
+//    agoProductFilter: Boolean,
+    appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
     onDaysFilterSelected: (String) -> Unit,
     onStatusFilterSelected: (Boolean, String) -> Unit,
     onProductFilterSelected: (Boolean, String) -> Unit
 ) {
+
 
     Column(
         Modifier
@@ -76,19 +82,22 @@ fun FilterTransactions(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, top = 6.dp, bottom = 6.dp),
+                            .padding(start = 16.dp, top = 4.dp, bottom = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (category == "Status" || category == "Product") {
                             Checkbox(
-                                modifier = Modifier.size(36.dp),
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(RoundedCornerShape(2.dp))
+                                    .clipToBounds(),
                                 checked = when (filter) {
-                                    Status.COMPLETED.name -> completedStatusFilter
-                                    Status.FAILED.name -> failedStatusFilter
-                                    Status.PENDING.name -> pendingStatusFilter
-                                    Product.DPK.name -> dpkProductFilter
-                                    Product.AGO.name -> agoProductFilter
-                                    Product.PMS.name -> pmsProductFilter
+                                    Status.COMPLETED.name -> appConfigPreferences.completedStatusFilter
+                                    Status.FAILED.name -> appConfigPreferences.failedStatusFilter
+                                    Status.PENDING.name -> appConfigPreferences.pendingStatusFilter
+                                    Product.DPK.name -> appConfigPreferences.dpkProductFilter
+                                    Product.AGO.name -> appConfigPreferences.agoProductFilter
+                                    Product.PMS.name -> appConfigPreferences.pmsProductFilter
                                     else -> false
                                 },
                                 onCheckedChange = { bool ->
@@ -101,8 +110,12 @@ fun FilterTransactions(
                             )
                         } else {
                             RadioButton(
-                                modifier = Modifier.size(36.dp),
-                                selected = filter == daysFilter.toString(),
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(RoundedCornerShape(50))
+                                    .clipToBounds()
+                                    ,
+                                selected = filter == appConfigPreferences.daysFilter.toString(),
                                 onClick = {
                                     onDaysFilterSelected(filter)
                                 },
@@ -110,7 +123,8 @@ fun FilterTransactions(
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(12.dp))
+
                         Text(
                             modifier = Modifier.padding(vertical = 8.dp),
                             text = if (category == "Date") {

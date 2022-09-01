@@ -158,7 +158,7 @@ fun HomeDashBoard(
                                         modifier = Modifier
                                             .background(
                                                 color = transparentPink,
-                                                shape = RoundedCornerShape(10.dp)
+                                                shape = RoundedCornerShape(4.dp)
                                             )
                                             .padding(8.dp),
                                         textAlign = TextAlign.Center

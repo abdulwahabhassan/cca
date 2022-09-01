@@ -105,7 +105,7 @@ fun BottomNavBarNavigation(
         }
         composable(HomeScreen.Transactions.route) {
             Transactions(
-                {},
+                downloadTransactions = {},
                 onSearchBarClicked = onSearchBarClicked,
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null

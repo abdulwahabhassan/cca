@@ -1,9 +1,14 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.KeyframesSpec
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,6 +20,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -56,24 +64,23 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(HomeScreen.Home.title) }
 
-    var visible by rememberSaveable { mutableStateOf(true) }
-    visible =
-        bottomSheetState.direction >= 0f && bottomSheetState.currentValue == BottomSheetValue.Collapsed
+    val visible by remember {
+        derivedStateOf { bottomSheetState.targetValue == BottomSheetValue.Expanded }
+    }
 
-    LaunchedEffect(key1 = bottomSheetState.direction) {
-        if (bottomSheetState.direction == -1f && currentBottomNavDestinationTitle == HomeScreen.Home.title) {
+    LaunchedEffect(key1 = bottomSheetState.targetValue) {
+        if (bottomSheetState.targetValue == BottomSheetValue.Expanded &&
+            currentBottomNavDestinationTitle == HomeScreen.Home.title
+        ) {
             onBottomNavItemClicked(HomeScreen.Transactions.route)
+        } else if (bottomSheetState.targetValue == BottomSheetValue.Collapsed &&
+            currentBottomNavDestinationTitle != HomeScreen.Home.title
+        ) {
+            onBottomNavItemClicked(HomeScreen.Home.route)
         }
     }
 
     LaunchedEffect(key1 = bottomNavBarNavHostController.currentDestination?.route, block = {
-        coroutineScope.launch {
-            if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
-                bottomSheetScaffoldState.bottomSheetState.collapse()
-            } else {
-                bottomSheetScaffoldState.bottomSheetState.expand()
-            }
-        }
 
         when (bottomNavBarNavHostController.currentDestination?.route) {
             HomeScreen.Home.route -> {
@@ -93,6 +100,16 @@ fun HomeScreen(
                     HomeScreen.Settings.title
             }
         }
+
+        coroutineScope.launch {
+            if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                bottomSheetScaffoldState.bottomSheetState.collapse()
+            } else {
+                bottomSheetScaffoldState.bottomSheetState.expand()
+            }
+        }
+
+
     })
 
     Scaffold(
@@ -118,9 +135,10 @@ fun HomeScreen(
             sheetContent = {
 
                 AnimatedVisibility(
-                    visible = !visible,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    modifier = Modifier.alpha(bottomSheetState.progress.fraction),
+                    visible = visible,
+                    enter = fadeIn(snap()),
+                    exit = fadeOut(snap())
                 ) {
 
                     if (currentBottomNavDestinationTitle != HomeScreen.Home.title) {
@@ -177,9 +195,18 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Icon(
                         modifier = Modifier
+                            .padding(bottom = 24.dp)
+                            .clip(RoundedCornerShape(50))
+                            .clipToBounds()
+                            .clickable {
+                                if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                                    onBottomNavItemClicked(HomeScreen.Transactions.route)
+                                } else {
+                                    onBottomNavItemClicked(HomeScreen.Home.route)
+                                }
+                            }
                             .align(Alignment.CenterHorizontally)
-                            .width(40.dp)
-                            .padding(bottom = 24.dp),
+                            .width(40.dp),
                         painter = painterResource(id = R.drawable.ic_bottom_sheet_handle_inactive),
                         contentDescription = "Bottom sheet handle",
                         tint = Color.Unspecified

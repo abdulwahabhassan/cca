@@ -52,18 +52,19 @@ fun HomeScreenModalBottomSheetLayer(
             }
         },
         onAddFundsClicked = goToAddFundsScreen,
-        userName = viewModel.appConfigPreferences.userName,
+//        userName = viewModel.appConfigPreferences.userName,
 //        "John Doe",
-        walletBalanceVisibility = viewModel.appConfigPreferences.walletBalanceVisibility,
+//        walletBalanceVisibility = viewModel.appConfigPreferences.walletBalanceVisibility,
 //        true,
         transactionHistoryUiState = viewModel.transactions,
-        daysFilter = viewModel.appConfigPreferences.daysFilter,
-        completedStatusFilter = viewModel.appConfigPreferences.completedStatusFilter,
-        failedStatusFilter = viewModel.appConfigPreferences.failedStatusFilter,
-        pendingStatusFilter = viewModel.appConfigPreferences.pendingStatusFilter,
-        dpkProductFilter = viewModel.appConfigPreferences.dpkProductFilter,
-        pmsProductFilter = viewModel.appConfigPreferences.pmsProductFilter,
-        agoProductFilter = viewModel.appConfigPreferences.agoProductFilter,
+        appConfigPreferences = viewModel.appConfigPreferences,
+//        daysFilter = viewModel.appConfigPreferences.daysFilter,
+//        completedStatusFilter = viewModel.appConfigPreferences.completedStatusFilter,
+//        failedStatusFilter = viewModel.appConfigPreferences.failedStatusFilter,
+//        pendingStatusFilter = viewModel.appConfigPreferences.pendingStatusFilter,
+//        dpkProductFilter = viewModel.appConfigPreferences.dpkProductFilter,
+//        pmsProductFilter = viewModel.appConfigPreferences.pmsProductFilter,
+//        agoProductFilter = viewModel.appConfigPreferences.agoProductFilter,
         onDaysFilterSelected = { date ->
             viewModel.updateDateFilter(date.toLong())
         },
@@ -83,9 +84,10 @@ fun HomeScreenModalBottomSheetLayer(
         },
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)
+        },
+        onLogoutClicked = {
+            viewModel.logOut()
+            goToLogin()
         }
-    ) {
-        viewModel.logOut()
-        goToLogin()
-    }
+    )
 }

@@ -8,14 +8,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.theme.black
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -110,11 +113,11 @@ fun Transactions(
                     fontWeight = FontWeight.Bold
                 )
                 IconButton(onClick = { downloadTransactions() }, enabled = false) {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.ic_download),
-//                        contentDescription = "Download icon",
-//                        tint = black
-//                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_download),
+                        contentDescription = "Download icon",
+                        tint = black
+                    )
                 }
             }
 

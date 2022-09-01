@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
@@ -32,21 +33,22 @@ fun HomeScreenModalBottomSheet(
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
-    userName: String,
-    walletBalanceVisibility: Boolean,
+//    userName: String,
+//    walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
-    daysFilter: Long,
-    completedStatusFilter: Boolean,
-    failedStatusFilter: Boolean,
-    pendingStatusFilter: Boolean,
-    dpkProductFilter: Boolean,
-    pmsProductFilter: Boolean,
-    agoProductFilter: Boolean,
+//    daysFilter: Long,
+//    completedStatusFilter: Boolean,
+//    failedStatusFilter: Boolean,
+//    pendingStatusFilter: Boolean,
+//    dpkProductFilter: Boolean,
+//    pmsProductFilter: Boolean,
+//    agoProductFilter: Boolean,
+    appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
     onDaysFilterSelected: (String) -> Unit,
     onStatusFilterSelected: (Boolean, String) -> Unit,
     onProductFilterSelected: (Boolean, String) -> Unit,
     transactionHistoryUiState: TransactionHistoryUiState,
-    onLogoutClicked: () -> Unit
+    onLogoutClicked: () -> Unit,
 ) {
 
     var showCustomSearch: Boolean by rememberSaveable {
@@ -75,7 +77,7 @@ fun HomeScreenModalBottomSheet(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.12f)
+                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.40f)
                 )
 
                 Column(
@@ -149,13 +151,14 @@ fun HomeScreenModalBottomSheet(
                         )
                     } else {
                         FilterTransactions(
-                            daysFilter = daysFilter,
-                            completedStatusFilter = completedStatusFilter,
-                            failedStatusFilter = failedStatusFilter,
-                            pendingStatusFilter = pendingStatusFilter,
-                            agoProductFilter = agoProductFilter,
-                            pmsProductFilter = pmsProductFilter,
-                            dpkProductFilter = dpkProductFilter,
+//                            daysFilter = daysFilter,
+//                            completedStatusFilter = completedStatusFilter,
+//                            failedStatusFilter = failedStatusFilter,
+//                            pendingStatusFilter = pendingStatusFilter,
+//                            agoProductFilter = agoProductFilter,
+//                            pmsProductFilter = pmsProductFilter,
+//                            dpkProductFilter = dpkProductFilter,
+                            appConfigPreferences = appConfigPreferences,
                             onDaysFilterSelected = onDaysFilterSelected,
                             onStatusFilterSelected = onStatusFilterSelected,
                             onProductFilterSelected = onProductFilterSelected,
@@ -176,8 +179,8 @@ fun HomeScreenModalBottomSheet(
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
             onAddFundsClicked = onAddFundsClicked,
-            userName = userName,
-            walletBalanceVisibility = walletBalanceVisibility,
+            userName = appConfigPreferences.userName,
+            walletBalanceVisibility = appConfigPreferences. walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
             transactionHistoryUiState = transactionHistoryUiState,
             onLogOutClicked = onLogoutClicked
