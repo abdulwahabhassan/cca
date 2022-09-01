@@ -3,6 +3,7 @@ package com.smartflowtech.cupidcustomerapp.data.api
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.response.LoginResponseData
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
+import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
 import retrofit2.http.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -31,4 +32,11 @@ interface CupidApiService {
         ,
         @Query("vendor_id") vendorId: String = "",
     ): CupidApiResponse<List<TransactionsResponseData>>
+
+
+    @GET("wallets")
+    suspend fun getWallet(
+        @Header("Authorization") token: String,
+        @Query("company_id") companyId: String
+    ): CupidApiResponse<List<WalletResponseData>>
 }

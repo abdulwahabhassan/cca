@@ -3,22 +3,22 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,7 +27,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import java.util.*
 
@@ -40,6 +42,7 @@ fun HomeDashBoard(
     userName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
+    transactionHistoryUiState: TransactionHistoryUiState,
     onLogOutClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState()
@@ -136,7 +139,7 @@ fun HomeDashBoard(
                             }
                         }
                         HorizontalPager(
-                            count = 3,
+                            count = transactionHistoryUiState.wallets.size,
                             state = pagerState,
                             itemSpacing = 16.dp,
                             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -145,15 +148,42 @@ fun HomeDashBoard(
                                 .height(horizontalPagerHeight)
                                 .padding(top = 16.dp, bottom = 16.dp)
                         ) { page: Int ->
-                            WalletCard(
-                                listOf(lightPink, lightYellow, skyBlue)[page],
-                                onAddFundsClicked = onAddFundsClicked,
-                                walletBalanceVisibility = walletBalanceVisibility,
-                                updateWalletVisibility = updateWalletVisibility
-                            )
+                            when (transactionHistoryUiState.viewModelResult) {
+                                ViewModelResult.ERROR -> {
+                                    Text(
+                                        transactionHistoryUiState.message
+                                            ?: "An error occurred!",
+                                        color = red,
+                                        fontSize = 12.sp,
+                                        modifier = Modifier
+                                            .background(
+                                                color = transparentPink,
+                                                shape = RoundedCornerShape(10.dp)
+                                            )
+                                            .padding(8.dp),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                                ViewModelResult.LOADING -> {
+                                    CircularProgressIndicator(color = pink, strokeWidth = 2.dp)
+                                }
+                                ViewModelResult.INITIAL -> {
+
+                                }
+                                ViewModelResult.SUCCESS -> {
+                                    WalletCard(
+                                        listOf(lightPink, lightYellow, skyBlue).random(),
+                                        onAddFundsClicked = onAddFundsClicked,
+                                        walletBalanceVisibility = walletBalanceVisibility,
+                                        updateWalletVisibility = updateWalletVisibility,
+                                        vendorName = transactionHistoryUiState.wallets[page].vendorName,
+                                        currentBalance = transactionHistoryUiState.wallets[page].currentBalance
+                                    )
+                                }
+                            }
                         }
                         HorizontalPagerIndicator(
-                            totalDots = 3,
+                            totalDots = transactionHistoryUiState.wallets.size,
                             selectedIndex = pagerState.currentPage
                         )
                     }

@@ -45,7 +45,7 @@ fun Transactions(
         )
     }
     val filteredTransactionHistoryUiState by remember(queryText, transactionHistoryUiState) {
-        val list = transactionHistoryUiState.data.filter { transaction ->
+        val list = transactionHistoryUiState.transactions.filter { transaction ->
             (transaction.status?.contains(queryText, true) == true) ||
                     (transaction.amount?.contains(queryText, true) == true) ||
                     transaction.date?.contains(queryText, true) == true ||
@@ -56,7 +56,11 @@ fun Transactions(
                     transaction.transactionSeqNumber?.contains(queryText, true) == true
         }
         mutableStateOf(
-            TransactionHistoryUiState(transactionHistoryUiState.viewModelResult, list)
+            TransactionHistoryUiState(
+                viewModelResult = transactionHistoryUiState.viewModelResult,
+                transactions = list,
+                wallets = transactionHistoryUiState.wallets
+            )
         )
     }
 

@@ -206,7 +206,8 @@ fun HomeScreen(
                 userName = userName,
                 walletBalanceVisibility = walletBalanceVisibility,
                 updateWalletVisibility = updateWalletVisibility,
-                onLogOutClicked = onLogOutClicked
+                onLogOutClicked = onLogOutClicked,
+                transactionHistoryUiState = transactionHistoryUiState
             )
         }
     }

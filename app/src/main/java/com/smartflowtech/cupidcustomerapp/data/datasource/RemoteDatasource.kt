@@ -5,6 +5,7 @@ import com.smartflowtech.cupidcustomerapp.data.api.CupidApiService
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.response.LoginResponseData
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
+import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -29,5 +30,12 @@ class RemoteDatasource @Inject constructor(
             token = token,
             companyId = companyId
         )
+    }
+
+    suspend fun getWallets(
+        token: String,
+        companyId: String
+    ): CupidApiResponse<List<WalletResponseData>> {
+        return apiService.getWallet(token = token, companyId = companyId)
     }
 }

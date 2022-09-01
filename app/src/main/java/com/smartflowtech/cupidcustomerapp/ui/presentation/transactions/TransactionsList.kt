@@ -21,7 +21,6 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.TransactionDateHeader
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -125,7 +124,7 @@ fun TransactionsList(
                 horizontalAlignment = Alignment.Start
             ) {
 
-                if (transactionHistoryUiState.data.isEmpty()) {
+                if (transactionHistoryUiState.transactions.isEmpty()) {
                     AnimatedVisibility(
                         visible = (bottomSheetScaffoldState.bottomSheetState.isCollapsed ||
                                 bottomSheetScaffoldState.bottomSheetState.isExpanded) &&
@@ -153,7 +152,7 @@ fun TransactionsList(
                     }
                 }
 
-                val grouped = transactionHistoryUiState.data.sortedByDescending { it.date }
+                val grouped = transactionHistoryUiState.transactions.sortedByDescending { it.date }
                     .groupBy { it.date }
 
                 LazyColumn(

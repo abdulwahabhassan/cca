@@ -7,11 +7,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -24,19 +21,22 @@ import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.GradientButton
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 fun WalletCard(
     backgroundColor: Color,
     onAddFundsClicked: () -> Unit,
     walletBalanceVisibility: Boolean,
-    updateWalletVisibility: (Boolean) -> Unit
+    updateWalletVisibility: (Boolean) -> Unit,
+    vendorName: String,
+    currentBalance: String
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
-        backgroundColor = backgroundColor
+        backgroundColor = remember { backgroundColor }
     ) {
 
         Column {
@@ -84,11 +84,14 @@ fun WalletCard(
                                     contentDescription = "Balance Visibility",
                                 )
                             }
-
                         }
 
                         Text(
-                            text = if (walletBalanceVisibility) "₦0.00" else "******",
+                            text = if (walletBalanceVisibility) "₦ ${
+                                Util.formatAmount(
+                                    currentBalance
+                                )
+                            }" else "******",
                             color = Color.Black,
                             style = MaterialTheme.typography.h6
                         )
@@ -118,10 +121,10 @@ fun WalletCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Card Number VLX-90345", fontSize = 12.sp)
+                    Text(text = "Vendor: ${vendorName}", fontSize = 12.sp)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Loyalty Points: 406",
+                        text = "Loyalty Points: 0",
                         fontSize = 12.sp,
                         color = brightBlue,
 
@@ -137,6 +140,6 @@ fun WalletCard(
 @Preview(heightDp = 200)
 fun WalletCardPreview() {
     CupidCustomerAppTheme {
-        WalletCard(backgroundColor = transparentBlue, {}, true, {})
+        WalletCard(backgroundColor = transparentBlue, {}, true, {}, "Smartflow", "₦30,000")
     }
 }

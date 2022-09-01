@@ -6,10 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
+import com.smartflowtech.cupidcustomerapp.data.repo.WalletRepository
 import com.smartflowtech.cupidcustomerapp.model.Product
 import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.Wallet
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
+import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
@@ -26,21 +29,24 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository,
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    private val walletRepository: WalletRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
     var transactions by mutableStateOf(
         TransactionHistoryUiState(
-            ViewModelResult.LOADING,
-            emptyList()
+            viewModelResult = ViewModelResult.LOADING,
+            transactions = emptyList(),
+            wallets = emptyList()
         )
     )
 
     init {
-        getTransactions()
+        getTransactionsAndWallets()
     }
 
-    private fun getTransactions() {
+
+    private fun getTransactionsAndWallets() {
         viewModelScope.launch {
             combine(
                 flowOf(
@@ -49,30 +55,56 @@ class HomeScreenViewModel @Inject constructor(
                         companyId = appConfigPreferences.companyId
                     )
                 ),
-                dataStorePrefsRepository.appConfigPreferencesAsFlow
-            ) { result, prefs ->
+                dataStorePrefsRepository.appConfigPreferencesAsFlow,
+                flowOf(
+                    walletRepository.getWallets(
+                        appConfigPreferences.token,
+                        appConfigPreferences.companyId
+                    )
+                )
+            ) { transactionsResult, prefs, walletsResult ->
 
-                when (result) {
+                val wallets = when (walletsResult) {
+                    is RepositoryResult.Success -> {
+                        mapWalletsResponseData(walletsResult.data)
+                    }
+                    is RepositoryResult.Error -> {
+                        emptyList()
+                    }
+                    is RepositoryResult.Local -> {
+                        mapWalletsResponseData(walletsResult.data)
+                    }
+                }
+
+                when (transactionsResult) {
                     is RepositoryResult.Success -> {
                         TransactionHistoryUiState(
                             viewModelResult = ViewModelResult.SUCCESS,
-                            data = processTransactionsResponseData(result.data, prefs)
-                                ?: emptyList()
+                            transactions = mapTransactionsResponseData(
+                                transactionsResult.data,
+                                prefs
+                            )
+                                ?: emptyList(),
+                            wallets = wallets ?: emptyList()
                         )
-
                     }
                     is RepositoryResult.Error -> {
                         TransactionHistoryUiState(
                             viewModelResult = ViewModelResult.ERROR,
-                            data = emptyList(),
-                            message = result.message
+                            transactions = emptyList(),
+                            message = transactionsResult.message,
+                            wallets = wallets ?: emptyList()
                         )
                     }
                     is RepositoryResult.Local -> {
                         TransactionHistoryUiState(
                             viewModelResult = ViewModelResult.SUCCESS,
-                            data = processTransactionsResponseData(result.data, prefs)
-                                ?: emptyList()
+                            transactions = mapTransactionsResponseData(
+                                transactionsResult.data,
+                                prefs
+                            )
+                                ?: emptyList(),
+                            wallets = wallets ?: emptyList()
                         )
                     }
                 }
@@ -82,7 +114,11 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun processTransactionsResponseData(
+    private fun mapWalletsResponseData(data: List<WalletResponseData>?): List<Wallet>? {
+        return data?.map { walletResponseData -> walletResponseData.mapToWallet() }
+    }
+
+    private fun mapTransactionsResponseData(
         result: List<TransactionsResponseData>?,
         prefs: DataStorePrefsRepository.AppConfigPreferences
     ): List<Transaction>? {
