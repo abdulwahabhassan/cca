@@ -139,7 +139,7 @@ fun HomeDashBoard(
                             }
                         }
                         HorizontalPager(
-                            count = transactionHistoryUiState.wallets.size,
+                            count = if (transactionHistoryUiState.viewModelResult == ViewModelResult.SUCCESS) transactionHistoryUiState.wallets.size else 1,
                             state = pagerState,
                             itemSpacing = 16.dp,
                             contentPadding = PaddingValues(horizontal = 16.dp),
