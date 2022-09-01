@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
+import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
@@ -12,6 +13,7 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
 
@@ -21,8 +23,9 @@ fun BottomNavBarNavigation(
     bottomNavHostController: NavHostController,
     onBackPressed: () -> Unit,
     onSearchBarClicked: () -> Unit,
-    transactions: List<Transaction>,
-    bottomSheetState: BottomSheetState
+    transactionHistoryUiState: TransactionHistoryUiState,
+//    bottomSheetState: BottomSheetState,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
 
     var selectedTransaction: Transaction? by remember {
@@ -95,8 +98,9 @@ fun BottomNavBarNavigation(
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
                 },
-                transactions = transactions,
-                bottomSheetState = bottomSheetState
+                transactionHistoryUiState = transactionHistoryUiState,
+//                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
+                bottomSheetScaffoldState = bottomSheetScaffoldState
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -106,8 +110,9 @@ fun BottomNavBarNavigation(
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
                 },
-                transactions = transactions,
-                bottomSheetState = bottomSheetState
+                transactionHistoryUiState = transactionHistoryUiState,
+//                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
+                bottomSheetScaffoldState = bottomSheetScaffoldState
             )
         }
         composable(HomeScreen.Location.route) {

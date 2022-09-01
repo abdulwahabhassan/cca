@@ -16,8 +16,8 @@ fun HomeBottomAppBar(isSelected: (String) -> Boolean, onClicked: (String) -> Uni
     val items = listOf(
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Home,
         com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Transactions,
-        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location,
-        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings,
+//        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Location,
+//        com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen.Settings,
     )
 
     BottomAppBar(

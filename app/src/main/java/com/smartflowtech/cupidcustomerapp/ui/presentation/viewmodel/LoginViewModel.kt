@@ -32,11 +32,12 @@ class LoginViewModel @Inject constructor(
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
                         dataStorePrefsRepository.updateLoggedIn(
-                            false,
+                            true,
                             data.fullname ?: "",
                             data.email ?: "",
-                            data.token ?: "",
-                            data.phoneNumber ?: ""
+                            "Bearer ${data.token}",
+                            data.phoneNumber ?: "",
+                            data.companyId ?: ""
                         )
                         loginScreenUiState =
                             LoginScreenUiState(

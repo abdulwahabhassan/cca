@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.NoRippleTheme
 import kotlinx.coroutines.launch
@@ -45,7 +45,8 @@ fun HomeScreen(
     userName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
-    transactions: List<Transaction>
+    transactionHistoryUiState: TransactionHistoryUiState,
+    onLogOutClicked: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -191,8 +192,9 @@ fun HomeScreen(
                                 bottomSheetState.expand()
                             }
                         },
-                        transactions = transactions,
-                        bottomSheetState = bottomSheetState
+                        transactionHistoryUiState = transactionHistoryUiState,
+//                        bottomSheetState = bottomSheetState,
+                        bottomSheetScaffoldState = bottomSheetScaffoldState
                     )
                 }
             }) { paddingValues ->
@@ -203,7 +205,8 @@ fun HomeScreen(
                 onAddFundsClicked = onAddFundsClicked,
                 userName = userName,
                 walletBalanceVisibility = walletBalanceVisibility,
-                updateWalletVisibility = updateWalletVisibility
+                updateWalletVisibility = updateWalletVisibility,
+                onLogOutClicked = onLogOutClicked
             )
         }
     }

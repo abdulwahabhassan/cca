@@ -16,12 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Product
-import com.smartflowtech.cupidcustomerapp.model.Status
-import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -47,7 +45,8 @@ fun HomeScreenModalBottomSheet(
     onDaysFilterSelected: (String) -> Unit,
     onStatusFilterSelected: (Boolean, String) -> Unit,
     onProductFilterSelected: (Boolean, String) -> Unit,
-    transactions: List<Transaction>
+    transactionHistoryUiState: TransactionHistoryUiState,
+    onLogoutClicked: () -> Unit
 ) {
 
     var showCustomSearch: Boolean by rememberSaveable {
@@ -180,7 +179,8 @@ fun HomeScreenModalBottomSheet(
             userName = userName,
             walletBalanceVisibility = walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
-            transactions = transactions
+            transactionHistoryUiState = transactionHistoryUiState,
+            onLogOutClicked = onLogoutClicked
         )
     }
 }

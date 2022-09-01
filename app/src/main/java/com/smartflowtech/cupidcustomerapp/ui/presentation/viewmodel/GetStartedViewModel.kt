@@ -14,7 +14,7 @@ class GetStartedViewModel @Inject constructor(
 
     fun updateStarted(bool: Boolean) {
         viewModelScope.launch {
-            //dataStorePrefsRepository.updateStarted(bool)
+            dataStorePrefsRepository.updateStarted(bool)
         }
     }
 

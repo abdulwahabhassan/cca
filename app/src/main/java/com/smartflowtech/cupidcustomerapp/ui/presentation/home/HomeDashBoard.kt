@@ -3,9 +3,12 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +39,8 @@ fun HomeDashBoard(
     onAddFundsClicked: () -> Unit,
     userName: String,
     walletBalanceVisibility: Boolean,
-    updateWalletVisibility: (Boolean) -> Unit
+    updateWalletVisibility: (Boolean) -> Unit,
+    onLogOutClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -117,11 +121,18 @@ fun HomeDashBoard(
                                     Text(text = "Trust you are good", color = Color.White)
                                 }
                                 Spacer(modifier = Modifier.width(16.dp))
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_notification_active),
-                                    contentDescription = "Notification bell",
-                                    tint = Color.White,
-                                )
+//                                Icon(
+//                                    painter = painterResource(id = R.drawable.ic_notification_active),
+//                                    contentDescription = "Notification bell",
+//                                    tint = Color.White,
+//                                )
+                                IconButton(onClick = { onLogOutClicked() }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Logout,
+                                        contentDescription = "Logout icon",
+                                        tint = Color.White,
+                                    )
+                                }
                             }
                         }
                         HorizontalPager(

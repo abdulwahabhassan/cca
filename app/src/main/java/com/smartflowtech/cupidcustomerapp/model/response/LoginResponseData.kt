@@ -13,4 +13,6 @@ class LoginResponseData(
     val phoneNumber: String?,
     @Json(name = "token")
     val token: String?,
+    @Json(name = "company_id")
+    val companyId: String?,
 )

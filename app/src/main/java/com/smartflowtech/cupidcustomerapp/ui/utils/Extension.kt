@@ -14,4 +14,12 @@ object Extension {
         Timber.d(result)
         return result
     }
+
+    fun String.capitalizeEachWord(): String {
+        val result = this.split(" ").joinToString(" ") {
+            it.capitalizeFirstLetter()
+        }
+        Timber.d(result)
+        return result
+    }
 }

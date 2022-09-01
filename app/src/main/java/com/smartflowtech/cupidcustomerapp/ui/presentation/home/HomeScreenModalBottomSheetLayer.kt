@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 fun HomeScreenModalBottomSheetLayer(
     viewModel: HomeScreenViewModel,
     bottomNavBarNavHostController: NavHostController,
-    goTo: () -> Unit,
+    goToLogin: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
     popBackStackOrFinishActivity: () -> Unit,
     goToDestination: (String) -> Unit,
@@ -52,9 +52,11 @@ fun HomeScreenModalBottomSheetLayer(
             }
         },
         onAddFundsClicked = goToAddFundsScreen,
-        userName = "John Doe",
-        walletBalanceVisibility = true,
-        transactions = viewModel.transactions,
+        userName = viewModel.appConfigPreferences.userName,
+//        "John Doe",
+        walletBalanceVisibility = viewModel.appConfigPreferences.walletBalanceVisibility,
+//        true,
+        transactionHistoryUiState = viewModel.transactions,
         daysFilter = viewModel.appConfigPreferences.daysFilter,
         completedStatusFilter = viewModel.appConfigPreferences.completedStatusFilter,
         failedStatusFilter = viewModel.appConfigPreferences.failedStatusFilter,
@@ -81,6 +83,9 @@ fun HomeScreenModalBottomSheetLayer(
         },
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)
-        },
-    )
+        }
+    ) {
+        viewModel.logOut()
+        goToLogin()
+    }
 }

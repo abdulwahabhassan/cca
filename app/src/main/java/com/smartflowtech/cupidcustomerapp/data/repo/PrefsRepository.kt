@@ -20,13 +20,14 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val token: String = "",
         val phoneNumber: String = "",
         val walletBalanceVisibility: Boolean = true,
-        val daysFilter: Long = 1,
-        val completedStatusFilter: Boolean = false,
-        val failedStatusFilter: Boolean = false,
-        val pendingStatusFilter: Boolean = false,
-        val dpkProductFilter: Boolean = false,
-        val agoProductFilter: Boolean = false,
-        val pmsProductFilter: Boolean = false,
+        val daysFilter: Long = 730,
+        val completedStatusFilter: Boolean = true,
+        val failedStatusFilter: Boolean = true,
+        val pendingStatusFilter: Boolean = true,
+        val dpkProductFilter: Boolean = true,
+        val agoProductFilter: Boolean = true,
+        val pmsProductFilter: Boolean = true,
+        val companyId: String = ""
     )
 
     private object PreferencesKeys {
@@ -44,6 +45,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val DPK_PRODUCT_FILTER = booleanPreferencesKey("dpkProductFilter")
         val PMS_PRODUCT_FILTER = booleanPreferencesKey("pmsProductFilter")
         val AGO_PRODUCT_FILTER = booleanPreferencesKey("agoProductFilter")
+        val COMPANY_ID = stringPreferencesKey("companyId")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -67,13 +69,14 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
             walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY]
                 ?: true,
-            daysFilter = preferences[PreferencesKeys.DAYS_FILTER] ?: 1,
-            completedStatusFilter = preferences[PreferencesKeys.COMPLETED_STATUS_FILTER] ?: false,
-            failedStatusFilter = preferences[PreferencesKeys.FAILED_STATUS_FILTER] ?: false,
-            pendingStatusFilter = preferences[PreferencesKeys.PENDING_STATUS_FILTER] ?: false,
-            dpkProductFilter = preferences[PreferencesKeys.DPK_PRODUCT_FILTER] ?: false,
-            pmsProductFilter = preferences[PreferencesKeys.PMS_PRODUCT_FILTER] ?: false,
-            agoProductFilter = preferences[PreferencesKeys.AGO_PRODUCT_FILTER] ?: false,
+            daysFilter = preferences[PreferencesKeys.DAYS_FILTER] ?: 730,
+            completedStatusFilter = preferences[PreferencesKeys.COMPLETED_STATUS_FILTER] ?: true,
+            failedStatusFilter = preferences[PreferencesKeys.FAILED_STATUS_FILTER] ?: true,
+            pendingStatusFilter = preferences[PreferencesKeys.PENDING_STATUS_FILTER] ?: true,
+            dpkProductFilter = preferences[PreferencesKeys.DPK_PRODUCT_FILTER] ?: true,
+            pmsProductFilter = preferences[PreferencesKeys.PMS_PRODUCT_FILTER] ?: true,
+            agoProductFilter = preferences[PreferencesKeys.AGO_PRODUCT_FILTER] ?: true,
+            companyId = preferences[PreferencesKeys.COMPANY_ID] ?: "",
         )
     }
 
@@ -130,7 +133,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         username: String,
         userEmail: String,
         token: String,
-        phoneNumber: String
+        phoneNumber: String,
+        companyId: String
     ) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.LOGGED_IN] = loggedIn
@@ -138,6 +142,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             mutablePreferences[PreferencesKeys.USER_EMAIL] = userEmail
             mutablePreferences[PreferencesKeys.TOKEN] = token
             mutablePreferences[PreferencesKeys.PHONE_NUMBER] = phoneNumber
+            mutablePreferences[PreferencesKeys.COMPANY_ID] = companyId
         }
     }
 

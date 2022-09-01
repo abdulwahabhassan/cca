@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) {
@@ -50,10 +50,10 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
                     )
                     .padding(8.dp),
                 painter = painterResource(
-                    id = when (data.type) {
+                    id = when (data.authType) {
                         "Credit" -> R.drawable.ic_transaction_credit
                         "Debit" -> R.drawable.ic_transaction_debit
-                        else -> R.drawable.ic_wallet
+                        else -> R.drawable.ic_transaction_debit
                     }
                 ),
                 contentDescription = "Diagonal arrow",
@@ -71,23 +71,24 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
                     .padding(start = 16.dp)
             ) {
                 Text(
-                    text = data.title,
+                    text = data.title ?: "",
                     fontFamily = AthleticsFontFamily,
                     fontWeight = FontWeight.W400
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     Text(
-                        text = data.status,
+                        text = data.status ?: "",
                         modifier = Modifier.padding(end = 4.dp),
                         fontSize = 12.sp,
                         color = grey,
                         fontFamily = AthleticsFontFamily
                     )
-                    Text(text = data.time, fontSize = 12.sp, color = grey)
+                    Text(text = data.time ?: "", fontSize = 12.sp, color = grey)
                 }
             }
             Text(
-                data.amount,
+                """₦${data.amount?.let { Util.formatAmount(it) }}""",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,
                 fontFamily = AthleticsFontFamily,

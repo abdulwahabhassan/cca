@@ -17,12 +17,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
-import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -80,13 +79,7 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
                                     bottomSheetState.collapse()
                                 }
                             }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = "Back arrow",
-                                tint = Color.White,
-                            )
-                        }
+                        }) {}
 
                         Text(
                             text = "Fund Wallet",
@@ -106,7 +99,7 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
                             color = Color.White,
                             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                         )
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Icon(
@@ -118,6 +111,23 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
                         contentDescription = "Bottom sheet handle",
                         tint = Color.Unspecified
                     )
+
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center) {
+                        Text(
+                            "This service is currently unavailable",
+                            color = purple,
+                            modifier = Modifier
+                                .background(
+                                    color = transparentPurple,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .padding(8.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
                 }
 
             }) { paddingValues ->

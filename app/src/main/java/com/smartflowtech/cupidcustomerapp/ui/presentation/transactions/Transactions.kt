@@ -8,17 +8,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.black
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -26,8 +23,9 @@ fun Transactions(
     downloadTransactions: () -> Unit,
     onSearchBarClicked: () -> Unit,
     onBackPressed: () -> Unit,
-    transactions: List<Transaction>,
-    bottomSheetState: BottomSheetState
+    transactionHistoryUiState: TransactionHistoryUiState,
+//    bottomSheetState: BottomSheetState,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
@@ -44,6 +42,21 @@ fun Transactions(
                 "",
                 ""
             )
+        )
+    }
+    val filteredTransactionHistoryUiState by remember(queryText, transactionHistoryUiState) {
+        val list = transactionHistoryUiState.data.filter { transaction ->
+            (transaction.status?.contains(queryText, true) == true) ||
+                    (transaction.amount?.contains(queryText, true) == true) ||
+                    transaction.date?.contains(queryText, true) == true ||
+                    (transaction.time?.contains(queryText, true) == true) ||
+                    transaction.authType?.contains(queryText, true) == true ||
+                    transaction.title?.contains(queryText, true) == true ||
+                    transaction.vendorStationName?.contains(queryText, true) == true ||
+                    transaction.transactionSeqNumber?.contains(queryText, true) == true
+        }
+        mutableStateOf(
+            TransactionHistoryUiState(transactionHistoryUiState.viewModelResult, list)
         )
     }
 
@@ -92,22 +105,23 @@ fun Transactions(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                IconButton(onClick = { downloadTransactions() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_download),
-                        contentDescription = "Forward arrow",
-                        tint = black
-                    )
+                IconButton(onClick = { downloadTransactions() }, enabled = false) {
+//                    Icon(
+//                        painter = painterResource(id = R.drawable.ic_download),
+//                        contentDescription = "Download icon",
+//                        tint = black
+//                    )
                 }
             }
 
             TransactionsList(
-                transactions = transactions,
+                transactionHistoryUiState = filteredTransactionHistoryUiState,
                 onTransactionClicked = { transaction: Transaction ->
                     showReceipt = true
                     selectedTransaction = transaction
                 },
-                bottomSheetState = bottomSheetState
+//                bottomSheetState = bottomSheetState,
+                bottomSheetScaffoldState = bottomSheetScaffoldState
             )
 
         }

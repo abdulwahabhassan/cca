@@ -3,7 +3,6 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -27,7 +26,7 @@ fun RootNavigation(
 
     AnimatedNavHost(
         navController = rootNavHostController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Splash.route,
         enterTransition = {
             if (targetState.destination.route != Screen.Home.route) {
                 slideInHorizontally { it }
@@ -67,8 +66,11 @@ fun RootNavigation(
                 loggedIn = splashScreenViewModel.appConfigPreferences.loggedIn,
                 goToHomeScreen = {
                     rootNavHostController.navigate(
-                        Screen.Home.route,
+                        Screen.Login.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                    )
+                    rootNavHostController.navigate(
+                        Screen.Home.route
                     )
                 },
                 goToGetStartedScreen = {
@@ -111,11 +113,19 @@ fun RootNavigation(
                 uiState = loginViewModel.loginScreenUiState,
                 goToHomeScreen = {
                     rootNavHostController.navigate(
-                        Screen.Home.route,
+                        Screen.Login.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
                     )
+
+                    rootNavHostController.navigate(
+                        Screen.Home.route
+                    )
+
                 },
-                goToForgotPasswordScreen = {}
+                goToForgotPasswordScreen = {},
+                finishActivity = {
+                    finishActivity()
+                }
             )
         }
 
@@ -127,7 +137,13 @@ fun RootNavigation(
             HomeScreenModalBottomSheetLayer(
                 viewModel = homeScreenViewModel,
                 bottomNavBarNavHostController = bottomNavBarNavHostController,
-                goTo = {},
+                goToLogin = {
+                    rootNavHostController.navigate(
+                        Screen.Login.route,
+                        NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                    )
+
+                },
                 isNavDestinationSelected = { route ->
                     currentRoute == route
                 },

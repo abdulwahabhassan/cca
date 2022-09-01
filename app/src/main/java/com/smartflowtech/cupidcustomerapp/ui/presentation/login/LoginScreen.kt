@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.login
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -32,17 +33,22 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     uiState: LoginScreenUiState,
     goToHomeScreen: () -> Unit,
-    goToForgotPasswordScreen: () -> Unit
+    goToForgotPasswordScreen: () -> Unit,
+    finishActivity: () -> Unit
 ) {
 
     val scaffoldState = rememberScaffoldState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var email by rememberSaveable { mutableStateOf("support@e360africa.com") }
-    var password by rememberSaveable { mutableStateOf("P@ssw0rdl0g1n%%") }
+    var email by rememberSaveable { mutableStateOf("abdulwahab.hassan@smartflowtech.com") }
+    var password by rememberSaveable { mutableStateOf("vMG9uJ") }
     var isEmailError by rememberSaveable { mutableStateOf(false) }
     var isPasswordError by rememberSaveable { mutableStateOf(false) }
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
     var passwordErrorLabel by rememberSaveable { mutableStateOf("") }
+
+    BackHandler(viewModel.appConfigPreferences.onBoarded) {
+        finishActivity()
+    }
 
 
     Scaffold(
@@ -201,9 +207,8 @@ fun LoginScreen(
                     when (uiState.viewModelResult) {
                         ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
                             CircularProgressIndicator(
-                                modifier = Modifier
-                                    .height(54.dp),
-                                color = darkBlue
+                                strokeWidth = 2.dp, modifier = Modifier
+                                    .height(54.dp)
                             )
                         }
                         else -> {
@@ -253,13 +258,13 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(40.dp))
 
                     //Forgot password
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.CenterStart)
-                            .padding(bottom = 16.dp),
-                        text = "Forgot password?"
-                    )
+//                    Text(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .align(Alignment.CenterStart)
+//                            .padding(bottom = 16.dp),
+//                        text = "Forgot password?"
+//                    )
                 }
 
             }

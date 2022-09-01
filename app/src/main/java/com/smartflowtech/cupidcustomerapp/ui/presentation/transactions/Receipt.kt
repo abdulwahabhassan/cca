@@ -14,7 +14,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,8 +27,11 @@ import com.google.accompanist.permissions.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.io.File
 import java.io.FileOutputStream
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -61,7 +63,7 @@ fun Receipt(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = transaction.type,
+                text = transaction.authType ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -74,7 +76,7 @@ fun Receipt(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = transaction.referenceNumber,
+                text = transaction.transactionSeqNumber ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -83,13 +85,13 @@ fun Receipt(
 
             Text(text = "Payment Date", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = transaction.date,
+                text = transaction.date ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = transaction.time,
+                text = transaction.time ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -98,7 +100,7 @@ fun Receipt(
 
             Text(text = "Description", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = transaction.description,
+                text = transaction.vendorStationName ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -107,7 +109,7 @@ fun Receipt(
 
             Text(text = "Amount", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = transaction.amount,
+                text = """₦${transaction.amount?.let { Util.formatAmount(it) }}""",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -116,7 +118,7 @@ fun Receipt(
 
             Text(text = "Status", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = transaction.status,
+                text = transaction.status ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -175,40 +177,33 @@ fun Receipt(
 
                         val canvas = page.canvas
                         canvas.drawBitmap(scaledBitmap, 40F, 35F, Paint())
-                        canvas.drawText(
-                            "Smartflow Technologies Ltd.",
-                            109F,
-                            65F,
-                            metaDataBlackPaint
-                        )
+                        canvas.drawText("Smartflow Technologies Ltd.", 109F, 65F, metaDataBlackPaint)
                         canvas.drawText("www.smartflowtech.com", 109F, 85F, urlBluePaint)
 
-                        //Header
                         canvas.drawText("Receipt", 40F, 145F, headerBlackPaint)
 
-                        //Body
                         canvas.drawText("Transaction Type", 109F, 200F, titleGreyPaint)
-                        canvas.drawText(transaction.type, 109F, 225F, textDarkBluePaint)
+                        canvas.drawText(transaction.authType ?: "", 109F, 225F, textDarkBluePaint)
 
                         canvas.drawText("Reference Number", 109F, 260F, titleGreyPaint)
-                        canvas.drawText(transaction.referenceNumber, 109F, 285F, textDarkBluePaint)
+                        canvas.drawText(transaction.transactionSeqNumber ?: "", 109F, 285F, textDarkBluePaint)
 
                         canvas.drawText("Payment Date", 109F, 320F, titleGreyPaint)
-                        canvas.drawText(transaction.date, 109F, 345F, textDarkBluePaint)
-                        canvas.drawText(transaction.time, 109F, 365F, textDarkBluePaint)
+                        canvas.drawText(LocalDate.parse(transaction.date).format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "", 109F, 345F, textDarkBluePaint)
+                        canvas.drawText(transaction.time ?: "", 109F, 365F, textDarkBluePaint)
 
                         canvas.drawText("Description", 109F, 400F, titleGreyPaint)
-                        canvas.drawText(transaction.description, 109F, 425F, textDarkBluePaint)
+                        canvas.drawText(transaction.title ?: "", 109F, 425F, textDarkBluePaint)
 
                         canvas.drawText("Amount", 109F, 460F, titleGreyPaint)
-                        canvas.drawText(transaction.amount, 109F, 485F, textDarkBluePaint)
+                        canvas.drawText("""₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "", 109F, 485F, textDarkBluePaint)
 
                         canvas.drawText("Status", 109F, 520F, titleGreyPaint)
-                        canvas.drawText(transaction.status, 109F, 545F, textDarkBluePaint)
+                        canvas.drawText(transaction.status ?: "", 109F, 545F, textDarkBluePaint)
 
                         document.finishPage(page)
 
-                        val file = createFile(transaction.referenceNumber)
+                        val file = createFile(transaction.transactionSeqNumber ?: "")
 
                         try {
                             document.writeTo(FileOutputStream(file))
@@ -340,10 +335,10 @@ fun ReceiptPreview() {
     CupidCustomerAppTheme {
         Receipt(
             transaction = Transaction(
-                type = "Mobile Transfer",
-                referenceNumber = "TRS90399291",
+                authType = "Mobile Transfer",
+                transactionSeqNumber = "TRS90399291",
                 date = "2022-08-31 08:21AM",
-                description = "Purchase on Cupid",
+                vendorStationName = "Purchase on Cupid",
                 amount = "₦20,500.05",
                 status = "Successful",
                 time = "08:21AM",

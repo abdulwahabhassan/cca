@@ -51,9 +51,9 @@ fun FilterTransactions(
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp)) {
+        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)) {
             mapOf(
-                "Date" to listOf("0", "7", "15", "30"),
+                "Date" to listOf("0", "7", "15", "30", "182", "365", "730"),
                 "Status" to listOf(Status.COMPLETED.name, Status.PENDING.name, Status.FAILED.name),
                 "Product" to listOf(Product.AGO.name, Product.DPK.name, Product.PMS.name)
             ).forEach { (category, filters) ->
@@ -76,11 +76,12 @@ fun FilterTransactions(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp),
+                            .padding(start = 16.dp, top = 6.dp, bottom = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (category == "Status" || category == "Product") {
                             Checkbox(
+                                modifier = Modifier.size(36.dp),
                                 checked = when (filter) {
                                     Status.COMPLETED.name -> completedStatusFilter
                                     Status.FAILED.name -> failedStatusFilter
@@ -100,6 +101,7 @@ fun FilterTransactions(
                             )
                         } else {
                             RadioButton(
+                                modifier = Modifier.size(36.dp),
                                 selected = filter == daysFilter.toString(),
                                 onClick = {
                                     onDaysFilterSelected(filter)
@@ -108,14 +110,26 @@ fun FilterTransactions(
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             modifier = Modifier.padding(vertical = 8.dp),
                             text = if (category == "Date") {
                                 if (filter.toLong() == 0L) {
                                     "Today"
+                                } else if (filter.toLong() == 7L) {
+                                    "1 week ago"
+                                } else if (filter.toLong() == 15L) {
+                                    "2 weeks ago"
+                                } else if (filter.toLong() == 30L) {
+                                    "1 month ago"
+                                } else if (filter.toLong() == 182L) {
+                                    "6 months ago"
+                                } else if (filter.toLong() == 365L) {
+                                    "1 year ago"
+                                } else if (filter.toLong() == 730L) {
+                                    "2 years ago"
                                 } else {
-                                    filter + " day${if (filter.toLong() > 1) "s" else ""} ago"
+                                    "All"
                                 }
                             } else if (category == "Status") {
                                 filter.capitalizeFirstLetter()
@@ -128,6 +142,7 @@ fun FilterTransactions(
                     }
                 }
 
+                //Not yet
 //                if (category == "Date") {
 //                    item {
 //                        Row(
