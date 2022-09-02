@@ -56,7 +56,7 @@ fun HomeScreenModalBottomSheetLayer(
 //        "John Doe",
 //        walletBalanceVisibility = viewModel.appConfigPreferences.walletBalanceVisibility,
 //        true,
-        transactionHistoryUiState = viewModel.transactions,
+        homeScreenUiState = viewModel.homeScreenUiState,
         appConfigPreferences = viewModel.appConfigPreferences,
 //        daysFilter = viewModel.appConfigPreferences.daysFilter,
 //        completedStatusFilter = viewModel.appConfigPreferences.completedStatusFilter,
@@ -88,6 +88,9 @@ fun HomeScreenModalBottomSheetLayer(
         onLogoutClicked = {
             viewModel.logOut()
             goToLogin()
+        },
+        getTransactions = {
+            viewModel.getTransactionsAndWallets()
         }
     )
 }

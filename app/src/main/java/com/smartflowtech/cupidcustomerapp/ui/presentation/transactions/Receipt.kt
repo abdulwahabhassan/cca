@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,11 +28,13 @@ import com.google.accompanist.permissions.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -177,7 +180,12 @@ fun Receipt(
 
                         val canvas = page.canvas
                         canvas.drawBitmap(scaledBitmap, 40F, 35F, Paint())
-                        canvas.drawText("Smartflow Technologies Ltd.", 109F, 65F, metaDataBlackPaint)
+                        canvas.drawText(
+                            "Smartflow Technologies Ltd.",
+                            109F,
+                            65F,
+                            metaDataBlackPaint
+                        )
                         canvas.drawText("www.smartflowtech.com", 109F, 85F, urlBluePaint)
 
                         canvas.drawText("Receipt", 40F, 145F, headerBlackPaint)
@@ -186,17 +194,33 @@ fun Receipt(
                         canvas.drawText(transaction.authType ?: "", 109F, 225F, textDarkBluePaint)
 
                         canvas.drawText("Reference Number", 109F, 260F, titleGreyPaint)
-                        canvas.drawText(transaction.transactionSeqNumber ?: "", 109F, 285F, textDarkBluePaint)
+                        canvas.drawText(
+                            transaction.transactionSeqNumber ?: "",
+                            109F,
+                            285F,
+                            textDarkBluePaint
+                        )
 
                         canvas.drawText("Payment Date", 109F, 320F, titleGreyPaint)
-                        canvas.drawText(LocalDate.parse(transaction.date).format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "", 109F, 345F, textDarkBluePaint)
+                        canvas.drawText(
+                            LocalDate.parse(transaction.date)
+                                .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "",
+                            109F,
+                            345F,
+                            textDarkBluePaint
+                        )
                         canvas.drawText(transaction.time ?: "", 109F, 365F, textDarkBluePaint)
 
                         canvas.drawText("Description", 109F, 400F, titleGreyPaint)
                         canvas.drawText(transaction.title ?: "", 109F, 425F, textDarkBluePaint)
 
                         canvas.drawText("Amount", 109F, 460F, titleGreyPaint)
-                        canvas.drawText("""₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "", 109F, 485F, textDarkBluePaint)
+                        canvas.drawText(
+                            """₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "",
+                            109F,
+                            485F,
+                            textDarkBluePaint
+                        )
 
                         canvas.drawText("Status", 109F, 520F, titleGreyPaint)
                         canvas.drawText(transaction.status ?: "", 109F, 545F, textDarkBluePaint)
@@ -233,11 +257,11 @@ fun Receipt(
                             multiplePermissionsState.revokedPermissions,
                             multiplePermissionsState.shouldShowRationale
                         ),
-                        color = red,
+                        color = darkBlue,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .background(
-                                color = transparentPink,
+                                color = transparentBlue,
                                 shape = RoundedCornerShape(10.dp)
                             )
                             .padding(8.dp),
@@ -302,12 +326,17 @@ private fun getTextToShowGivenPermissions(
     if (revokedPermissionsSize == 0) return ""
 
     val textToShow = StringBuilder()
+    textToShow.append("${if (revokedPermissionsSize == 1) "Permission" else "Permissions"} to ")
 
     for (i in permissions.indices) {
-        textToShow.append(permissions[i].permission.substringAfter("android.permission."))
+        textToShow.append(
+            permissions[i].permission.substringAfter("android.permission.")
+                .replace("_", " ")
+                .lowercase(Locale.ROOT)
+        )
         when {
             revokedPermissionsSize > 1 && i == revokedPermissionsSize - 2 -> {
-                textToShow.append(", and ")
+                textToShow.append(" and ")
             }
             i == revokedPermissionsSize - 1 -> {
                 textToShow.append(" ")
@@ -317,7 +346,7 @@ private fun getTextToShowGivenPermissions(
             }
         }
     }
-    textToShow.append(if (revokedPermissionsSize == 1) "permission is" else "permissions are")
+    textToShow.append(if (revokedPermissionsSize == 1) "is" else "are")
     textToShow.append(
         if (shouldShowRationale) {
             " important. Please grant all of them for the app to function properly."

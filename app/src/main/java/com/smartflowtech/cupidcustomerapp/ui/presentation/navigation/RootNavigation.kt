@@ -116,11 +116,9 @@ fun RootNavigation(
                         Screen.Login.route,
                         NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
                     )
-
                     rootNavHostController.navigate(
                         Screen.Home.route,
                     )
-
                 },
                 goToForgotPasswordScreen = {},
                 finishActivity = {

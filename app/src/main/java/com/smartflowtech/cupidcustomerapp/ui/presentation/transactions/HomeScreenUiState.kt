@@ -5,7 +5,7 @@ import com.smartflowtech.cupidcustomerapp.model.Wallet
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 
-data class TransactionHistoryUiState(
+data class HomeScreenUiState(
     val viewModelResult: ViewModelResult,
     val transactions: List<Transaction>,
     val message: String? = null,

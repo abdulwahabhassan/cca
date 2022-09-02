@@ -1,8 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
@@ -15,9 +14,10 @@ import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseDat
 import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
@@ -33,9 +33,9 @@ class HomeScreenViewModel @Inject constructor(
     private val walletRepository: WalletRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
-    var transactions by mutableStateOf(
-        TransactionHistoryUiState(
-            viewModelResult = ViewModelResult.LOADING,
+    var homeScreenUiState by mutableStateOf(
+        HomeScreenUiState(
+            viewModelResult = ViewModelResult.INITIAL,
             transactions = emptyList(),
             wallets = emptyList()
         )
@@ -45,9 +45,12 @@ class HomeScreenViewModel @Inject constructor(
         getTransactionsAndWallets()
     }
 
+    fun getTransactionsAndWallets() {
 
-    private fun getTransactionsAndWallets() {
         viewModelScope.launch {
+
+            homeScreenUiState = homeScreenUiState.copy(viewModelResult = ViewModelResult.LOADING)
+
             combine(
                 flowOf(
                     transactionRepository.getTransactions(
@@ -78,7 +81,7 @@ class HomeScreenViewModel @Inject constructor(
 
                 when (transactionsResult) {
                     is RepositoryResult.Success -> {
-                        TransactionHistoryUiState(
+                        HomeScreenUiState(
                             viewModelResult = ViewModelResult.SUCCESS,
                             transactions = mapTransactionsResponseData(
                                 transactionsResult.data,
@@ -89,7 +92,7 @@ class HomeScreenViewModel @Inject constructor(
                         )
                     }
                     is RepositoryResult.Error -> {
-                        TransactionHistoryUiState(
+                        HomeScreenUiState(
                             viewModelResult = ViewModelResult.ERROR,
                             transactions = emptyList(),
                             message = transactionsResult.message,
@@ -97,7 +100,7 @@ class HomeScreenViewModel @Inject constructor(
                         )
                     }
                     is RepositoryResult.Local -> {
-                        TransactionHistoryUiState(
+                        HomeScreenUiState(
                             viewModelResult = ViewModelResult.SUCCESS,
                             transactions = mapTransactionsResponseData(
                                 transactionsResult.data,
@@ -109,7 +112,7 @@ class HomeScreenViewModel @Inject constructor(
                     }
                 }
             }.collectLatest {
-                transactions = it
+                homeScreenUiState = it
             }
         }
     }

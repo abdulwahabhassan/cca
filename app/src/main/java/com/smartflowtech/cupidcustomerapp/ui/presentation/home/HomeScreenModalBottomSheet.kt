@@ -20,7 +20,7 @@ import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -47,8 +47,9 @@ fun HomeScreenModalBottomSheet(
     onDaysFilterSelected: (String) -> Unit,
     onStatusFilterSelected: (Boolean, String) -> Unit,
     onProductFilterSelected: (Boolean, String) -> Unit,
-    transactionHistoryUiState: TransactionHistoryUiState,
+    homeScreenUiState: HomeScreenUiState,
     onLogoutClicked: () -> Unit,
+    getTransactions: () -> Unit
 ) {
 
     var showCustomSearch: Boolean by rememberSaveable {
@@ -77,7 +78,7 @@ fun HomeScreenModalBottomSheet(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.40f)
+                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.12f)
                 )
 
                 Column(
@@ -182,8 +183,9 @@ fun HomeScreenModalBottomSheet(
             userName = appConfigPreferences.userName,
             walletBalanceVisibility = appConfigPreferences. walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
-            transactionHistoryUiState = transactionHistoryUiState,
-            onLogOutClicked = onLogoutClicked
+            homeScreenUiState = homeScreenUiState,
+            onLogOutClicked = onLogoutClicked,
+            getTransactions = getTransactions
         )
     }
 }

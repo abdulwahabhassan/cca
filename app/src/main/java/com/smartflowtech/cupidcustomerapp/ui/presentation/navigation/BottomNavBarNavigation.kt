@@ -3,7 +3,6 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
 import androidx.compose.material.BottomSheetScaffoldState
-import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
@@ -13,7 +12,7 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
 
@@ -23,9 +22,10 @@ fun BottomNavBarNavigation(
     bottomNavHostController: NavHostController,
     onBackPressed: () -> Unit,
     onSearchBarClicked: () -> Unit,
-    transactionHistoryUiState: TransactionHistoryUiState,
+    homeScreenUiState: HomeScreenUiState,
 //    bottomSheetState: BottomSheetState,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    getTransactions: () -> Unit
 ) {
 
     var selectedTransaction: Transaction? by remember {
@@ -98,9 +98,10 @@ fun BottomNavBarNavigation(
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
                 },
-                transactionHistoryUiState = transactionHistoryUiState,
+                homeScreenUiState = homeScreenUiState,
 //                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
-                bottomSheetScaffoldState = bottomSheetScaffoldState
+                bottomSheetScaffoldState = bottomSheetScaffoldState,
+                getTransactions = getTransactions
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -110,7 +111,7 @@ fun BottomNavBarNavigation(
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null
                 },
-                transactionHistoryUiState = transactionHistoryUiState,
+                homeScreenUiState = homeScreenUiState,
 //                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState
             )

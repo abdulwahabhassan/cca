@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,24 +29,14 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun TransactionsList(
-    transactionHistoryUiState: TransactionHistoryUiState,
+    homeScreenUiState: HomeScreenUiState,
     onTransactionClicked: (transaction: Transaction) -> Unit,
 //    bottomSheetState: BottomSheetState,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    getTransactions: () -> Unit
 ) {
 
-
-    LaunchedEffect(key1 = transactionHistoryUiState, block = {
-        if (transactionHistoryUiState.viewModelResult == ViewModelResult.ERROR) {
-            if (transactionHistoryUiState.message != null) {
-                bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                    transactionHistoryUiState.message
-                )
-            }
-        }
-    })
-
-    when (transactionHistoryUiState.viewModelResult) {
+    when (homeScreenUiState.viewModelResult) {
         ViewModelResult.LOADING -> {
             Column(
                 Modifier
@@ -81,6 +72,20 @@ fun TransactionsList(
             ) {}
         }
         ViewModelResult.ERROR -> {
+
+            LaunchedEffect(key1 = Unit, block = {
+                if (homeScreenUiState.message != null) {
+                    val result = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                        message = homeScreenUiState.message,
+                        actionLabel = "Retry",
+                        duration = SnackbarDuration.Indefinite
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        getTransactions()
+                    }
+                }
+            })
+
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -124,7 +129,7 @@ fun TransactionsList(
                 horizontalAlignment = Alignment.Start
             ) {
 
-                if (transactionHistoryUiState.transactions.isEmpty()) {
+                if (homeScreenUiState.transactions.isEmpty()) {
                     AnimatedVisibility(
                         visible = (bottomSheetScaffoldState.bottomSheetState.isCollapsed ||
                                 bottomSheetScaffoldState.bottomSheetState.isExpanded) &&
@@ -152,7 +157,7 @@ fun TransactionsList(
                     }
                 }
 
-                val grouped = transactionHistoryUiState.transactions.sortedByDescending { it.date }
+                val grouped = homeScreenUiState.transactions.sortedByDescending { it.date }
                     .groupBy { it.date }
 
                 LazyColumn(

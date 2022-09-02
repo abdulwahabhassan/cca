@@ -1,10 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.KeyframesSpec
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -34,9 +31,8 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
-import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.NoRippleTheme
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
 
@@ -53,8 +49,9 @@ fun HomeScreen(
     userName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
-    transactionHistoryUiState: TransactionHistoryUiState,
-    onLogOutClicked: () -> Unit
+    homeScreenUiState: HomeScreenUiState,
+    onLogOutClicked: () -> Unit,
+    getTransactions: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -127,6 +124,16 @@ fun HomeScreen(
             modifier = Modifier.padding(paddingValues),
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
+            snackbarHost = {
+                SnackbarHost(it) { data ->
+                    Snackbar(
+                        backgroundColor = transparentPurple,
+                        contentColor = purple,
+                        snackbarData = data,
+                        actionColor = darkBlue
+                    )
+                }
+            },
             sheetBackgroundColor = Color.Transparent,
             sheetPeekHeight = if (LocalConfiguration.current.screenWidthDp.dp > 320.dp)
                 LocalConfiguration.current.screenHeightDp.dp * 0.50f
@@ -219,9 +226,10 @@ fun HomeScreen(
                                 bottomSheetState.expand()
                             }
                         },
-                        transactionHistoryUiState = transactionHistoryUiState,
+                        homeScreenUiState = homeScreenUiState,
 //                        bottomSheetState = bottomSheetState,
-                        bottomSheetScaffoldState = bottomSheetScaffoldState
+                        bottomSheetScaffoldState = bottomSheetScaffoldState,
+                        getTransactions = getTransactions
                     )
                 }
             }) { paddingValues ->
@@ -234,7 +242,7 @@ fun HomeScreen(
                 walletBalanceVisibility = walletBalanceVisibility,
                 updateWalletVisibility = updateWalletVisibility,
                 onLogOutClicked = onLogOutClicked,
-                transactionHistoryUiState = transactionHistoryUiState
+                homeScreenUiState = homeScreenUiState
             )
         }
     }

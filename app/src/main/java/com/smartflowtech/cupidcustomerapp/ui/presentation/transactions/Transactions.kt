@@ -26,7 +26,7 @@ fun Transactions(
     downloadTransactions: () -> Unit,
     onSearchBarClicked: () -> Unit,
     onBackPressed: () -> Unit,
-    transactionHistoryUiState: TransactionHistoryUiState,
+    homeScreenUiState: HomeScreenUiState,
 //    bottomSheetState: BottomSheetState,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
@@ -47,8 +47,8 @@ fun Transactions(
             )
         )
     }
-    val filteredTransactionHistoryUiState by remember(queryText, transactionHistoryUiState) {
-        val list = transactionHistoryUiState.transactions.filter { transaction ->
+    val filteredHomeScreenUiState by remember(queryText, homeScreenUiState) {
+        val list = homeScreenUiState.transactions.filter { transaction ->
             (transaction.status?.contains(queryText, true) == true) ||
                     (transaction.amount?.contains(queryText, true) == true) ||
                     transaction.date?.contains(queryText, true) == true ||
@@ -59,10 +59,10 @@ fun Transactions(
                     transaction.transactionSeqNumber?.contains(queryText, true) == true
         }
         mutableStateOf(
-            TransactionHistoryUiState(
-                viewModelResult = transactionHistoryUiState.viewModelResult,
+            HomeScreenUiState(
+                viewModelResult = homeScreenUiState.viewModelResult,
                 transactions = list,
-                wallets = transactionHistoryUiState.wallets
+                wallets = homeScreenUiState.wallets
             )
         )
     }
@@ -122,13 +122,14 @@ fun Transactions(
             }
 
             TransactionsList(
-                transactionHistoryUiState = filteredTransactionHistoryUiState,
+                homeScreenUiState = filteredHomeScreenUiState,
                 onTransactionClicked = { transaction: Transaction ->
                     showReceipt = true
                     selectedTransaction = transaction
                 },
 //                bottomSheetState = bottomSheetState,
-                bottomSheetScaffoldState = bottomSheetScaffoldState
+                bottomSheetScaffoldState = bottomSheetScaffoldState,
+                getTransactions = {},
             )
 
         }

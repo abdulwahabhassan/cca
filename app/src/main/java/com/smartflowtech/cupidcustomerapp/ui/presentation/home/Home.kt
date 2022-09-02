@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionHistoryUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionsList
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
@@ -26,9 +26,10 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.black
 fun Home(
     goToTransactions: () -> Unit,
     onBackPressed: () -> Unit,
-    transactionHistoryUiState: TransactionHistoryUiState,
+    homeScreenUiState: HomeScreenUiState,
 //    bottomSheetState: BottomSheetState,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    getTransactions: () -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -77,10 +78,11 @@ fun Home(
         }
 
         TransactionsList(
-            transactionHistoryUiState = transactionHistoryUiState,
+            homeScreenUiState = homeScreenUiState,
             onTransactionClicked = { goToTransactions() },
 //            bottomSheetState = bottomSheetState,
-            bottomSheetScaffoldState = bottomSheetScaffoldState
+            bottomSheetScaffoldState = bottomSheetScaffoldState,
+            getTransactions = getTransactions
         )
     }
 }

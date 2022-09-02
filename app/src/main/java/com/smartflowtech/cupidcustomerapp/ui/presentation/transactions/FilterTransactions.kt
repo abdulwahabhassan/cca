@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +44,12 @@ fun FilterTransactions(
     onProductFilterSelected: (Boolean, String) -> Unit
 ) {
 
+    val completedStatusFilter = rememberSaveable { appConfigPreferences.completedStatusFilter }
+    val pendingStatusFilter = rememberSaveable { appConfigPreferences.pendingStatusFilter }
+    val failedStatusFilter = rememberSaveable { appConfigPreferences.failedStatusFilter }
+    val dpkProductFilter = rememberSaveable { appConfigPreferences.dpkProductFilter }
+    val agoProductFilter = rememberSaveable { appConfigPreferences.agoProductFilter }
+    val pmsProductFilter = rememberSaveable { appConfigPreferences.pmsProductFilter }
 
     Column(
         Modifier
@@ -92,12 +99,12 @@ fun FilterTransactions(
                                     .clip(RoundedCornerShape(2.dp))
                                     .clipToBounds(),
                                 checked = when (filter) {
-                                    Status.COMPLETED.name -> appConfigPreferences.completedStatusFilter
-                                    Status.FAILED.name -> appConfigPreferences.failedStatusFilter
-                                    Status.PENDING.name -> appConfigPreferences.pendingStatusFilter
-                                    Product.DPK.name -> appConfigPreferences.dpkProductFilter
-                                    Product.AGO.name -> appConfigPreferences.agoProductFilter
-                                    Product.PMS.name -> appConfigPreferences.pmsProductFilter
+                                    Status.COMPLETED.name -> completedStatusFilter
+                                    Status.FAILED.name -> failedStatusFilter
+                                    Status.PENDING.name -> pendingStatusFilter
+                                    Product.DPK.name -> dpkProductFilter
+                                    Product.AGO.name -> agoProductFilter
+                                    Product.PMS.name -> pmsProductFilter
                                     else -> false
                                 },
                                 onCheckedChange = { bool ->
@@ -113,8 +120,7 @@ fun FilterTransactions(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .clip(RoundedCornerShape(50))
-                                    .clipToBounds()
-                                    ,
+                                    .clipToBounds(),
                                 selected = filter == appConfigPreferences.daysFilter.toString(),
                                 onClick = {
                                     onDaysFilterSelected(filter)
@@ -187,6 +193,20 @@ fun FilterTransactions(
 
             }
 
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+            shape = RoundedCornerShape(10.dp),
+        ) {
+            Text(text = "Save")
         }
     }
 }
