@@ -23,7 +23,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.black
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Transactions(
-    downloadTransactions: () -> Unit,
+    onDownloadTransactionsClicked: () -> Unit,
     onSearchBarClicked: () -> Unit,
     onBackPressed: () -> Unit,
     homeScreenUiState: HomeScreenUiState,
@@ -31,6 +31,7 @@ fun Transactions(
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
 
+//    var downloadButtonEnabled by remember { mutableStateOf(true) }
     var queryText by rememberSaveable { mutableStateOf("") }
     var selectedTransaction: Transaction by remember {
         mutableStateOf(
@@ -112,7 +113,7 @@ fun Transactions(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                IconButton(onClick = { downloadTransactions() }, enabled = false) {
+                IconButton(onClick = { onDownloadTransactionsClicked() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_download),
                         contentDescription = "Download icon",

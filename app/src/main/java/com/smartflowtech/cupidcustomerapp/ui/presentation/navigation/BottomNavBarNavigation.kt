@@ -25,7 +25,8 @@ fun BottomNavBarNavigation(
     homeScreenUiState: HomeScreenUiState,
 //    bottomSheetState: BottomSheetState,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    getTransactions: () -> Unit
+    getTransactions: () -> Unit,
+    onDownloadTransactionsClicked: () -> Unit
 ) {
 
     var selectedTransaction: Transaction? by remember {
@@ -106,7 +107,7 @@ fun BottomNavBarNavigation(
         }
         composable(HomeScreen.Transactions.route) {
             Transactions(
-                downloadTransactions = {},
+                onDownloadTransactionsClicked = onDownloadTransactionsClicked,
                 onSearchBarClicked = onSearchBarClicked,
                 onBackPressed = onBackPressed.also {
                     selectedTransaction = null

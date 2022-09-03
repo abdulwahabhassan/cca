@@ -27,7 +27,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> Unit) {
+fun DownloadTransactions(goBackToFilterTransactions: () -> Unit, onShowSuccess: () -> Unit) {
 
     var startDate by rememberSaveable { mutableStateOf("") }
     var endDate by rememberSaveable { mutableStateOf("") }
@@ -226,7 +226,7 @@ fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> U
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = {
-                onGoBackToFilterPressed()
+                goBackToFilterTransactions()
             }) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
@@ -248,6 +248,6 @@ fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> U
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 fun CustomDateSearchPreview() {
     CupidCustomerAppTheme {
-        CustomDateSearch({}, {})
+        DownloadTransactions({}, {})
     }
 }

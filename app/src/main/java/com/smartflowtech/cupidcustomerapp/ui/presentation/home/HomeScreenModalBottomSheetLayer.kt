@@ -4,8 +4,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
@@ -27,6 +27,20 @@ fun HomeScreenModalBottomSheetLayer(
     )
     val coroutineScope = rememberCoroutineScope()
 
+    var shouldShowDownloadTransactions: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var shouldShowSuccess: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
+        if (!modalBottomSheetState.isVisible) {
+            shouldShowSuccess = false
+            shouldShowDownloadTransactions = false
+        }
+    })
+
     HomeScreenModalBottomSheet(
         modalBottomSheetState = modalBottomSheetState,
         bottomNavBarNavHostController = bottomNavBarNavHostController,
@@ -36,6 +50,8 @@ fun HomeScreenModalBottomSheetLayer(
             if (modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
+                    shouldShowSuccess = false
+                    shouldShowDownloadTransactions = false
                 }
             } else {
                 popBackStackOrFinishActivity()
@@ -50,39 +66,13 @@ fun HomeScreenModalBottomSheetLayer(
             }
         },
         onAddFundsClicked = goToAddFundsScreen,
-//        userName = viewModel.appConfigPreferences.userName,
-//        "John Doe",
-//        walletBalanceVisibility = viewModel.appConfigPreferences.walletBalanceVisibility,
-//        true,
         homeScreenUiState = viewModel.homeScreenUiState,
         appConfigPreferences = viewModel.appConfigPreferences,
-//        daysFilter = viewModel.appConfigPreferences.daysFilter,
-//        completedStatusFilter = viewModel.appConfigPreferences.completedStatusFilter,
-//        failedStatusFilter = viewModel.appConfigPreferences.failedStatusFilter,
-//        pendingStatusFilter = viewModel.appConfigPreferences.pendingStatusFilter,
-//        dpkProductFilter = viewModel.appConfigPreferences.dpkProductFilter,
-//        pmsProductFilter = viewModel.appConfigPreferences.pmsProductFilter,
-//        agoProductFilter = viewModel.appConfigPreferences.agoProductFilter,
-//        onDaysFilterSelected = { days ->
-//            viewModel.updateDateFilter(days)
-//        },
         onSaveFilterClicked = { daysFilter, mapOfFilters ->
 
             viewModel.updateTransactionFilters(daysFilter, mapOfFilters)
 
-//            when (type) {
-//                Status.COMPLETED.name -> viewModel.updateCompletedStatusFilter(bool)
-//                Status.FAILED.name -> viewModel.updateFailedStatusFilter(bool)
-//                Status.PENDING.name -> viewModel.updatePendingStatusFilter(bool)
-//            }
         },
-//        onProductFilterSelected = { bool, type ->
-//            when (type) {
-//                Product.PMS.name -> viewModel.updatePmsProduct(bool)
-//                Product.AGO.name -> viewModel.updateAgoProduct(bool)
-//                Product.DPK.name -> viewModel.updateDpkProduct(bool)
-//            }
-//        },
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)
         },
@@ -92,6 +82,30 @@ fun HomeScreenModalBottomSheetLayer(
         },
         getTransactions = {
             viewModel.getTransactionsAndWallets()
+        },
+        shouldShowDownloadTransactions = shouldShowDownloadTransactions,
+        showDownloadTransactions = { bool ->
+            shouldShowDownloadTransactions = bool
+            shouldShowSuccess = !bool
+            if (!modalBottomSheetState.isVisible) {
+                coroutineScope.launch {
+                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
+                }
+            }
+        },
+        shouldShowSuccess = shouldShowSuccess,
+        showSuccess = { bool ->
+            shouldShowSuccess = bool
+            shouldShowDownloadTransactions = !bool
+            if (!modalBottomSheetState.isVisible) {
+                coroutineScope.launch {
+                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
+                }
+            }
+        },
+        goBackToFilterTransactions = {
+            shouldShowDownloadTransactions = false
+            shouldShowSuccess = false
         }
     )
 }

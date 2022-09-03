@@ -51,7 +51,8 @@ fun HomeScreen(
     updateWalletVisibility: (Boolean) -> Unit,
     homeScreenUiState: HomeScreenUiState,
     onLogOutClicked: () -> Unit,
-    getTransactions: () -> Unit
+    getTransactions: () -> Unit,
+    onDownloadTransactionsClicked: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -229,7 +230,8 @@ fun HomeScreen(
                         homeScreenUiState = homeScreenUiState,
 //                        bottomSheetState = bottomSheetState,
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
-                        getTransactions = getTransactions
+                        getTransactions = getTransactions,
+                        onDownloadTransactionsClicked = onDownloadTransactionsClicked
                     )
                 }
             }) { paddingValues ->

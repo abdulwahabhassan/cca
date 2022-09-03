@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,10 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
-import com.smartflowtech.cupidcustomerapp.model.Category
-import com.smartflowtech.cupidcustomerapp.model.Days
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 
@@ -30,42 +27,28 @@ fun HomeScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
-    isNavDestinationSelected: (kotlin.String) -> Boolean,
+    isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
-    onBottomNavItemClicked: (kotlin.String) -> Unit,
+    onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
-//    userName: Days,
-//    walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
-//    daysFilter: Long,
-//    completedStatusFilter: Boolean,
-//    failedStatusFilter: Boolean,
-//    pendingStatusFilter: Boolean,
-//    dpkProductFilter: Boolean,
-//    pmsProductFilter: Boolean,
-//    agoProductFilter: Boolean,
     appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
-//    onDaysFilterSelected: (Days) -> Unit,
     onSaveFilterClicked: (String, Map<String, Boolean>) -> Unit,
-//    onProductFilterSelected: (Boolean, Days) -> Unit,
     homeScreenUiState: HomeScreenUiState,
     onLogoutClicked: () -> Unit,
-    getTransactions: () -> Unit
+    getTransactions: () -> Unit,
+    shouldShowDownloadTransactions: Boolean,
+    shouldShowSuccess: Boolean,
+    showSuccess: (Boolean) -> Unit,
+    showDownloadTransactions: (Boolean) -> Unit,
+    goBackToFilterTransactions: () -> Unit
 ) {
 
-    var showCustomSearch: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var showSuccess: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    LaunchedEffect(key1 = modalBottomSheetState) {
-        if (!modalBottomSheetState.isVisible) {
-            showCustomSearch = false
-        }
-    }
+//    if (!modalBottomSheetState.isVisible) {
+//        showDownloadTransactions(false)
+//        showSuccess(false)
+//    }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -118,8 +101,9 @@ fun HomeScreenModalBottomSheet(
                         IconButton(
                             onClick = {
                                 onBackPressed()
-                                showCustomSearch = false
-                                showSuccess = false
+//                                closeBottomSheet()
+//                                showDownloadTransactions = false
+//                                showSuccess = false
                             },
                             modifier = Modifier
                                 .padding(end = 8.dp),
@@ -132,45 +116,30 @@ fun HomeScreenModalBottomSheet(
                         }
                     }
 
-                    if (showCustomSearch) {
-                        CustomDateSearch(
-                            onGoBackToFilterPressed = {
-                                showCustomSearch = false
-                            },
+                    if (shouldShowDownloadTransactions) {
+                        DownloadTransactions(
+                            goBackToFilterTransactions = goBackToFilterTransactions,
                             onShowSuccess = {
-                                showCustomSearch = false
-                                showSuccess = true
+                                showSuccess(true)
+//                                showDownloadTransactions = false
+//                                showSuccess = true
                             }
                         )
-                    } else if (showSuccess) {
+                    } else if (shouldShowSuccess) {
                         Success(
                             message = "Sent",
                             info = "We've sent the requested statements to your email",
                             onOkayPressed = {
                                 onBackPressed()
-                                showCustomSearch = false
-                                showSuccess = false
+
+//                                showDownloadTransactions = false
+//                                showSuccess = false
                             }
                         )
                     } else {
                         FilterTransactions(
-//                            daysFilter = daysFilter,
-//                            completedStatusFilter = completedStatusFilter,
-//                            failedStatusFilter = failedStatusFilter,
-//                            pendingStatusFilter = pendingStatusFilter,
-//                            agoProductFilter = agoProductFilter,
-//                            pmsProductFilter = pmsProductFilter,
-//                            dpkProductFilter = dpkProductFilter,
                             appConfigPreferences = appConfigPreferences,
-//                            onDaysFilterSelected = onDaysFilterSelected,
                             onFilterSaveClicked = onSaveFilterClicked,
-//                                .also {
-//                                onBackPressed()
-//                            }
-//                            onProductFilterSelected = onProductFilterSelected,
-                            onCustomSearchClicked = {
-                                showCustomSearch = !showCustomSearch
-                            },
                             onBackPressed = onBackPressed
                         )
                     }
@@ -191,7 +160,10 @@ fun HomeScreenModalBottomSheet(
             updateWalletVisibility = updateWalletVisibility,
             homeScreenUiState = homeScreenUiState,
             onLogOutClicked = onLogoutClicked,
-            getTransactions = getTransactions
+            getTransactions = getTransactions,
+            onDownloadTransactionsClicked = {
+                showDownloadTransactions(true)
+            }
         )
     }
 }

@@ -37,16 +37,7 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLett
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilterTransactions(
-//    daysFilter: Long,
-    onCustomSearchClicked: () -> Unit,
-//    completedStatusFilter: Boolean,
-//    failedStatusFilter: Boolean,
-//    pendingStatusFilter: Boolean,
-//    dpkProductFilter: Boolean,
-//    pmsProductFilter: Boolean,
-//    agoProductFilter: Boolean,
     appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
-//    onDaysFilterSelected: (Days) -> Unit,
     onFilterSaveClicked: (String, Map<String, Boolean>) -> Unit,
     onBackPressed: () -> Unit
 ) {
@@ -120,7 +111,7 @@ fun FilterTransactions(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, top = 4.dp, bottom = 4.dp),
+                            .padding(start = 16.dp, top = 2.dp, bottom = 2.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         when (category) {
@@ -189,30 +180,6 @@ fun FilterTransactions(
                             text = when (category) {
                                 Category.DATE -> {
                                     filter.capitalizeEachWord()
-//                                    when (filter) {
-////                                        Days.TODAY.name -> {
-////                                            "Today"
-////                                        }
-////                                        Days.ONE_WEEK.name -> {
-////                                            "1 week ago"
-////                                        }
-////                                        Days.TWO_WEEKS.name -> {
-////                                            "2 weeks ago"
-////                                        }
-////                                        Days.ONE_MONTH.name -> {
-////                                            "1 month ago"
-////                                        }
-////                                        Days.SIX_MONTHS.name -> {
-////                                            "6 months ago"
-////                                        }
-////                                        Days.ONE_YEAR.name -> {
-////                                            "1 year ago"
-////                                        }
-////                                        Days.TWO_YEARS.name -> {
-////                                            "2 years ago"
-////                                        }
-////                                        else -> {""}
-//                                    }
                                 }
                                 Category.STATUS -> {
                                     filter.capitalizeFirstLetter()
@@ -227,33 +194,33 @@ fun FilterTransactions(
                     }
                 }
 
-                if (category == Category.DATE) {
-                    item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(vertical = 8.dp),
-                                text = "Custom search",
-                                color = grey,
-                                fontFamily = AthleticsFontFamily
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            IconButton(onClick = {
-                                onCustomSearchClicked()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.ArrowForward,
-                                    contentDescription = "Forward arrow",
-                                    tint = grey
-                                )
-                            }
-                        }
-                    }
-                }
+//                if (category == Category.DATE) {
+//                    item {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(start = 16.dp),
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Text(
+//                                modifier = Modifier.padding(vertical = 8.dp),
+//                                text = "Custom search",
+//                                color = grey,
+//                                fontFamily = AthleticsFontFamily
+//                            )
+//                            Spacer(modifier = Modifier.width(4.dp))
+//                            IconButton(onClick = {
+//
+//                            }) {
+//                                Icon(
+//                                    imageVector = Icons.Rounded.ArrowForward,
+//                                    contentDescription = "Forward arrow",
+//                                    tint = grey
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
             }
 
             item {
