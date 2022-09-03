@@ -148,15 +148,38 @@ fun HomeDashBoard(
                                 .height(horizontalPagerHeight)
                                 .padding(top = 16.dp, bottom = 16.dp)
                         ) { page: Int ->
-                            if (homeScreenUiState.wallets.isNotEmpty()) {
-                                WalletCard(
-                                    listOf(lightPink, lightYellow, skyBlue).random(),
-                                    onAddFundsClicked = onAddFundsClicked,
-                                    walletBalanceVisibility = walletBalanceVisibility,
-                                    updateWalletVisibility = updateWalletVisibility,
-                                    vendorName = homeScreenUiState.wallets[page].vendorName,
-                                    currentBalance = homeScreenUiState.wallets[page].currentBalance
-                                )
+                            when (homeScreenUiState.viewModelResult) {
+                                ViewModelResult.ERROR -> {}
+                                ViewModelResult.LOADING -> {
+                                    CircularProgressIndicator(color = pink, strokeWidth = 2.dp)
+                                }
+                                ViewModelResult.INITIAL -> {}
+                                ViewModelResult.SUCCESS -> {
+                                    if (homeScreenUiState.wallets.isNotEmpty()) {
+                                        WalletCard(
+                                            listOf(lightPink, lightYellow, skyBlue).random(),
+                                            onAddFundsClicked = onAddFundsClicked,
+                                            walletBalanceVisibility = walletBalanceVisibility,
+                                            updateWalletVisibility = updateWalletVisibility,
+                                            vendorName = homeScreenUiState.wallets[page].vendorName,
+                                            currentBalance = homeScreenUiState.wallets[page].currentBalance
+                                        )
+                                    }
+                                    else {
+                                        Text(
+                                            "No cards found",
+                                            color = purple,
+                                            fontSize = 12.sp,
+                                            modifier = Modifier
+                                                .background(
+                                                    color = transparentPurple,
+                                                    shape = RoundedCornerShape(4.dp)
+                                                )
+                                                .padding(vertical = 8.dp,  horizontal = 12.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
                             }
                         }
                         HorizontalPagerIndicator(

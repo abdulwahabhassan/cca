@@ -1,6 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.model
 
-import com.squareup.moshi.Json
+import kotlin.String
 
 data class Wallet(
     val vendorName: String,

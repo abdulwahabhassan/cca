@@ -1,6 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.model
 
-import java.time.LocalDate
+import kotlin.String
 
 data class Transaction(
     val status: String?,

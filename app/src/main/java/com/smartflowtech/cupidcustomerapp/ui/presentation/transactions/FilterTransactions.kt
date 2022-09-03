@@ -7,7 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,12 +23,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
+import com.smartflowtech.cupidcustomerapp.model.Category
+import com.smartflowtech.cupidcustomerapp.model.Days
 import com.smartflowtech.cupidcustomerapp.model.Product
 import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.black
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -39,17 +46,25 @@ fun FilterTransactions(
 //    pmsProductFilter: Boolean,
 //    agoProductFilter: Boolean,
     appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
-    onDaysFilterSelected: (String) -> Unit,
-    onStatusFilterSelected: (Boolean, String) -> Unit,
-    onProductFilterSelected: (Boolean, String) -> Unit
+//    onDaysFilterSelected: (Days) -> Unit,
+    onFilterSaveClicked: (String, Map<String, Boolean>) -> Unit,
+    onBackPressed: () -> Unit
 ) {
 
-    val completedStatusFilter = rememberSaveable { appConfigPreferences.completedStatusFilter }
-    val pendingStatusFilter = rememberSaveable { appConfigPreferences.pendingStatusFilter }
-    val failedStatusFilter = rememberSaveable { appConfigPreferences.failedStatusFilter }
-    val dpkProductFilter = rememberSaveable { appConfigPreferences.dpkProductFilter }
-    val agoProductFilter = rememberSaveable { appConfigPreferences.agoProductFilter }
-    val pmsProductFilter = rememberSaveable { appConfigPreferences.pmsProductFilter }
+    val daysFilter =
+        remember { mutableStateOf(appConfigPreferences.daysFilter) }
+    val completedStatusFilter =
+        remember { mutableStateOf(appConfigPreferences.completedStatusFilter) }
+    val pendingStatusFilter =
+        remember { mutableStateOf(appConfigPreferences.pendingStatusFilter) }
+    val failedStatusFilter =
+        remember { mutableStateOf(appConfigPreferences.failedStatusFilter) }
+    val dpkProductFilter =
+        remember { mutableStateOf(appConfigPreferences.dpkProductFilter) }
+    val agoProductFilter =
+        remember { mutableStateOf(appConfigPreferences.agoProductFilter) }
+    val pmsProductFilter =
+        remember { mutableStateOf(appConfigPreferences.pmsProductFilter) }
 
     Column(
         Modifier
@@ -66,9 +81,25 @@ fun FilterTransactions(
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)) {
             mapOf(
-                "Date" to listOf("0", "7", "15", "30", "182", "365", "730"),
-                "Status" to listOf(Status.COMPLETED.name, Status.PENDING.name, Status.FAILED.name),
-                "Product" to listOf(Product.AGO.name, Product.DPK.name, Product.PMS.name)
+                Category.DATE to listOf(
+                    Days.TODAY.name,
+                    Days.ONE_WEEK.name,
+                    Days.TWO_WEEKS.name,
+                    Days.ONE_MONTH.name,
+                    Days.SIX_MONTHS.name,
+                    Days.ONE_YEAR.name,
+                    Days.TWO_YEARS.name
+                ),
+                Category.STATUS to listOf(
+                    Status.COMPLETED.name,
+                    Status.PENDING.name,
+                    Status.FAILED.name
+                ),
+                Category.PRODUCT to listOf(
+                    Product.AGO.name,
+                    Product.DPK.name,
+                    Product.PMS.name
+                )
             ).forEach { (category, filters) ->
 
                 stickyHeader {
@@ -77,7 +108,7 @@ fun FilterTransactions(
                             .fillMaxWidth()
                             .background(color = Color.White)
                             .padding(vertical = 12.dp),
-                        text = category,
+                        text = category.name.capitalizeFirstLetter(),
                         color = black,
                         fontFamily = AthleticsFontFamily,
                         fontSize = 14.sp,
@@ -92,69 +123,103 @@ fun FilterTransactions(
                             .padding(start = 16.dp, top = 4.dp, bottom = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (category == "Status" || category == "Product") {
-                            Checkbox(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(RoundedCornerShape(2.dp))
-                                    .clipToBounds(),
-                                checked = when (filter) {
-                                    Status.COMPLETED.name -> completedStatusFilter
-                                    Status.FAILED.name -> failedStatusFilter
-                                    Status.PENDING.name -> pendingStatusFilter
-                                    Product.DPK.name -> dpkProductFilter
-                                    Product.AGO.name -> agoProductFilter
-                                    Product.PMS.name -> pmsProductFilter
-                                    else -> false
-                                },
-                                onCheckedChange = { bool ->
-                                    when (category) {
-                                        "Status" -> onStatusFilterSelected(bool, filter)
-                                        "Product" -> onProductFilterSelected(bool, filter)
-                                    }
-                                },
-                                colors = CheckboxDefaults.colors(checkedColor = darkBlue)
-                            )
-                        } else {
-                            RadioButton(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(RoundedCornerShape(50))
-                                    .clipToBounds(),
-                                selected = filter == appConfigPreferences.daysFilter.toString(),
-                                onClick = {
-                                    onDaysFilterSelected(filter)
-                                },
-                                colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
-                            )
+                        when (category) {
+                            Category.STATUS, Category.PRODUCT -> {
+                                Checkbox(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(RoundedCornerShape(2.dp))
+                                        .clipToBounds(),
+                                    checked = when (filter) {
+                                        Status.COMPLETED.name -> completedStatusFilter.value
+                                        Status.FAILED.name -> failedStatusFilter.value
+                                        Status.PENDING.name -> pendingStatusFilter.value
+                                        Product.DPK.name -> dpkProductFilter.value
+                                        Product.AGO.name -> agoProductFilter.value
+                                        Product.PMS.name -> pmsProductFilter.value
+                                        else -> false
+                                    },
+                                    onCheckedChange = { bool ->
+                                        when (filter) {
+                                            Status.COMPLETED.name -> {
+                                                completedStatusFilter.value = bool
+                                            }
+                                            Status.PENDING.name -> {
+                                                pendingStatusFilter.value = bool
+                                            }
+                                            Status.FAILED.name -> {
+                                                failedStatusFilter.value = bool
+                                            }
+                                            Product.DPK.name -> {
+                                                dpkProductFilter.value = bool
+                                            }
+                                            Product.PMS.name -> {
+                                                pmsProductFilter.value = bool
+                                            }
+                                            Product.AGO.name -> {
+                                                agoProductFilter.value = bool
+                                            }
+                                        }
+                                    },
+                                    colors = CheckboxDefaults.colors(checkedColor = darkBlue)
+                                )
+                            }
+
+                            else -> {
+                                RadioButton(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(RoundedCornerShape(50))
+                                        .padding(8.dp)
+                                        .clipToBounds(),
+                                    selected = daysFilter.value == filter,
+                                    onClick = {
+                                        daysFilter.value = filter
+                                    },
+                                    colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
+                                )
+                            }
+
                         }
 
                         Spacer(modifier = Modifier.width(12.dp))
 
                         Text(
                             modifier = Modifier.padding(vertical = 8.dp),
-                            text = if (category == "Date") {
-                                if (filter.toLong() == 0L) {
-                                    "Today"
-                                } else if (filter.toLong() == 7L) {
-                                    "1 week ago"
-                                } else if (filter.toLong() == 15L) {
-                                    "2 weeks ago"
-                                } else if (filter.toLong() == 30L) {
-                                    "1 month ago"
-                                } else if (filter.toLong() == 182L) {
-                                    "6 months ago"
-                                } else if (filter.toLong() == 365L) {
-                                    "1 year ago"
-                                } else if (filter.toLong() == 730L) {
-                                    "2 years ago"
-                                } else {
-                                    "All"
+                            text = when (category) {
+                                Category.DATE -> {
+                                    filter.capitalizeEachWord()
+//                                    when (filter) {
+////                                        Days.TODAY.name -> {
+////                                            "Today"
+////                                        }
+////                                        Days.ONE_WEEK.name -> {
+////                                            "1 week ago"
+////                                        }
+////                                        Days.TWO_WEEKS.name -> {
+////                                            "2 weeks ago"
+////                                        }
+////                                        Days.ONE_MONTH.name -> {
+////                                            "1 month ago"
+////                                        }
+////                                        Days.SIX_MONTHS.name -> {
+////                                            "6 months ago"
+////                                        }
+////                                        Days.ONE_YEAR.name -> {
+////                                            "1 year ago"
+////                                        }
+////                                        Days.TWO_YEARS.name -> {
+////                                            "2 years ago"
+////                                        }
+////                                        else -> {""}
+//                                    }
                                 }
-                            } else if (category == "Status") {
-                                filter.capitalizeFirstLetter()
-                            } else {
-                                filter
+                                Category.STATUS -> {
+                                    filter.capitalizeFirstLetter()
+                                }
+                                Category.PRODUCT -> {
+                                    filter
+                                }
                             },
                             color = grey,
                             fontFamily = AthleticsFontFamily
@@ -162,51 +227,63 @@ fun FilterTransactions(
                     }
                 }
 
-                //Not yet
-//                if (category == "Date") {
-//                    item {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(start = 16.dp),
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            Text(
-//                                modifier = Modifier.padding(vertical = 8.dp),
-//                                text = "Custom search",
-//                                color = grey,
-//                                fontFamily = AthleticsFontFamily
-//                            )
-//                            Spacer(modifier = Modifier.width(4.dp))
-//                            IconButton(onClick = {
-//                                onCustomSearchClicked()
-//                            }) {
-//                                Icon(
-//                                    imageVector = Icons.Rounded.ArrowForward,
-//                                    contentDescription = "Forward arrow",
-//                                    tint = grey
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
+                if (category == Category.DATE) {
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(vertical = 8.dp),
+                                text = "Custom search",
+                                color = grey,
+                                fontFamily = AthleticsFontFamily
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            IconButton(onClick = {
+                                onCustomSearchClicked()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.ArrowForward,
+                                    contentDescription = "Forward arrow",
+                                    tint = grey
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            item {
+                Button(
+                    onClick = {
+                        onFilterSaveClicked(
+                            daysFilter.value,
+                            mapOf(
+                                Status.COMPLETED.name to completedStatusFilter.value,
+                                Status.FAILED.name to failedStatusFilter.value,
+                                Status.PENDING.name to pendingStatusFilter.value,
+                                Product.AGO.name to agoProductFilter.value,
+                                Product.DPK.name to dpkProductFilter.value,
+                                Product.PMS.name to pmsProductFilter.value
+                            )
+                        ).also {
+                            onBackPressed()
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(vertical = 24.dp, horizontal = 8.dp)
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Text(text = "Save")
+                }
 
             }
 
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-            shape = RoundedCornerShape(10.dp),
-        ) {
-            Text(text = "Save")
         }
     }
 }

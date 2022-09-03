@@ -1,15 +1,11 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel
 
 import androidx.compose.runtime.*
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.WalletRepository
-import com.smartflowtech.cupidcustomerapp.model.Product
-import com.smartflowtech.cupidcustomerapp.model.Status
-import com.smartflowtech.cupidcustomerapp.model.Transaction
-import com.smartflowtech.cupidcustomerapp.model.Wallet
+import com.smartflowtech.cupidcustomerapp.model.*
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
 import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
@@ -17,7 +13,6 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
@@ -47,9 +42,9 @@ class HomeScreenViewModel @Inject constructor(
 
     fun getTransactionsAndWallets() {
 
-        viewModelScope.launch {
+        homeScreenUiState = homeScreenUiState.copy(viewModelResult = ViewModelResult.LOADING)
 
-            homeScreenUiState = homeScreenUiState.copy(viewModelResult = ViewModelResult.LOADING)
+        viewModelScope.launch {
 
             combine(
                 flowOf(
@@ -126,9 +121,18 @@ class HomeScreenViewModel @Inject constructor(
         prefs: DataStorePrefsRepository.AppConfigPreferences
     ): List<Transaction>? {
         return result?.map { it.mapToTransaction() }?.filter { transaction ->
-            Timber.d("$transaction")
+//            Timber.d("$transaction")
             LocalDate.parse(transaction.date) >= LocalDate.now()
-                .minusDays(prefs.daysFilter)
+                .minusDays(when(prefs.daysFilter) {
+                    Days.TODAY.name -> 0L
+                    Days.ONE_WEEK.name -> 7L
+                    Days.TWO_WEEKS.name -> 14L
+                    Days.ONE_MONTH.name -> 30L
+                    Days.SIX_MONTHS.name -> 182L
+                    Days.ONE_YEAR.name -> 365L
+                    Days.TWO_YEARS.name -> 720L
+                    else -> {0L}
+                })
         }?.filter { transaction ->
             when (transaction.status) {
                 Status.COMPLETED.name.capitalizeFirstLetter() ->
@@ -164,52 +168,9 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-
     fun updateWalletBalanceVisibility(visibility: Boolean) {
         viewModelScope.launch {
             dataStorePrefsRepository.updateWalletBalanceVisibility(visibility)
-        }
-    }
-
-    fun updateDateFilter(date: Long) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updateDaysFilter(date)
-        }
-    }
-
-    fun updateCompletedStatusFilter(bool: Boolean) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updateCompletedStatusFilter(bool)
-        }
-    }
-
-    fun updateFailedStatusFilter(bool: Boolean) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updateFailedStatusFilter(bool)
-        }
-    }
-
-    fun updatePendingStatusFilter(bool: Boolean) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updatePendingStatusFilter(bool)
-        }
-    }
-
-    fun updateDpkProduct(bool: Boolean) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updateDpkProductFilter(bool)
-        }
-    }
-
-    fun updatePmsProduct(bool: Boolean) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updatePmsProductFilter(bool)
-        }
-    }
-
-    fun updateAgoProduct(bool: Boolean) {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updateAgoProductFilter(bool)
         }
     }
 
@@ -223,6 +184,13 @@ class HomeScreenViewModel @Inject constructor(
                 appConfigPreferences.phoneNumber,
                 appConfigPreferences.companyId
             )
+        }
+    }
+
+    fun updateTransactionFilters(daysFilter: String, mapOfFilters: Map<String, Boolean>) {
+        Timber.d("$daysFilter $mapOfFilters")
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateTransactionFilters(daysFilter, mapOfFilters)
         }
     }
 

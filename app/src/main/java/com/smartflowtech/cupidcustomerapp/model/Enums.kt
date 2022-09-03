@@ -11,3 +11,19 @@ enum class Product {
     DPK,
     AGO
 }
+
+enum class Days {
+    TODAY,
+    ONE_WEEK,
+    TWO_WEEKS,
+    ONE_MONTH,
+    SIX_MONTHS,
+    ONE_YEAR,
+    TWO_YEARS
+}
+
+enum class Category {
+    STATUS,
+    PRODUCT,
+    DATE
+}

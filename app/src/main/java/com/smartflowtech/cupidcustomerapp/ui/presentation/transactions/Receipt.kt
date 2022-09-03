@@ -86,7 +86,7 @@ fun Receipt(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "Payment Date", color = grey, modifier = Modifier.padding(bottom = 2.dp))
+            Text(text = "Payment Days", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
                 text = transaction.date ?: "",
                 color = darkBlue,
@@ -201,7 +201,7 @@ fun Receipt(
                             textDarkBluePaint
                         )
 
-                        canvas.drawText("Payment Date", 109F, 320F, titleGreyPaint)
+                        canvas.drawText("Payment Days", 109F, 320F, titleGreyPaint)
                         canvas.drawText(
                             LocalDate.parse(transaction.date)
                                 .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "",

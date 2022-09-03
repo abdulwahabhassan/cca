@@ -50,7 +50,7 @@ fun CustomDateSearch(onGoBackToFilterPressed: () -> Unit, onShowSuccess: () -> U
         ) {
 
             Text(
-                "Input Date Range", color = Color.Black,
+                "Input Days Range", color = Color.Black,
                 fontFamily = AthleticsFontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold

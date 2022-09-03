@@ -14,7 +14,7 @@ object Extension {
     }
 
     fun String.capitalizeEachWord(): String {
-        return this.split(" ").joinToString(" ") {
+        return this.split(" ", "_").joinToString(" ") {
             it.capitalizeFirstLetter()
         }
     }

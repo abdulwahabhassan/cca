@@ -7,8 +7,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
-import com.smartflowtech.cupidcustomerapp.model.Product
-import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
 
@@ -65,23 +63,26 @@ fun HomeScreenModalBottomSheetLayer(
 //        dpkProductFilter = viewModel.appConfigPreferences.dpkProductFilter,
 //        pmsProductFilter = viewModel.appConfigPreferences.pmsProductFilter,
 //        agoProductFilter = viewModel.appConfigPreferences.agoProductFilter,
-        onDaysFilterSelected = { date ->
-            viewModel.updateDateFilter(date.toLong())
+//        onDaysFilterSelected = { days ->
+//            viewModel.updateDateFilter(days)
+//        },
+        onSaveFilterClicked = { daysFilter, mapOfFilters ->
+
+            viewModel.updateTransactionFilters(daysFilter, mapOfFilters)
+
+//            when (type) {
+//                Status.COMPLETED.name -> viewModel.updateCompletedStatusFilter(bool)
+//                Status.FAILED.name -> viewModel.updateFailedStatusFilter(bool)
+//                Status.PENDING.name -> viewModel.updatePendingStatusFilter(bool)
+//            }
         },
-        onStatusFilterSelected = { bool, type ->
-            when (type) {
-                Status.COMPLETED.name -> viewModel.updateCompletedStatusFilter(bool)
-                Status.FAILED.name -> viewModel.updateFailedStatusFilter(bool)
-                Status.PENDING.name -> viewModel.updatePendingStatusFilter(bool)
-            }
-        },
-        onProductFilterSelected = { bool, type ->
-            when (type) {
-                Product.PMS.name -> viewModel.updatePmsProduct(bool)
-                Product.AGO.name -> viewModel.updateAgoProduct(bool)
-                Product.DPK.name -> viewModel.updateDpkProduct(bool)
-            }
-        },
+//        onProductFilterSelected = { bool, type ->
+//            when (type) {
+//                Product.PMS.name -> viewModel.updatePmsProduct(bool)
+//                Product.AGO.name -> viewModel.updateAgoProduct(bool)
+//                Product.DPK.name -> viewModel.updateDpkProduct(bool)
+//            }
+//        },
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)
         },

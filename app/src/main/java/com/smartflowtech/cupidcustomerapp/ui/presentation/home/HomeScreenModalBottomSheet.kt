@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
+import com.smartflowtech.cupidcustomerapp.model.Category
+import com.smartflowtech.cupidcustomerapp.model.Days
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CustomDateSearch
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
@@ -28,12 +30,12 @@ fun HomeScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
-    isNavDestinationSelected: (String) -> Boolean,
+    isNavDestinationSelected: (kotlin.String) -> Boolean,
     onBackPressed: () -> Unit,
-    onBottomNavItemClicked: (String) -> Unit,
+    onBottomNavItemClicked: (kotlin.String) -> Unit,
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
-//    userName: String,
+//    userName: Days,
 //    walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
 //    daysFilter: Long,
@@ -44,9 +46,9 @@ fun HomeScreenModalBottomSheet(
 //    pmsProductFilter: Boolean,
 //    agoProductFilter: Boolean,
     appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
-    onDaysFilterSelected: (String) -> Unit,
-    onStatusFilterSelected: (Boolean, String) -> Unit,
-    onProductFilterSelected: (Boolean, String) -> Unit,
+//    onDaysFilterSelected: (Days) -> Unit,
+    onSaveFilterClicked: (String, Map<String, Boolean>) -> Unit,
+//    onProductFilterSelected: (Boolean, Days) -> Unit,
     homeScreenUiState: HomeScreenUiState,
     onLogoutClicked: () -> Unit,
     getTransactions: () -> Unit
@@ -160,12 +162,16 @@ fun HomeScreenModalBottomSheet(
 //                            pmsProductFilter = pmsProductFilter,
 //                            dpkProductFilter = dpkProductFilter,
                             appConfigPreferences = appConfigPreferences,
-                            onDaysFilterSelected = onDaysFilterSelected,
-                            onStatusFilterSelected = onStatusFilterSelected,
-                            onProductFilterSelected = onProductFilterSelected,
+//                            onDaysFilterSelected = onDaysFilterSelected,
+                            onFilterSaveClicked = onSaveFilterClicked,
+//                                .also {
+//                                onBackPressed()
+//                            }
+//                            onProductFilterSelected = onProductFilterSelected,
                             onCustomSearchClicked = {
                                 showCustomSearch = !showCustomSearch
                             },
+                            onBackPressed = onBackPressed
                         )
                     }
                 }
@@ -181,7 +187,7 @@ fun HomeScreenModalBottomSheet(
             onFilteredClicked = onFilteredClicked,
             onAddFundsClicked = onAddFundsClicked,
             userName = appConfigPreferences.userName,
-            walletBalanceVisibility = appConfigPreferences. walletBalanceVisibility,
+            walletBalanceVisibility = appConfigPreferences.walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
             homeScreenUiState = homeScreenUiState,
             onLogOutClicked = onLogoutClicked,
