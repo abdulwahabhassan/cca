@@ -27,25 +27,14 @@ fun Transactions(
     onSearchBarClicked: () -> Unit,
     onBackPressed: () -> Unit,
     homeScreenUiState: HomeScreenUiState,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    isCardSelected: Boolean,
+    selectedTab: String,
+    onTabSelected: (String) -> Unit
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
-    var selectedTransaction: Transaction by remember {
-        mutableStateOf(
-            Transaction(
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
-            )
-        )
-    }
+
     val filteredHomeScreenUiState by remember(queryText, homeScreenUiState) {
         val list = homeScreenUiState.transactions.filter { transaction ->
             (transaction.status?.contains(queryText, true) == true) ||
@@ -70,6 +59,26 @@ fun Transactions(
         mutableStateOf(false)
     }
 
+//    var isCardSelected: Boolean by remember {
+//        mutableStateOf(false)
+//    }
+
+    var selectedTransaction: Transaction by remember {
+        mutableStateOf(
+            Transaction(
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            )
+        )
+    }
+
     BackHandler(true) {
         onBackPressed()
     }
@@ -80,6 +89,17 @@ fun Transactions(
             onGoBackToTransactionListPressed = {
                 showReceipt = false
             }
+        )
+    } else if (isCardSelected) {
+        CardTransactionHistory(
+            homeScreenUiState = homeScreenUiState,
+            onSelectTransaction = { transaction ->
+                selectedTransaction = transaction
+                showReceipt = true
+            },
+            bottomSheetScaffoldState = bottomSheetScaffoldState,
+            selectedTab = selectedTab,
+            onTabSelected = onTabSelected
         )
     } else {
         Column(
@@ -122,11 +142,10 @@ fun Transactions(
 
             TransactionsList(
                 homeScreenUiState = filteredHomeScreenUiState,
-                onTransactionClicked = { transaction: Transaction ->
-                    showReceipt = true
+                onSelectTransaction = { transaction: Transaction ->
                     selectedTransaction = transaction
+                    showReceipt = true
                 },
-//                bottomSheetState = bottomSheetState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 getTransactions = {},
             )

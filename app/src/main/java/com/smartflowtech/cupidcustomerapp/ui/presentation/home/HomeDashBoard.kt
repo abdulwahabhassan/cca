@@ -42,7 +42,6 @@ import java.util.*
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeDashBoard(
-//    horizontalPagerHeight: Dp,
     bottomSheetState: BottomSheetState,
     onAddFundsClicked: () -> Unit,
     userName: String,
@@ -55,8 +54,6 @@ fun HomeDashBoard(
 ) {
     val pagerState = rememberPagerState()
     val ctx = LocalContext.current
-
-    //Animation params
     var visible by remember { mutableStateOf(true) }
     visible =
         bottomSheetState.direction == 0f && bottomSheetState.isCollapsed
@@ -95,7 +92,6 @@ fun HomeDashBoard(
                                 IconButton(
                                     onClick = {
                                         onCardSelected(false)
-//                                        isCardSelected = false
                                     }) {
                                     Icon(
                                         imageVector = Icons.Rounded.ArrowBack,
@@ -200,7 +196,6 @@ fun HomeDashBoard(
                                                 if (!isCardSelected) {
                                                     onCardSelected(true)
                                                 }
-                                                //isCardSelected = true
                                             },
                                             isCardSelected
                                         )

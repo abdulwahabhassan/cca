@@ -70,7 +70,7 @@ fun FilterTransactions(
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)) {
+        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
             mapOf(
                 Category.DATE to listOf(
                     Days.TODAY.name,

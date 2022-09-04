@@ -66,7 +66,6 @@ fun HomeScreen(
     var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(HomeScreen.Home.title) }
 
     val localConfig = LocalConfiguration.current
-    val ctx = LocalContext.current
 
     var isCardSelected: Boolean by rememberSaveable { mutableStateOf(false) }
     var sheetPeekHeight by remember {
@@ -232,16 +231,15 @@ fun HomeScreen(
                             }
                         },
                         homeScreenUiState = homeScreenUiState,
-//                        bottomSheetState = bottomSheetState,
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
                         getTransactions = getTransactions,
-                        onDownloadTransactionsClicked = onDownloadTransactionsClicked
+                        onDownloadTransactionsClicked = onDownloadTransactionsClicked,
+                        isCardSelected
                     )
                 }
             }) { paddingValues ->
 
             HomeDashBoard(
-//                horizontalPagerHeight = localConfig.screenHeightDp.dp * 0.30f,
                 bottomSheetState = bottomSheetState,
                 onAddFundsClicked = onAddFundsClicked,
                 userName = userName,
@@ -251,7 +249,7 @@ fun HomeScreen(
                 homeScreenUiState = homeScreenUiState,
                 onCardSelected = { bool ->
                     isCardSelected = bool
-                    if (isCardSelected) {
+                    if (bool) {
                         sheetPeekHeight *= 1.08f
                     } else {
                         sheetPeekHeight = if (localConfig.screenWidthDp.dp > 320.dp)

@@ -23,17 +23,18 @@ fun BottomNavBarNavigation(
     onBackPressed: () -> Unit,
     onSearchBarClicked: () -> Unit,
     homeScreenUiState: HomeScreenUiState,
-//    bottomSheetState: BottomSheetState,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     getTransactions: () -> Unit,
-    onDownloadTransactionsClicked: () -> Unit
+    onDownloadTransactionsClicked: () -> Unit,
+    isCardSelected: Boolean
 ) {
 
-    var selectedTransaction: Transaction? by remember {
-        mutableStateOf(
-            null
-        )
-    }
+//    var selectedTransaction: Transaction? by remember {
+//        mutableStateOf(
+//            null
+//        )
+//    }
+    var selectedTab by remember { mutableStateOf("Transactions") }
 
     AnimatedNavHost(bottomNavHostController,
         startDestination = HomeScreen.Home.route,
@@ -96,25 +97,37 @@ fun BottomNavBarNavigation(
                         restoreState = true
                     }
                 },
-                onBackPressed = onBackPressed.also {
-                    selectedTransaction = null
-                },
+                onBackPressed = onBackPressed
+//                    .also {
+//                    selectedTransaction = null
+//                }
+                ,
                 homeScreenUiState = homeScreenUiState,
-//                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                getTransactions = getTransactions
+                getTransactions = getTransactions,
+                isCardSelected = isCardSelected,
+                selectedTab = selectedTab,
+                onTabSelected = { tab ->
+                    selectedTab = tab
+                }
             )
         }
         composable(HomeScreen.Transactions.route) {
             Transactions(
                 onDownloadTransactionsClicked = onDownloadTransactionsClicked,
                 onSearchBarClicked = onSearchBarClicked,
-                onBackPressed = onBackPressed.also {
-                    selectedTransaction = null
-                },
+                onBackPressed = onBackPressed
+//                    .also {
+//                    selectedTransaction = null
+//                }
+                ,
                 homeScreenUiState = homeScreenUiState,
-//                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
-                bottomSheetScaffoldState = bottomSheetScaffoldState
+                bottomSheetScaffoldState = bottomSheetScaffoldState,
+                isCardSelected = isCardSelected,
+                selectedTab = selectedTab,
+                onTabSelected = { tab ->
+                    selectedTab = tab
+                }
             )
         }
         composable(HomeScreen.Location.route) {

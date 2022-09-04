@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,8 +29,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TransactionsList(
     homeScreenUiState: HomeScreenUiState,
-    onTransactionClicked: (transaction: Transaction) -> Unit,
-//    bottomSheetState: BottomSheetState,
+    onSelectTransaction: (transaction: Transaction) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     getTransactions: () -> Unit
 ) {
@@ -179,7 +177,7 @@ fun TransactionsList(
                             Transaction(
                                 transaction
                             ) { data: Transaction ->
-                                onTransactionClicked(data)
+                                onSelectTransaction(data)
                             }
                         }
 
