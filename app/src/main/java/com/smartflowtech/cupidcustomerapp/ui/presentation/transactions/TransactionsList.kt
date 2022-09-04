@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.TransactionDateHeader
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -31,7 +32,8 @@ fun TransactionsList(
     homeScreenUiState: HomeScreenUiState,
     onSelectTransaction: (transaction: Transaction) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    getTransactions: () -> Unit
+    getTransactions: () -> Unit,
+    currentBottomNavDestination: String
 ) {
 
     when (homeScreenUiState.viewModelResult) {
@@ -162,6 +164,7 @@ fun TransactionsList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(),
+                    userScrollEnabled = currentBottomNavDestination != HomeScreen.Home.route,
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

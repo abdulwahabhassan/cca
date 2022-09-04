@@ -45,11 +45,6 @@ fun HomeScreenModalBottomSheet(
     goBackToFilterTransactions: () -> Unit
 ) {
 
-//    if (!modalBottomSheetState.isVisible) {
-//        showDownloadTransactions(false)
-//        showSuccess(false)
-//    }
-
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
         sheetState = modalBottomSheetState,
@@ -101,9 +96,6 @@ fun HomeScreenModalBottomSheet(
                         IconButton(
                             onClick = {
                                 onBackPressed()
-//                                closeBottomSheet()
-//                                showDownloadTransactions = false
-//                                showSuccess = false
                             },
                             modifier = Modifier
                                 .padding(end = 8.dp),
@@ -121,8 +113,6 @@ fun HomeScreenModalBottomSheet(
                             goBackToFilterTransactions = goBackToFilterTransactions,
                             onShowSuccess = {
                                 showSuccess(true)
-//                                showDownloadTransactions = false
-//                                showSuccess = true
                             }
                         )
                     } else if (shouldShowSuccess) {
@@ -131,9 +121,6 @@ fun HomeScreenModalBottomSheet(
                             info = "We've sent the requested statements to your email",
                             onOkayPressed = {
                                 onBackPressed()
-
-//                                showDownloadTransactions = false
-//                                showSuccess = false
                             }
                         )
                     } else {

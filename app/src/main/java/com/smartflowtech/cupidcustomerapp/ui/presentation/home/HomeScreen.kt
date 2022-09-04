@@ -136,6 +136,7 @@ fun HomeScreen(
             modifier = Modifier.padding(paddingValues),
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
+            sheetGesturesEnabled = false,
             snackbarHost = {
                 SnackbarHost(it) { data ->
                     Snackbar(

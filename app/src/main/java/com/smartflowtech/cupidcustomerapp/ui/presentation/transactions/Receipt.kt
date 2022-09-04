@@ -278,7 +278,7 @@ fun Receipt(
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(modifier = Modifier
                         .fillMaxWidth()
-                        ,
+                        .height(54.dp),
                         shape = RoundedCornerShape(10.dp),
                         onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
                         Text("Grant permission")

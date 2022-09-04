@@ -38,9 +38,9 @@ fun Home(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     getTransactions: () -> Unit,
     isCardSelected: Boolean,
-//    onSelectTransaction: (Transaction) -> Unit
     selectedTab: String,
-    onTabSelected: (String) -> Unit
+    onTabSelected: (String) -> Unit,
+    currentBottomNavDestination: String
 ) {
     val pagerState = rememberPagerState()
 
@@ -77,7 +77,8 @@ fun Home(
                 showReceipt = true
             },
             selectedTab = selectedTab,
-            onTabSelected = onTabSelected
+            onTabSelected = onTabSelected,
+            currentBottomNavDestination = currentBottomNavDestination
         )
     } else {
         Column(
@@ -127,7 +128,8 @@ fun Home(
                     showReceipt = true
                 },
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                getTransactions = getTransactions
+                getTransactions = getTransactions,
+                currentBottomNavDestination = currentBottomNavDestination
             )
         }
 

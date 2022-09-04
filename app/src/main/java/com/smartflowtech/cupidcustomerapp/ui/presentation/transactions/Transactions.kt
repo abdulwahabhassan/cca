@@ -30,7 +30,8 @@ fun Transactions(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     isCardSelected: Boolean,
     selectedTab: String,
-    onTabSelected: (String) -> Unit
+    onTabSelected: (String) -> Unit,
+    currentBottomNavDestination: String
 ) {
 
     var queryText by rememberSaveable { mutableStateOf("") }
@@ -59,9 +60,6 @@ fun Transactions(
         mutableStateOf(false)
     }
 
-//    var isCardSelected: Boolean by remember {
-//        mutableStateOf(false)
-//    }
 
     var selectedTransaction: Transaction by remember {
         mutableStateOf(
@@ -99,7 +97,8 @@ fun Transactions(
             },
             bottomSheetScaffoldState = bottomSheetScaffoldState,
             selectedTab = selectedTab,
-            onTabSelected = onTabSelected
+            onTabSelected = onTabSelected,
+            currentBottomNavDestination = currentBottomNavDestination
         )
     } else {
         Column(
@@ -148,6 +147,7 @@ fun Transactions(
                 },
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 getTransactions = {},
+                currentBottomNavDestination = currentBottomNavDestination
             )
 
         }

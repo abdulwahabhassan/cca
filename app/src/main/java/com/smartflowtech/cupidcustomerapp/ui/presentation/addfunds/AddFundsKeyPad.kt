@@ -114,9 +114,25 @@ fun AddFundsKeyPad(
                     Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                         Button(
                             onClick = {
-                                onDisplayValueUpdated(
+                                val amt = if (displayValue.isNotEmpty()) {
+                                    Util.formatAmount(
+                                        displayValue.substringBefore(".")
+                                            .replace(",", "")
+                                            .toInt() + amount.substringBefore(".").toInt()
+                                    ).substringBefore(".")
+                                } else {
                                     Util.formatAmount(amount).substringBefore(".")
-                                )
+                                }
+
+                                val value = amt.substringBefore(".").replace(",", "").toInt()
+                                if (value < 1_000_000) {
+                                    onDisplayValueUpdated(
+                                        amt
+                                    )
+                                } else {
+                                    showSnackBar("Maximum limit exceeded")
+                                }
+
                             },
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(
@@ -129,7 +145,7 @@ fun AddFundsKeyPad(
 
                         {
                             Text(
-                                text = "₦${Util.formatAmount(amount).substringBefore(".")}",
+                                text = "+₦${Util.formatAmount(amount).substringBefore(".")}",
                                 color = Color.White,
                                 fontFamily = AthleticsFontFamily,
                                 fontWeight = FontWeight.Bold,
@@ -169,15 +185,25 @@ fun AddFundsKeyPad(
                                 onDisplayValueUpdated("")
                             }
                             else -> {
-                                if (displayValue.length < 7) {
-                                    val amount = Util.formatAmount(
-                                        displayValue
-                                            .replace(",", "") + item
-                                    ).substringBefore(".")
+                                val amount = Util.formatAmount(
+                                    displayValue
+                                        .replace(",", "") + item
+                                ).substringBefore(".")
+                                val value = amount.substringBefore(".").replace(",", "").toInt()
+                                if(value < 1_000_000) {
                                     onDisplayValueUpdated(amount)
                                 } else {
                                     showSnackBar("Maximum limit exceeded")
                                 }
+//                                if (displayValue.length < 7) {
+//                                    val amount = Util.formatAmount(
+//                                        displayValue
+//                                            .replace(",", "") + item
+//                                    ).substringBefore(".")
+//                                    onDisplayValueUpdated(amount)
+//                                } else {
+//                                    showSnackBar("Maximum limit exceeded")
+//                                }
 
                             }
                         }

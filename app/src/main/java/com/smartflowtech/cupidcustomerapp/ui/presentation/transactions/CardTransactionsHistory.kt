@@ -29,7 +29,8 @@ fun CardTransactionHistory(
     onSelectTransaction: (Transaction) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     selectedTab: String,
-    onTabSelected: (String) -> Unit
+    onTabSelected: (String) -> Unit,
+    currentBottomNavDestination: String
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -64,11 +65,12 @@ fun CardTransactionHistory(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.padding(2.dp))
+                Spacer(modifier = Modifier.padding(4.dp))
                 Divider(
                     modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                         .fillMaxWidth()
-                        .width(98.dp)
+                        .width(50.dp)
                         .height(2.dp)
                         .background(
                             color = if (selectedTab == "Transactions") darkBlue else Color.Transparent,
@@ -105,11 +107,12 @@ fun CardTransactionHistory(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.padding(2.dp))
+                Spacer(modifier = Modifier.padding(4.dp))
                 Divider(
                     modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                         .fillMaxWidth()
-                        .width(73.dp)
+                        .width(50.dp)
                         .height(2.dp)
                         .background(
                             color = if (selectedTab == "Analytics") darkBlue else Color.Transparent,
@@ -129,7 +132,8 @@ fun CardTransactionHistory(
                 homeScreenUiState = homeScreenUiState,
                 onSelectTransaction = onSelectTransaction,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                getTransactions = {}
+                getTransactions = {},
+                currentBottomNavDestination = currentBottomNavDestination
             )
         } else {
             Column(
@@ -192,7 +196,8 @@ fun CardTransactionHistoryPreview() {
             ),
             onSelectTransaction = {},
             selectedTab = "Transactions",
-            onTabSelected = {}
+            onTabSelected = {},
+            currentBottomNavDestination = ""
         )
     }
 }

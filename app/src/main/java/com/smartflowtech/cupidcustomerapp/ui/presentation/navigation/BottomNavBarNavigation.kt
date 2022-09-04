@@ -29,11 +29,6 @@ fun BottomNavBarNavigation(
     isCardSelected: Boolean
 ) {
 
-//    var selectedTransaction: Transaction? by remember {
-//        mutableStateOf(
-//            null
-//        )
-//    }
     var selectedTab by remember { mutableStateOf("Transactions") }
 
     AnimatedNavHost(bottomNavHostController,
@@ -97,11 +92,7 @@ fun BottomNavBarNavigation(
                         restoreState = true
                     }
                 },
-                onBackPressed = onBackPressed
-//                    .also {
-//                    selectedTransaction = null
-//                }
-                ,
+                onBackPressed = onBackPressed,
                 homeScreenUiState = homeScreenUiState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 getTransactions = getTransactions,
@@ -109,25 +100,25 @@ fun BottomNavBarNavigation(
                 selectedTab = selectedTab,
                 onTabSelected = { tab ->
                     selectedTab = tab
-                }
+                },
+                currentBottomNavDestination = bottomNavHostController.currentDestination?.route
+                    ?: ""
             )
         }
         composable(HomeScreen.Transactions.route) {
             Transactions(
                 onDownloadTransactionsClicked = onDownloadTransactionsClicked,
                 onSearchBarClicked = onSearchBarClicked,
-                onBackPressed = onBackPressed
-//                    .also {
-//                    selectedTransaction = null
-//                }
-                ,
+                onBackPressed = onBackPressed,
                 homeScreenUiState = homeScreenUiState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 isCardSelected = isCardSelected,
                 selectedTab = selectedTab,
                 onTabSelected = { tab ->
                     selectedTab = tab
-                }
+                },
+                currentBottomNavDestination = bottomNavHostController.currentDestination?.route
+                    ?: ""
             )
         }
         composable(HomeScreen.Location.route) {
