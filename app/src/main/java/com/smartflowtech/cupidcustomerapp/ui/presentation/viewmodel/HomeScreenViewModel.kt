@@ -72,7 +72,15 @@ class HomeScreenViewModel @Inject constructor(
                     is RepositoryResult.Local -> {
                         mapWalletsResponseData(walletsResult.data)
                     }
-                }
+                }?.plus(
+                    Wallet(
+                        "Smartflow Technologies",
+                        99L,
+                        "47500.20",
+                        "2022-09-01",
+                        ""
+                    )
+                )
 
                 when (transactionsResult) {
                     is RepositoryResult.Success -> {
@@ -123,16 +131,20 @@ class HomeScreenViewModel @Inject constructor(
         return result?.map { it.mapToTransaction() }?.filter { transaction ->
 //            Timber.d("$transaction")
             LocalDate.parse(transaction.date) >= LocalDate.now()
-                .minusDays(when(prefs.daysFilter) {
-                    Days.TODAY.name -> 0L
-                    Days.ONE_WEEK.name -> 7L
-                    Days.TWO_WEEKS.name -> 14L
-                    Days.ONE_MONTH.name -> 30L
-                    Days.SIX_MONTHS.name -> 182L
-                    Days.ONE_YEAR.name -> 365L
-                    Days.TWO_YEARS.name -> 720L
-                    else -> {0L}
-                })
+                .minusDays(
+                    when (prefs.daysFilter) {
+                        Days.TODAY.name -> 0L
+                        Days.ONE_WEEK.name -> 7L
+                        Days.TWO_WEEKS.name -> 14L
+                        Days.ONE_MONTH.name -> 30L
+                        Days.SIX_MONTHS.name -> 182L
+                        Days.ONE_YEAR.name -> 365L
+                        Days.TWO_YEARS.name -> 720L
+                        else -> {
+                            0L
+                        }
+                    }
+                )
         }?.filter { transaction ->
             when (transaction.status) {
                 Status.COMPLETED.name.capitalizeFirstLetter() ->

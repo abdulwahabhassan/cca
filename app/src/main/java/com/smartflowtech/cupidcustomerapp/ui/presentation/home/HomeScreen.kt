@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.fadeIn
@@ -22,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +36,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
@@ -62,11 +65,20 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(HomeScreen.Home.title) }
 
-    val visible by remember {
-        derivedStateOf { bottomSheetState.targetValue == BottomSheetValue.Expanded }
+    val localConfig = LocalConfiguration.current
+    val ctx = LocalContext.current
+
+    var isCardSelected: Boolean by rememberSaveable { mutableStateOf(false) }
+    var sheetPeekHeight by remember {
+        mutableStateOf(
+            if (localConfig.screenWidthDp.dp > 320.dp)
+                localConfig.screenHeightDp.dp * 0.50f
+            else
+                localConfig.screenHeightDp.dp * 0.40f
+        )
     }
 
-    LaunchedEffect(key1 = bottomSheetState.targetValue) {
+    LaunchedEffect(key1 = bottomSheetState.currentValue) {
         if (bottomSheetState.targetValue == BottomSheetValue.Expanded &&
             currentBottomNavDestinationTitle == HomeScreen.Home.title
         ) {
@@ -136,58 +148,50 @@ fun HomeScreen(
                 }
             },
             sheetBackgroundColor = Color.Transparent,
-            sheetPeekHeight = if (LocalConfiguration.current.screenWidthDp.dp > 320.dp)
-                LocalConfiguration.current.screenHeightDp.dp * 0.50f
+            sheetPeekHeight = if (currentBottomNavDestinationTitle == HomeScreen.Home.title)
+                sheetPeekHeight * 1.2f
             else
-                LocalConfiguration.current.screenHeightDp.dp * 0.40f,
+                sheetPeekHeight,
             sheetContent = {
 
-                AnimatedVisibility(
-                    modifier = Modifier.alpha(bottomSheetState.progress.fraction),
-                    visible = visible,
-                    enter = fadeIn(snap()),
-                    exit = fadeOut(snap())
+                Row(
+                    modifier = Modifier
+                        .alpha(if (bottomSheetState.isExpanded) 1f else 0f)
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, top = 32.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
 
-                    if (currentBottomNavDestinationTitle != HomeScreen.Home.title) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp, end = 8.dp, top = 32.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            IconButton(onClick = {
-                                onBackPressed()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.ArrowBack,
-                                    contentDescription = "Back arrow",
-                                    tint = Color.White,
-                                )
-                            }
-
-                            Text(
-                                text = currentBottomNavDestinationTitle,
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.SemiBold
+                        IconButton(onClick = {
+                            onBackPressed()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowBack,
+                                contentDescription = "Back arrow",
+                                tint = Color.White,
                             )
-                            if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
-                                IconButton(onClick = {
-                                    onFilteredClicked()
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.FilterList,
-                                        contentDescription = "Filter",
-                                        tint = Color.White,
-                                    )
-                                }
-                            } else {
-                                IconButton(onClick = {}) {}
-                            }
                         }
 
+                        Text(
+                            text = currentBottomNavDestinationTitle,
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+
+                        IconButton(onClick = {
+                            onFilteredClicked()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.FilterList,
+                                contentDescription = "Filter",
+                                tint = Color.White,
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = {}, enabled = false) {}
                     }
                 }
 
@@ -237,14 +241,27 @@ fun HomeScreen(
             }) { paddingValues ->
 
             HomeDashBoard(
-                horizontalPagerHeight = LocalConfiguration.current.screenHeightDp.dp * 0.30f,
+//                horizontalPagerHeight = localConfig.screenHeightDp.dp * 0.30f,
                 bottomSheetState = bottomSheetState,
                 onAddFundsClicked = onAddFundsClicked,
                 userName = userName,
                 walletBalanceVisibility = walletBalanceVisibility,
                 updateWalletVisibility = updateWalletVisibility,
                 onLogOutClicked = onLogOutClicked,
-                homeScreenUiState = homeScreenUiState
+                homeScreenUiState = homeScreenUiState,
+                onCardSelected = { bool ->
+                    isCardSelected = bool
+                    if (isCardSelected) {
+                        sheetPeekHeight *= 1.08f
+                    } else {
+                        sheetPeekHeight = if (localConfig.screenWidthDp.dp > 320.dp)
+                            localConfig.screenHeightDp.dp * 0.50f
+                        else
+                            localConfig.screenHeightDp.dp * 0.40f
+                    }
+
+                },
+                isCardSelected = isCardSelected
             )
         }
     }

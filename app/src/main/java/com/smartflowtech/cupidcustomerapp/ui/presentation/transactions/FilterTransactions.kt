@@ -226,18 +226,18 @@ fun FilterTransactions(
             item {
                 Button(
                     onClick = {
-                        onFilterSaveClicked(
-                            daysFilter.value,
-                            mapOf(
-                                Status.COMPLETED.name to completedStatusFilter.value,
-                                Status.FAILED.name to failedStatusFilter.value,
-                                Status.PENDING.name to pendingStatusFilter.value,
-                                Product.AGO.name to agoProductFilter.value,
-                                Product.DPK.name to dpkProductFilter.value,
-                                Product.PMS.name to pmsProductFilter.value
+                        onBackPressed().also {
+                            onFilterSaveClicked(
+                                daysFilter.value,
+                                mapOf(
+                                    Status.COMPLETED.name to completedStatusFilter.value,
+                                    Status.FAILED.name to failedStatusFilter.value,
+                                    Status.PENDING.name to pendingStatusFilter.value,
+                                    Product.AGO.name to agoProductFilter.value,
+                                    Product.DPK.name to dpkProductFilter.value,
+                                    Product.PMS.name to pmsProductFilter.value
+                                )
                             )
-                        ).also {
-                            onBackPressed()
                         }
                     },
                     modifier = Modifier

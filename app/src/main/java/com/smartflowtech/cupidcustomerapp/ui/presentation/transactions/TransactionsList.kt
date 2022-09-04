@@ -54,7 +54,7 @@ fun TransactionsList(
                     Column(
                         Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.6f),
+                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.3f else 0.7f),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -103,7 +103,7 @@ fun TransactionsList(
                     Column(
                         Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.6f),
+                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.3f else 0.7f),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -140,7 +140,7 @@ fun TransactionsList(
                         Column(
                             Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.6f),
+                                .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.3f else 0.7f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {

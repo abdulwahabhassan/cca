@@ -50,7 +50,7 @@ fun DownloadTransactions(goBackToFilterTransactions: () -> Unit, onShowSuccess: 
         ) {
 
             Text(
-                "Input Days Range", color = Color.Black,
+                "Input History Range", color = Color.Black,
                 fontFamily = AthleticsFontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold

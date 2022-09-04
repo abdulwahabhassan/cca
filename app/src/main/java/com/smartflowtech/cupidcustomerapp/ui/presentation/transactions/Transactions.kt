@@ -27,11 +27,9 @@ fun Transactions(
     onSearchBarClicked: () -> Unit,
     onBackPressed: () -> Unit,
     homeScreenUiState: HomeScreenUiState,
-//    bottomSheetState: BottomSheetState,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
 
-//    var downloadButtonEnabled by remember { mutableStateOf(true) }
     var queryText by rememberSaveable { mutableStateOf("") }
     var selectedTransaction: Transaction by remember {
         mutableStateOf(

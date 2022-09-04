@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import android.service.quickaccesswallet.WalletCard
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -30,12 +31,18 @@ fun WalletCard(
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
     vendorName: String,
-    currentBalance: String
+    currentBalance: String,
+    onCardSelected: (String) -> Unit,
+    isCardSelected: Boolean
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onCardSelected(currentBalance)
+            },
         shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
+        elevation = if (isCardSelected) 16.dp else 4.dp,
         backgroundColor = remember { backgroundColor }
     ) {
 
@@ -87,7 +94,7 @@ fun WalletCard(
                         }
 
                         Text(
-                            text = if (walletBalanceVisibility) "₦ ${
+                            text = if (walletBalanceVisibility) "₦${
                                 Util.formatAmount(
                                     currentBalance
                                 )
@@ -127,8 +134,7 @@ fun WalletCard(
                         text = "Loyalty Points: 0",
                         fontSize = 12.sp,
                         color = brightBlue,
-
-                        )
+                    )
                 }
 
             }
@@ -140,6 +146,14 @@ fun WalletCard(
 @Preview(heightDp = 200)
 fun WalletCardPreview() {
     CupidCustomerAppTheme {
-        WalletCard(backgroundColor = transparentBlue, {}, true, {}, "Smartflow", "₦30,000")
+        WalletCard(backgroundColor = transparentBlue,
+            {},
+            true,
+            {},
+            "Smartflow",
+            "₦30,000",
+            {},
+            false
+        )
     }
 }

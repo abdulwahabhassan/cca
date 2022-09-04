@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.google.accompanist.permissions.*
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
@@ -122,7 +123,14 @@ fun Receipt(
             Text(text = "Status", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
                 text = transaction.status ?: "",
-                color = darkBlue,
+                color = when (transaction.status) {
+                    Status.COMPLETED.name.capitalizeFirstLetter() -> green
+                    Status.PENDING.name.capitalizeFirstLetter() -> darkBlue
+                    Status.FAILED.name.capitalizeFirstLetter() -> red
+                    else -> {
+                        darkBlue
+                    }
+                },
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
