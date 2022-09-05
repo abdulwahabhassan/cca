@@ -3,6 +3,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -112,12 +113,12 @@ fun Home(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                IconButton(onClick = { goToTransactions() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.ArrowForward,
-                        contentDescription = "Forward arrow",
-                        tint = black
-                    )
+                IconButton(onClick = { goToTransactions() }, enabled = false) {
+//                    Icon(
+//                        imageVector = Icons.Rounded.ArrowForward,
+//                        contentDescription = "Forward arrow",
+//                        tint = black
+//                    )
                 }
             }
 
@@ -139,7 +140,8 @@ fun Home(
         Dialog(
             onDismissRequest = { showReceipt = false },
         ) {
-            Column(
+
+            LazyColumn(
                 modifier = Modifier
                     .background(
                         color = Color.White,
@@ -148,10 +150,15 @@ fun Home(
                     .padding(top = 32.dp)
 
             ) {
-                Receipt(transaction = selectedTransaction,
-                    onGoBackToTransactionListPressed = {
-                        showReceipt = false
-                    })
+                item {
+                    Receipt(
+                        transaction = selectedTransaction,
+                        onGoBackToTransactionListPressed = {
+                            showReceipt = false
+                        }
+                    )
+                }
+
             }
         }
     }

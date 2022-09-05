@@ -1,7 +1,10 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
@@ -60,7 +64,6 @@ fun Transactions(
         mutableStateOf(false)
     }
 
-
     var selectedTransaction: Transaction by remember {
         mutableStateOf(
             Transaction(
@@ -81,14 +84,7 @@ fun Transactions(
         onBackPressed()
     }
 
-    if (showReceipt) {
-        Receipt(
-            transaction = selectedTransaction,
-            onGoBackToTransactionListPressed = {
-                showReceipt = false
-            }
-        )
-    } else if (isCardSelected) {
+    if (isCardSelected) {
         CardTransactionHistory(
             homeScreenUiState = homeScreenUiState,
             onSelectTransaction = { transaction ->
@@ -149,6 +145,33 @@ fun Transactions(
                 getTransactions = {},
                 currentBottomNavDestination = currentBottomNavDestination
             )
+
+
+        }
+    }
+
+    if (showReceipt) {
+        Dialog(
+            onDismissRequest = { showReceipt = false },
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .background(
+                        color = Color.White,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .padding(top = 32.dp)
+
+            ) {
+                item {
+                    Receipt(transaction = selectedTransaction,
+                        onGoBackToTransactionListPressed = {
+                            showReceipt = false
+                        }
+                    )
+                }
+
+            }
 
         }
     }

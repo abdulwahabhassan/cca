@@ -63,13 +63,13 @@ fun FilterTransactions(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = "Filter Transactions",
+            text = "Filter Preferences",
             color = Color.Black,
             fontFamily = AthleticsFontFamily,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
             mapOf(
                 Category.DATE to listOf(

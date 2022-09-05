@@ -30,4 +30,6 @@ val transparentAsh = Color(0xFFD9D9D9)
 val lightPink = Color(0xFFFDEDFF)
 val lightYellow = Color(0xFFFFFAEA)
 val red = Color(0xFFC9252D)
+val cardBlue = Color(0xFFE1EBFA)
+val cardYellow = Color(0xFFFFFAEA)
 

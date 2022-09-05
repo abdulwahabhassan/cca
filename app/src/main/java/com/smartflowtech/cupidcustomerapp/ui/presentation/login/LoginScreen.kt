@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -98,6 +99,17 @@ fun LoginScreen(
                 painter = painterResource(id = R.drawable.design_background),
                 contentDescription = "background"
             )
+
+            Image(
+                modifier = Modifier
+                    .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.14f)
+                    .align(
+                        Alignment.TopCenter
+                    ),
+                painter = painterResource(id = R.drawable.ic_smartflow),
+                contentDescription = "Vendor logo"
+            )
+
             LazyColumn(
                 Modifier
                     .fillMaxHeight(0.7f)

@@ -242,7 +242,9 @@ fun HomeScreen(
                     BottomNavBarNavigation(
                         bottomNavHostController = bottomNavBarNavHostController,
                         onBackPressed = {
-                            if (isCardSelected) {
+                            if (isCardSelected && bottomNavBarNavHostController.currentDestination
+                                    ?.route == HomeScreen.Home.route
+                            ) {
                                 isCardSelected = false
                             } else {
                                 onBackPressed()
