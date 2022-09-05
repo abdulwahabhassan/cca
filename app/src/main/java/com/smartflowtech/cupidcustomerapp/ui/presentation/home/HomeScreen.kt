@@ -12,6 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
@@ -121,6 +123,17 @@ fun HomeScreen(
 
     })
 
+    LaunchedEffect(key1 = isCardSelected, block = {
+        if (isCardSelected) {
+            sheetPeekHeight *= 1.08f
+        } else {
+            sheetPeekHeight = if (localConfig.screenWidthDp.dp > 320.dp)
+                localConfig.screenHeightDp.dp * 0.50f
+            else
+                localConfig.screenHeightDp.dp * 0.40f
+        }
+    })
+
     Scaffold(
         bottomBar = {
             CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
@@ -207,7 +220,8 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Icon(
                         modifier = Modifier
-                            .padding(bottom = 24.dp)
+                            .size(46.dp)
+                            .padding(bottom = 16.dp)
                             .clip(RoundedCornerShape(50))
                             .clipToBounds()
                             .clickable {
@@ -217,15 +231,23 @@ fun HomeScreen(
                                     onBottomNavItemClicked(HomeScreen.Home.route)
                                 }
                             }
-                            .align(Alignment.CenterHorizontally)
-                            .width(40.dp),
-                        painter = painterResource(id = R.drawable.ic_bottom_sheet_handle_inactive),
+                            .align(Alignment.CenterHorizontally),
+                        imageVector = if (bottomSheetState.isExpanded)
+                            Icons.Rounded.ExpandMore
+                        else
+                            Icons.Rounded.ExpandLess,
                         contentDescription = "Bottom sheet handle",
-                        tint = Color.Unspecified
+                        tint = grey
                     )
                     BottomNavBarNavigation(
                         bottomNavHostController = bottomNavBarNavHostController,
-                        onBackPressed = onBackPressed,
+                        onBackPressed = {
+                            if (isCardSelected) {
+                                isCardSelected = false
+                            } else {
+                                onBackPressed()
+                            }
+                        },
                         onSearchBarClicked = {
                             coroutineScope.launch {
                                 bottomSheetState.expand()
@@ -250,15 +272,6 @@ fun HomeScreen(
                 homeScreenUiState = homeScreenUiState,
                 onCardSelected = { bool ->
                     isCardSelected = bool
-                    if (bool) {
-                        sheetPeekHeight *= 1.08f
-                    } else {
-                        sheetPeekHeight = if (localConfig.screenWidthDp.dp > 320.dp)
-                            localConfig.screenHeightDp.dp * 0.50f
-                        else
-                            localConfig.screenHeightDp.dp * 0.40f
-                    }
-
                 },
                 isCardSelected = isCardSelected
             )

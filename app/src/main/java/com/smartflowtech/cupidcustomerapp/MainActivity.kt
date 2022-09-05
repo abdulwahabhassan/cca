@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     RootNavigation(
-                        rootNavHostController = rememberAnimatedNavController(),
                         finishActivity = { finishActivity() }
                     )
                 }

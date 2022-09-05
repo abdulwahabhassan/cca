@@ -76,7 +76,8 @@ fun HomeDashBoard(
                 AnimatedVisibility(
                     visible = visible,
                     enter = slideInVertically() { it / 1000 } + fadeIn(),
-                    exit = slideOutVertically(targetOffsetY = { -it / 1000 }) + fadeOut()) {
+                    exit = slideOutVertically(targetOffsetY = { -it / 1000 }) + fadeOut()
+                ) {
                     Column() {
                         Spacer(
                             modifier = Modifier

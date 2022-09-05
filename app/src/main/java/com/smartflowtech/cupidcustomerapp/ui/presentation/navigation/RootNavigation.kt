@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -20,9 +21,10 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun RootNavigation(
-    rootNavHostController: NavHostController,
     finishActivity: () -> Unit
 ) {
+
+    val rootNavHostController = rememberAnimatedNavController()
 
     AnimatedNavHost(
         navController = rootNavHostController,
