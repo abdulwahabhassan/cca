@@ -164,7 +164,8 @@ fun TransactionsList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(),
-                    userScrollEnabled = currentBottomNavDestination != HomeScreen.Home.route,
+                    userScrollEnabled = true,
+//                    userScrollEnabled = currentBottomNavDestination != HomeScreen.Home.route,
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

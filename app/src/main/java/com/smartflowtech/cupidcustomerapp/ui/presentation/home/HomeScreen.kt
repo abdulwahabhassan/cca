@@ -149,7 +149,7 @@ fun HomeScreen(
             modifier = Modifier.padding(paddingValues),
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
-            sheetGesturesEnabled = false,
+            sheetGesturesEnabled = true,
             snackbarHost = {
                 SnackbarHost(it) { data ->
                     Snackbar(
@@ -166,7 +166,6 @@ fun HomeScreen(
             else
                 sheetPeekHeight,
             sheetContent = {
-
                 Row(
                     modifier = Modifier
                         .alpha(if (bottomSheetState.isExpanded) 1f else 0f)
@@ -188,7 +187,9 @@ fun HomeScreen(
                         }
 
                         Text(
-                            text = currentBottomNavDestinationTitle,
+                            text = if (isCardSelected) "Card History"
+                            else
+                                currentBottomNavDestinationTitle,
                             color = Color.White,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold
