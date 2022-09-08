@@ -117,6 +117,7 @@ fun TransactionPreview() {
         "Credit",
         "TRS283883920",
         "Wallet Top-Up",
-        "PMS"
+        "PMS",
+        "VLX-5324"
     )
 }

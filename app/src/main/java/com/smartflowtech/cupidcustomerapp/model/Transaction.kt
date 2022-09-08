@@ -11,7 +11,9 @@ data class Transaction(
     val authType: String?,
     val transactionSeqNumber: String?,
     val vendorStationName: String?,
-    val product: String?
+    val product: String?,
+    val nfcTagCode: String?,
+    val dateTime: String? = "2022-01-01 12:00:00"
 ) {
 
     companion object {

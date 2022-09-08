@@ -75,6 +75,7 @@ fun Transactions(
                 "",
                 "",
                 "",
+                "",
                 ""
             )
         )

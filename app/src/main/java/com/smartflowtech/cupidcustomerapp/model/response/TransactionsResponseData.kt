@@ -76,7 +76,9 @@ data class TransactionsResponseData(
             authType = this.authType,
             transactionSeqNumber = this.transactionSeqNumber ?: this.id.toString(),
             vendorStationName = this.vendorStationName,
-            product = this.product
+            product = this.product,
+            nfcTagCode = this.nfctag?.nfctagCode,
+            dateTime = this.createdAt
         )
     }
 }

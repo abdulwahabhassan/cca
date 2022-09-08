@@ -380,7 +380,8 @@ fun ReceiptPreview() {
                 status = "Successful",
                 time = "08:21AM",
                 title = "Mobile Transfer",
-                product = "DPK"
+                product = "DPK",
+                nfcTagCode = "VLX-5324"
             ),
             {}
         )

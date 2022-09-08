@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,7 +27,11 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.model.Wallet
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
-import kotlin.random.Random
+import timber.log.Timber
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -38,6 +43,8 @@ fun CardTransactionHistory(
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String
 ) {
+
+
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -207,9 +214,6 @@ fun CardTransactionHistory(
                     }
                 }
 
-                val yStep = 50
-                val points = listOf(150f, 100f, 250f, 200f, 330f, 300f, 90f, 120f, 285f, 199f)
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -240,41 +244,9 @@ fun CardTransactionHistory(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(
-                            LocalConfiguration.current.screenWidthDp.dp * 0.70f
-                        )
-                ) {
-
-                    AnalyticsGraph(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(start = 16.dp, end = 4.dp),
-                        xValues = (0..9).map { it + 1 },
-                        yValues = (0..6).map { (it + 1) * yStep },
-                        points = points,
-                        paddingSpace = 16.dp,
-                        verticalStep = yStep
-                    )
-                }
-
-                Text(
-                    "Monthly Transactions",
-                    color = purple,
-                    modifier = Modifier
-                        .background(
-                            color = transparentPurple,
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 12.sp
-                )
             }
+
+
         }
     }
 }
@@ -298,6 +270,7 @@ fun CardTransactionHistoryPreview() {
                         "26716727",
                         "NNPC",
                         "PMS",
+                        "VLX-5324"
                     )
                 ),
                 message = null,

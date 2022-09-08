@@ -64,6 +64,7 @@ fun Home(
                 "",
                 "",
                 "",
+                "",
                 ""
             )
         )
@@ -79,7 +80,11 @@ fun Home(
             },
             selectedTab = selectedTab,
             onTabSelected = onTabSelected,
-            currentBottomNavDestination = currentBottomNavDestination
+            currentBottomNavDestination = currentBottomNavDestination,
+//            transactions = homeScreenUiState.transactions
+//                .filter { transaction: Transaction ->
+//                transaction.nfcTagCode
+//            }
         )
     } else {
         Column(
