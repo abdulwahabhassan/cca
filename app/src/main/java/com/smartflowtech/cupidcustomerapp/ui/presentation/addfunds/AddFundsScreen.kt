@@ -112,21 +112,9 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
                         tint = Color.Unspecified
                     )
 
-                    Column(modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center) {
-                        Text(
-                            "This service is currently unavailable",
-                            color = purple,
-                            modifier = Modifier
-                                .background(
-                                    color = transparentPurple,
-                                    shape = RoundedCornerShape(10.dp)
-                                )
-                                .padding(8.dp),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    AddFundsSelectPaymentMode(onSelectPaymentMode = {
+
+                    })
 
                 }
 
