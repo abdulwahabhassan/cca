@@ -45,6 +45,7 @@ fun AddFundsPaymentMode(data: PaymentMode, onClick: (paymentMode: PaymentMode) -
             Icon(
                 modifier = Modifier
                     .background(transparentBlue, shape = CircleShape)
+                    .size(36.dp)
                     .padding(8.dp),
                 painter = painterResource(
                     id = when (data) {

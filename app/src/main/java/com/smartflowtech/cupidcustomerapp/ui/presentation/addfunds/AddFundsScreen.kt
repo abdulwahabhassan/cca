@@ -22,12 +22,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.PaymentMode
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
-fun AddFundsScreen(onBackPressed: () -> Unit) {
+fun AddFundsScreen(
+    onBackPressed: () -> Unit,
+    onPaymentModeSelected: (PaymentMode) -> Unit
+) {
 
     var amount by rememberSaveable { mutableStateOf("") }
 
@@ -59,7 +63,6 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
                 }
             },
             sheetContent = {
-
                 AnimatedVisibility(
                     visible = !visible,
                     enter = fadeIn(),
@@ -112,8 +115,10 @@ fun AddFundsScreen(onBackPressed: () -> Unit) {
                         tint = Color.Unspecified
                     )
 
-                    AddFundsSelectPaymentMode(onSelectPaymentMode = {
-
+                    AddFundsSelectPaymentMode(onSelectPaymentMode = { paymentMode ->
+                        coroutineScope.launch {
+                            onPaymentModeSelected(paymentMode)
+                        }
                     })
 
                 }

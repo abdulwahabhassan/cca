@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,19 +8,30 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.smartflowtech.cupidcustomerapp.model.PaymentMode
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddFundsScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     onBackPressed: () -> Unit,
-    onClosePressed: () -> Unit
+    onClosePressed: () -> Unit,
+    showModalBottomSheet: () -> Unit
 ) {
+
+    val selectedPaymentMode = remember { mutableStateOf(PaymentMode.CARD) }
+
+    BackHandler {
+        onClosePressed()
+    }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -55,7 +67,7 @@ fun AddFundsScreenModalBottomSheet(
                         //Close button
                         IconButton(
                             onClick = {
-                                //onClosePressed()
+                                onClosePressed()
                             },
                             modifier = Modifier
                                 .padding(end = 8.dp),
@@ -67,10 +79,24 @@ fun AddFundsScreenModalBottomSheet(
                             )
                         }
                     }
+                    when (selectedPaymentMode.value) {
+                        PaymentMode.BANK_TRANSFER -> AddFundsBankPaymentMode(
+                            "35647729920",
+                            "Wema Bank"
+                        )
+                        PaymentMode.USSD -> AddFundsUssdPaymentMode(code = "*243*904*09382")
+                        PaymentMode.CARD -> { }
+                    }
+
+
                 }
             }
         }
     ) {
-        AddFundsScreen(onBackPressed = onBackPressed)
+        AddFundsScreen(onBackPressed = onBackPressed, onPaymentModeSelected = { mode ->
+            selectedPaymentMode.value = mode
+            showModalBottomSheet()
+        })
+
     }
 }

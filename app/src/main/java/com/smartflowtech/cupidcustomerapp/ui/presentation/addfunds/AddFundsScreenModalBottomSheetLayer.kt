@@ -34,6 +34,12 @@ fun AddFundsScreenModalBottomSheetLayer(
             } else {
                 goBackToHomeScreen()
             }
+        },
+        showModalBottomSheet = {
+            coroutineScope.launch {
+                modalBottomSheetState.show()
+            }
+
         }
     )
 }
