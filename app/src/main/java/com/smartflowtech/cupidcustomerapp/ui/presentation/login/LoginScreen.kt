@@ -102,6 +102,7 @@ fun LoginScreen(
 
             Image(
                 modifier = Modifier
+                    .size(50.dp)
                     .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.14f)
                     .align(
                         Alignment.TopCenter

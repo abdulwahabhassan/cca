@@ -85,7 +85,7 @@ fun AddFundsScreenModalBottomSheet(
                             "Wema Bank"
                         )
                         PaymentMode.USSD -> AddFundsUssdPaymentMode(code = "*243*904*09382")
-                        PaymentMode.CARD -> { }
+                        PaymentMode.CARD -> AddFundsSelectCardPaymentProcessor()
                     }
 
 
