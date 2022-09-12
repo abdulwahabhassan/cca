@@ -16,16 +16,18 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.AdsCard
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked: () -> Unit) {
+fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked: () -> Unit = {}, searchPlaceholder: String) {
 
     TextField(
         modifier = Modifier
@@ -46,9 +48,11 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked
         singleLine = true,
         placeholder = {
             Text(
-                text = "Search transactions",
+                text = searchPlaceholder,
                 fontFamily = AthleticsFontFamily,
-                color = grey
+                color = grey,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp
             )
         },
         shape = RoundedCornerShape(12.dp),
@@ -74,5 +78,5 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked
 @Composable
 @Preview(showBackground = true)
 fun SearchBarPreview() {
-    SearchBar("", {}, {})
+    SearchBar("", {}, {}, "Search transactions")
 }

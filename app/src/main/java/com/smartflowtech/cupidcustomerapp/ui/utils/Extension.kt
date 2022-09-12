@@ -1,5 +1,8 @@
 package com.smartflowtech.cupidcustomerapp.ui.utils
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.ui.text.toLowerCase
 import timber.log.Timber
 import java.util.*
@@ -19,5 +22,13 @@ object Extension {
         }
     }
 
+    fun Context.findActivity(): Activity {
+        var context = this
+        while (context is ContextWrapper) {
+            if (context is Activity) return context
+            context = context.baseContext
+        }
+        throw IllegalStateException("no activity")
+    }
 
 }

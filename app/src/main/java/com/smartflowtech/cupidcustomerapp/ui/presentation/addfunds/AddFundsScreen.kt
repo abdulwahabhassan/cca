@@ -119,7 +119,9 @@ fun AddFundsScreen(
                         coroutineScope.launch {
                             onPaymentModeSelected(paymentMode)
                         }
-                    })
+                    },
+                        onBackPressed = onBackPressed
+                    )
 
                 }
 

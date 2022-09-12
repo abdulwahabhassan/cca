@@ -102,4 +102,6 @@ dependencies {
     //Data store
     implementation "androidx.datastore:datastore-preferences:$data_store_version"
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+    //Pay stack
+    implementation 'co.paystack.android:paystack:3.1.3'
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.smartflowtech.cupidcustomerapp.model.Bank
 import com.smartflowtech.cupidcustomerapp.model.PaymentMode
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -24,10 +25,13 @@ fun AddFundsScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     onBackPressed: () -> Unit,
     onClosePressed: () -> Unit,
-    showModalBottomSheet: () -> Unit
+    showBanks: Boolean,
+    onShowBanksClicked: () -> Unit,
+    selectedBank: String,
+    selectedPaymentMode: PaymentMode,
+    onSelectBank: (Bank) -> Unit,
+    onSelectPaymentMode: (PaymentMode) -> Unit
 ) {
-
-    val selectedPaymentMode = remember { mutableStateOf(PaymentMode.CARD) }
 
     BackHandler {
         onClosePressed()
@@ -79,23 +83,26 @@ fun AddFundsScreenModalBottomSheet(
                             )
                         }
                     }
-                    when (selectedPaymentMode.value) {
+                    when (selectedPaymentMode) {
                         PaymentMode.BANK_TRANSFER -> AddFundsBankPaymentMode(
                             "35647729920",
                             "Wema Bank"
                         )
-                        PaymentMode.USSD -> AddFundsUssdPaymentMode(code = "*243*904*09382")
+                        PaymentMode.USSD -> AddFundsUssdPaymentMode(
+                            code = "*243*904*09382",
+                            onShowBanksClicked = onShowBanksClicked,
+                            showBanks = showBanks,
+                            selectedBank = selectedBank,
+                            onSelectBank = onSelectBank
+                        )
                         PaymentMode.CARD -> AddFundsSelectCardPaymentProcessor()
                     }
-
-
                 }
             }
         }
     ) {
         AddFundsScreen(onBackPressed = onBackPressed, onPaymentModeSelected = { mode ->
-            selectedPaymentMode.value = mode
-            showModalBottomSheet()
+            onSelectPaymentMode(mode)
         })
 
     }

@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
@@ -20,7 +21,12 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 @Composable
 fun AddFundsSelectPaymentMode(
     onSelectPaymentMode: (paymentMode: PaymentMode) -> Unit,
+    onBackPressed: () -> Unit
 ) {
+
+    BackHandler {
+        onBackPressed()
+    }
 
     Column(
         Modifier
@@ -64,6 +70,6 @@ fun AddFundsSelectPaymentMode(
 @Preview(showBackground = true)
 fun AddFundsSelectPaymentModePreview() {
     CupidCustomerAppTheme {
-        AddFundsSelectPaymentMode(onSelectPaymentMode = {})
+        AddFundsSelectPaymentMode(onSelectPaymentMode = {}, {})
     }
 }

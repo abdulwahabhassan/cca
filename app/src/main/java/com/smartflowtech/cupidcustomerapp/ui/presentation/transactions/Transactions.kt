@@ -110,7 +110,8 @@ fun Transactions(
                 onQueryChange = { searchText ->
                     queryText = searchText
                 },
-                onSearchBarClicked = onSearchBarClicked
+                onSearchBarClicked = onSearchBarClicked,
+                "Search transactions"
             )
 
             Row(
