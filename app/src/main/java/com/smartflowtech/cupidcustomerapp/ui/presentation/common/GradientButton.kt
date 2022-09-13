@@ -33,7 +33,6 @@ fun GradientButton(
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(),
         onClick = {
-            //Toast.makeText(context, "Unavailable", Toast.LENGTH_SHORT).show()
             enabled = false
             onClick()
         },

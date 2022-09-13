@@ -1,16 +1,17 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,14 +25,23 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddFundsUssdPaymentMode(
+    modalBottomSheetState: ModalBottomSheetState,
     code: String,
     onShowBanksClicked: () -> Unit,
     showBanks: Boolean,
     selectedBank: String,
-    onSelectBank: (Bank) -> Unit
+    onSelectBank: (Bank) -> Unit,
+    onBackPressed: () -> Unit
 ) {
+
+    val ctx = LocalContext.current
+
+    BackHandler(modalBottomSheetState.isVisible) {
+        onBackPressed()
+    }
 
     if (showBanks) {
         AddFundsSelectBank(onBankSelected = onSelectBank)
@@ -75,7 +85,9 @@ fun AddFundsUssdPaymentMode(
                     modifier = Modifier
                         .clip(CircleShape)
                         .clickable {
-
+                            Toast
+                                .makeText(ctx, "Copied!", Toast.LENGTH_SHORT)
+                                .show()
                         }
                         .padding(8.dp),
                     painter = painterResource(
@@ -101,15 +113,20 @@ fun AddFundsUssdPaymentMode(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview(showBackground = true)
 fun AddFundsUssdPaymentModePreview() {
     CupidCustomerAppTheme {
         AddFundsUssdPaymentMode(
+            ModalBottomSheetState(
+                ModalBottomSheetValue.Expanded
+            ),
             "*234*000*0320#",
             {},
             false,
             "First Bank of Nigeria",
+            {},
             {}
         )
     }

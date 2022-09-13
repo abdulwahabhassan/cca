@@ -5,7 +5,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
-import com.smartflowtech.cupidcustomerapp.model.PaymentMode
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.AddFundsScreenViewModel
 import kotlinx.coroutines.launch
 
@@ -22,7 +21,7 @@ fun AddFundsScreenModalBottomSheetLayer(
     val coroutineScope = rememberCoroutineScope()
     var showBanks by remember { mutableStateOf(false) }
     var selectedBank by remember { mutableStateOf("") }
-    val selectedPaymentMode = remember { mutableStateOf(PaymentMode.CARD) }
+    val selectedPaymentMode = remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
         if (!modalBottomSheetState.isVisible) {
@@ -33,23 +32,19 @@ fun AddFundsScreenModalBottomSheetLayer(
     AddFundsScreenModalBottomSheet(
         modalBottomSheetState = modalBottomSheetState,
         onBackPressed = {
-            if (showBanks) {
-                showBanks = false
-            } else {
-                goBackToHomeScreen()
-            }
+            goBackToHomeScreen()
         },
-        onClosePressed = {
+        closeModalBottomSheet = {
             if (showBanks) {
                 showBanks = false
             } else {
-                if (modalBottomSheetState.isVisible) {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                    }
-                } else {
-                    goBackToHomeScreen()
+                coroutineScope.launch {
+                    modalBottomSheetState.hide()
                 }
+//                else {
+//                    //check if bottom sheet is open and close else go to home screen
+//                    goBackToHomeScreen()
+//                }
             }
         },
         onShowBanksClicked = {
@@ -62,11 +57,12 @@ fun AddFundsScreenModalBottomSheetLayer(
         },
         selectedPaymentMode = selectedPaymentMode.value,
         onSelectPaymentMode = {
-            selectedPaymentMode.value = it
+            selectedPaymentMode.value = it.name
             coroutineScope.launch {
                 modalBottomSheetState.show()
             }
-        }
+        },
+        goToHome = goBackToHomeScreen
     )
 }
 

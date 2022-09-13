@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
-import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentSuccess
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
@@ -116,7 +116,7 @@ fun HomeScreenModalBottomSheet(
                             }
                         )
                     } else if (shouldShowSuccess) {
-                        Success(
+                        PaymentSuccess(
                             message = "Sent",
                             info = "We've sent the requested statements to your email",
                             onOkayPressed = {

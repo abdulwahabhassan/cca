@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -30,19 +32,23 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddFundsScreen(
     onBackPressed: () -> Unit,
-    onPaymentModeSelected: (PaymentMode) -> Unit
+    onPaymentModeSelected: (PaymentMode) -> Unit,
 ) {
 
     var amount by rememberSaveable { mutableStateOf("") }
-
     val coroutineScope = rememberCoroutineScope()
-    val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = bottomSheetState
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
     var visible by rememberSaveable { mutableStateOf(true) }
     visible =
-        bottomSheetState.direction >= 0f && bottomSheetState.currentValue == BottomSheetValue.Collapsed
+        bottomSheetScaffoldState.bottomSheetState.direction >= 0f && bottomSheetScaffoldState.bottomSheetState.currentValue == BottomSheetValue.Collapsed
+
+    BackHandler(bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+        coroutineScope.launch {
+            bottomSheetScaffoldState.bottomSheetState.collapse()
+        }
+    }
 
     Scaffold(
     ) { paddingValues ->
@@ -64,6 +70,7 @@ fun AddFundsScreen(
             },
             sheetContent = {
                 AnimatedVisibility(
+                    modifier = Modifier.alpha(bottomSheetScaffoldState.bottomSheetState.progress.fraction),
                     visible = !visible,
                     enter = fadeIn(),
                     exit = fadeOut()
@@ -77,9 +84,9 @@ fun AddFundsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         IconButton(onClick = {
-                            if (bottomSheetState.isExpanded) {
+                            if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
                                 coroutineScope.launch {
-                                    bottomSheetState.collapse()
+                                    bottomSheetScaffoldState.bottomSheetState.collapse()
                                 }
                             }
                         }) {}
@@ -115,14 +122,13 @@ fun AddFundsScreen(
                         tint = Color.Unspecified
                     )
 
-                    AddFundsSelectPaymentMode(onSelectPaymentMode = { paymentMode ->
-                        coroutineScope.launch {
-                            onPaymentModeSelected(paymentMode)
+                    AddFundsSelectPaymentMode(
+                        onSelectPaymentMode = { paymentMode ->
+                            coroutineScope.launch {
+                                onPaymentModeSelected(paymentMode)
+                            }
                         }
-                    },
-                        onBackPressed = onBackPressed
                     )
-
                 }
 
             }) { paddingValues ->
@@ -153,6 +159,7 @@ fun AddFundsScreen(
 
                 }
 
+                //Keypad
                 AddFundsKeyPad(
                     displayValue = amount,
                     onDisplayValueUpdated = { newValue ->
@@ -178,7 +185,7 @@ fun AddFundsScreen(
                     onClick = {
                         if (amount.isNotEmpty() && amount != "0") {
                             coroutineScope.launch {
-                                bottomSheetState.expand()
+                                bottomSheetScaffoldState.bottomSheetState.expand()
                             }
                         } else {
                             coroutineScope.launch {

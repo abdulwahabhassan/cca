@@ -20,7 +20,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun Success(message: String, info: String, onOkayPressed: () -> Unit) {
+fun PaymentSuccess(message: String, info: String, onOkayPressed: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,8 +59,8 @@ fun Success(message: String, info: String, onOkayPressed: () -> Unit) {
 
 @Composable
 @Preview(showBackground = true)
-fun SuccessPreview() {
+fun PaymentSuccessPreview() {
     CupidCustomerAppTheme {
-        Success("Sent", "We've sent the requested statements to your email", {})
+        PaymentSuccess("Sent", "We've sent the requested statements to your email", {})
     }
 }

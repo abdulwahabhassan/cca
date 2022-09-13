@@ -1,16 +1,12 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,18 +20,15 @@ import com.smartflowtech.cupidcustomerapp.model.PaymentMode
 fun AddFundsScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     onBackPressed: () -> Unit,
-    onClosePressed: () -> Unit,
+    closeModalBottomSheet: () -> Unit,
     showBanks: Boolean,
     onShowBanksClicked: () -> Unit,
     selectedBank: String,
-    selectedPaymentMode: PaymentMode,
+    selectedPaymentMode: String,
     onSelectBank: (Bank) -> Unit,
-    onSelectPaymentMode: (PaymentMode) -> Unit
+    onSelectPaymentMode: (PaymentMode) -> Unit,
+    goToHome: () -> Unit
 ) {
-
-    BackHandler {
-        onClosePressed()
-    }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -71,7 +64,7 @@ fun AddFundsScreenModalBottomSheet(
                         //Close button
                         IconButton(
                             onClick = {
-                                onClosePressed()
+                                closeModalBottomSheet()
                             },
                             modifier = Modifier
                                 .padding(end = 8.dp),
@@ -84,26 +77,38 @@ fun AddFundsScreenModalBottomSheet(
                         }
                     }
                     when (selectedPaymentMode) {
-                        PaymentMode.BANK_TRANSFER -> AddFundsBankPaymentMode(
+                        PaymentMode.BANK_TRANSFER.name -> AddFundsBankPaymentMode(
+                            modalBottomSheetState = modalBottomSheetState,
                             "35647729920",
-                            "Wema Bank"
+                            "Wema Bank",
+                            onBackPressed = closeModalBottomSheet
                         )
-                        PaymentMode.USSD -> AddFundsUssdPaymentMode(
+                        PaymentMode.USSD.name -> AddFundsUssdPaymentMode(
+                            modalBottomSheetState = modalBottomSheetState,
                             code = "*243*904*09382",
                             onShowBanksClicked = onShowBanksClicked,
                             showBanks = showBanks,
                             selectedBank = selectedBank,
-                            onSelectBank = onSelectBank
+                            onSelectBank = onSelectBank,
+                            onBackPressed = closeModalBottomSheet
                         )
-                        PaymentMode.CARD -> AddFundsSelectCardPaymentProcessor()
+                        PaymentMode.CARD.name -> AddFundsSelectCardPaymentProcessor(
+                            modalBottomSheetState = modalBottomSheetState,
+                            onBackPressed = closeModalBottomSheet,
+                            onDismissErrorDialog = closeModalBottomSheet,
+                            onDismissSuccessDialog = goToHome
+                        )
                     }
                 }
             }
         }
     ) {
-        AddFundsScreen(onBackPressed = onBackPressed, onPaymentModeSelected = { mode ->
-            onSelectPaymentMode(mode)
-        })
+        AddFundsScreen(
+            onBackPressed = onBackPressed,
+            onPaymentModeSelected = { mode ->
+                onSelectPaymentMode(mode)
+            }
+        )
 
     }
 }

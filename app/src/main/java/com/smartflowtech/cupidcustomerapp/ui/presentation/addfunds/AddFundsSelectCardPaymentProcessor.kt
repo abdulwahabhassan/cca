@@ -1,11 +1,15 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,23 +18,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.smartflowtech.cupidcustomerapp.model.CardPaymentProcessor
-import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentError
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentSuccess
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AddFundsSelectCardPaymentProcessor() {
+fun AddFundsSelectCardPaymentProcessor(
+    modalBottomSheetState: ModalBottomSheetState,
+    onBackPressed: () -> Unit,
+    onDismissErrorDialog: () -> Unit,
+    onDismissSuccessDialog: () -> Unit
+) {
 
     var selectedCardProcessor by remember { mutableStateOf("") }
     var showCardDetailsForm by remember { mutableStateOf(false) }
     var showSuccess by remember { mutableStateOf(false) }
     var showError by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+    var transactionReference by remember { mutableStateOf("") }
     val ctx = LocalContext.current
+
+    BackHandler(modalBottomSheetState.isVisible) {
+        onBackPressed()
+    }
 
     LazyColumn(modifier = Modifier) {
         items(
             listOf(
-                CardPaymentProcessor.PAYSTACK,
-                CardPaymentProcessor.FLUTTERWAVE
+                CardPaymentProcessor.PAYSTACK
             )
         ) { cardProcessor ->
             AddFundsCardPaymentProcessor(
@@ -70,6 +86,8 @@ fun AddFundsSelectCardPaymentProcessor() {
                         onPaymentSuccess = { reference ->
                             showCardDetailsForm = false
                             selectedCardProcessor = ""
+                            transactionReference = reference
+                            showSuccess = true
                             //send ref to business owner for confirmation
                             Toast.makeText(
                                 ctx,
@@ -78,12 +96,16 @@ fun AddFundsSelectCardPaymentProcessor() {
                             ).show()
                         },
                         onPaymentError = { message, reference ->
+                            showCardDetailsForm = false
+                            selectedCardProcessor = ""
+                            errorMessage = message
+                            transactionReference = reference
+                            showError = true
                             Toast.makeText(
                                 ctx,
                                 "Error due to $message, Ref: $reference",
                                 Toast.LENGTH_LONG
                             ).show()
-
                         }
                     )
                 }
@@ -95,8 +117,7 @@ fun AddFundsSelectCardPaymentProcessor() {
         Dialog(
             onDismissRequest = {
                 showSuccess = false
-                selectedCardProcessor = ""
-                showCardDetailsForm = false
+                onDismissSuccessDialog()
             },
         ) {
             LazyColumn(
@@ -109,12 +130,15 @@ fun AddFundsSelectCardPaymentProcessor() {
 
             ) {
                 item {
-                    Success(
+                    PaymentSuccess(
                         message = "Payment Successful",
-                        info = "You have successfully funded your wallet"
-                    ) {
-
-                    }
+                        info = "Ref: $transactionReference\n" +
+                                "You have successfully funded your wallet!",
+                        onOkayPressed = {
+                            showSuccess = false
+                            onDismissSuccessDialog()
+                        }
+                    )
                 }
             }
         }
@@ -124,8 +148,7 @@ fun AddFundsSelectCardPaymentProcessor() {
         Dialog(
             onDismissRequest = {
                 showError = false
-                selectedCardProcessor = ""
-                showCardDetailsForm = false
+                onDismissErrorDialog()
             },
         ) {
             LazyColumn(
@@ -134,16 +157,17 @@ fun AddFundsSelectCardPaymentProcessor() {
                         color = Color.White,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .padding(top = 32.dp)
-
             ) {
                 item {
-                    Success(
-                        message = "Payment Successful",
-                        info = "You have successfully funded your wallet"
-                    ) {
-
-                    }
+                    PaymentError(
+                        message = "Transaction Failed",
+                        info = "Ref: $transactionReference\n" +
+                                "$errorMessage ",
+                        onCloseDialog = {
+                            showError = false
+                            onDismissErrorDialog()
+                        }
+                    )
                 }
             }
         }
@@ -151,10 +175,18 @@ fun AddFundsSelectCardPaymentProcessor() {
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview(showBackground = true)
 fun AddFundsSelectedCardPaymentProcessorPreview() {
     CupidCustomerAppTheme {
-        AddFundsSelectCardPaymentProcessor()
+        AddFundsSelectCardPaymentProcessor(
+            ModalBottomSheetState(
+                ModalBottomSheetValue.Expanded
+            ),
+            {},
+            {},
+            {}
+        )
     }
 }

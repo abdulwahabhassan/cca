@@ -1,16 +1,16 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,8 +19,21 @@ import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AddFundsBankPaymentMode(accountNumber: String, bankName: String) {
+fun AddFundsBankPaymentMode(
+    modalBottomSheetState: ModalBottomSheetState,
+    accountNumber: String,
+    bankName: String,
+    onBackPressed: () -> Unit
+) {
+
+    val ctx = LocalContext.current
+
+    BackHandler(modalBottomSheetState.isVisible) {
+        onBackPressed()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,7 +54,7 @@ fun AddFundsBankPaymentMode(accountNumber: String, bankName: String) {
                 modifier = Modifier
                     .clip(CircleShape)
                     .clickable {
-
+                        Toast.makeText(ctx, "Copied!", Toast.LENGTH_SHORT).show()
                     }
                     .padding(8.dp),
                 painter = painterResource(
@@ -63,10 +76,18 @@ fun AddFundsBankPaymentMode(accountNumber: String, bankName: String) {
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview(showBackground = true)
 fun AddFundsBankPaymentModePreview() {
     CupidCustomerAppTheme {
-        AddFundsBankPaymentMode("35647729920", "Wema Bank")
+        AddFundsBankPaymentMode(
+            ModalBottomSheetState(
+                ModalBottomSheetValue.Expanded
+            ),
+            "35647729920",
+            "Wema Bank",
+            {}
+        )
     }
 }

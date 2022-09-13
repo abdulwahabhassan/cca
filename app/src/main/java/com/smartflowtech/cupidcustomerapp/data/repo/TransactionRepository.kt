@@ -29,7 +29,7 @@ class TransactionRepository @Inject constructor(
             }
         ) {
             is NetworkResult.Success -> {
-                Timber.d("Success -> ${networkResult.payload}")
+                //Timber.d("Success -> ${networkResult.payload}")
                 if (networkResult.payload.status) {
                     RepositoryResult.Success(
                         data = networkResult.payload.data,
@@ -40,7 +40,7 @@ class TransactionRepository @Inject constructor(
                 }
             }
             is NetworkResult.Error -> {
-                Timber.d("Error -> ${networkResult.message}")
+                //Timber.d("Error -> ${networkResult.message}")
                 RepositoryResult.Error(message = networkResult.message)
             }
         }

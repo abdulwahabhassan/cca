@@ -23,7 +23,16 @@ class LoginRepository @Inject constructor(
             }
         ) {
             is NetworkResult.Success -> {
-                Timber.d("Success -> ${networkResult.payload}")
+                Timber.d(
+                    "Success -> ${
+                        """id: ${networkResult.payload.data?.id} 
+                           companyId: ${networkResult.payload.data?.companyId}
+                           token: ${networkResult.payload.data?.token}
+                           email: ${networkResult.payload.data?.email}
+                           fullname: ${networkResult.payload.data?.fullname}
+                        """
+                    }"
+                )
                 if (networkResult.payload.status) {
                     RepositoryResult.Success(
                         data = networkResult.payload.data,

@@ -1,17 +1,15 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -54,6 +52,7 @@ fun AddFundsCardPaymentDetailsForm(
     var isMonthError by rememberSaveable { mutableStateOf(false) }
     var isYearError by rememberSaveable { mutableStateOf(false) }
     val ctx = LocalContext.current
+    var showLoadingIndicator by remember { mutableStateOf(false)}
 
     fun chargeCardWithPayStack(card: Card) {
         if (card.isValid) {
@@ -101,7 +100,7 @@ fun AddFundsCardPaymentDetailsForm(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 32.dp)
+            .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
         Column(
             modifier = Modifier
@@ -245,57 +244,68 @@ fun AddFundsCardPaymentDetailsForm(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            //Pay button
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                enabled = cardNumber.isNotEmpty() && month.isNotEmpty() && year.isNotEmpty() && cvv.isNotEmpty(),
-                onClick = {
-                    val trimmedCardNumber = cardNumber.trim()
-                    val trimmedMonth = month.trim()
-                    val trimmedYear = year.trim()
-                    val trimmedCvv = cvv.trim()
+            if (showLoadingIndicator) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.dp, modifier = Modifier
+                        .height(54.dp)
+                        .align(CenterHorizontally)
+                )
+            } else {
+                //Pay button
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    enabled = cardNumber.isNotEmpty() && month.isNotEmpty() && year.isNotEmpty() && cvv.isNotEmpty(),
+                    onClick = {
+                        val trimmedCardNumber = cardNumber.trim()
+                        val trimmedMonth = month.trim()
+                        val trimmedYear = year.trim()
+                        val trimmedCvv = cvv.trim()
 
-                    if (!trimmedMonth.matches(Regex("\\d{2}")) || trimmedMonth.toInt() > 12) {
-                        monthErrorLabel = "*"
-                        isMonthError = true
-                    } else {
-                        monthErrorLabel = ""
-                        isMonthError = false
-                    }
+                        if (!trimmedMonth.matches(Regex("\\d{2}")) || trimmedMonth.toInt() > 12) {
+                            monthErrorLabel = "*"
+                            isMonthError = true
+                        } else {
+                            monthErrorLabel = ""
+                            isMonthError = false
+                        }
 
-                    if (!trimmedYear.matches(Regex("\\d{4}"))) {
-                        yearErrorLabel = "*"
-                        isYearError = true
-                    } else {
-                        yearErrorLabel = ""
-                        isYearError = false
-                    }
+                        if (!trimmedYear.matches(Regex("\\d{4}"))) {
+                            yearErrorLabel = "*"
+                            isYearError = true
+                        } else {
+                            yearErrorLabel = ""
+                            isYearError = false
+                        }
 
-                    if (!isCardNumberError && !isMonthError && !isCvvError) {
-                        val card = Card(
-                            trimmedCardNumber,
-                            trimmedMonth.toInt(),
-                            trimmedYear.toInt(),
-                            trimmedCvv
-                        )
+                        if (!isCardNumberError && !isMonthError && !isCvvError) {
 
-                        chargeCardWithPayStack(card)
+                            showLoadingIndicator = true
 
-                    } else {
-                        Toast.makeText(
-                            ctx,
-                            "Please input valid card details",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                            val card = Card(
+                                trimmedCardNumber,
+                                trimmedMonth.toInt(),
+                                trimmedYear.toInt(),
+                                trimmedCvv
+                            )
 
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-            ) {
-                Text(text = "Pay")
+                            chargeCardWithPayStack(card)
+
+                        } else {
+                            Toast.makeText(
+                                ctx,
+                                "Please input valid card details",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                ) {
+                    Text(text = "Pay")
+                }
             }
         }
 
