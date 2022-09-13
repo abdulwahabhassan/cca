@@ -41,8 +41,7 @@ fun HomeScreenModalBottomSheet(
     shouldShowDownloadTransactions: Boolean,
     shouldShowSuccess: Boolean,
     showSuccess: (Boolean) -> Unit,
-    showDownloadTransactions: (Boolean) -> Unit,
-    goBackToFilterTransactions: () -> Unit
+    showDownloadTransactions: (Boolean) -> Unit
 ) {
 
     ModalBottomSheetLayout(
@@ -110,7 +109,6 @@ fun HomeScreenModalBottomSheet(
 
                     if (shouldShowDownloadTransactions) {
                         DownloadTransactions(
-                            goBackToFilterTransactions = goBackToFilterTransactions,
                             onShowSuccess = {
                                 showSuccess(true)
                             }

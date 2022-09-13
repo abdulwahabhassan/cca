@@ -27,7 +27,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun DownloadTransactions(goBackToFilterTransactions: () -> Unit, onShowSuccess: () -> Unit) {
+fun DownloadTransactions(onShowSuccess: () -> Unit) {
 
     var startDate by rememberSaveable { mutableStateOf("") }
     var endDate by rememberSaveable { mutableStateOf("") }
@@ -46,7 +46,7 @@ fun DownloadTransactions(goBackToFilterTransactions: () -> Unit, onShowSuccess: 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
 
             Text(
@@ -217,30 +217,6 @@ fun DownloadTransactions(goBackToFilterTransactions: () -> Unit, onShowSuccess: 
             }
         }
 
-        //Go back arrow
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 4.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = {
-                goBackToFilterTransactions()
-            }) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = "Back arrow",
-                    tint = darkBlue,
-                )
-            }
-            Spacer(modifier = Modifier.width(2.dp))
-            Text(
-                text = "Go back",
-                color = darkBlue,
-                fontWeight = FontWeight.Bold
-            )
-        }
     }
 }
 
@@ -248,6 +224,6 @@ fun DownloadTransactions(goBackToFilterTransactions: () -> Unit, onShowSuccess: 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 fun CustomDateSearchPreview() {
     CupidCustomerAppTheme {
-        DownloadTransactions({}, {})
+        DownloadTransactions({})
     }
 }

@@ -91,7 +91,7 @@ fun AddFundsSelectCardPaymentProcessor(
                             //send ref to business owner for confirmation
                             Toast.makeText(
                                 ctx,
-                                "Successful payment $reference",
+                                "Success!",
                                 Toast.LENGTH_LONG
                             ).show()
                         },
@@ -103,7 +103,7 @@ fun AddFundsSelectCardPaymentProcessor(
                             showError = true
                             Toast.makeText(
                                 ctx,
-                                "Error due to $message, Ref: $reference",
+                                "Error!",
                                 Toast.LENGTH_LONG
                             ).show()
                         }

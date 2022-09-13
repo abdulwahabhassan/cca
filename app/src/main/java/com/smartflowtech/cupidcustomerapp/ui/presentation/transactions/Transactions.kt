@@ -128,12 +128,12 @@ fun Transactions(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                IconButton(onClick = { onDownloadTransactionsClicked() }, enabled = false) {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.ic_download),
-//                        contentDescription = "Download icon",
-//                        tint = black
-//                    )
+                IconButton(onClick = { onDownloadTransactionsClicked() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_download),
+                        contentDescription = "Download icon",
+                        tint = black
+                    )
                 }
             }
 

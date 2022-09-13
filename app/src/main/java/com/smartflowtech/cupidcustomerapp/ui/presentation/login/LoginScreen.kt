@@ -102,11 +102,12 @@ fun LoginScreen(
 
             Image(
                 modifier = Modifier
-                    .size(50.dp)
-                    .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.14f)
+                    .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.10f)
+                    .size(60.dp)
                     .align(
                         Alignment.TopCenter
-                    ),
+                    )
+                    ,
                 painter = painterResource(id = R.drawable.ic_smartflow),
                 contentDescription = "Vendor logo"
             )

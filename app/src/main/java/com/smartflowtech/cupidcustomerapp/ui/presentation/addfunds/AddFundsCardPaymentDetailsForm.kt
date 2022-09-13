@@ -72,7 +72,7 @@ fun AddFundsCardPaymentDetailsForm(
                     override fun beforeValidate(transaction: Transaction?) {
                         Toast.makeText(
                             ctx,
-                            "Before validate ${transaction?.reference}",
+                            "Validating.. ${transaction?.reference}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -264,7 +264,7 @@ fun AddFundsCardPaymentDetailsForm(
                         val trimmedCvv = cvv.trim()
 
                         if (!trimmedMonth.matches(Regex("\\d{2}")) || trimmedMonth.toInt() > 12) {
-                            monthErrorLabel = "*"
+                            monthErrorLabel = "MM"
                             isMonthError = true
                         } else {
                             monthErrorLabel = ""
@@ -272,7 +272,7 @@ fun AddFundsCardPaymentDetailsForm(
                         }
 
                         if (!trimmedYear.matches(Regex("\\d{4}"))) {
-                            yearErrorLabel = "*"
+                            yearErrorLabel = "YYYY"
                             isYearError = true
                         } else {
                             yearErrorLabel = ""
@@ -298,6 +298,7 @@ fun AddFundsCardPaymentDetailsForm(
                                 "Please input valid card details",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            showLoadingIndicator = false
                         }
 
                     },

@@ -102,10 +102,6 @@ fun HomeScreenModalBottomSheetLayer(
                     modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
                 }
             }
-        },
-        goBackToFilterTransactions = {
-            shouldShowDownloadTransactions = false
-            shouldShowSuccess = false
         }
     )
 }
