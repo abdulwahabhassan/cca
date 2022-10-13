@@ -21,10 +21,18 @@ android {
         }
     }
 
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "PAYSTACK_PUBLIC_KEY", PSTK_PUBLIC_LIVE_KEY)
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "PAYSTACK_PUBLIC_KEY", PSTK_PUBLIC_TEST_KEY)
         }
     }
     compileOptions {

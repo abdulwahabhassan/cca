@@ -11,6 +11,7 @@ class CupidCustomerApp : Application() {
         super.onCreate()
         initTimberLog()
         PaystackSdk.initialize(applicationContext);
+        PaystackSdk.setPublicKey(BuildConfig.PAYSTACK_PUBLIC_KEY)
     }
 
     private fun initTimberLog() {

@@ -85,6 +85,7 @@ fun AddFundsCardPaymentDetailsForm(
                             error?.message ?: "No message",
                             transaction?.reference ?: "No ref"
                         )
+                        showLoadingIndicator = false
                     }
 
                 })
@@ -94,6 +95,7 @@ fun AddFundsCardPaymentDetailsForm(
                 "Invalid Card: Please select a valid card",
                 Toast.LENGTH_SHORT
             ).show()
+            showLoadingIndicator = false
         }
     }
 
