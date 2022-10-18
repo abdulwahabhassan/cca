@@ -281,8 +281,9 @@ fun LoginScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(40.dp))
+//                    Spacer(modifier = Modifier.height(40.dp))
                     Text(
+                        modifier = Modifier.padding(16.dp).align(Alignment.BottomCenter),
                         text = "Powered by Smartflow Technologies",
                         style = MaterialTheme.typography.caption,
                     )
