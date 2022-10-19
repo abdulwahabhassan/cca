@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -42,17 +43,17 @@ fun LoginScreen(
 
     val scaffoldState = rememberScaffoldState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var email by rememberSaveable { mutableStateOf("abdulwahab.hassan@smartflowtech.com") }
-    var password by rememberSaveable { mutableStateOf("vMG9uJ") }
-    var isEmailError by rememberSaveable { mutableStateOf(false) }
-    var isPasswordError by rememberSaveable { mutableStateOf(false) }
-    var emailErrorLabel by rememberSaveable { mutableStateOf("") }
-    var passwordErrorLabel by rememberSaveable { mutableStateOf("") }
+    var notMe by rememberSaveable { mutableStateOf(false) }
+    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else "abdulwahab.hassan@smartflowtech.com") }
+    var password by rememberSaveable(notMe) { mutableStateOf("") }
+    var isEmailError by rememberSaveable(notMe) { mutableStateOf(false) }
+    var isPasswordError by rememberSaveable(notMe) { mutableStateOf(false) }
+    var emailErrorLabel by rememberSaveable(notMe) { mutableStateOf("") }
+    var passwordErrorLabel by rememberSaveable(notMe) { mutableStateOf("") }
 
     BackHandler(viewModel.appConfigPreferences.onBoarded) {
         finishActivity()
     }
-
 
     Scaffold(
         modifier = Modifier
@@ -115,14 +116,15 @@ fun LoginScreen(
 
             LazyColumn(
                 Modifier
-                    .fillMaxHeight(0.7f)
+                    .fillMaxHeight(0.68f)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
                     )
                     .align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.Bottom
             ) {
                 item {
                     Spacer(
@@ -134,7 +136,10 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.CenterStart),
-                        text = "Login to your account",
+                        text = if (!notMe && viewModel.appConfigPreferences.userName.isNotEmpty())
+                            "Welcome Back, ${viewModel.appConfigPreferences.userName}"
+                        else
+                            "Login to your account",
                         style = MaterialTheme.typography.h6
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -193,7 +198,10 @@ fun LoginScreen(
                         },
                         singleLine = true,
                         isError = isPasswordError,
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation = if (passwordVisible)
+                            VisualTransformation.None
+                        else
+                            PasswordVisualTransformation(),
                         trailingIcon = {
                             val image = if (passwordVisible)
                                 Icons.Filled.Visibility
@@ -248,8 +256,7 @@ fun LoginScreen(
                                     }
 
                                     if (password.isEmpty()) {
-                                        passwordErrorLabel =
-                                            "Input valid password"
+                                        passwordErrorLabel = "Input valid password"
                                         isPasswordError = true
                                     } else {
                                         passwordErrorLabel = ""
@@ -263,37 +270,76 @@ fun LoginScreen(
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = MaterialTheme.colors.primary
+                                )
                             ) {
                                 Text(text = "Login")
                             }
-                            Spacer(modifier = Modifier.height(24.dp))
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    //Forgot password
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable(
+                                    enabled = viewModel.loginScreenUiState.viewModelResult
+                                            != ViewModelResult.LOADING
+                                ) {
+                                    //call forgot password api
+                                }
+                                .padding(8.dp),
+                            text = "Forgot Password?",
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    //Remember me, Not me
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable(
+                                enabled = viewModel.loginScreenUiState.viewModelResult
+                                        != ViewModelResult.LOADING
+                            ) {
+                                notMe = !notMe
+                            }
+                            .padding(8.dp),
+                    ) {
+                        if (notMe) {
                             Text(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .clickable {
-                                        //call forgot password api
-                                    }
-                                    .padding(8.dp),
-                                text = "Forgot Password?",
+                                text = "Remember me",
                                 style = MaterialTheme.typography.body1
+                            )
+                        } else {
+                            Text(
+                                text = "Not me? ",
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = "Login",
+                                style = MaterialTheme.typography.body1,
+                                fontWeight = FontWeight.Bold
                             )
                         }
                     }
-
-//                    Spacer(modifier = Modifier.height(40.dp))
+                    //Powered by Smartflow
                     Text(
-                        modifier = Modifier.padding(16.dp).align(Alignment.BottomCenter),
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .align(Alignment.BottomCenter),
                         text = "Powered by Smartflow Technologies",
                         style = MaterialTheme.typography.caption,
                     )
                 }
-
             }
         }
-
     }
-
 
 }
 
