@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Bank
+import com.smartflowtech.cupidcustomerapp.model.SettingsItem
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -175,6 +176,36 @@ object Util {
                 name = "Zenith Bank",
                 icon = R.drawable.ic_zenith,
                 code = "057"
+            )
+        )
+    }
+
+    fun getListOfSettingsItems(): List<SettingsItem> {
+        return listOf(
+            SettingsItem(
+                "Edit Profile",
+                "Change your profile information",
+                R.drawable.ic_profile
+            ),
+            SettingsItem(
+                "Security",
+                "Change password",
+                R.drawable.ic_security
+            ),
+            SettingsItem(
+                "Notifications",
+                "Control notification preferences",
+                R.drawable.ic_notification
+            ),
+            SettingsItem(
+                "Payment",
+                "Choose default payment method",
+                R.drawable.ic_payment
+            ),
+            SettingsItem(
+                "Appearance",
+                "Switch between light and dark theme",
+                R.drawable.ic_appearance
             )
         )
     }
