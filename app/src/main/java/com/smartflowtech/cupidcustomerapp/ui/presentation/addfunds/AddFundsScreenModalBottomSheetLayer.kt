@@ -53,7 +53,7 @@ fun AddFundsScreenModalBottomSheetLayer(
         showBanks = showBanks,
         selectedBank = selectedBank,
         onSelectBank = {
-            selectedBank = it.name
+            selectedBank = it.name ?: ""
         },
         selectedPaymentMode = selectedPaymentMode.value,
         onSelectPaymentMode = {

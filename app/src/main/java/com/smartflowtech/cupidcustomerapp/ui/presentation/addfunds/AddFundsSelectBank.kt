@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,24 +19,21 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 fun AddFundsSelectBank(onBankSelected: (Bank) -> Unit) {
 
+//    val context = LocalContext.current
     var queryText by rememberSaveable { mutableStateOf("") }
     val banks by remember(queryText) {
-        val list = listOf(
-            Bank("First Bank of Nigeria", R.drawable.ic_firstbank),
-            Bank("Access Bank Plc", R.drawable.ic_accessbank),
-            Bank("United Bank for Africa", R.drawable.ic_ubabank),
-            Bank("Kuda Bank", R.drawable.ic_kudabank)
-        ).filter { bank ->
-            (bank.name.contains(queryText, true))
+        val list = Util.getListOfBanks().filter { bank ->
+            (bank.name?.contains(queryText, true) == true)
         }
         mutableStateOf(list)
     }
 
-    Column(modifier = Modifier.fillMaxSize(), ) {
+    Column(modifier = Modifier.fillMaxSize()) {
 
         Text(
             text = "Choose Payment Bank",

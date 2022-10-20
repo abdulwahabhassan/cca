@@ -225,29 +225,34 @@ fun Receipt(
                                 textDarkBluePaint
                             )
 
-                            canvas.drawText("Payment Days", 109F, 320F, titleGreyPaint)
+                            canvas.drawText("Payment Date", 109F, 320F, titleGreyPaint)
                             canvas.drawText(
-                                LocalDate.parse(transaction.date)
-                                    .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "",
+                                buildString {
+                                    append(
+                                        LocalDate.parse(transaction.date)
+                                            .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
+                                            ?: ""
+                                    )
+                                    append(", ${transaction.time}")
+                                },
                                 109F,
                                 345F,
                                 textDarkBluePaint
                             )
-                            canvas.drawText(transaction.time ?: "", 109F, 365F, textDarkBluePaint)
 
-                            canvas.drawText("Description", 109F, 400F, titleGreyPaint)
-                            canvas.drawText(transaction.title ?: "", 109F, 425F, textDarkBluePaint)
+                            canvas.drawText("Description", 109F, 380F, titleGreyPaint)
+                            canvas.drawText(transaction.title ?: "", 109F, 405F, textDarkBluePaint)
 
-                            canvas.drawText("Amount", 109F, 460F, titleGreyPaint)
+                            canvas.drawText("Amount", 109F, 440F, titleGreyPaint)
                             canvas.drawText(
                                 """₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "",
                                 109F,
-                                485F,
+                                465F,
                                 textDarkBluePaint
                             )
 
-                            canvas.drawText("Status", 109F, 520F, titleGreyPaint)
-                            canvas.drawText(transaction.status ?: "", 109F, 545F, textDarkBluePaint)
+                            canvas.drawText("Status", 109F, 500F, titleGreyPaint)
+                            canvas.drawText(transaction.status ?: "", 109F, 525F, textDarkBluePaint)
 
                             document.finishPage(page)
 
