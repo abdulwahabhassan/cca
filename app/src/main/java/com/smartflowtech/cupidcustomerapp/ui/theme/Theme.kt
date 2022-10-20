@@ -33,7 +33,8 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun CupidCustomerAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
+//        isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {

@@ -166,11 +166,15 @@ fun AddFundsScreen(
                         amount = newValue
                     },
                     showSnackBar = { message ->
-                        coroutineScope.launch {
-                            bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                                message = message,
-                                duration = SnackbarDuration.Short
-                            )
+                        if (bottomSheetScaffoldState.snackbarHostState
+                                .currentSnackbarData == null
+                        ) {
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                                    message = message,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                         }
                     }
 
@@ -188,11 +192,16 @@ fun AddFundsScreen(
                                 bottomSheetScaffoldState.bottomSheetState.expand()
                             }
                         } else {
-                            coroutineScope.launch {
-                                bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                                    message = "Invalid amount",
-                                    duration = SnackbarDuration.Short
-                                )
+                            if (bottomSheetScaffoldState.snackbarHostState
+                                    .currentSnackbarData == null
+                            ) {
+                                coroutineScope.launch {
+                                    bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                                        message = "Invalid amount",
+                                        duration = SnackbarDuration.Short
+                                    )
+
+                                }
                             }
                         }
 
@@ -212,6 +221,6 @@ fun AddFundsScreen(
 @Composable
 fun AddFundsScreenPreview() {
     CupidCustomerAppTheme {
-        //AddFundsScreen({}, {}, { true }, {})
+        AddFundsScreen({}, {})
     }
 }

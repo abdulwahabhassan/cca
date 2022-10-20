@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -181,10 +182,25 @@ fun Transactions(
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview(showBackground = true)
 fun TransactionsPreview() {
     CupidCustomerAppTheme {
-        //Transactions({}, {}, {}, Transaction.transactions)
+        Transactions(
+            {},
+            {},
+            {},
+            HomeScreenUiState(ViewModelResult.INITIAL, listOf(), "", listOf()),
+            BottomSheetScaffoldState(
+                DrawerState(DrawerValue.Closed),
+                BottomSheetState(BottomSheetValue.Collapsed),
+                SnackbarHostState()
+            ),
+            false,
+            "",
+            {},
+            "Transactions"
+        )
     }
 }

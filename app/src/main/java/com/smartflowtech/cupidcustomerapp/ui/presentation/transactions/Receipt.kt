@@ -1,10 +1,12 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
+import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -14,16 +16,17 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.google.accompanist.permissions.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Status
@@ -31,11 +34,13 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -43,6 +48,7 @@ fun Receipt(
     transaction: Transaction,
     onGoBackToTransactionListPressed: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val multiplePermissionsState = rememberMultiplePermissionsState(
         listOf(
@@ -144,113 +150,147 @@ fun Receipt(
                         .height(54.dp),
                     onClick = {
 
-                        val document = PdfDocument()
-                        val bmp = BitmapFactory.decodeResource(
-                            context.resources,
-                            R.drawable.ic_smartflow_logo
-                        )
-                        val scaledBitmap = Bitmap.createScaledBitmap(bmp, 200, 60, false)
-
-                        val titleGreyPaint = Paint()
-                        titleGreyPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-                        titleGreyPaint.textSize = 18F
-                        titleGreyPaint.color = ContextCompat.getColor(context, R.color.grey)
-                        titleGreyPaint.textAlign = Paint.Align.LEFT
-
-                        val textDarkBluePaint = Paint()
-                        textDarkBluePaint.typeface =
-                            Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-                        textDarkBluePaint.textSize = 22F
-                        textDarkBluePaint.color = ContextCompat.getColor(context, R.color.darkBlue)
-                        textDarkBluePaint.textAlign = Paint.Align.LEFT
-
-                        val metaDataBlackPaint = Paint()
-                        metaDataBlackPaint.typeface =
-                            Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-                        metaDataBlackPaint.textSize = 14F
-                        metaDataBlackPaint.color = ContextCompat.getColor(context, R.color.black)
-
-                        val urlBluePaint = Paint()
-                        urlBluePaint.typeface =
-                            Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-                        urlBluePaint.textSize = 12F
-                        urlBluePaint.color = ContextCompat.getColor(context, R.color.darkBlue)
-
-                        val headerBlackPaint = Paint()
-                        headerBlackPaint.typeface =
-                            Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                        headerBlackPaint.textSize = 22F
-                        headerBlackPaint.color = ContextCompat.getColor(context, R.color.black)
-                        headerBlackPaint.textAlign = Paint.Align.LEFT
-
-                        val pageInfo = PdfDocument.PageInfo.Builder(600, 600, 1).create()
-                        val page = document.startPage(pageInfo)
-
-                        val canvas = page.canvas
-                        canvas.drawBitmap(scaledBitmap, 40F, 35F, Paint())
-                        canvas.drawText(
-                            "Smartflow Technologies Ltd.",
-                            109F,
-                            65F,
-                            metaDataBlackPaint
-                        )
-                        canvas.drawText("www.smartflowtech.com", 109F, 85F, urlBluePaint)
-
-                        canvas.drawText("Receipt", 40F, 145F, headerBlackPaint)
-
-                        canvas.drawText("Transaction Type", 109F, 200F, titleGreyPaint)
-                        canvas.drawText(transaction.authType ?: "", 109F, 225F, textDarkBluePaint)
-
-                        canvas.drawText("Reference Number", 109F, 260F, titleGreyPaint)
-                        canvas.drawText(
-                            transaction.transactionSeqNumber ?: "",
-                            109F,
-                            285F,
-                            textDarkBluePaint
-                        )
-
-                        canvas.drawText("Payment Days", 109F, 320F, titleGreyPaint)
-                        canvas.drawText(
-                            LocalDate.parse(transaction.date)
-                                .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "",
-                            109F,
-                            345F,
-                            textDarkBluePaint
-                        )
-                        canvas.drawText(transaction.time ?: "", 109F, 365F, textDarkBluePaint)
-
-                        canvas.drawText("Description", 109F, 400F, titleGreyPaint)
-                        canvas.drawText(transaction.title ?: "", 109F, 425F, textDarkBluePaint)
-
-                        canvas.drawText("Amount", 109F, 460F, titleGreyPaint)
-                        canvas.drawText(
-                            """₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "",
-                            109F,
-                            485F,
-                            textDarkBluePaint
-                        )
-
-                        canvas.drawText("Status", 109F, 520F, titleGreyPaint)
-                        canvas.drawText(transaction.status ?: "", 109F, 545F, textDarkBluePaint)
-
-                        document.finishPage(page)
-
-                        val file = createFile(transaction.transactionSeqNumber ?: "")
-
-                        try {
-                            document.writeTo(FileOutputStream(file))
-                            Toast.makeText(context, "Downloaded as PDF", Toast.LENGTH_SHORT)
-                                .show()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            Toast.makeText(
-                                context,
-                                "Failed to generate PDF",
-                                Toast.LENGTH_SHORT
+                        coroutineScope.launch {
+                            //Create pdf
+                            val document = PdfDocument()
+                            val bmp = BitmapFactory.decodeResource(
+                                context.resources,
+                                R.drawable.ic_smartflow_logo
                             )
-                                .show()
+                            val scaledBitmap = Bitmap.createScaledBitmap(bmp, 200, 60, false)
+
+                            val titleGreyPaint = Paint()
+                            titleGreyPaint.typeface =
+                                Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                            titleGreyPaint.textSize = 18F
+                            titleGreyPaint.color = ContextCompat.getColor(context, R.color.grey)
+                            titleGreyPaint.textAlign = Paint.Align.LEFT
+
+                            val textDarkBluePaint = Paint()
+                            textDarkBluePaint.typeface =
+                                Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                            textDarkBluePaint.textSize = 22F
+                            textDarkBluePaint.color =
+                                ContextCompat.getColor(context, R.color.darkBlue)
+                            textDarkBluePaint.textAlign = Paint.Align.LEFT
+
+                            val metaDataBlackPaint = Paint()
+                            metaDataBlackPaint.typeface =
+                                Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                            metaDataBlackPaint.textSize = 14F
+                            metaDataBlackPaint.color =
+                                ContextCompat.getColor(context, R.color.black)
+
+                            val urlBluePaint = Paint()
+                            urlBluePaint.typeface =
+                                Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                            urlBluePaint.textSize = 12F
+                            urlBluePaint.color = ContextCompat.getColor(context, R.color.darkBlue)
+
+                            val headerBlackPaint = Paint()
+                            headerBlackPaint.typeface =
+                                Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                            headerBlackPaint.textSize = 22F
+                            headerBlackPaint.color = ContextCompat.getColor(context, R.color.black)
+                            headerBlackPaint.textAlign = Paint.Align.LEFT
+
+                            val pageInfo = PdfDocument.PageInfo.Builder(600, 600, 1).create()
+                            val page = document.startPage(pageInfo)
+
+                            val canvas = page.canvas
+                            canvas.drawBitmap(scaledBitmap, 40F, 35F, Paint())
+                            canvas.drawText(
+                                "Smartflow Technologies Ltd.",
+                                109F,
+                                65F,
+                                metaDataBlackPaint
+                            )
+                            canvas.drawText("www.smartflowtech.com", 109F, 85F, urlBluePaint)
+
+                            canvas.drawText("Receipt", 40F, 145F, headerBlackPaint)
+
+                            canvas.drawText("Transaction Type", 109F, 200F, titleGreyPaint)
+                            canvas.drawText(
+                                transaction.authType ?: "",
+                                109F,
+                                225F,
+                                textDarkBluePaint
+                            )
+
+                            canvas.drawText("Reference Number", 109F, 260F, titleGreyPaint)
+                            canvas.drawText(
+                                transaction.transactionSeqNumber ?: "",
+                                109F,
+                                285F,
+                                textDarkBluePaint
+                            )
+
+                            canvas.drawText("Payment Days", 109F, 320F, titleGreyPaint)
+                            canvas.drawText(
+                                LocalDate.parse(transaction.date)
+                                    .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")) ?: "",
+                                109F,
+                                345F,
+                                textDarkBluePaint
+                            )
+                            canvas.drawText(transaction.time ?: "", 109F, 365F, textDarkBluePaint)
+
+                            canvas.drawText("Description", 109F, 400F, titleGreyPaint)
+                            canvas.drawText(transaction.title ?: "", 109F, 425F, textDarkBluePaint)
+
+                            canvas.drawText("Amount", 109F, 460F, titleGreyPaint)
+                            canvas.drawText(
+                                """₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "",
+                                109F,
+                                485F,
+                                textDarkBluePaint
+                            )
+
+                            canvas.drawText("Status", 109F, 520F, titleGreyPaint)
+                            canvas.drawText(transaction.status ?: "", 109F, 545F, textDarkBluePaint)
+
+                            document.finishPage(page)
+
+                            //Save pdf to storage
+                            val file = createFile(transaction.transactionSeqNumber ?: "")
+
+                            try {
+                                document.writeTo(FileOutputStream(file))
+                                Toast.makeText(context, "Downloaded as PDF", Toast.LENGTH_SHORT)
+                                    .show()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                Toast.makeText(
+                                    context,
+                                    "Failed to generate PDF",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                            document.close()
+
+                            //Open the saved pdf
+                            val pdfUri = FileProvider.getUriForFile(
+                                context,
+                                context.applicationContext.packageName + ".provider",
+                                file
+                            )
+                            val pdfIntent = Intent(Intent.ACTION_VIEW)
+                            pdfIntent.setDataAndType(pdfUri, "application/pdf")
+                            pdfIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            pdfIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+                            try {
+                                context.startActivity(pdfIntent)
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    context,
+                                    e.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                        document.close()
+
 
                     },
                     shape = RoundedCornerShape(10.dp),
