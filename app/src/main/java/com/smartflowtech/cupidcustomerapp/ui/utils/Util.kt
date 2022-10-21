@@ -3,16 +3,15 @@ package com.smartflowtech.cupidcustomerapp.ui.utils
 import android.content.Context
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Bank
-import com.smartflowtech.cupidcustomerapp.model.NotificationSettingsItem
-import com.smartflowtech.cupidcustomerapp.model.SettingsItem
-import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationSettings
+import com.smartflowtech.cupidcustomerapp.model.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import timber.log.Timber
 import java.io.IOException
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Util {
     fun formatAmount(value: Any): String {
@@ -24,6 +23,20 @@ object Util {
 
         val df = DecimalFormat("##,###,##0.00")
         return df.format(valueToBeFormatted)
+    }
+
+    fun getCurrentDateTime(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
+        sdf.timeZone = TimeZone.getTimeZone("Africa/Lagos")
+        val now = Date()
+        return sdf.format(now)
+    }
+
+    fun formatDateTimeToFullDate(dateTime: String): String {
+        val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
+        val formatter = SimpleDateFormat("E, dd MMM yyyy", Locale.UK)
+        formatter.timeZone = TimeZone.getTimeZone("Africa/Lagos")
+        return formatter.format(parser.parse(dateTime) ?: "")
     }
 
     fun <T> loadJsonFromAsset(context: Context, fileName: String): T? {
@@ -227,6 +240,50 @@ object Util {
                 true
             ),
 
+            )
+    }
+
+    fun getListOfNotifications(): List<NotificationItem> {
+        return listOf(
+            NotificationItem(
+                "1",
+                "Your wallet was topped up with ₦600",
+                "2022-10-21T00:00:00",
+                R.drawable.ic_debit_notification
+            ),
+            NotificationItem(
+                "2",
+                "₦1,000 was debited from your wallet",
+                "2022-10-21T08:00:00",
+                R.drawable.ic_credit_notification
+            ),
+            NotificationItem(
+                "3",
+                "Get 10% off any payment you make today",
+                "2022-10-15T10:20:30",
+                R.drawable.ic_gift_notification
+            ),
+            NotificationItem(
+                "4",
+                "Your wallet was topped up with ₦5,000",
+                "2022-10-09T09:45:00",
+                R.drawable.ic_credit_notification
+            ),
+            NotificationItem(
+                "5",
+                "You have received 40 loyalty points",
+                "2022-10-01T13:00:00",
+                R.drawable.ic_gift_notification
+            )
+
+        )
+    }
+
+    fun getListOfDaysFilter(): List<DaysFilter> {
+        return listOf(
+            DaysFilter.TODAY,
+            DaysFilter.LAST_SEVEN_DAYS,
+            DaysFilter.LAST_THIRTY_DAYS
         )
     }
 

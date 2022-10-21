@@ -2,8 +2,7 @@ package com.smartflowtech.cupidcustomerapp.data.repo
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import com.smartflowtech.cupidcustomerapp.model.Category
-import com.smartflowtech.cupidcustomerapp.model.Days
+import com.smartflowtech.cupidcustomerapp.model.Period
 import com.smartflowtech.cupidcustomerapp.model.Product
 import com.smartflowtech.cupidcustomerapp.model.Status
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +23,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val token: String = "",
         val phoneNumber: String = "",
         val walletBalanceVisibility: Boolean = true,
-        val daysFilter: String = Days.TWO_YEARS.name,
+        val periodFilter: String = Period.TWO_YEARS.name,
         val completedStatusFilter: Boolean = true,
         val failedStatusFilter: Boolean = true,
         val pendingStatusFilter: Boolean = true,
@@ -42,7 +41,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val TOKEN = stringPreferencesKey("token")
         val PHONE_NUMBER = stringPreferencesKey("phoneNumber")
         val WALLET_BALANCE_VISIBILITY = booleanPreferencesKey("walletVisibility")
-        val DAYS_FILTER = stringPreferencesKey("daysFilter")
+        val DAYS_FILTER = stringPreferencesKey("periodFilter")
         val COMPLETED_STATUS_FILTER = booleanPreferencesKey("completedStatusFilter")
         val FAILED_STATUS_FILTER = booleanPreferencesKey("failedStatusFilter")
         val PENDING_STATUS_FILTER = booleanPreferencesKey("pendingStatusFilter")
@@ -73,7 +72,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
             walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY]
                 ?: true,
-            daysFilter = preferences[PreferencesKeys.DAYS_FILTER] ?: Days.TWO_YEARS.name,
+            periodFilter = preferences[PreferencesKeys.DAYS_FILTER] ?: Period.TWO_YEARS.name,
             completedStatusFilter = preferences[PreferencesKeys.COMPLETED_STATUS_FILTER] ?: true,
             failedStatusFilter = preferences[PreferencesKeys.FAILED_STATUS_FILTER] ?: true,
             pendingStatusFilter = preferences[PreferencesKeys.PENDING_STATUS_FILTER] ?: true,

@@ -7,12 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.model.Category
-import com.smartflowtech.cupidcustomerapp.model.Days
+import com.smartflowtech.cupidcustomerapp.model.Period
 import com.smartflowtech.cupidcustomerapp.model.Product
 import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
@@ -43,7 +40,7 @@ fun FilterTransactions(
 ) {
 
     val daysFilter =
-        remember { mutableStateOf(appConfigPreferences.daysFilter) }
+        remember { mutableStateOf(appConfigPreferences.periodFilter) }
     val completedStatusFilter =
         remember { mutableStateOf(appConfigPreferences.completedStatusFilter) }
     val pendingStatusFilter =
@@ -73,13 +70,13 @@ fun FilterTransactions(
         LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
             mapOf(
                 Category.DATE to listOf(
-                    Days.TODAY.name,
-                    Days.ONE_WEEK.name,
-                    Days.TWO_WEEKS.name,
-                    Days.ONE_MONTH.name,
-                    Days.SIX_MONTHS.name,
-                    Days.ONE_YEAR.name,
-                    Days.TWO_YEARS.name
+                    Period.TODAY.name,
+                    Period.ONE_WEEK.name,
+                    Period.TWO_WEEKS.name,
+                    Period.ONE_MONTH.name,
+                    Period.SIX_MONTHS.name,
+                    Period.ONE_YEAR.name,
+                    Period.TWO_YEARS.name
                 ),
                 Category.STATUS to listOf(
                     Status.COMPLETED.name,

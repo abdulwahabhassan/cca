@@ -132,14 +132,14 @@ class HomeScreenViewModel @Inject constructor(
 //            Timber.d("$transaction")
             LocalDate.parse(transaction.date) >= LocalDate.now()
                 .minusDays(
-                    when (prefs.daysFilter) {
-                        Days.TODAY.name -> 0L
-                        Days.ONE_WEEK.name -> 7L
-                        Days.TWO_WEEKS.name -> 14L
-                        Days.ONE_MONTH.name -> 30L
-                        Days.SIX_MONTHS.name -> 182L
-                        Days.ONE_YEAR.name -> 365L
-                        Days.TWO_YEARS.name -> 720L
+                    when (prefs.periodFilter) {
+                        Period.TODAY.name -> 0L
+                        Period.ONE_WEEK.name -> 7L
+                        Period.TWO_WEEKS.name -> 14L
+                        Period.ONE_MONTH.name -> 30L
+                        Period.SIX_MONTHS.name -> 182L
+                        Period.ONE_YEAR.name -> 365L
+                        Period.TWO_YEARS.name -> 720L
                         else -> {
                             0L
                         }

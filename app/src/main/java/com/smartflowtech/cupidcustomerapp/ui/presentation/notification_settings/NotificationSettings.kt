@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation.notification
+package com.smartflowtech.cupidcustomerapp.ui.presentation.notification_settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

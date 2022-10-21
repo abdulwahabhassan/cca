@@ -12,7 +12,7 @@ enum class Product {
     AGO
 }
 
-enum class Days {
+enum class Period {
     TODAY,
     ONE_WEEK,
     TWO_WEEKS,
@@ -20,6 +20,12 @@ enum class Days {
     SIX_MONTHS,
     ONE_YEAR,
     TWO_YEARS
+}
+
+enum class DaysFilter {
+    TODAY,
+    LAST_SEVEN_DAYS,
+    LAST_THIRTY_DAYS,
 }
 
 enum class Category {

@@ -93,7 +93,7 @@ fun Receipt(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "Payment Days", color = grey, modifier = Modifier.padding(bottom = 2.dp))
+            Text(text = "Payment Period", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
                 text = transaction.date ?: "",
                 color = darkBlue,
