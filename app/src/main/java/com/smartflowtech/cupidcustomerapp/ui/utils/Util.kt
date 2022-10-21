@@ -4,7 +4,9 @@ import android.content.Context
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.Bank
+import com.smartflowtech.cupidcustomerapp.model.NotificationSettingsItem
 import com.smartflowtech.cupidcustomerapp.model.SettingsItem
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationSettings
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -209,4 +211,24 @@ object Util {
             )
         )
     }
+
+    fun getListOfNotificationSettingsItems(): List<NotificationSettingsItem> {
+        return listOf(
+            NotificationSettingsItem(
+                "Email Notifications",
+                "Manage your preferences",
+                R.drawable.ic_email,
+                false
+            ),
+            NotificationSettingsItem(
+                "Push Notifications",
+                "Manage your preferences",
+                R.drawable.ic_push_notification,
+                true
+            ),
+
+        )
+    }
+
+
 }

@@ -1,12 +1,14 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
+package com.smartflowtech.cupidcustomerapp.ui.presentation.payment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.CardPaymentProcessor
+import com.smartflowtech.cupidcustomerapp.model.PaymentGateway
+import com.smartflowtech.cupidcustomerapp.model.PaymentMethodPreference
+import com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds.AddFundsCardPaymentGateway
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
@@ -25,9 +29,9 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.transparentBlue
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 
 @Composable
-fun AddFundsCardPaymentProcessor(
-    cardPaymentProcessor: CardPaymentProcessor,
-    onClick: (paymentProcessor: CardPaymentProcessor) -> Unit,
+fun PaymentMethodPreference(
+    paymentMethodPref: PaymentMethodPreference,
+    onClick: (String: PaymentMethodPreference) -> Unit,
     isSelected: Boolean
 ) {
     Column(
@@ -38,7 +42,7 @@ fun AddFundsCardPaymentProcessor(
         Row(
             modifier = Modifier
                 .clickable {
-                    onClick(cardPaymentProcessor)
+                    onClick(paymentMethodPref)
                 }
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 8.dp),
@@ -51,9 +55,9 @@ fun AddFundsCardPaymentProcessor(
                     .size(36.dp)
                     .padding(8.dp),
                 painter = painterResource(
-                    id = when (cardPaymentProcessor) {
-                        CardPaymentProcessor.PAYSTACK -> R.drawable.ic_paystack
-                        CardPaymentProcessor.FLUTTERWAVE -> R.drawable.ic_flutterwave
+                    id = when (paymentMethodPref) {
+                        PaymentMethodPreference.PAYSTACK -> R.drawable.ic_paystack
+                        else -> R.drawable.ic_always_ask
                     }
                 ),
                 contentDescription = "Icon",
@@ -67,7 +71,7 @@ fun AddFundsCardPaymentProcessor(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = cardPaymentProcessor.name.capitalizeEachWord(),
+                    text = paymentMethodPref.name.capitalizeEachWord(),
                     fontFamily = AthleticsFontFamily,
                     fontWeight = FontWeight.W400
                 )
@@ -80,7 +84,7 @@ fun AddFundsCardPaymentProcessor(
                         .clipToBounds(),
                     selected = isSelected,
                     onClick = {
-                        onClick(cardPaymentProcessor)
+                        onClick(paymentMethodPref)
                     },
                     colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
                 )
@@ -98,10 +102,24 @@ fun AddFundsCardPaymentProcessor(
 
 @Preview(showBackground = true)
 @Composable
-fun AddFundsCardPaymentProcessorPreview() {
-    AddFundsCardPaymentProcessor(
-        CardPaymentProcessor.PAYSTACK,
-        { },
-        true
-    )
+fun PreviewPaymentMethodSettings() {
+    var selectedPaymentMethod by remember { mutableStateOf("") }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(
+            listOf(
+                PaymentMethodPreference.ASK_ALWAYS,
+                PaymentMethodPreference.PAYSTACK
+            )
+        ) { item ->
+            PaymentMethodPreference(
+                paymentMethodPref = item,
+                onClick = { paymentMethodPref ->
+                    selectedPaymentMethod = paymentMethodPref.name
+                    //update remote and local preference
+                },
+                isSelected = selectedPaymentMethod == item.name
+            )
+        }
+
+    }
 }

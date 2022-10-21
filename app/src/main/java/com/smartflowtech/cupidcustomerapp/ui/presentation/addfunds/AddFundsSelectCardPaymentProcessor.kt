@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.smartflowtech.cupidcustomerapp.model.CardPaymentProcessor
+import com.smartflowtech.cupidcustomerapp.model.PaymentGateway
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentError
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentSuccess
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -46,11 +46,11 @@ fun AddFundsSelectCardPaymentProcessor(
     LazyColumn(modifier = Modifier) {
         items(
             listOf(
-                CardPaymentProcessor.PAYSTACK
+                PaymentGateway.PAYSTACK
             )
         ) { cardProcessor ->
-            AddFundsCardPaymentProcessor(
-                cardPaymentProcessor = cardProcessor,
+            AddFundsCardPaymentGateway(
+                paymentGateway = cardProcessor,
                 onClick = { cardProcessor ->
                     selectedCardProcessor = cardProcessor.name
                     showCardDetailsForm = true

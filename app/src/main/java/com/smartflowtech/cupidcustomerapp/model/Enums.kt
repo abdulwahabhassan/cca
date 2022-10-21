@@ -27,3 +27,12 @@ enum class Category {
     PRODUCT,
     DATE
 }
+
+enum class PaymentGateway {
+    PAYSTACK
+}
+
+enum class PaymentMethodPreference {
+    PAYSTACK,
+    ASK_ALWAYS
+}
