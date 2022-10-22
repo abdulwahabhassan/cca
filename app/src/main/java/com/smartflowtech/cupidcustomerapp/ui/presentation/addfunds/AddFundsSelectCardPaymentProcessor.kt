@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.smartflowtech.cupidcustomerapp.model.PaymentGateway
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentError
-import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentSuccess
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -130,9 +130,9 @@ fun AddFundsSelectCardPaymentProcessor(
 
             ) {
                 item {
-                    PaymentSuccess(
-                        message = "Payment Successful",
-                        info = "Ref: $transactionReference\n" +
+                    Success(
+                        title = "Payment Successful",
+                        message = "Ref: $transactionReference\n" +
                                 "You have successfully funded your wallet!",
                         onOkayPressed = {
                             showSuccess = false

@@ -22,10 +22,8 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 @Preview(showBackground = true)
-fun Filter() {
-
+fun DaysFilter() {
     Column(Modifier.fillMaxSize()) {
-
         Icon(
             imageVector = Icons.Rounded.Close,
             contentDescription = "",

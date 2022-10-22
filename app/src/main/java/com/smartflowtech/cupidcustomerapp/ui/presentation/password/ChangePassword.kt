@@ -209,7 +209,11 @@ fun ChangePassword() {
                 Spacer(modifier = Modifier.height(24.dp))
 
 
-                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
                     Icon(
                         modifier = Modifier.size(18.dp),
                         tint = if (isEightCharactersLong) brightGreen else red,
@@ -224,7 +228,11 @@ fun ChangePassword() {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Must be at least 8 characters long")
                 }
-                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
                     Icon(
                         modifier = Modifier.size(18.dp),
                         tint = if (hasAtLeastOneUpperCaseLetter) brightGreen else red,
@@ -239,7 +247,11 @@ fun ChangePassword() {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Include at least 1 uppercase letter")
                 }
-                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
                     Icon(
                         modifier = Modifier.size(18.dp),
                         tint = if (hasAtLeastOneSpecialCharacter) brightGreen else red,
@@ -254,7 +266,11 @@ fun ChangePassword() {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Include at least 1 special character (!@#$%^&*)")
                 }
-                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
                     Icon(
                         modifier = Modifier.size(18.dp),
                         tint = if (hasAtLeastOneLowerCaseLetter) brightGreen else red,

@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.common
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -23,17 +24,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.AdsCard
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
+import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearchBarClicked: () -> Unit = {}, searchPlaceholder: String) {
+fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearchBarClicked: () -> Unit = {},
+    searchPlaceholder: String,
+    applyBorder: Boolean = false,
+    maxWidthFraction: Float = 1f
+) {
 
     TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(horizontal = 16.dp),
+        modifier = if (applyBorder)
+            Modifier
+                .fillMaxWidth(maxWidthFraction)
+                .height(50.dp)
+                .padding(horizontal = 16.dp)
+                .border(1.dp, darkBlue, RoundedCornerShape(12.dp))
+        else
+            Modifier
+                .fillMaxWidth(maxWidthFraction)
+                .height(50.dp)
+                .padding(horizontal = 16.dp),
         value = query,
         onValueChange = { text ->
             onQueryChange(text)

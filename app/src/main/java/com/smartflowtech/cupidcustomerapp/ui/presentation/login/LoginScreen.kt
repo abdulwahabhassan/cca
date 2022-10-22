@@ -140,7 +140,8 @@ fun LoginScreen(
                             "Welcome Back, ${viewModel.appConfigPreferences.userName}"
                         else
                             "Login to your account",
-                        style = MaterialTheme.typography.h6
+                        style = MaterialTheme.typography.h6,
+                        color = darkBlue
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -148,7 +149,8 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .align(Alignment.CenterStart),
                         text = "Please login to your account",
-                        style = MaterialTheme.typography.body1
+                        style = MaterialTheme.typography.body1,
+                        color = grey
                     )
                     Spacer(modifier = Modifier.height(32.dp))
 

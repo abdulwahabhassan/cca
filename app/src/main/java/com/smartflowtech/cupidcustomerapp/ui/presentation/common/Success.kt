@@ -13,14 +13,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
-import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun PaymentSuccess(message: String, info: String, onOkayPressed: () -> Unit) {
+fun Success(
+    title: String,
+    message: String,
+    buttonText: String = "Okay",
+    onOkayPressed: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,10 +39,10 @@ fun PaymentSuccess(message: String, info: String, onOkayPressed: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
         //Message text
-        Text(text = message, color = darkBlue, fontWeight = FontWeight.Bold)
+        Text(text = title, color = darkBlue, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
         //Info text
-        Text(text = info, color = grey, textAlign = TextAlign.Center)
+        Text(text = message, color = grey, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(32.dp))
         //Okay button
         Button(
@@ -52,7 +55,7 @@ fun PaymentSuccess(message: String, info: String, onOkayPressed: () -> Unit) {
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
         ) {
-            Text(text = "Okay")
+            Text(text = buttonText)
         }
     }
 }
@@ -61,6 +64,9 @@ fun PaymentSuccess(message: String, info: String, onOkayPressed: () -> Unit) {
 @Preview(showBackground = true)
 fun PaymentSuccessPreview() {
     CupidCustomerAppTheme {
-        PaymentSuccess("Sent", "We've sent the requested statements to your email", {})
+        Success(
+            title = "Sent",
+            message = "We've sent the requested statements to your email",
+            onOkayPressed = {})
     }
 }

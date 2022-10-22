@@ -279,11 +279,63 @@ object Util {
         )
     }
 
+    fun getListOfUploadImageOptions(): List<UploadImageOption> {
+        return listOf(
+            UploadImageOption(
+                "Choose from gallery",
+                "Select a picture from gallery",
+                R.drawable.ic_gallery
+            ),
+            UploadImageOption(
+                "Take a photo",
+                "Take a live selfie of your self",
+                R.drawable.ic_photo
+            )
+
+        )
+    }
+
     fun getListOfDaysFilter(): List<DaysFilter> {
         return listOf(
             DaysFilter.TODAY,
             DaysFilter.LAST_SEVEN_DAYS,
             DaysFilter.LAST_THIRTY_DAYS
+        )
+    }
+
+    fun getListOfStationsFilter(): List<String> {
+        return listOf(
+            "States",
+            "LGA"
+        )
+    }
+
+    fun getListOfStations(): List<Station> {
+        return listOf(
+            Station(
+                "Ardova Gas Station",
+                "10, Koka Road, Iyana Ipaja",
+                "ardova@gmail.com",
+                "08167039661"
+            ),
+            Station(
+                "Orlando Petrol",
+                "21, Allen junction, Ikeja, Lagos",
+                "orlandopetrol@gmail.com",
+                "09039393918"
+            ),
+            Station(
+                "Petrocam",
+                "Block 50B, Festac",
+                "petrocam@gmail.com",
+                "07038271927"
+            ),
+            Station(
+                "Mobil Gas Station",
+                "Ijesha",
+                "mobilgasstation@gmail.com",
+                ""
+            )
         )
     }
 
