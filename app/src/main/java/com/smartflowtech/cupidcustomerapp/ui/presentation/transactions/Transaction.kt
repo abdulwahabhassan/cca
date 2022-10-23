@@ -61,7 +61,7 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
                     "Completed" -> blue
                     "Pending" -> yellow
                     "Failed" -> red
-                    else -> black
+                    else -> deepBlue
                 }
             )
 

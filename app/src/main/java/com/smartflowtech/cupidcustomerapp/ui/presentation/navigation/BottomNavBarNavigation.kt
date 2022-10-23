@@ -8,11 +8,10 @@ import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Location
-import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
+import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
+import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 

@@ -25,7 +25,7 @@ import com.smartflowtech.cupidcustomerapp.model.Period
 import com.smartflowtech.cupidcustomerapp.model.Product
 import com.smartflowtech.cupidcustomerapp.model.Status
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.black
+import com.smartflowtech.cupidcustomerapp.ui.theme.deepBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
@@ -97,7 +97,7 @@ fun FilterTransactions(
                             .background(color = Color.White)
                             .padding(vertical = 12.dp),
                         text = category.name.capitalizeFirstLetter(),
-                        color = black,
+                        color = deepBlue,
                         fontFamily = AthleticsFontFamily,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold

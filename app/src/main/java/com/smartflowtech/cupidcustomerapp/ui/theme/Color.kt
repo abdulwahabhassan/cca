@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val darkBlue = Color(0xFF001B6A)
 val smartFlowBlue = Color(0xFF1F387C)
-val black = Color(0xFF000C23)
+val deepBlue = Color(0xFF000C23)
 val grey = Color(0xFF666666)
 val lightGrey = Color(0xFFF6F7F9)
 val lineGrey = Color(0xFFCFCED1)

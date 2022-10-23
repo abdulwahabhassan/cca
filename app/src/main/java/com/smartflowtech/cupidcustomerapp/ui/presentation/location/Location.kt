@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation.station
+package com.smartflowtech.cupidcustomerapp.ui.presentation.location
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,15 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
-import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
-import com.smartflowtech.cupidcustomerapp.ui.theme.gradientBluePurple
-import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-@Preview(showBackground = true)
-fun Station() {
+fun Location() {
 
     var selectedTab by remember { mutableStateOf("List") }
 
@@ -51,7 +47,6 @@ fun Station() {
 
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Spacer(modifier = Modifier.height(24.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -230,4 +225,12 @@ fun Station() {
 
     }
 
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewLocation() {
+    CupidCustomerAppTheme {
+        Location()
+    }
 }

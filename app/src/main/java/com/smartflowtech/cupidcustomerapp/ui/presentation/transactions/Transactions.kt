@@ -23,7 +23,7 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.black
+import com.smartflowtech.cupidcustomerapp.ui.theme.deepBlue
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -133,7 +133,7 @@ fun Transactions(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_download),
                         contentDescription = "Download icon",
-                        tint = black
+                        tint = deepBlue
                     )
                 }
             }

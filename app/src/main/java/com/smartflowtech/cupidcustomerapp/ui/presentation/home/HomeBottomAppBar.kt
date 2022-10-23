@@ -31,7 +31,7 @@ fun HomeBottomAppBar(
         HomeScreen.Profile
     )
 
-    AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
+    if (visible) {
         BottomAppBar(
             backgroundColor = Color.White,
             modifier = androidx.compose.ui.Modifier
@@ -62,5 +62,4 @@ fun HomeBottomAppBar(
             }
         }
     }
-
 }
