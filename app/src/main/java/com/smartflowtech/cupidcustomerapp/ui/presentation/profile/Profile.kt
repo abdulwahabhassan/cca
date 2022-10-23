@@ -62,7 +62,7 @@ fun Profile() {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box {
+                Box() {
                     Image(
                         modifier = Modifier
                             .size(100.dp)
@@ -73,9 +73,6 @@ fun Profile() {
                     )
                     Icon(
                         modifier = Modifier
-                            .clickable {
-                                //do something
-                            }
                             .align(Alignment.BottomEnd)
                             .padding(start = 60.dp, top = 60.dp),
                         painter = painterResource(id = R.drawable.ic_edit_profile),
