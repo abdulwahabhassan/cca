@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.Screen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
@@ -242,27 +243,31 @@ fun HomeScreen(
                         .fillMaxSize()
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    Icon(
-                        modifier = Modifier
-                            .size(46.dp)
-                            .padding(bottom = 16.dp)
-                            .clip(RoundedCornerShape(50))
-                            .clipToBounds()
-                            .clickable {
-                                if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
-                                    onBottomNavItemClicked(HomeScreen.Transactions.route)
-                                } else {
-                                    onBottomNavItemClicked(HomeScreen.Home.route)
+                    if (currentBottomNavDestinationTitle == HomeScreen.Home.title) {
+                        Icon(
+                            modifier = Modifier
+                                .size(46.dp)
+                                .padding(bottom = 16.dp)
+                                .clip(RoundedCornerShape(50))
+                                .clipToBounds()
+                                .clickable {
+                                    if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                                        onBottomNavItemClicked(HomeScreen.Transactions.route)
+                                    } else {
+                                        onBottomNavItemClicked(HomeScreen.Home.route)
+                                    }
                                 }
-                            }
-                            .align(Alignment.CenterHorizontally),
-                        imageVector = if (bottomSheetState.isExpanded)
-                            Icons.Rounded.ExpandMore
-                        else
-                            Icons.Rounded.ExpandLess,
-                        contentDescription = "Bottom sheet handle",
-                        tint = grey
-                    )
+                                .align(Alignment.CenterHorizontally),
+                            imageVector = if (bottomSheetState.isExpanded)
+                                Icons.Rounded.ExpandMore
+                            else
+                                Icons.Rounded.ExpandLess,
+                            contentDescription = "Bottom sheet handle",
+                            tint = grey
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
                     BottomNavBarNavigation(
                         bottomNavHostController = bottomNavBarNavHostController,
                         onBackPressed = {
