@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ExpandLess
-import androidx.compose.material.icons.rounded.ExpandMore
-import androidx.compose.material.icons.rounded.FilterList
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -251,7 +248,10 @@ fun HomeScreen(
                                 .clip(RoundedCornerShape(50))
                                 .clipToBounds()
                                 .clickable {
-                                    if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                                    if (
+                                        bottomNavBarNavHostController.currentDestination?.route ==
+                                        HomeScreen.Home.route
+                                    ) {
                                         onBottomNavItemClicked(HomeScreen.Transactions.route)
                                     } else {
                                         onBottomNavItemClicked(HomeScreen.Home.route)
@@ -259,9 +259,9 @@ fun HomeScreen(
                                 }
                                 .align(Alignment.CenterHorizontally),
                             imageVector = if (bottomSheetState.isExpanded)
-                                Icons.Rounded.ExpandMore
+                                Icons.Rounded.HorizontalRule
                             else
-                                Icons.Rounded.ExpandLess,
+                                Icons.Rounded.HorizontalRule,
                             contentDescription = "Bottom sheet handle",
                             tint = grey
                         )

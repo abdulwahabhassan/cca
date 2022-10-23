@@ -156,11 +156,6 @@ fun HomeDashBoard(
                                         Text(text = "Trust you are good", color = Color.White)
                                     }
                                     Spacer(modifier = Modifier.width(16.dp))
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_notification_active),
-                                        contentDescription = "Notification bell",
-                                        tint = Color.White,
-                                    )
                                     IconButton(onClick = { onLogOutClicked() }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Logout,
@@ -168,6 +163,12 @@ fun HomeDashBoard(
                                             tint = Color.White,
                                         )
                                     }
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_notification_active),
+                                        contentDescription = "Notification bell",
+                                        tint = Color.White,
+                                    )
+
                                 }
                             }
                         }
