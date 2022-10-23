@@ -54,7 +54,10 @@ fun Location() {
         ) {
             SearchBar(
                 query = queryText,
-                onQueryChange = {},
+                onQueryChange = { newText ->
+                    queryText = newText
+
+                },
                 searchPlaceholder = "Search",
                 applyBorder = true,
                 maxWidthFraction = 0.85f
