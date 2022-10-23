@@ -12,6 +12,7 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Settings
+import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
@@ -49,14 +50,11 @@ fun BottomNavBarNavigation(
                 targetState.destination.route == HomeScreen.Transactions.route
             ) {
                 fadeOut(animationSpec = snap())
-            } else if (initialState.destination.route == HomeScreen.Transactions.route &&
+            } else if ((initialState.destination.route == HomeScreen.Transactions.route ||
+                        initialState.destination.route == HomeScreen.Profile.route) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
                 slideOutVertically { -it }
-            } else if (initialState.destination.route == HomeScreen.Transactions.route &&
-                targetState.destination.route == HomeScreen.Home.route
-            ) {
-                fadeOut(snap())
             } else {
                 slideOutHorizontally { -it }
             }
@@ -69,7 +67,8 @@ fun BottomNavBarNavigation(
             }
         },
         popExitTransition = {
-            if (initialState.destination.route == HomeScreen.Transactions.route &&
+            if ((initialState.destination.route == HomeScreen.Transactions.route ||
+                        initialState.destination.route == HomeScreen.Profile.route) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
                 fadeOut(snap())
@@ -126,6 +125,9 @@ fun BottomNavBarNavigation(
         }
         composable(HomeScreen.Settings.route) {
             Settings()
+        }
+        composable(HomeScreen.Profile.route) {
+            Profile()
         }
     }
 }

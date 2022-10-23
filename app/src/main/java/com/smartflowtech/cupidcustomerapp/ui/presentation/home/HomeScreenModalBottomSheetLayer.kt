@@ -69,9 +69,7 @@ fun HomeScreenModalBottomSheetLayer(
         homeScreenUiState = viewModel.homeScreenUiState,
         appConfigPreferences = viewModel.appConfigPreferences,
         onSaveFilterClicked = { daysFilter, mapOfFilters ->
-
             viewModel.updateTransactionFilters(daysFilter, mapOfFilters)
-
         },
         updateWalletVisibility = { visibility ->
             viewModel.updateWalletBalanceVisibility(visibility)

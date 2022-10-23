@@ -11,6 +11,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 object Util {
@@ -335,6 +336,175 @@ object Util {
                 "Ijesha",
                 "mobilgasstation@gmail.com",
                 ""
+            )
+        )
+    }
+
+    fun getListOfTransactions(): List<Transaction> {
+        return listOf(
+            Transaction(
+                "Completed",
+                "12:24AM",
+                "Transaction",
+                "₦67,000.00",
+                date = "2022-08-01",
+                authType = "Credit",
+                transactionSeqNumber = "TRS90399291",
+                vendorStationName = "Purchase on Cupid",
+                product = "PMS",
+                nfcTagCode = "123"
+            ),
+            Transaction(
+                "Pending",
+                "11:24PM",
+                "Transaction",
+                "₦30,000.00",
+                date = "2022-08-15",
+                authType = "Credit",
+                transactionSeqNumber = "TRS765599291",
+                vendorStationName = "Wallet Top-Up",
+                product = "PMS",
+                nfcTagCode = "456"
+            ),
+            Transaction(
+                "Completed",
+                "11:20AM",
+                "Transaction",
+                "₦12,000.00",
+                date = "2022-08-30",
+                authType = "Credit",
+                transactionSeqNumber = "TRS765599291",
+                vendorStationName = "Wallet Top-Up",
+                product = "AGO",
+                nfcTagCode = "123"
+            ),
+            Transaction(
+                "Failed",
+                "01:24PM",
+                "Transaction",
+                "₦17,000.00",
+                date = "2022-07-01",
+                authType = "Debit",
+                transactionSeqNumber = "TRS723599291",
+                vendorStationName = "Mobile Transfer",
+                product = "AGO",
+                nfcTagCode = "123"
+            ),
+            Transaction(
+                "Completed",
+                "11:24PM",
+                "Transaction",
+                "₦65,000.00",
+                date = "2022-07-15",
+                authType = "Debit",
+                transactionSeqNumber = "TRS0949482392",
+                vendorStationName = "Mobile Transfer",
+                product = "DPK",
+                nfcTagCode = "456"
+            ),
+            Transaction(
+                "Completed",
+                "11:24PM",
+                "Transaction",
+                "₦7,000.00",
+                date = "2022-08-07",
+                authType = "Debit",
+                transactionSeqNumber = "TRS501499291",
+                vendorStationName = "Purchase on Cupid",
+                product = "DPK",
+                nfcTagCode = "456"
+            ),
+            Transaction(
+                "Pending",
+                "08:24PM",
+                "Transaction",
+                "₦167,000.00",
+                date = "2022-08-21",
+                authType = "Credit",
+                transactionSeqNumber = "TRS501499291",
+                vendorStationName = "Wallet Top-Up",
+                product = "PMS",
+                nfcTagCode = "456"
+            ),
+            Transaction(
+                "Failed",
+                "11:24PM",
+                "Transaction",
+                "₦1,000.00",
+                date = "2022-08-24",
+                authType = "Debit",
+                transactionSeqNumber = "TRS97814937841",
+                vendorStationName = "Purchase on Cupid",
+                product = "AGO",
+                nfcTagCode = "456"
+            ),
+            Transaction(
+                "Completed",
+                "11:24PM",
+                "Transaction",
+                "₦10,000.00",
+                date = LocalDate.now().toString(),
+                authType = "Debit",
+                transactionSeqNumber = "TRS501499291",
+                vendorStationName = "Purchase on Cupid",
+                product = "DPK",
+                nfcTagCode = "123"
+            ),
+            Transaction(
+                "Pending",
+                "02:45PM",
+                "Transaction",
+                "₦99,000.00",
+                date = "2022-07-31",
+                authType = "Debit",
+                transactionSeqNumber = "TRS5011235591",
+                vendorStationName = "Purchase on Cupid",
+                product = "PMS",
+                nfcTagCode = "123"
+            ),
+            Transaction(
+                "Pending",
+                "11:24PM",
+                "Transaction",
+                "₦144,000.00",
+                date = "2022-08-01",
+                authType = "Credit",
+                transactionSeqNumber = "TRS504299291",
+                vendorStationName = "Cash Back",
+                product = "AGO",
+                nfcTagCode = "123"
+            ),
+            Transaction(
+                "Pending",
+                "05:30PM",
+                "Transaction",
+                "₦1.00",
+                date = "2022-01-01",
+                authType = "Debit",
+                transactionSeqNumber = "TRS3819499291",
+                vendorStationName = "Transaction Fee",
+                product = "DPK",
+                nfcTagCode = "123"
+            )
+
+        )
+    }
+
+    fun getListsOfWallets(): List<Wallet> {
+        return listOf(
+            Wallet(
+                "Ardova",
+                1,
+                "150000.00",
+                "2022-12-01",
+                "1000000",
+            ),
+            Wallet(
+                "Sterling",
+                2,
+                "460000.00",
+                "2022-10-12",
+                "7800000",
             )
         )
     }

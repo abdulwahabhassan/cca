@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +38,7 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.util.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
@@ -50,7 +52,8 @@ fun HomeDashBoard(
     homeScreenUiState: HomeScreenUiState,
     onLogOutClicked: () -> Unit,
     onCardSelected: (Boolean) -> Unit,
-    isCardSelected: Boolean
+    isCardSelected: Boolean,
+    onProfileClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState()
     val ctx = LocalContext.current
@@ -114,7 +117,9 @@ fun HomeDashBoard(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 IconButton(
-                                    onClick = { }, modifier = Modifier
+                                    onClick = {
+                                        onProfileClicked()
+                                    }, modifier = Modifier
                                         .size(50.dp)
                                         .background(color = transparentBlue, CircleShape)
                                 ) {
@@ -151,11 +156,11 @@ fun HomeDashBoard(
                                         Text(text = "Trust you are good", color = Color.White)
                                     }
                                     Spacer(modifier = Modifier.width(16.dp))
-//                                Icon(
-//                                    painter = painterResource(id = R.drawable.ic_notification_active),
-//                                    contentDescription = "Notification bell",
-//                                    tint = Color.White,
-//                                )
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_notification_active),
+                                        contentDescription = "Notification bell",
+                                        tint = Color.White,
+                                    )
                                     IconButton(onClick = { onLogOutClicked() }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Logout,
@@ -168,7 +173,8 @@ fun HomeDashBoard(
                         }
 
                         HorizontalPager(
-                            count = if (homeScreenUiState.viewModelResult == ViewModelResult.SUCCESS) homeScreenUiState.wallets.size else 1,
+                            count = if (homeScreenUiState.viewModelResult == ViewModelResult.SUCCESS)
+                                homeScreenUiState.wallets.size else 1,
                             state = pagerState,
                             itemSpacing = 16.dp,
                             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -228,5 +234,36 @@ fun HomeDashBoard(
 
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+@Preview(showBackground = true)
+fun PreviewHomeDashBoard() {
+    var visible by remember { mutableStateOf(true) }
+    var isCardSelected by remember { mutableStateOf(false) }
+    CupidCustomerAppTheme {
+        HomeDashBoard(
+            bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
+            onAddFundsClicked = { },
+            userName = "Mike Murdock",
+            walletBalanceVisibility = visible,
+            updateWalletVisibility = {
+                visible = !it
+            },
+            homeScreenUiState = HomeScreenUiState(
+                ViewModelResult.SUCCESS,
+                Util.getListOfTransactions(),
+                "",
+                Util.getListsOfWallets()
+            ),
+            onLogOutClicked = { },
+            onCardSelected = {
+                isCardSelected = !it
+            },
+            isCardSelected = isCardSelected,
+            {}
+        )
     }
 }

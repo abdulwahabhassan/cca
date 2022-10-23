@@ -36,4 +36,10 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
         "Settings",
         R.drawable.ic_settings
     )
+
+    object Profile : HomeScreen(
+        "home_screen/profile",
+        "Profile",
+        R.drawable.ic_profile
+    )
 }

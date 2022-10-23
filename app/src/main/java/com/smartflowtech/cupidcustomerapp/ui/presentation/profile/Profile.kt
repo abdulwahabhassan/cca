@@ -31,7 +31,6 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-@Preview(showBackground = true)
 fun Profile() {
 
     // Visibility and input text
@@ -55,7 +54,7 @@ fun Profile() {
                 shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
         item {
 
@@ -212,4 +211,10 @@ fun Profile() {
 
         }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewProfile() {
+    Profile()
 }

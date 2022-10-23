@@ -68,6 +68,7 @@ fun HomeScreen(
     var currentBottomNavDestinationTitle by rememberSaveable { mutableStateOf(HomeScreen.Home.title) }
 
     val localConfig = LocalConfiguration.current
+    var bottomAppBarVisibility by rememberSaveable { mutableStateOf(true) }
 
     var isCardSelected: Boolean by rememberSaveable { mutableStateOf(false) }
     var sheetPeekHeight by remember {
@@ -97,24 +98,34 @@ fun HomeScreen(
             HomeScreen.Home.route -> {
                 currentBottomNavDestinationTitle =
                     HomeScreen.Home.title
+                bottomAppBarVisibility = true
             }
             HomeScreen.Transactions.route -> {
                 currentBottomNavDestinationTitle =
                     HomeScreen.Transactions.title
+                bottomAppBarVisibility = true
             }
             HomeScreen.Location.route -> {
                 currentBottomNavDestinationTitle =
                     HomeScreen.Location.title
+                bottomAppBarVisibility = true
             }
             HomeScreen.Settings.route -> {
                 currentBottomNavDestinationTitle =
                     HomeScreen.Settings.title
+                bottomAppBarVisibility = true
+            }
+            HomeScreen.Profile.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Profile.title
+                bottomAppBarVisibility = false
             }
         }
 
         coroutineScope.launch {
             if (bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
                 bottomSheetScaffoldState.bottomSheetState.collapse()
+
             } else {
                 bottomSheetScaffoldState.bottomSheetState.expand()
             }
@@ -139,7 +150,8 @@ fun HomeScreen(
             CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
                 HomeBottomAppBar(
                     isSelected = isNavDestinationSelected,
-                    onClicked = onBottomNavItemClicked
+                    onClicked = onBottomNavItemClicked,
+                    visible = bottomAppBarVisibility
                 )
             }
         }
@@ -174,7 +186,7 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
+                    if (currentBottomNavDestinationTitle != HomeScreen.Home.title) {
 
                         IconButton(onClick = {
                             onBackPressed()
@@ -187,7 +199,11 @@ fun HomeScreen(
                         }
 
                         Text(
-                            text = if (isCardSelected) "Card History"
+                            text = if (
+                                currentBottomNavDestinationTitle ==
+                                HomeScreen.Transactions.title &&
+                                isCardSelected
+                            ) "Card History"
                             else
                                 currentBottomNavDestinationTitle,
                             color = Color.White,
@@ -195,15 +211,22 @@ fun HomeScreen(
                             fontWeight = FontWeight.SemiBold
                         )
 
-                        IconButton(onClick = {
-                            onFilteredClicked()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.FilterList,
-                                contentDescription = "Filter",
-                                tint = Color.White,
-                            )
+                        if (
+                            currentBottomNavDestinationTitle == HomeScreen.Transactions.title
+                        ) {
+                            IconButton(onClick = {
+                                onFilteredClicked()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.FilterList,
+                                    contentDescription = "Filter",
+                                    tint = Color.White,
+                                )
+                            }
+                        } else {
+                            IconButton(enabled = false, onClick = {}) {}
                         }
+
                     } else {
                         IconButton(onClick = {}, enabled = false) {}
                     }
@@ -276,11 +299,13 @@ fun HomeScreen(
                 onCardSelected = { bool ->
                     isCardSelected = bool
                 },
-                isCardSelected = isCardSelected
+                isCardSelected = isCardSelected,
+                onProfileClicked = {
+                    onBottomNavItemClicked(HomeScreen.Profile.route)
+                }
             )
         }
     }
-
 }
 
 @Preview(showBackground = true)
