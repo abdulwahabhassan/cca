@@ -185,7 +185,7 @@ fun Location() {
                                     //
                                 }
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                                .padding(start = 8.dp, end = 8.dp, top = 16.dp),
                             verticalArrangement = Arrangement.Center
                         ) {
                             Row(
@@ -217,7 +217,6 @@ fun Location() {
             } else {
                 // Show map
                 Column(modifier = Modifier.fillMaxWidth()) {
-
                 }
 
             }
