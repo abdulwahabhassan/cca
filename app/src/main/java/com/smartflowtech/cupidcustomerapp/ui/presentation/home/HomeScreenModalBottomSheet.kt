@@ -19,7 +19,6 @@ import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

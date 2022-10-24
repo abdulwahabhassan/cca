@@ -10,6 +10,10 @@ sealed class Screen(val route: String) {
     object GetStartedSecond : Screen("get_started_second_screen")
     object Login : Screen("login_screen")
     object AddFunds : Screen("add_funds_screen")
+    object ResetPassword : Screen("reset_password_screen")
+    object VerifyEmail : Screen("verify_email_screen")
+    object NewPassword : Screen("new_password_screen")
+
 }
 
 sealed class HomeScreen(val route: String, var title: String, var icon: Int) {

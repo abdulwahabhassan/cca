@@ -1,10 +1,8 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.animation.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -15,6 +13,9 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenModalBo
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.password.NewPasswordScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ResetPasswordScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.password.VerifyEmailScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
 
@@ -62,10 +63,10 @@ fun RootNavigation(
     ) {
 
         composable(route = Screen.Splash.route) {
-            val splashScreenViewModel = hiltViewModel<SplashScreenViewModel>()
+            val splashViewModel = hiltViewModel<SplashViewModel>()
             SplashScreen(
-                onboarded = splashScreenViewModel.appConfigPreferences.onBoarded,
-                loggedIn = splashScreenViewModel.appConfigPreferences.loggedIn,
+                onboarded = splashViewModel.appConfigPreferences.onBoarded,
+                loggedIn = splashViewModel.appConfigPreferences.loggedIn,
                 goToHomeScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
@@ -122,20 +123,77 @@ fun RootNavigation(
                         Screen.Home.route,
                     )
                 },
-                goToForgotPasswordScreen = {},
+                goToResetPassword = {
+                    rootNavHostController.navigate(
+                        Screen.ResetPassword.route
+                    )
+                },
                 finishActivity = {
                     finishActivity()
                 }
             )
+
         }
 
+        composable(route = Screen.ResetPassword.route) {
+            val resetPasswordViewModel = hiltViewModel<ResetPasswordViewModel>()
+            ResetPasswordScreen(
+                viewModel = resetPasswordViewModel,
+                uiState = resetPasswordViewModel.resetPasswordScreenUiState,
+                goToVerifyEmailScreen = {
+                    rootNavHostController.navigate(
+                        Screen.VerifyEmail.route
+                    )
+                },
+                goToLoginScreen = {
+                    rootNavHostController.navigate(
+                        Screen.Login.route
+                    )
+                },
+            )
+        }
+
+        composable(route = Screen.VerifyEmail.route) {
+            VerifyEmailScreen(
+                goToNewPasswordScreen = {
+                    rootNavHostController.navigate(
+                        Screen.NewPassword.route
+                    )
+                },
+                goToResetPasswordScreen = {
+                    rootNavHostController.navigate(
+                        Screen.ResetPassword.route
+                    )
+                }
+            )
+        }
+
+        composable(route = Screen.NewPassword.route) {
+            val newPasswordViewModel = hiltViewModel<NewPasswordViewModel>()
+            NewPasswordScreen(
+                viewModel = newPasswordViewModel,
+                uiState = newPasswordViewModel.newPasswordScreenUiState,
+                goToLoginScreen = {
+                    rootNavHostController.navigate(
+                        Screen.Login.route
+                    )
+                },
+                goToResetPasswordScreen = {
+                    rootNavHostController.navigate(
+                        Screen.ResetPassword.route
+                    )
+                }
+            )
+        }
+
+
         composable(route = Screen.Home.route) {
-            val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
+            val homeViewModel = hiltViewModel<HomeViewModel>()
             val bottomNavBarNavHostController = rememberAnimatedNavController()
             val currentRoute =
                 bottomNavBarNavHostController.currentBackStackEntryAsState().value?.destination?.route
             HomeScreenModalBottomSheetLayer(
-                viewModel = homeScreenViewModel,
+                viewModel = homeViewModel,
                 bottomNavBarNavHostController = bottomNavBarNavHostController,
                 goToLogin = {
                     rootNavHostController.navigate(
@@ -175,9 +233,9 @@ fun RootNavigation(
         }
 
         composable(route = Screen.AddFunds.route) {
-            val addFundsScreenViewModel = hiltViewModel<AddFundsScreenViewModel>()
+            val addFundsViewModel = hiltViewModel<AddFundsViewModel>()
             AddFundsScreenModalBottomSheetLayer(
-                viewModel = addFundsScreenViewModel,
+                viewModel = addFundsViewModel,
                 goBackToHomeScreen = {
                     rootNavHostController.popBackStack()
                 }

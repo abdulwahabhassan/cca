@@ -1,9 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.data.api
 
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
-import com.smartflowtech.cupidcustomerapp.model.response.LoginResponseData
-import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
-import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
+import com.smartflowtech.cupidcustomerapp.model.request.*
+import com.smartflowtech.cupidcustomerapp.model.response.*
 import retrofit2.http.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -13,8 +11,7 @@ interface CupidApiService {
     @POST("auth")
     suspend fun login(
         @Body loginRequestBody: LoginRequestBody
-    ): CupidApiResponse<LoginResponseData>
-
+    ): CupidApiResponse<LoginData>
 
     @GET("purchases")
     suspend fun getTransactions(
@@ -31,12 +28,38 @@ interface CupidApiService {
         )
         ,
         @Query("vendor_id") vendorId: String = "",
-    ): CupidApiResponse<List<TransactionsResponseData>>
-
+    ): CupidApiResponse<List<TransactionsData>>
 
     @GET("wallets")
     suspend fun getWallet(
         @Header("Authorization") token: String,
         @Query("company_id") companyId: String
-    ): CupidApiResponse<List<WalletResponseData>>
+    ): CupidApiResponse<List<WalletData>>
+
+    @POST("users/profile/{user_id}")
+    suspend fun updateProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: String,
+        @Body updateProfileRequestBody: UpdateProfileRequestBody
+    ): CupidApiResponse<UpdateProfileData>
+
+    @POST("payments/initiate/paystack")
+    suspend fun verifyPayStackPayment(
+        @Header("Authorization") token: String,
+        @Body verifyPaymentRequestBody: VerifyPaymentRequestBody
+    ): CupidApiResponse<Any>
+
+    @POST("auth/forgotpass/verifyemail")
+    suspend fun forgotPassWordVerifyEmail(
+        @Header("Authorization") token: String,
+        @Body verifyEmailRequestBody: VerifyEmailRequestBody
+    ): CupidApiResponse<VerifyEmailData>
+
+    @POST("sm_stations/{vendor_id}")
+    suspend fun vendorStations(
+        @Header("Authorization") token: String,
+        @Path("vendor_id") vendorId: Long,
+        @Body vendorStationsRequestBody: VendorStationsRequestBody
+    ) : CupidApiResponse<VendorStationsData>
+
 }

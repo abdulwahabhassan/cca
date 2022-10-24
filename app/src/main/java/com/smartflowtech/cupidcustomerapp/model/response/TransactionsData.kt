@@ -2,10 +2,10 @@ package com.smartflowtech.cupidcustomerapp.model.response
 
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
-import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import com.squareup.moshi.Json
 
-data class TransactionsResponseData(
+data class TransactionsData(
+    @Json(name = "id")
     val id: Long?,
 
     @Json(name = "vendor_id")
@@ -57,9 +57,16 @@ data class TransactionsResponseData(
     @Json(name = "transaction_seq_no")
     val transactionSeqNumber: String?,
 
+    @Json(name = "costcenter")
     val costcenter: Costcenter?,
+
+    @Json(name = "driver")
     val driver: Driver?,
+
+    @Json(name = "nfctag")
     val nfctag: Nfctag?,
+
+    @Json(name = "vendor")
     val vendor: Vendor?
 ) {
     fun mapToTransaction(): Transaction {

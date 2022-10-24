@@ -37,7 +37,7 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     uiState: LoginScreenUiState,
     goToHomeScreen: () -> Unit,
-    goToForgotPasswordScreen: () -> Unit,
+    goToResetPassword: (String) -> Unit,
     finishActivity: () -> Unit
 ) {
 
@@ -81,13 +81,6 @@ fun LoginScreen(
                 .background(MaterialTheme.colors.background),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            when (uiState.viewModelResult) {
-                ViewModelResult.SUCCESS -> {
-                    goToHomeScreen()
-                }
-                else -> {}
-            }
 
             LaunchedEffect(uiState.viewModelResult) {
                 if (!uiState.message.isNullOrEmpty()) {
@@ -235,6 +228,9 @@ fun LoginScreen(
                                 strokeWidth = 2.dp, modifier = Modifier
                                     .height(54.dp)
                             )
+                            if (uiState.viewModelResult == ViewModelResult.SUCCESS) {
+                                goToHomeScreen()
+                            }
                         }
                         else -> {
                             Button(
@@ -293,7 +289,7 @@ fun LoginScreen(
                                     enabled = viewModel.loginScreenUiState.viewModelResult
                                             != ViewModelResult.LOADING
                                 ) {
-                                    //call forgot password api
+                                    goToResetPassword("reset_password_screen")
                                 }
                                 .padding(8.dp),
                             text = "Forgot Password?",

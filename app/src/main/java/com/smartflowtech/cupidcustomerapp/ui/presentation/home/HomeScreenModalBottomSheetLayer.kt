@@ -7,13 +7,13 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeScreenViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreenModalBottomSheetLayer(
-    viewModel: HomeScreenViewModel,
+    viewModel: HomeViewModel,
     bottomNavBarNavHostController: NavHostController,
     goToLogin: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,

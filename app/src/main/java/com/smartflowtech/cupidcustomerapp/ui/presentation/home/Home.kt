@@ -20,7 +20,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CardTransactionHistory
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionsList
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily

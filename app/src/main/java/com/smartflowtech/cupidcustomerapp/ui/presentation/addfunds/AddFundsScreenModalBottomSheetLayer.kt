@@ -5,13 +5,13 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.AddFundsScreenViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.AddFundsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddFundsScreenModalBottomSheetLayer(
-    viewModel: AddFundsScreenViewModel,
+    viewModel: AddFundsViewModel,
     goBackToHomeScreen: () -> Unit
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
@@ -41,10 +41,6 @@ fun AddFundsScreenModalBottomSheetLayer(
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
                 }
-//                else {
-//                    //check if bottom sheet is open and close else go to home screen
-//                    goBackToHomeScreen()
-//                }
             }
         },
         onShowBanksClicked = {

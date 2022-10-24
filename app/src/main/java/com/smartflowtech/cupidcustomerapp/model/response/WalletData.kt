@@ -3,7 +3,7 @@ package com.smartflowtech.cupidcustomerapp.model.response
 import com.smartflowtech.cupidcustomerapp.model.Wallet
 import com.squareup.moshi.Json
 
-data class WalletResponseData(
+data class WalletData(
     @Json(name = "vendor_name")
     val vendorName: String,
 

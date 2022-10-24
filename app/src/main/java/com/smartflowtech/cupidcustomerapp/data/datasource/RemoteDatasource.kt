@@ -2,13 +2,8 @@ package com.smartflowtech.cupidcustomerapp.data.datasource
 
 import com.smartflowtech.cupidcustomerapp.data.api.CupidApiResponse
 import com.smartflowtech.cupidcustomerapp.data.api.CupidApiService
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
-import com.smartflowtech.cupidcustomerapp.model.response.LoginResponseData
-import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
-import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
-import timber.log.Timber
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.smartflowtech.cupidcustomerapp.model.request.*
+import com.smartflowtech.cupidcustomerapp.model.response.*
 import javax.inject.Inject
 
 class RemoteDatasource @Inject constructor(
@@ -16,7 +11,7 @@ class RemoteDatasource @Inject constructor(
 ) {
     suspend fun login(
         loginRequestBody: LoginRequestBody
-    ): CupidApiResponse<LoginResponseData> {
+    ): CupidApiResponse<LoginData> {
         return apiService.login(
             loginRequestBody = loginRequestBody
         )
@@ -25,7 +20,7 @@ class RemoteDatasource @Inject constructor(
     suspend fun getTransactions(
         token: String,
         companyId: String
-    ): CupidApiResponse<List<TransactionsResponseData>> {
+    ): CupidApiResponse<List<TransactionsData>> {
         return apiService.getTransactions(
             token = token,
             companyId = companyId
@@ -35,7 +30,51 @@ class RemoteDatasource @Inject constructor(
     suspend fun getWallets(
         token: String,
         companyId: String
-    ): CupidApiResponse<List<WalletResponseData>> {
+    ): CupidApiResponse<List<WalletData>> {
         return apiService.getWallet(token = token, companyId = companyId)
+    }
+
+    suspend fun updateProfile(
+        token: String,
+        userId: String,
+        updateProfileRequestBody: UpdateProfileRequestBody
+    ): CupidApiResponse<UpdateProfileData> {
+        return apiService.updateProfile(
+            token = token,
+            userId = userId,
+            updateProfileRequestBody = updateProfileRequestBody
+        )
+    }
+
+    suspend fun verifyPayStackPayment(
+        token: String,
+        verifyPaymentRequestBody: VerifyPaymentRequestBody
+    ): CupidApiResponse<Any> {
+        return apiService.verifyPayStackPayment(
+            token = token,
+            verifyPaymentRequestBody = verifyPaymentRequestBody
+        )
+    }
+
+    suspend fun forgotPasswordVerifyEmail(
+        token: String,
+        verifyEmailRequestBody: VerifyEmailRequestBody
+    ): CupidApiResponse<VerifyEmailData> {
+        return apiService.forgotPassWordVerifyEmail(
+            token = token,
+            verifyEmailRequestBody = verifyEmailRequestBody
+        )
+    }
+
+    suspend fun vendorStations(
+        token: String,
+        vendorId: Long,
+        vendorStationsRequestBody: VendorStationsRequestBody
+    ): CupidApiResponse<VendorStationsData> {
+        return apiService.vendorStations(
+            token = token,
+            vendorId = vendorId,
+            vendorStationsRequestBody = vendorStationsRequestBody
+        )
     }
 }

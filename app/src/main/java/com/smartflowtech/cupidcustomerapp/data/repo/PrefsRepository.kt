@@ -30,7 +30,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val dpkProductFilter: Boolean = true,
         val agoProductFilter: Boolean = true,
         val pmsProductFilter: Boolean = true,
-        val companyId: String = ""
+        val companyId: String = "",
+        val userId: String = ""
     )
 
     private object PreferencesKeys {
@@ -49,6 +50,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val PMS_PRODUCT_FILTER = booleanPreferencesKey("pmsProductFilter")
         val AGO_PRODUCT_FILTER = booleanPreferencesKey("agoProductFilter")
         val COMPANY_ID = stringPreferencesKey("companyId")
+        val USER_ID = stringPreferencesKey("userId")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -80,6 +82,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             pmsProductFilter = preferences[PreferencesKeys.PMS_PRODUCT_FILTER] ?: true,
             agoProductFilter = preferences[PreferencesKeys.AGO_PRODUCT_FILTER] ?: true,
             companyId = preferences[PreferencesKeys.COMPANY_ID] ?: "",
+            userId = preferences[PreferencesKeys.USER_ID] ?: ""
         )
     }
 
@@ -89,55 +92,14 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-//    suspend fun updateDaysFilter(string: kotlin.String) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.DAYS_FILTER] = string
-//        }
-//    }
-//
-//    suspend fun updateCompletedStatusFilter(bool: Boolean) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.COMPLETED_STATUS_FILTER] = bool
-//        }
-//    }
-//
-//    suspend fun updateFailedStatusFilter(bool: Boolean) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.FAILED_STATUS_FILTER] = bool
-//        }
-//    }
-//
-//    suspend fun updatePendingStatusFilter(bool: Boolean) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.PENDING_STATUS_FILTER] = bool
-//        }
-//    }
-//
-//    suspend fun updateDpkProductFilter(bool: Boolean) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.DPK_PRODUCT_FILTER] = bool
-//        }
-//    }
-//
-//    suspend fun updatePmsProductFilter(bool: Boolean) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.PMS_PRODUCT_FILTER] = bool
-//        }
-//    }
-//
-//    suspend fun updateAgoProductFilter(bool: Boolean) {
-//        dataStore.edit { mutablePreferences ->
-//            mutablePreferences[PreferencesKeys.AGO_PRODUCT_FILTER] = bool
-//        }
-//    }
-
     suspend fun updateLoggedIn(
         loggedIn: Boolean,
         username: String,
         userEmail: String,
         token: String,
         phoneNumber: String,
-        companyId: String
+        companyId: String,
+        userId: String
     ) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.LOGGED_IN] = loggedIn
@@ -146,6 +108,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             mutablePreferences[PreferencesKeys.TOKEN] = token
             mutablePreferences[PreferencesKeys.PHONE_NUMBER] = phoneNumber
             mutablePreferences[PreferencesKeys.COMPANY_ID] = companyId
+            mutablePreferences[PreferencesKeys.USER_ID] = userId
         }
     }
 

@@ -12,7 +12,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 
 

@@ -54,7 +54,7 @@ object Util {
             val listType = object : TypeToken<T>() {}.type
             val adapter: JsonAdapter<T> = moshi.adapter(listType)
             val data = adapter.fromJson(stringJson)
-            Timber.d("Data $data")
+            Timber.d("UpdateProfileData $data")
             return data
         } catch (e: IOException) {
             e.printStackTrace()

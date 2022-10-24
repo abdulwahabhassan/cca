@@ -6,11 +6,11 @@ import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.WalletRepository
 import com.smartflowtech.cupidcustomerapp.model.*
-import com.smartflowtech.cupidcustomerapp.model.response.TransactionsResponseData
-import com.smartflowtech.cupidcustomerapp.model.response.WalletResponseData
+import com.smartflowtech.cupidcustomerapp.model.response.TransactionsData
+import com.smartflowtech.cupidcustomerapp.model.response.WalletData
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -22,7 +22,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository,
     private val transactionRepository: TransactionRepository,
     private val walletRepository: WalletRepository
@@ -35,6 +35,7 @@ class HomeScreenViewModel @Inject constructor(
             wallets = emptyList()
         )
     )
+        private set
 
     init {
         getTransactionsAndWallets()
@@ -120,16 +121,16 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun mapWalletsResponseData(data: List<WalletResponseData>?): List<Wallet>? {
+    private fun mapWalletsResponseData(data: List<WalletData>?): List<Wallet>? {
         return data?.map { walletResponseData -> walletResponseData.mapToWallet() }
     }
 
     private fun mapTransactionsResponseData(
-        result: List<TransactionsResponseData>?,
+        result: List<TransactionsData>?,
         prefs: DataStorePrefsRepository.AppConfigPreferences
     ): List<Transaction>? {
         return result?.map { it.mapToTransaction() }?.filter { transaction ->
-//            Timber.d("$transaction")
+            Timber.d("$transaction")
             LocalDate.parse(transaction.date) >= LocalDate.now()
                 .minusDays(
                     when (prefs.periodFilter) {
@@ -194,7 +195,8 @@ class HomeScreenViewModel @Inject constructor(
                 appConfigPreferences.userEmail,
                 appConfigPreferences.token,
                 appConfigPreferences.phoneNumber,
-                appConfigPreferences.companyId
+                appConfigPreferences.companyId,
+                appConfigPreferences.userId
             )
         }
     }
