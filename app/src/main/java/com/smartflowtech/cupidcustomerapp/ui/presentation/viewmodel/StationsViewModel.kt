@@ -13,9 +13,11 @@ import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.LocationScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.ProfileScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class StationsViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository,
     private val stationsRepository: StationsRepository

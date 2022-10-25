@@ -116,8 +116,8 @@ fun LoginScreen(
                     )
                     .align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.Bottom
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 item {
                     Spacer(
@@ -326,11 +326,12 @@ fun LoginScreen(
                             )
                         }
                     }
+                }
+
+                item {
                     //Powered by Smartflow
                     Text(
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .align(Alignment.BottomCenter),
+                        modifier = Modifier.padding(bottom = 16.dp),
                         text = "Powered by Smartflow Technologies",
                         style = MaterialTheme.typography.caption,
                     )

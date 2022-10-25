@@ -101,9 +101,10 @@ fun ResetPasswordScreen(
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
-                    ),
+                    )
+                    .align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 item {
                     Spacer(

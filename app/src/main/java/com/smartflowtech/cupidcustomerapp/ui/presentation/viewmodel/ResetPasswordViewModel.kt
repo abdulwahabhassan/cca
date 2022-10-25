@@ -10,9 +10,11 @@ import com.smartflowtech.cupidcustomerapp.model.request.VerifyEmailRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ResetPasswordScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ResetPasswordViewModel @Inject constructor(
     private val passwordRepository: PasswordRepository,
     private val dataStorePrefsRepository: DataStorePrefsRepository
