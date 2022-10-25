@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.password
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -27,17 +28,13 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 fun ResetPasswordScreen(
     viewModel: ResetPasswordViewModel,
     uiState: ResetPasswordScreenUiState,
-    goToLoginScreen: () -> Unit,
+    onBackArrowPressed: () -> Unit,
     goToVerifyEmailScreen: () -> Unit,
 ) {
 
-    BackHandler(viewModel.appConfigPreferences.onBoarded) {
-        goToLoginScreen()
-    }
-
     val scaffoldState = rememberScaffoldState()
 
-    var email by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("abdulwahab.hassan@smartflowtech.com") }
 
     // Error and labels
     var isEmailError by rememberSaveable { mutableStateOf(false) }
@@ -94,6 +91,18 @@ fun ResetPasswordScreen(
                 painter = painterResource(id = R.drawable.ic_smartflow),
                 contentDescription = "Vendor logo"
             )
+
+            IconButton(
+                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp),
+                onClick = {
+                    onBackArrowPressed()
+                }) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "Back arrow",
+                    tint = Color.White,
+                )
+            }
 
             LazyColumn(
                 Modifier
@@ -182,7 +191,8 @@ fun ResetPasswordScreen(
                                     } else {
                                         emailErrorLabel = ""
                                         isEmailError = false
-                                        viewModel.forgotPasswordVerifyEmail(email = trimmedEmail)
+                                        //viewModel.forgotPasswordVerifyEmail(email = trimmedEmail)
+                                        goToVerifyEmailScreen()
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),

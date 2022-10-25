@@ -92,7 +92,8 @@ fun RootNavigation(
         composable(route = Screen.GetStartedFirst.route) {
             GetStartedFirstScreen {
                 rootNavHostController.navigate(
-                    Screen.GetStartedSecond.route
+                    Screen.GetStartedSecond.route,
+                    NavOptions.Builder().setLaunchSingleTop(true).build()
                 )
             }
         }
@@ -101,7 +102,8 @@ fun RootNavigation(
             GetStartedSecondScreen(
                 goToLoginScreen = {
                     rootNavHostController.navigate(
-                        Screen.Login.route
+                        Screen.Login.route,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
                     )
                 },
                 getStarted = {
@@ -125,7 +127,8 @@ fun RootNavigation(
                 },
                 goToResetPassword = {
                     rootNavHostController.navigate(
-                        Screen.ResetPassword.route
+                        Screen.ResetPassword.route,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
                     )
                 },
                 finishActivity = {
@@ -142,13 +145,12 @@ fun RootNavigation(
                 uiState = resetPasswordViewModel.resetPasswordScreenUiState,
                 goToVerifyEmailScreen = {
                     rootNavHostController.navigate(
-                        Screen.VerifyEmail.route
+                        Screen.VerifyEmail.route,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
                     )
                 },
-                goToLoginScreen = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route
-                    )
+                onBackArrowPressed = {
+                    rootNavHostController.popBackStack()
                 },
             )
         }
@@ -157,13 +159,12 @@ fun RootNavigation(
             VerifyEmailScreen(
                 goToNewPasswordScreen = {
                     rootNavHostController.navigate(
-                        Screen.NewPassword.route
+                        Screen.NewPassword.route,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
                     )
                 },
-                goToResetPasswordScreen = {
-                    rootNavHostController.navigate(
-                        Screen.ResetPassword.route
-                    )
+                onBackArrowPressed = {
+                    rootNavHostController.popBackStack()
                 }
             )
         }
@@ -175,13 +176,12 @@ fun RootNavigation(
                 uiState = newPasswordViewModel.newPasswordScreenUiState,
                 goToLoginScreen = {
                     rootNavHostController.navigate(
-                        Screen.Login.route
+                        Screen.Login.route,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
                     )
                 },
-                goToResetPasswordScreen = {
-                    rootNavHostController.navigate(
-                        Screen.ResetPassword.route
-                    )
+                onBackArrowPressed = {
+                    rootNavHostController.popBackStack()
                 }
             )
         }

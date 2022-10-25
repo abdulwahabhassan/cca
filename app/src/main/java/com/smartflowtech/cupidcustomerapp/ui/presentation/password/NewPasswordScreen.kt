@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.password
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -39,12 +39,8 @@ fun NewPasswordScreen(
     viewModel: NewPasswordViewModel,
     uiState: NewPasswordScreenUiState,
     goToLoginScreen: () -> Unit,
-    goToResetPasswordScreen: () -> Unit
+    onBackArrowPressed: () -> Unit
 ) {
-
-    BackHandler(true) {
-        goToResetPasswordScreen()
-    }
 
     // Visibility and input text
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
@@ -59,18 +55,18 @@ fun NewPasswordScreen(
     var confirmPasswordErrorLabel by rememberSaveable { mutableStateOf("") }
 
     // Password validation
-    val isEightCharactersLong by rememberSaveable { derivedStateOf { newPassword.length >= 8 } }
-    val hasAtLeastOneUpperCaseLetter by rememberSaveable {
+    val isEightCharactersLong by remember { derivedStateOf { newPassword.length >= 8 } }
+    val hasAtLeastOneUpperCaseLetter by remember {
         derivedStateOf { newPassword.contains(Regex("[A-Z]")) }
     }
-    val hasAtLeastOneSpecialCharacter by rememberSaveable {
+    val hasAtLeastOneSpecialCharacter by remember {
         derivedStateOf { newPassword.contains(Regex("!|@|#|\\$|%|\\^|&|\\*")) }
     }
-    val hasAtLeastOneLowerCaseLetter by rememberSaveable {
-        derivedStateOf { newPassword.contains("a-z") }
+    val hasAtLeastOneLowerCaseLetter by remember {
+        derivedStateOf { newPassword.contains(Regex("[a-z]")) }
     }
 
-    var showSuccessDialog by rememberSaveable { mutableStateOf(false) }
+    var showSuccessDialog by remember { mutableStateOf(false) }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -126,6 +122,20 @@ fun NewPasswordScreen(
                 contentDescription = "Vendor logo"
             )
 
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(top = 24.dp),
+                onClick = {
+                    onBackArrowPressed()
+                }) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "Back arrow",
+                    tint = Color.White,
+                )
+            }
+
             LazyColumn(
                 Modifier
                     .fillMaxHeight(0.68f)
@@ -135,7 +145,7 @@ fun NewPasswordScreen(
                     )
                     .align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 item {
                     Spacer(
@@ -297,25 +307,6 @@ fun NewPasswordScreen(
                     ) {
                         Icon(
                             modifier = Modifier.size(18.dp),
-                            tint = if (hasAtLeastOneSpecialCharacter) brightGreen else red,
-                            painter = if (hasAtLeastOneSpecialCharacter)
-                                painterResource(id = R.drawable.ic_valid)
-                            else
-                                painterResource(
-                                    id = R.drawable.ic_invalid
-                                ),
-                            contentDescription = "valid status icon"
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Include at least 1 special character (!@#$%^&*)")
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
                             tint = if (hasAtLeastOneLowerCaseLetter) brightGreen else red,
                             painter = if (hasAtLeastOneLowerCaseLetter)
                                 painterResource(id = R.drawable.ic_valid)
@@ -328,6 +319,25 @@ fun NewPasswordScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = "Include at least 1 lowercase letter")
                     }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            tint = if (hasAtLeastOneSpecialCharacter) brightGreen else red,
+                            painter = if (hasAtLeastOneSpecialCharacter)
+                                painterResource(id = R.drawable.ic_valid)
+                            else
+                                painterResource(
+                                    id = R.drawable.ic_invalid
+                                ),
+                            contentDescription = "valid status icon"
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "Include at least 1 special character (!@#$%^&*)")
+                    }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -339,7 +349,12 @@ fun NewPasswordScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(54.dp),
-                                enabled = newPassword.isNotEmpty() && confirmPassword.isNotEmpty(),
+                                enabled = newPassword.isNotEmpty() &&
+                                        confirmPassword.isNotEmpty() &&
+                                        isEightCharactersLong &&
+                                        hasAtLeastOneLowerCaseLetter &&
+                                        hasAtLeastOneUpperCaseLetter &&
+                                        hasAtLeastOneSpecialCharacter,
                                 onClick = {
                                     newPasswordErrorLabel = ""
                                     isNewPasswordError = false
@@ -351,7 +366,8 @@ fun NewPasswordScreen(
 
                                     //Basic validator
                                     if (trimmedNewPassword == trimmedConfirmedPassword) {
-                                        viewModel.updateProfile(newPassword = trimmedNewPassword)
+                                        //viewModel.updateProfile(newPassword = trimmedNewPassword)
+                                        showSuccessDialog = true
                                     } else {
                                         newPasswordErrorLabel = "Passwords do not match!"
                                         isNewPasswordError = true
@@ -378,22 +394,23 @@ fun NewPasswordScreen(
                         }
                     }
 
+                }
 
-
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
                         Text(modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .clickable {
                                 goToLoginScreen()
                             }
-                            .padding(8.dp),
+                            .padding(vertical = 24.dp),
                             text = "Back to Login",
                             color = darkBlue
                         )
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
-
                 }
             }
 
@@ -427,7 +444,7 @@ fun NewPasswordScreen(
                         onOkayPressed = {
                             goToLoginScreen()
                         },
-                        buttonText = "Go To Dashboard"
+                        buttonText = "Go To Login"
                     )
                 }
             }

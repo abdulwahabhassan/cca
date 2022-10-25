@@ -1,18 +1,20 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.password
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
@@ -21,12 +23,8 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 @Composable
 fun VerifyEmailScreen(
     goToNewPasswordScreen: () -> Unit,
-    goToResetPasswordScreen: () -> Unit,
+    onBackArrowPressed: () -> Unit,
 ) {
-
-    BackHandler(true) {
-        goToResetPasswordScreen()
-    }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -58,6 +56,7 @@ fun VerifyEmailScreen(
                 contentDescription = "background"
             )
 
+
             Image(
                 modifier = Modifier
                     .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.10f)
@@ -68,6 +67,18 @@ fun VerifyEmailScreen(
                 painter = painterResource(id = R.drawable.ic_smartflow),
                 contentDescription = "Vendor logo"
             )
+
+            IconButton(
+                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp),
+                onClick = {
+                    onBackArrowPressed()
+                }) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "Back arrow",
+                    tint = Color.White,
+                )
+            }
 
             LazyColumn(
                 Modifier
@@ -92,7 +103,8 @@ fun VerifyEmailScreen(
                             .fillMaxWidth(),
                         text = "Verification Email Sent",
                         style = MaterialTheme.typography.h6,
-                        color = darkBlue
+                        color = darkBlue,
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -100,7 +112,8 @@ fun VerifyEmailScreen(
                             .fillMaxWidth(),
                         text = "We sent an email to hass********.com \nPlease verify your email",
                         style = MaterialTheme.typography.body1,
-                        color = grey
+                        color = grey,
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(60.dp))
 
@@ -141,6 +154,6 @@ fun VerifyEmailScreen(
 @Preview(showBackground = true)
 fun PreviewVerificationEmail() {
     CupidCustomerAppTheme {
-        VerifyEmailScreen(goToNewPasswordScreen = {}, goToResetPasswordScreen = {})
+        VerifyEmailScreen(goToNewPasswordScreen = {}, onBackArrowPressed = {})
     }
 }
