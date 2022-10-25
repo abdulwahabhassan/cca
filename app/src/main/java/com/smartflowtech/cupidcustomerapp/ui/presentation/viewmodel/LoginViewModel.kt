@@ -13,6 +13,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreenUiSta
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +33,7 @@ class LoginViewModel @Inject constructor(
             when (val repositoryResult = loginRepository.login(loginRequestBody)) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
+                        Timber.d("Viewmodel Login Data $data")
                         dataStorePrefsRepository.updateLoggedIn(
                             true,
                             data.fullname?.replace(".", " ")?.capitalizeEachWord() ?: "",

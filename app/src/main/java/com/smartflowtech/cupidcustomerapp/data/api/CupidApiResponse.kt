@@ -7,6 +7,6 @@ data class CupidApiResponse<T>(
     var status: Boolean = false,
     @Json(name = "message")
     var message: String? = null,
-    @Json(name = "editProfileResponse")
+    @Json(name = "data")
     val data: T? = null
 )
