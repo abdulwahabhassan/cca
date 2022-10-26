@@ -350,7 +350,7 @@ object Util {
                 date = "2022-08-01",
                 authType = "Credit",
                 transactionSeqNumber = "TRS90399291",
-                vendorStationName = "Purchase on Cupid",
+                vendorStationName = "Purchase on CUPID_PROD",
                 product = "PMS",
                 nfcTagCode = "123"
             ),
@@ -410,7 +410,7 @@ object Util {
                 date = "2022-08-07",
                 authType = "Debit",
                 transactionSeqNumber = "TRS501499291",
-                vendorStationName = "Purchase on Cupid",
+                vendorStationName = "Purchase on CUPID_PROD",
                 product = "DPK",
                 nfcTagCode = "456"
             ),
@@ -434,7 +434,7 @@ object Util {
                 date = "2022-08-24",
                 authType = "Debit",
                 transactionSeqNumber = "TRS97814937841",
-                vendorStationName = "Purchase on Cupid",
+                vendorStationName = "Purchase on CUPID_PROD",
                 product = "AGO",
                 nfcTagCode = "456"
             ),
@@ -446,7 +446,7 @@ object Util {
                 date = LocalDate.now().toString(),
                 authType = "Debit",
                 transactionSeqNumber = "TRS501499291",
-                vendorStationName = "Purchase on Cupid",
+                vendorStationName = "Purchase on CUPID_PROD",
                 product = "DPK",
                 nfcTagCode = "123"
             ),
@@ -458,7 +458,7 @@ object Util {
                 date = "2022-07-31",
                 authType = "Debit",
                 transactionSeqNumber = "TRS5011235591",
-                vendorStationName = "Purchase on Cupid",
+                vendorStationName = "Purchase on CUPID_PROD",
                 product = "PMS",
                 nfcTagCode = "123"
             ),

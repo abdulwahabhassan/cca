@@ -1,7 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.di
 
 
-import com.smartflowtech.cupidcustomerapp.data.api.Api
+import com.smartflowtech.cupidcustomerapp.BuildConfig
 import com.smartflowtech.cupidcustomerapp.data.api.CupidApiService
 import com.smartflowtech.cupidcustomerapp.network.NetworkClient
 import dagger.Module
@@ -17,7 +17,7 @@ object ApiModule {
     fun providesCupidApiService(
         networkClient: NetworkClient
     ): CupidApiService {
-        return networkClient.getApiService(Api.Cupid)
+        return networkClient.getApiService(BuildConfig.CUPID_BASE_URL)
     }
 
 }

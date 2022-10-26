@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -13,7 +14,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenModalBo
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedFirstScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.onboarding.GetStartedSecondScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.password.NewPasswordScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ResetPasswordScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.VerifyEmailScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
@@ -26,6 +27,7 @@ fun RootNavigation(
 ) {
 
     val rootNavHostController = rememberAnimatedNavController()
+    var verifiedEmail: String by rememberSaveable { mutableStateOf("") }
 
     AnimatedNavHost(
         navController = rootNavHostController,
@@ -143,7 +145,8 @@ fun RootNavigation(
             ResetPasswordScreen(
                 viewModel = resetPasswordViewModel,
                 uiState = resetPasswordViewModel.resetPasswordScreenUiState,
-                goToVerifyEmailScreen = {
+                goToVerifyEmailScreen = { email ->
+                    verifiedEmail = email
                     rootNavHostController.navigate(
                         Screen.VerifyEmail.route,
                         NavOptions.Builder().setLaunchSingleTop(true).build()
@@ -165,15 +168,16 @@ fun RootNavigation(
                 },
                 onBackArrowPressed = {
                     rootNavHostController.popBackStack()
-                }
+                },
+                verifiedEmail = verifiedEmail
             )
         }
 
         composable(route = Screen.NewPassword.route) {
-            val newPasswordViewModel = hiltViewModel<NewPasswordViewModel>()
-            NewPasswordScreen(
-                viewModel = newPasswordViewModel,
-                uiState = newPasswordViewModel.newPasswordScreenUiState,
+            val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
+            ChangePasswordScreen(
+                viewModel = changePasswordViewModel,
+                uiState = changePasswordViewModel.changePasswordScreenUiState,
                 goToLoginScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,

@@ -23,16 +23,18 @@ android {
 
 
     buildTypes {
-        release {
+        all {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
             buildConfigField("String", "PAYSTACK_PUBLIC_KEY", PSTK_PUBLIC_LIVE_KEY)
+            buildConfigField("String", "CUPID_BASE_URL", CUPID_PROD_BASE_URL)
         }
 
         debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "PAYSTACK_PUBLIC_KEY", PSTK_PUBLIC_TEST_KEY)
+            buildConfigField("String", "CUPID_BASE_URL", CUPID_PROD_BASE_URL)
         }
     }
     compileOptions {

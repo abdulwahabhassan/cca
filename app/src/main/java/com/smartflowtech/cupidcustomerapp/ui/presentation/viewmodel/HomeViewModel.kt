@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
         private set
 
     init {
-        getTransactionsAndWallets()
+        //getTransactionsAndWallets()
     }
 
     fun getTransactionsAndWallets() {
@@ -196,7 +196,8 @@ class HomeViewModel @Inject constructor(
                 appConfigPreferences.token,
                 appConfigPreferences.phoneNumber,
                 appConfigPreferences.companyId,
-                appConfigPreferences.userId
+                appConfigPreferences.userId,
+                appConfigPreferences.fullName
             )
         }
     }

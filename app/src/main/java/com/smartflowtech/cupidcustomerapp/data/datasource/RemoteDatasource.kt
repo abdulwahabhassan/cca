@@ -46,6 +46,18 @@ class RemoteDatasource @Inject constructor(
         )
     }
 
+    suspend fun changePassword(
+        token: String,
+        userId: String,
+        changePasswordRequestBody: ChangePasswordRequestBody
+    ): CupidApiResponse<ChangePasswordData> {
+        return apiService.changePassword(
+            token = token,
+            userId = userId,
+            changePasswordRequestBody = changePasswordRequestBody
+        )
+    }
+
     suspend fun verifyPayStackPayment(
         token: String,
         verifyPaymentRequestBody: VerifyPaymentRequestBody

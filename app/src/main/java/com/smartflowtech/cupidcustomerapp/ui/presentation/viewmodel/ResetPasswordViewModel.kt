@@ -32,11 +32,7 @@ class ResetPasswordViewModel @Inject constructor(
 
             when (val repositoryResult = passwordRepository.forgotPasswordVerifyEmail(
                 token = appConfigPreferences.token,
-                VerifyEmailRequestBody(
-                    hostname = "",
-                    type = "",
-                    email = email
-                )
+                VerifyEmailRequestBody(email = email)
             )) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->

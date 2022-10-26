@@ -69,7 +69,7 @@ fun AddFundsBankPaymentMode(
         Text(text = bankName, fontWeight = FontWeight.Bold, color = grey)
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Money sent to this account number will automatically top up your Cupid",
+            text = "Money sent to this account number will automatically top up your CUPID_PROD",
             color = grey
         )
     }

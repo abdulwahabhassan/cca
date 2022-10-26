@@ -420,7 +420,7 @@ fun ReceiptPreview() {
                 authType = "Mobile Transfer",
                 transactionSeqNumber = "TRS90399291",
                 date = "2022-08-31 08:21AM",
-                vendorStationName = "Purchase on Cupid",
+                vendorStationName = "Purchase on CUPID_PROD",
                 amount = "₦20,500.05",
                 status = "Successful",
                 time = "08:21AM",

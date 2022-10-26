@@ -30,7 +30,7 @@ fun ResetPasswordScreen(
     viewModel: ResetPasswordViewModel,
     uiState: ResetPasswordScreenUiState,
     onBackArrowPressed: () -> Unit,
-    goToVerifyEmailScreen: () -> Unit,
+    goToVerifyEmailScreen: (String) -> Unit,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -194,8 +194,7 @@ fun ResetPasswordScreen(
                                     } else {
                                         emailErrorLabel = ""
                                         isEmailError = false
-                                        //viewModel.forgotPasswordVerifyEmail(email = trimmedEmail)
-                                        goToVerifyEmailScreen()
+                                        viewModel.forgotPasswordVerifyEmail(email = trimmedEmail)
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),
@@ -212,7 +211,8 @@ fun ResetPasswordScreen(
                                 modifier = Modifier.height(54.dp)
                             )
                             if (uiState.viewModelResult == ViewModelResult.SUCCESS) {
-                                goToVerifyEmailScreen()
+
+                                goToVerifyEmailScreen(email)
                             }
                         }
                     }

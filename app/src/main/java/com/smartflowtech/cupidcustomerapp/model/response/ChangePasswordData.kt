@@ -2,7 +2,7 @@ package com.smartflowtech.cupidcustomerapp.model.response
 
 import com.squareup.moshi.Json
 
-data class VerifyEmailData(
+data class ChangePasswordData(
     @Json(name = "id")
     val id: Long?,
 
@@ -13,10 +13,10 @@ data class VerifyEmailData(
     val email: String?,
 
     @Json(name = "username")
-    val username: String?,
+    val username: Any? = null,
 
     @Json(name = "is_company_set_up")
-    val isCompanySetUp: Boolean?,
+    val isCompanySetUp: Boolean? = null,
 
     @Json(name = "phone_number")
     val phoneNumber: String?,
@@ -27,7 +27,6 @@ data class VerifyEmailData(
     @Json(name = "company_id")
     val companyID: String?,
 
-    @Json(name = "status")
     val status: String?,
 
     @Json(name = "created_at")
@@ -37,7 +36,7 @@ data class VerifyEmailData(
     val updatedAt: String?,
 
     @Json(name = "deleted_at")
-    val deletedAt: String?,
+    val deletedAt: String? = null,
 
     @Json(name = "first_name")
     val firstName: String?,

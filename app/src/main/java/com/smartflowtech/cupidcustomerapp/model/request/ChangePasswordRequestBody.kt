@@ -2,7 +2,7 @@ package com.smartflowtech.cupidcustomerapp.model.request
 
 import com.squareup.moshi.Json
 
-data class UpdateProfileRequestBody(
+data class ChangePasswordRequestBody(
     @Json(name = "id")
     val id: String,
     @Json(name = "email")
@@ -11,8 +11,10 @@ data class UpdateProfileRequestBody(
     val userName: String,
     @Json(name = "company_id")
     val companyId: String,
-    @Json(name = "fullname")
-    val fullName: String,
-    @Json(name = "phone_number")
-    val phoneNumber: String
+    @Json(name = "currentpassword")
+    val currentPassword: String,
+    @Json(name = "password")
+    val password: String,
+    @Json(name = "repeatPassword")
+    val repeatPassword: String,
 )

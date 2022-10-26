@@ -268,8 +268,8 @@ fun LoginScreen(
                                     if (!isEmailError &&
                                         !isPasswordError
                                     ) {
-                                        //viewModel.login(LoginRequestBody(trimmedEmail, password))
-                                        goToHomeScreen()
+                                        viewModel.login(LoginRequestBody(trimmedEmail, password))
+                                        //goToHomeScreen()
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),

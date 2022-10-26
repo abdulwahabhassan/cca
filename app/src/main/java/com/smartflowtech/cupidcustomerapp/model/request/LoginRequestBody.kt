@@ -9,10 +9,6 @@ data class LoginRequestBody(
     val password: String,
     @Json(name = "type")
     val type: String = "FLEET_MANAGER",
-    @Json(name = "browser_name")
-    val browserName: String = "",
-    @Json(name = "browser_version")
-    val browserVersion: String = "Mobile",
     @Json(name = "os_version")
     val osVersion: String = "Android",
     @Json(name = "hostname")

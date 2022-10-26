@@ -36,12 +36,19 @@ interface CupidApiService {
         @Query("company_id") companyId: String
     ): CupidApiResponse<List<WalletData>>
 
-    @POST("users/profile/{user_id}")
+    @PATCH("company_users/{user_id}/profile")
     suspend fun updateProfile(
         @Header("Authorization") token: String,
         @Path("user_id") userId: String,
         @Body updateProfileRequestBody: UpdateProfileRequestBody
     ): CupidApiResponse<UpdateProfileData>
+
+    @PATCH("company_users/{user_id}/profile")
+    suspend fun changePassword(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: String,
+        @Body changePasswordRequestBody: ChangePasswordRequestBody
+    ): CupidApiResponse<ChangePasswordData>
 
     @POST("payments/initiate/paystack")
     suspend fun verifyPayStackPayment(

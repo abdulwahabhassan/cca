@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.network
 
-import com.smartflowtech.cupidcustomerapp.data.api.Api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,15 +7,15 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class NetworkClient @Inject constructor (
-    private val moshiConverterFactory: MoshiConverterFactory,
+class NetworkClient @Inject constructor(
+    val moshiConverterFactory: MoshiConverterFactory,
 ) {
 
     private val loggerInterceptor = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 
-    private val okHttpClient by lazy {
+    val okHttpClient by lazy {
         OkHttpClient.Builder().apply {
             this
                 .addInterceptor(loggerInterceptor)
@@ -27,18 +26,15 @@ class NetworkClient @Inject constructor (
         }.build()
     }
 
-    inline fun <reified T>getApiService(api: Api): T {
-        return getRetrofitInstance(api.baseUrl).create(T::class.java)
-    }
-
-    fun getRetrofitInstance(
+    inline fun <reified T> getApiService(
         baseUrl: String
-    ): Retrofit {
+    ): T {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
+            .create(T::class.java)
     }
 
 }

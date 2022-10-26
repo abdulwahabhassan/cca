@@ -35,13 +35,14 @@ class LoginViewModel @Inject constructor(
                     repositoryResult.data?.let { data ->
                         Timber.d("Viewmodel Login Data $data")
                         dataStorePrefsRepository.updateLoggedIn(
-                            true,
-                            data.fullname?.replace(".", " ")?.capitalizeEachWord() ?: "",
-                            data.email ?: "",
-                            "Bearer ${data.token}",
-                            data.phoneNumber ?: "",
-                            data.companyId ?: "",
-                            data.id?.toString() ?: ""
+                            loggedIn = true,
+                            userName = data.username ?: "",
+                            userEmail = data.email ?: "",
+                            token = "Bearer ${data.token}",
+                            phoneNumber = data.phoneNumber ?: "",
+                            companyId = data.companyId ?: "",
+                            userId = data.id?.toString() ?: "",
+                            fullName = data.fullname ?: ""
                         )
                         loginScreenUiState =
                             LoginScreenUiState(

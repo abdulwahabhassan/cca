@@ -31,27 +31,31 @@ import androidx.compose.ui.window.DialogProperties
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.NewPasswordViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ChangePasswordViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 
 @Composable
-fun NewPasswordScreen(
-    viewModel: NewPasswordViewModel,
-    uiState: NewPasswordScreenUiState,
+fun ChangePasswordScreen(
+    viewModel: ChangePasswordViewModel,
+    uiState: ChangePasswordScreenUiState,
     goToLoginScreen: () -> Unit,
     onBackArrowPressed: () -> Unit
 ) {
 
     // Visibility and input text
+    var currentPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var currentPassword by rememberSaveable { mutableStateOf("") }
     var newPassword by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
 
     // Error and labels
+    var isCurrentPasswordError by rememberSaveable { mutableStateOf(false) }
     var isNewPasswordError by rememberSaveable { mutableStateOf(false) }
     var isConfirmPasswordError by rememberSaveable { mutableStateOf(false) }
+    var currentPasswordErrorLabel by rememberSaveable { mutableStateOf("") }
     var newPasswordErrorLabel by rememberSaveable { mutableStateOf("") }
     var confirmPasswordErrorLabel by rememberSaveable { mutableStateOf("") }
 
@@ -156,7 +160,7 @@ fun NewPasswordScreen(
                             .height(48.dp)
 
                     )
-                    //Change password
+                    //Change password text
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -173,6 +177,52 @@ fun NewPasswordScreen(
                         color = grey
                     )
                     Spacer(modifier = Modifier.height(32.dp))
+
+                    //Enter Current password
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        value = currentPassword,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        onValueChange = { text ->
+                            currentPassword = text
+                        },
+                        singleLine = true,
+                        label = {
+                            if (isCurrentPasswordError) {
+                                Text(text = currentPasswordErrorLabel)
+                            } else {
+                                Text(text = "Enter current password")
+                            }
+                        },
+                        isError = isCurrentPasswordError,
+                        visualTransformation = if (currentPasswordVisible)
+                            VisualTransformation.None
+                        else
+                            PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val image = if (currentPasswordVisible)
+                                Icons.Filled.Visibility
+                            else Icons.Filled.VisibilityOff
+                            val description =
+                                if (currentPasswordVisible) "Hide password" else "Show password"
+                            IconButton(onClick = {
+                                currentPasswordVisible =
+                                    !currentPasswordVisible
+                            }) {
+                                Icon(imageVector = image, description, tint = Color.LightGray)
+                            }
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = lightGrey,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Transparent
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     //Enter new password
                     TextField(
@@ -352,13 +402,17 @@ fun NewPasswordScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(54.dp),
-                                enabled = newPassword.isNotEmpty() &&
+
+                                enabled = currentPassword.isNotEmpty() &&
+                                        newPassword.isNotEmpty() &&
                                         confirmPassword.isNotEmpty() &&
                                         isEightCharactersLong &&
                                         hasAtLeastOneLowerCaseLetter &&
                                         hasAtLeastOneUpperCaseLetter &&
                                         hasAtLeastOneSpecialCharacter,
                                 onClick = {
+                                    currentPasswordErrorLabel = ""
+                                    isCurrentPasswordError = false
                                     newPasswordErrorLabel = ""
                                     isNewPasswordError = false
                                     confirmPasswordErrorLabel = ""
@@ -366,11 +420,14 @@ fun NewPasswordScreen(
 
                                     val trimmedNewPassword = newPassword.trim()
                                     val trimmedConfirmedPassword = confirmPassword.trim()
+                                    val trimmedOldPassword = currentPassword.trim()
 
                                     //Basic validator
                                     if (trimmedNewPassword == trimmedConfirmedPassword) {
-                                        //viewModel.updateProfile(newPassword = trimmedNewPassword)
-                                        showSuccessDialog = true
+                                        viewModel.changePassword(
+                                            currentPassword = trimmedOldPassword,
+                                            newPassword = trimmedNewPassword
+                                        )
                                     } else {
                                         newPasswordErrorLabel = "Passwords do not match!"
                                         isNewPasswordError = true
