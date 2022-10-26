@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -93,6 +94,8 @@ fun LoginScreen(
             }
 
             Image(
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
                 painter = painterResource(id = R.drawable.design_background),
                 contentDescription = "background"
             )
@@ -265,7 +268,8 @@ fun LoginScreen(
                                     if (!isEmailError &&
                                         !isPasswordError
                                     ) {
-                                        viewModel.login(LoginRequestBody(trimmedEmail, password))
+                                        //viewModel.login(LoginRequestBody(trimmedEmail, password))
+                                        goToHomeScreen()
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),

@@ -24,10 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.AdsCard
-import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
-import com.smartflowtech.cupidcustomerapp.ui.theme.grey
-import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
 fun SearchBar(
@@ -45,7 +42,7 @@ fun SearchBar(
                 .fillMaxWidth(maxWidthFraction)
                 .height(50.dp)
                 .padding(horizontal = 16.dp)
-                .border(1.dp, darkBlue, RoundedCornerShape(12.dp))
+                .border(1.dp, lineGrey, RoundedCornerShape(12.dp))
         else
             Modifier
                 .fillMaxWidth(maxWidthFraction)
@@ -74,7 +71,7 @@ fun SearchBar(
         },
         shape = RoundedCornerShape(12.dp),
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = lightGrey,
+            backgroundColor = if (applyBorder) Color.White else lightGrey,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent

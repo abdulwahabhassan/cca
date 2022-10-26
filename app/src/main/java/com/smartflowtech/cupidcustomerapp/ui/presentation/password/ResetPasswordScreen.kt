@@ -14,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -77,6 +78,8 @@ fun ResetPasswordScreen(
             }
 
             Image(
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
                 painter = painterResource(id = R.drawable.design_background),
                 contentDescription = "background"
             )

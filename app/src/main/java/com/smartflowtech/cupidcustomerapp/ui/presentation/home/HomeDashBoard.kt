@@ -13,6 +13,7 @@ import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -63,10 +64,10 @@ fun HomeDashBoard(
 
         Box(contentAlignment = Alignment.TopCenter) {
             Image(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
                 painter = painterResource(id = R.drawable.ic_design_background),
-                contentDescription = "background",
-                contentScale = ContentScale.FillBounds
+                contentDescription = "background"
             )
             Column(modifier = Modifier) {
                 AnimatedVisibility(

@@ -52,8 +52,13 @@ fun Settings() {
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
-                        Text(text = item.name, fontWeight = FontWeight.Bold)
-                        Text(text = item.description, fontSize = 14.sp)
+                        Text(
+                            text = item.name,
+                            fontFamily = AthleticsFontFamily,
+                            fontWeight = FontWeight.W400,
+                            color = Color.Black
+                        )
+                        Text(text = item.description, fontSize = 14.sp, color = grey)
                     }
                     if (item.name == "Appearance") {
                         Spacer(modifier = Modifier.width(16.dp))

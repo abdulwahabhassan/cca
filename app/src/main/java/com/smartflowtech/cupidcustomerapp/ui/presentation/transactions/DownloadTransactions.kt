@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +25,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun DownloadTransactions(onShowSuccess: () -> Unit) {
+fun DownloadTransactions(showSuccess: () -> Unit) {
 
     var startDate by rememberSaveable { mutableStateOf("") }
     var endDate by rememberSaveable { mutableStateOf("") }
@@ -207,7 +205,7 @@ fun DownloadTransactions(onShowSuccess: () -> Unit) {
                     }
 
                     if (!isStartDateError && !isEndDateError) {
-                        onShowSuccess()
+                        showSuccess()
                     }
                 },
                 shape = RoundedCornerShape(10.dp),

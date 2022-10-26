@@ -26,7 +26,9 @@ fun BottomNavBarNavigation(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     getTransactions: () -> Unit,
     onDownloadTransactionsClicked: () -> Unit,
-    isCardSelected: Boolean
+    isCardSelected: Boolean,
+    onUploadImageClicked: () -> Unit,
+    showProfileUpdateSuccess: () -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -126,7 +128,11 @@ fun BottomNavBarNavigation(
             Settings()
         }
         composable(HomeScreen.Profile.route) {
-            Profile()
+            Profile(
+                onUploadImageClicked = onUploadImageClicked,
+                showProfileUpdateSuccess = showProfileUpdateSuccess,
+                onBackPressed = onBackPressed
+            )
         }
     }
 }

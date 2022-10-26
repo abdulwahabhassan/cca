@@ -44,7 +44,9 @@ fun HomeScreen(
     homeScreenUiState: HomeScreenUiState,
     onLogOutClicked: () -> Unit,
     getTransactions: () -> Unit,
-    onDownloadTransactionsClicked: () -> Unit
+    onDownloadTransactionsClicked: () -> Unit,
+    onUploadImageClicked: () -> Unit,
+    showProfileUpdateSuccess: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -277,7 +279,9 @@ fun HomeScreen(
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
                         getTransactions = getTransactions,
                         onDownloadTransactionsClicked = onDownloadTransactionsClicked,
-                        isCardSelected
+                        isCardSelected,
+                        onUploadImageClicked = onUploadImageClicked,
+                        showProfileUpdateSuccess = showProfileUpdateSuccess
                     )
                 }
             }) { paddingValues ->

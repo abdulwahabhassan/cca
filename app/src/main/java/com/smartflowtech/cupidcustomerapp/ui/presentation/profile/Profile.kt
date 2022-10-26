@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,7 +32,11 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 
 @Composable
-fun Profile() {
+fun Profile(
+    onUploadImageClicked: () -> Unit,
+    showProfileUpdateSuccess: () -> Unit,
+    onBackPressed: () -> Unit
+) {
 
     // Visibility and input text
     var firstName by rememberSaveable { mutableStateOf("") }
@@ -66,7 +71,9 @@ fun Profile() {
                     Image(
                         modifier = Modifier
                             .size(100.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .clipToBounds()
+                            .clickable(false) { },
                         painter = painterResource(id = R.drawable.img_person_3),
                         contentDescription = "Avatar",
                         contentScale = ContentScale.Crop
@@ -74,7 +81,12 @@ fun Profile() {
                     Icon(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(start = 60.dp, top = 60.dp),
+                            .padding(start = 60.dp, top = 60.dp)
+                            .clipToBounds()
+                            .clip(CircleShape)
+                            .clickable {
+                                onUploadImageClicked()
+                            },
                         painter = painterResource(id = R.drawable.ic_edit_profile),
                         contentDescription = "Edit icon",
                         tint = Color.Unspecified
@@ -195,7 +207,12 @@ fun Profile() {
                     val trimmedFirstName = firstName.trim()
                     val trimmedLastName = lastName.trim()
                     val trimmedEmail = email.trim()
-                    //do something
+
+                    showProfileUpdateSuccess()
+                    onBackPressed()
+
+
+
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -213,5 +230,5 @@ fun Profile() {
 @Composable
 @Preview(showBackground = true)
 fun PreviewProfile() {
-    Profile()
+    Profile({}, {}, {})
 }

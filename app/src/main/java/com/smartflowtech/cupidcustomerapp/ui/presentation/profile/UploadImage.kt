@@ -24,7 +24,6 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-@Preview(showBackground = true)
 fun UploadImage() {
 
     val options = Util.getListOfUploadImageOptions()
@@ -38,7 +37,6 @@ fun UploadImage() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Spacer(modifier = Modifier.height(24.dp))
             Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -65,9 +63,7 @@ fun UploadImage() {
 @Composable
 fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImageOption) -> Unit) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
@@ -75,7 +71,7 @@ fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImag
                     onClick(data)
                 }
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(horizontal = 24.dp, vertical = 12.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -96,13 +92,14 @@ fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImag
                 Text(
                     text = data.title,
                     fontFamily = AthleticsFontFamily,
-                    fontWeight = FontWeight.W400
+                    fontWeight = FontWeight.W400,
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
                     Text(
                         text = data.description,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         color = grey
                     )
                 }
@@ -120,10 +117,7 @@ fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImag
 @Composable
 fun UploadImageOptionPreview() {
     CupidCustomerAppTheme {
-        UploadImageOption(
-            Util.getListOfUploadImageOptions()[0],
-            {}
-        )
+        UploadImage ()
     }
 
 }

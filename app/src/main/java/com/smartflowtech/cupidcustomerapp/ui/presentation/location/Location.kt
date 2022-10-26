@@ -108,7 +108,7 @@ fun Location() {
                 ) {
                     Text(
                         text = "List",
-                        color = Color.Black,
+                        color = if (selectedTab == "List") darkBlue else grey,
                         fontFamily = AthleticsFontFamily,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -150,7 +150,7 @@ fun Location() {
                 ) {
                     Text(
                         text = "Map",
-                        color = Color.Black,
+                        color = if (selectedTab == "Map") darkBlue else grey,
                         fontFamily = AthleticsFontFamily,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -204,8 +204,12 @@ fun Location() {
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
-                                    Text(text = station.name, fontWeight = FontWeight.Bold)
-                                    Text(text = station.address, fontSize = 14.sp)
+                                    Text(
+                                        text = station.name, fontFamily = AthleticsFontFamily,
+                                        fontWeight = FontWeight.W400,
+                                        color = Color.Black
+                                    )
+                                    Text(text = station.address, fontSize = 14.sp, color = grey)
                                 }
                             }
                             Spacer(modifier = Modifier.height(16.dp))

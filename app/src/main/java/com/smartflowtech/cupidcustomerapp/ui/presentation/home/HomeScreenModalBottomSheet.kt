@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
+import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.UploadImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
 
@@ -40,8 +42,13 @@ fun HomeScreenModalBottomSheet(
     shouldShowDownloadTransactions: Boolean,
     shouldShowSuccess: Boolean,
     showSuccess: (Boolean) -> Unit,
-    showDownloadTransactions: (Boolean) -> Unit
+    showDownloadTransactions: (Boolean) -> Unit,
+    shouldShowUploadImage: Boolean,
+    showUploadImage: (Boolean) -> Unit
 ) {
+
+    var successTitle: String by rememberSaveable{ mutableStateOf("Success") }
+    var successMessage: String by rememberSaveable{ mutableStateOf("") }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -106,16 +113,20 @@ fun HomeScreenModalBottomSheet(
                         }
                     }
 
-                    if (shouldShowDownloadTransactions) {
+                    if (shouldShowUploadImage) {
+                        UploadImage()
+                    } else if (shouldShowDownloadTransactions) {
                         DownloadTransactions(
-                            onShowSuccess = {
+                            showSuccess = {
+                                successTitle = "Sent"
+                                successMessage = "We've sent the requested statements to your email"
                                 showSuccess(true)
                             }
                         )
                     } else if (shouldShowSuccess) {
                         Success(
-                            title = "Sent",
-                            message = "We've sent the requested statements to your email",
+                            title = successTitle,
+                            message = successMessage,
                             onOkayPressed = {
                                 onBackPressed()
                             }
@@ -139,7 +150,8 @@ fun HomeScreenModalBottomSheet(
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
             onAddFundsClicked = onAddFundsClicked,
-            userName = appConfigPreferences.userName,
+            userName = "Hassan Abdulwahab",
+//            appConfigPreferences.userName,
             walletBalanceVisibility = appConfigPreferences.walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
             homeScreenUiState = homeScreenUiState,
@@ -147,6 +159,14 @@ fun HomeScreenModalBottomSheet(
             getTransactions = getTransactions,
             onDownloadTransactionsClicked = {
                 showDownloadTransactions(true)
+            },
+            onUploadImageClicked = {
+                showUploadImage(true)
+            },
+            showProfileUpdateSuccess = {
+                successTitle = "Successful"
+                successMessage = "Profile updated"
+                showSuccess(true)
             }
         )
     }

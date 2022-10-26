@@ -33,10 +33,14 @@ fun HomeScreenModalBottomSheetLayer(
     var shouldShowSuccess: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
+    var shouldShowUploadImage: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
         if (!modalBottomSheetState.isVisible) {
             shouldShowSuccess = false
+            shouldShowUploadImage = false
             shouldShowDownloadTransactions = false
         }
     })
@@ -51,6 +55,7 @@ fun HomeScreenModalBottomSheetLayer(
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
                     shouldShowSuccess = false
+                    shouldShowUploadImage = false
                     shouldShowDownloadTransactions = false
                 }
             } else {
@@ -85,6 +90,7 @@ fun HomeScreenModalBottomSheetLayer(
         showDownloadTransactions = { bool ->
             shouldShowDownloadTransactions = bool
             shouldShowSuccess = !bool
+            shouldShowUploadImage = !bool
             if (!modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
@@ -94,7 +100,19 @@ fun HomeScreenModalBottomSheetLayer(
         shouldShowSuccess = shouldShowSuccess,
         showSuccess = { bool ->
             shouldShowSuccess = bool
+            shouldShowUploadImage = !bool
             shouldShowDownloadTransactions = !bool
+            if (!modalBottomSheetState.isVisible) {
+                coroutineScope.launch {
+                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
+                }
+            }
+        },
+        shouldShowUploadImage = shouldShowUploadImage,
+        showUploadImage = { bool ->
+            shouldShowUploadImage = bool
+            shouldShowDownloadTransactions = !bool
+            shouldShowSuccess = !bool
             if (!modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
