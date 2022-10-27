@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -38,7 +39,7 @@ fun HomeScreen(
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
-    userName: String,
+    fullName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
     homeScreenUiState: HomeScreenUiState,
@@ -46,7 +47,8 @@ fun HomeScreen(
     getTransactions: () -> Unit,
     onDownloadTransactionsClicked: () -> Unit,
     onUploadImageClicked: () -> Unit,
-    showProfileUpdateSuccess: () -> Unit
+    showProfileUpdateSuccess: () -> Unit,
+    selectedImage: Uri
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -281,7 +283,8 @@ fun HomeScreen(
                         onDownloadTransactionsClicked = onDownloadTransactionsClicked,
                         isCardSelected,
                         onUploadImageClicked = onUploadImageClicked,
-                        showProfileUpdateSuccess = showProfileUpdateSuccess
+                        showProfileUpdateSuccess = showProfileUpdateSuccess,
+                        selectedImage = selectedImage
                     )
                 }
             }) { paddingValues ->
@@ -289,7 +292,7 @@ fun HomeScreen(
             HomeDashBoard(
                 bottomSheetState = bottomSheetState,
                 onAddFundsClicked = onAddFundsClicked,
-                userName = userName,
+                fullName = fullName,
                 walletBalanceVisibility = walletBalanceVisibility,
                 updateWalletVisibility = updateWalletVisibility,
                 onLogOutClicked = onLogOutClicked,

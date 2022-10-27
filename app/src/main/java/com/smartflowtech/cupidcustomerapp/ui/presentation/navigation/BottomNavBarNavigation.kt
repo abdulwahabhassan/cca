@@ -1,10 +1,12 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
+import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -14,6 +16,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -28,7 +31,8 @@ fun BottomNavBarNavigation(
     onDownloadTransactionsClicked: () -> Unit,
     isCardSelected: Boolean,
     onUploadImageClicked: () -> Unit,
-    showProfileUpdateSuccess: () -> Unit
+    showProfileUpdateSuccess: () -> Unit,
+    selectedImage: Uri
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -128,9 +132,12 @@ fun BottomNavBarNavigation(
             Settings()
         }
         composable(HomeScreen.Profile.route) {
+            val profileViewModel = hiltViewModel<ProfileViewModel>()
             Profile(
+                viewModel = profileViewModel,
                 onUploadImageClicked = onUploadImageClicked,
                 showProfileUpdateSuccess = showProfileUpdateSuccess,
+                selectedImage = selectedImage,
                 onBackPressed = onBackPressed
             )
         }

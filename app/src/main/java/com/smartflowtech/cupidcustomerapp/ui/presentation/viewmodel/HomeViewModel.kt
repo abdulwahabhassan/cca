@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
         private set
 
     init {
-        //getTransactionsAndWallets()
+        getTransactionsAndWallets()
     }
 
     fun getTransactionsAndWallets() {
@@ -189,16 +189,7 @@ class HomeViewModel @Inject constructor(
 
     fun logOut() {
         viewModelScope.launch {
-            dataStorePrefsRepository.updateLoggedIn(
-                false,
-                appConfigPreferences.userName,
-                appConfigPreferences.userEmail,
-                appConfigPreferences.token,
-                appConfigPreferences.phoneNumber,
-                appConfigPreferences.companyId,
-                appConfigPreferences.userId,
-                appConfigPreferences.fullName
-            )
+            dataStorePrefsRepository.updateLoggedIn(loggedIn = false)
         }
     }
 

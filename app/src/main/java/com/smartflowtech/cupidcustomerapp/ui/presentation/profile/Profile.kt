@@ -1,5 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
 
+import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,16 +28,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 
 @Composable
 fun Profile(
+    viewModel: ProfileViewModel,
     onUploadImageClicked: () -> Unit,
     showProfileUpdateSuccess: () -> Unit,
-    onBackPressed: () -> Unit
+    selectedImage: Uri,
+    onBackPressed: () -> Unit,
 ) {
 
     // Visibility and input text
@@ -50,6 +57,10 @@ fun Profile(
     var firstNameErrorLabel by rememberSaveable { mutableStateOf("") }
     var lastNameErrorLabel by rememberSaveable { mutableStateOf("") }
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
+
+    BackHandler(true) {
+        onBackPressed()
+    }
 
     LazyColumn(
         Modifier
@@ -74,7 +85,7 @@ fun Profile(
                             .clip(CircleShape)
                             .clipToBounds()
                             .clickable(false) { },
-                        painter = painterResource(id = R.drawable.img_person_3),
+                        painter = rememberAsyncImagePainter(selectedImage),
                         contentDescription = "Avatar",
                         contentScale = ContentScale.Crop
                     )
@@ -204,14 +215,16 @@ fun Profile(
                     emailErrorLabel = ""
                     emailError = false
 
-                    val trimmedFirstName = firstName.trim()
-                    val trimmedLastName = lastName.trim()
+                    val trimmedFirstName = firstName.trim().capitalizeFirstLetter()
+                    val trimmedLastName = lastName.trim().capitalizeFirstLetter()
                     val trimmedEmail = email.trim()
 
+                    viewModel.updateProfile(
+                        firstName = trimmedFirstName,
+                        lastName = trimmedLastName,
+                        email = trimmedEmail
+                    )
                     showProfileUpdateSuccess()
-                    onBackPressed()
-
-
 
                 },
                 shape = RoundedCornerShape(10.dp),
@@ -230,5 +243,5 @@ fun Profile(
 @Composable
 @Preview(showBackground = true)
 fun PreviewProfile() {
-    Profile({}, {}, {})
+//    Profile({}, {}, {})
 }

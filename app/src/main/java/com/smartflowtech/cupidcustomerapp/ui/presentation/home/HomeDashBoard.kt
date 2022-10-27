@@ -13,7 +13,6 @@ import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -40,7 +39,7 @@ import java.util.*
 fun HomeDashBoard(
     bottomSheetState: BottomSheetState,
     onAddFundsClicked: () -> Unit,
-    userName: String,
+    fullName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
     homeScreenUiState: HomeScreenUiState,
@@ -118,10 +117,7 @@ fun HomeDashBoard(
                                         .background(color = transparentBlue, CircleShape)
                                 ) {
                                     Text(
-                                        text = userName.first().toString() + userName.substring(
-                                            1,
-                                            2
-                                        ),
+                                        text = if (fullName.isNotEmpty()) fullName.first().toString() + fullName.substring(1, 2) else "",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 20.sp
                                     )
@@ -136,7 +132,7 @@ fun HomeDashBoard(
                                     Column {
                                         Text(
                                             text = "Hi ${
-                                                userName.replaceFirstChar {
+                                                fullName.substringBefore(" ").replaceFirstChar {
                                                     if (it.isLowerCase()) it.titlecase(
                                                         Locale.getDefault()
                                                     ) else it.toString()
@@ -242,7 +238,7 @@ fun PreviewHomeDashBoard() {
         HomeDashBoard(
             bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
             onAddFundsClicked = { },
-            userName = "Mike Murdock",
+            fullName = "Mike Murdock",
             walletBalanceVisibility = visible,
             updateWalletVisibility = {
                 visible = !it

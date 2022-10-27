@@ -23,7 +23,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @Composable
 fun VerifyEmailScreen(
-    goToNewPasswordScreen: () -> Unit,
+    goToChangePasswordScreen: () -> Unit,
     onBackArrowPressed: () -> Unit,
     verifiedEmail: String
 ) {
@@ -114,7 +114,7 @@ fun VerifyEmailScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "We sent an email to ${verifiedEmail.replace(Regex("(?<=\\w{3})(.*?)(?=@)"), "**")} \nPlease verify your email",
+                        text = "We sent an email to ${verifiedEmail.replace(Regex("(?<=\\w{3})(.+)(?=@)"), "********")} \nPlease verify your email",
                         style = MaterialTheme.typography.body1,
                         color = grey,
                         textAlign = TextAlign.Center
@@ -134,7 +134,7 @@ fun VerifyEmailScreen(
                             .fillMaxWidth()
                             .height(54.dp),
                         onClick = {
-                            goToNewPasswordScreen()
+                            goToChangePasswordScreen()
                         },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -158,6 +158,6 @@ fun VerifyEmailScreen(
 @Preview(showBackground = true)
 fun PreviewVerificationEmail() {
     CupidCustomerAppTheme {
-        VerifyEmailScreen(goToNewPasswordScreen = {}, onBackArrowPressed = {}, "abcdefghi@gmail.com")
+        VerifyEmailScreen(goToChangePasswordScreen = {}, onBackArrowPressed = {}, "abcdefghijkllnkjn@gmail.com")
     }
 }

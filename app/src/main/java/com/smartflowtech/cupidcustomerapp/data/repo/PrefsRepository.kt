@@ -97,25 +97,36 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
 
     suspend fun updateLoggedIn(
         loggedIn: Boolean,
+    ) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.LOGGED_IN] = loggedIn
+        }
+    }
+
+    suspend fun persistToken(token: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.TOKEN] = token
+        }
+    }
+
+    suspend fun persistUser(
         userName: String,
         userEmail: String,
-        token: String,
         phoneNumber: String,
         companyId: String,
         userId: String,
         fullName: String,
     ) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.LOGGED_IN] = loggedIn
             mutablePreferences[PreferencesKeys.USERNAME] = userName
             mutablePreferences[PreferencesKeys.USER_EMAIL] = userEmail
-            mutablePreferences[PreferencesKeys.TOKEN] = token
             mutablePreferences[PreferencesKeys.PHONE_NUMBER] = phoneNumber
             mutablePreferences[PreferencesKeys.COMPANY_ID] = companyId
             mutablePreferences[PreferencesKeys.USER_ID] = userId
             mutablePreferences[PreferencesKeys.FULL_NAME] = fullName
         }
     }
+
 
     suspend fun updateWalletBalanceVisibility(visibility: Boolean) {
         dataStore.edit { mutablePreferences ->
@@ -152,6 +163,12 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
                     mutablePreferences[PreferencesKeys.PMS_PRODUCT_FILTER] = bool
                 }
             }
+        }
+    }
+
+    suspend fun persistEmail(userEmail: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.USER_EMAIL] = userEmail
         }
     }
 }

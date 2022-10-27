@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,8 +48,9 @@ fun HomeScreenModalBottomSheet(
     showUploadImage: (Boolean) -> Unit
 ) {
 
-    var successTitle: String by rememberSaveable{ mutableStateOf("Success") }
-    var successMessage: String by rememberSaveable{ mutableStateOf("") }
+    var successTitle: String by rememberSaveable { mutableStateOf("Success") }
+    var successMessage: String by rememberSaveable { mutableStateOf("") }
+    var selectedImage: Uri by remember { mutableStateOf(Uri.EMPTY) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -114,7 +116,11 @@ fun HomeScreenModalBottomSheet(
                     }
 
                     if (shouldShowUploadImage) {
-                        UploadImage()
+                        UploadImage(
+                            onImageSelected = {
+                                selectedImage = it
+                            }
+                        )
                     } else if (shouldShowDownloadTransactions) {
                         DownloadTransactions(
                             showSuccess = {
@@ -150,8 +156,7 @@ fun HomeScreenModalBottomSheet(
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
             onAddFundsClicked = onAddFundsClicked,
-            userName = "Hassan Abdulwahab",
-//            appConfigPreferences.userName,
+            fullName = appConfigPreferences.fullName,
             walletBalanceVisibility = appConfigPreferences.walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
             homeScreenUiState = homeScreenUiState,
@@ -167,7 +172,9 @@ fun HomeScreenModalBottomSheet(
                 successTitle = "Successful"
                 successMessage = "Profile updated"
                 showSuccess(true)
-            }
+                onBackPressed()
+            },
+            selectedImage = selectedImage
         )
     }
 }

@@ -72,22 +72,37 @@ fun RootNavigation(
                 goToHomeScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
-                        NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
                     )
                     rootNavHostController.navigate(
-                        Screen.Home.route
+                        Screen.Home.route,
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .build()
                     )
                 },
                 goToGetStartedScreen = {
                     rootNavHostController.navigate(
                         Screen.GetStartedFirst.route,
-                        NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                        NavOptions.Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
                     )
                 },
                 goToLoginScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
-                        NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
                     )
                 })
         }
@@ -121,7 +136,10 @@ fun RootNavigation(
                 goToHomeScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
-                        NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                        NavOptions.Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
                     )
                     rootNavHostController.navigate(
                         Screen.Home.route,
@@ -160,9 +178,9 @@ fun RootNavigation(
 
         composable(route = Screen.VerifyEmail.route) {
             VerifyEmailScreen(
-                goToNewPasswordScreen = {
+                goToChangePasswordScreen = {
                     rootNavHostController.navigate(
-                        Screen.NewPassword.route,
+                        Screen.ChangePassword.route,
                         NavOptions.Builder().setLaunchSingleTop(true).build()
                     )
                 },
@@ -173,15 +191,32 @@ fun RootNavigation(
             )
         }
 
-        composable(route = Screen.NewPassword.route) {
+        composable(route = Screen.ChangePassword.route) {
             val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
             ChangePasswordScreen(
                 viewModel = changePasswordViewModel,
                 uiState = changePasswordViewModel.changePasswordScreenUiState,
-                goToLoginScreen = {
+                goToHomeScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
-                        NavOptions.Builder().setLaunchSingleTop(true).build()
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
+                    )
+                    rootNavHostController.navigate(
+                        Screen.Home.route,
+                    )
+                },
+                goToLogin = {
+                    rootNavHostController.navigate(
+                        Screen.Login.route,
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
                     )
                 },
                 onBackArrowPressed = {
@@ -202,7 +237,11 @@ fun RootNavigation(
                 goToLogin = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
-                        NavOptions.Builder().setPopUpTo(Screen.Splash.route, true).build()
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.Splash.route, true)
+                            .build()
                     )
                 },
                 isNavDestinationSelected = { route ->

@@ -36,12 +36,20 @@ class ResetPasswordViewModel @Inject constructor(
             )) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
-                        resetPasswordScreenUiState =
-                            ResetPasswordScreenUiState(
-                                viewModelResult = ViewModelResult.SUCCESS,
-                                message = repositoryResult.message,
-                                data = repositoryResult.data
-                            )
+                        //Persist user
+                        dataStorePrefsRepository.persistUser(
+                            userName = data.username ?: "",
+                            userEmail = data.email ?: "",
+                            phoneNumber = data.phoneNumber ?: "",
+                            companyId = data.companyID ?: "",
+                            userId = data.id?.toString() ?: "",
+                            fullName = data.fullname ?: "",
+                        )
+                        resetPasswordScreenUiState = ResetPasswordScreenUiState(
+                            viewModelResult = ViewModelResult.SUCCESS,
+                            message = repositoryResult.message,
+                            data = repositoryResult.data
+                        )
                     }
                 }
                 is RepositoryResult.Error -> {

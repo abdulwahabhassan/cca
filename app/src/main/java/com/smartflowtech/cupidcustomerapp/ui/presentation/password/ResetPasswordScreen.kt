@@ -96,7 +96,9 @@ fun ResetPasswordScreen(
             )
 
             IconButton(
-                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp),
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(top = 24.dp),
                 onClick = {
                     onBackArrowPressed()
                 }) {
@@ -211,7 +213,6 @@ fun ResetPasswordScreen(
                                 modifier = Modifier.height(54.dp)
                             )
                             if (uiState.viewModelResult == ViewModelResult.SUCCESS) {
-
                                 goToVerifyEmailScreen(email)
                             }
                         }

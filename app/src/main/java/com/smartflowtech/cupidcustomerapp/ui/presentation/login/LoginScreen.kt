@@ -45,7 +45,7 @@ fun LoginScreen(
     val scaffoldState = rememberScaffoldState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var notMe by rememberSaveable { mutableStateOf(false) }
-    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else "abdulwahab.hassan@smartflowtech.com") }
+    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else viewModel.appConfigPreferences.userEmail) }
     var password by rememberSaveable(notMe) { mutableStateOf("") }
     var isEmailError by rememberSaveable(notMe) { mutableStateOf(false) }
     var isPasswordError by rememberSaveable(notMe) { mutableStateOf(false) }
@@ -269,7 +269,6 @@ fun LoginScreen(
                                         !isPasswordError
                                     ) {
                                         viewModel.login(LoginRequestBody(trimmedEmail, password))
-                                        //goToHomeScreen()
                                     }
                                 },
                                 shape = RoundedCornerShape(10.dp),

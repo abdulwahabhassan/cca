@@ -39,8 +39,9 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 fun ChangePasswordScreen(
     viewModel: ChangePasswordViewModel,
     uiState: ChangePasswordScreenUiState,
-    goToLoginScreen: () -> Unit,
-    onBackArrowPressed: () -> Unit
+    goToHomeScreen: () -> Unit,
+    onBackArrowPressed: () -> Unit,
+    goToLogin: () -> Unit
 ) {
 
     // Visibility and input text
@@ -103,7 +104,10 @@ fun ChangePasswordScreen(
         ) {
 
             LaunchedEffect(uiState.viewModelResult) {
-                if (!uiState.message.isNullOrEmpty()) {
+                if (
+                    !uiState.message.isNullOrEmpty() &&
+                    uiState.viewModelResult != ViewModelResult.SUCCESS
+                ) {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = uiState.message,
                         duration = SnackbarDuration.Short
@@ -443,14 +447,14 @@ fun ChangePasswordScreen(
                                 Text(text = "Update")
                             }
                         }
-                        ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
+                        ViewModelResult.LOADING -> {
                             CircularProgressIndicator(
                                 strokeWidth = 2.dp,
                                 modifier = Modifier.height(54.dp)
                             )
-                            if (uiState.viewModelResult == ViewModelResult.SUCCESS) {
-                                showSuccessDialog = true
-                            }
+                        }
+                        ViewModelResult.SUCCESS -> {
+                            showSuccessDialog = true
                         }
                     }
 
@@ -463,8 +467,8 @@ fun ChangePasswordScreen(
                     ) {
                         Text(modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .clickable {
-                                goToLoginScreen()
+                            .clickable(uiState.viewModelResult != ViewModelResult.LOADING) {
+                                goToLogin()
                             }
                             .padding(vertical = 24.dp),
                             text = "Back to Login",
@@ -482,7 +486,7 @@ fun ChangePasswordScreen(
     if (showSuccessDialog) {
         Dialog(
             onDismissRequest = {
-                goToLoginScreen()
+                goToHomeScreen()
             },
             properties = DialogProperties(
                 dismissOnClickOutside = false
@@ -502,9 +506,9 @@ fun ChangePasswordScreen(
                         title = "Successful",
                         message = uiState.message ?: "Changed Successfully",
                         onOkayPressed = {
-                            goToLoginScreen()
+                            goToHomeScreen()
                         },
-                        buttonText = "Go To Login"
+                        buttonText = "Go To Dashboard"
                     )
                 }
             }
@@ -516,6 +520,6 @@ fun ChangePasswordScreen(
 @Preview(showBackground = true)
 fun ForgotPasswordPreview() {
     CupidCustomerAppTheme {
-        //NewPassword()
+        //ChangePassword()
     }
 }

@@ -33,17 +33,17 @@ class LoginViewModel @Inject constructor(
             when (val repositoryResult = loginRepository.login(loginRequestBody)) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
-                        Timber.d("Viewmodel Login Data $data")
-                        dataStorePrefsRepository.updateLoggedIn(
-                            loggedIn = true,
+                        Timber.d("View model Login Data $data")
+                        dataStorePrefsRepository.persistUser(
                             userName = data.username ?: "",
                             userEmail = data.email ?: "",
-                            token = "Bearer ${data.token}",
                             phoneNumber = data.phoneNumber ?: "",
                             companyId = data.companyId ?: "",
                             userId = data.id?.toString() ?: "",
                             fullName = data.fullname ?: ""
                         )
+                        dataStorePrefsRepository.persistToken(token = "Bearer ${data.token}")
+                        dataStorePrefsRepository.updateLoggedIn(loggedIn = true)
                         loginScreenUiState =
                             LoginScreenUiState(
                                 viewModelResult = ViewModelResult.SUCCESS,

@@ -1,5 +1,8 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +11,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,9 +29,17 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-fun UploadImage() {
+fun UploadImage(
+    onImageSelected: (Uri) -> Unit
+) {
 
     val options = Util.getListOfUploadImageOptions()
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
+            if (imageUri != null) {
+                onImageSelected(imageUri)
+            }
+        }
 
     LazyColumn(
         modifier = Modifier
@@ -53,9 +66,12 @@ fun UploadImage() {
         items(options) { item ->
             UploadImageOption(
                 item
-            ) { data: UploadImageOption ->
-
+            ) { uploadOption: UploadImageOption ->
+                if (uploadOption.title == "Choose from gallery") {
+                    galleryLauncher.launch("image/*")
+                }
             }
+
         }
     }
 }
@@ -117,7 +133,7 @@ fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImag
 @Composable
 fun UploadImageOptionPreview() {
     CupidCustomerAppTheme {
-        UploadImage ()
+        UploadImage({})
     }
 
 }
