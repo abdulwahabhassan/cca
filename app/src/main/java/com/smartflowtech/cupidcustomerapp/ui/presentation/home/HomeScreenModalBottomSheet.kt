@@ -45,12 +45,13 @@ fun HomeScreenModalBottomSheet(
     showSuccess: (Boolean) -> Unit,
     showDownloadTransactions: (Boolean) -> Unit,
     shouldShowUploadImage: Boolean,
-    showUploadImage: (Boolean) -> Unit
+    showUploadImage: (Boolean) -> Unit,
+    persistProfilePicture: (String) -> Unit,
+    profilePicture: String
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
     var successMessage: String by rememberSaveable { mutableStateOf("") }
-    var selectedImage: Uri by remember { mutableStateOf(Uri.EMPTY) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -101,9 +102,7 @@ fun HomeScreenModalBottomSheet(
 
                         //Close button
                         IconButton(
-                            onClick = {
-                                onBackPressed()
-                            },
+                            onClick = onBackPressed,
                             modifier = Modifier
                                 .padding(end = 8.dp),
                         ) {
@@ -117,8 +116,9 @@ fun HomeScreenModalBottomSheet(
 
                     if (shouldShowUploadImage) {
                         UploadImage(
-                            onImageSelected = {
-                                selectedImage = it
+                            onImageSelected = { uri ->
+                                persistProfilePicture(uri)
+                                onBackPressed()
                             }
                         )
                     } else if (shouldShowDownloadTransactions) {
@@ -133,9 +133,7 @@ fun HomeScreenModalBottomSheet(
                         Success(
                             title = successTitle,
                             message = successMessage,
-                            onOkayPressed = {
-                                onBackPressed()
-                            }
+                            onOkayPressed = onBackPressed
                         )
                     } else {
                         FilterTransactions(
@@ -174,7 +172,7 @@ fun HomeScreenModalBottomSheet(
                 showSuccess(true)
                 onBackPressed()
             },
-            selectedImage = selectedImage
+            profilePicture = profilePicture
         )
     }
 }

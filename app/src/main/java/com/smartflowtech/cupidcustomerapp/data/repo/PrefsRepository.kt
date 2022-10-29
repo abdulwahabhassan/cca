@@ -32,7 +32,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val pmsProductFilter: Boolean = true,
         val companyId: String = "",
         val userId: String = "",
-        val fullName: String = ""
+        val fullName: String = "",
+        val profilePictureUri: String = ""
     )
 
     private object PreferencesKeys {
@@ -53,6 +54,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val COMPANY_ID = stringPreferencesKey("companyId")
         val USER_ID = stringPreferencesKey("userId")
         val FULL_NAME = stringPreferencesKey("fullName")
+        val PROFILE_PICTURE_URI = stringPreferencesKey("profilePicture")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -85,7 +87,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             agoProductFilter = preferences[PreferencesKeys.AGO_PRODUCT_FILTER] ?: true,
             companyId = preferences[PreferencesKeys.COMPANY_ID] ?: "",
             userId = preferences[PreferencesKeys.USER_ID] ?: "",
-            fullName = preferences[PreferencesKeys.FULL_NAME] ?: ""
+            fullName = preferences[PreferencesKeys.FULL_NAME] ?: "",
+            profilePictureUri = preferences[PreferencesKeys.PROFILE_PICTURE_URI] ?: ""
         )
     }
 
@@ -166,9 +169,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-    suspend fun persistEmail(userEmail: String) {
+    suspend fun persistProfilePicture(uri: String) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.USER_EMAIL] = userEmail
+            mutablePreferences[PreferencesKeys.PROFILE_PICTURE_URI] = uri
         }
     }
 }

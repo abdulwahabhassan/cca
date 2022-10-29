@@ -1,8 +1,10 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +15,8 @@ import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -24,6 +28,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -32,6 +40,9 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
 import java.util.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
@@ -46,10 +57,15 @@ fun HomeDashBoard(
     onLogOutClicked: () -> Unit,
     onCardSelected: (Boolean) -> Unit,
     isCardSelected: Boolean,
-    onProfileClicked: () -> Unit
+    onProfileClicked: () -> Unit,
+    profilePicture: String
 ) {
-    val pagerState = rememberPagerState()
+
     val ctx = LocalContext.current
+//    Toast.makeText(ctx, profilePicture, Toast.LENGTH_LONG).show()
+//    Timber.d(profilePicture)
+
+    val pagerState = rememberPagerState()
     var visible by remember { mutableStateOf(true) }
     visible =
         bottomSheetState.direction == 0f && bottomSheetState.isCollapsed
@@ -109,19 +125,23 @@ fun HomeDashBoard(
                                     ),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                IconButton(
-                                    onClick = {
-                                        onProfileClicked()
-                                    }, modifier = Modifier
+
+
+                                Image(
+                                    modifier = Modifier
                                         .size(50.dp)
-                                        .background(color = transparentBlue, CircleShape)
-                                ) {
-                                    Text(
-                                        text = if (fullName.isNotEmpty()) fullName.first().toString() + fullName.substring(1, 2) else "",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 20.sp
-                                    )
-                                }
+                                        .clip(CircleShape)
+                                        .clipToBounds()
+                                        .clickable {
+                                            onProfileClicked()
+                                        },
+                                    painter = if (profilePicture.isEmpty())
+                                        painterResource(id = R.drawable.ic_avatar)
+                                    else
+                                        rememberAsyncImagePainter(model = profilePicture),
+                                    contentDescription = "Avatar",
+                                    contentScale = ContentScale.Crop
+                                )
                                 Spacer(modifier = Modifier.width(16.dp))
                                 Row(
                                     Modifier
@@ -254,7 +274,8 @@ fun PreviewHomeDashBoard() {
                 isCardSelected = !it
             },
             isCardSelected = isCardSelected,
-            {}
+            {},
+            ""
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,8 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,13 +36,14 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
+import timber.log.Timber
 
 @Composable
 fun Profile(
     viewModel: ProfileViewModel,
     onUploadImageClicked: () -> Unit,
     showProfileUpdateSuccess: () -> Unit,
-    selectedImage: Uri,
+    profilePicture: String,
     onBackPressed: () -> Unit,
 ) {
 
@@ -81,11 +83,14 @@ fun Profile(
                 Box() {
                     Image(
                         modifier = Modifier
-                            .size(100.dp)
+                            .size(90.dp)
                             .clip(CircleShape)
                             .clipToBounds()
                             .clickable(false) { },
-                        painter = rememberAsyncImagePainter(selectedImage),
+                        painter = if (profilePicture.isEmpty())
+                            painterResource(id = R.drawable.ic_avatar)
+                        else
+                            rememberAsyncImagePainter(profilePicture),
                         contentDescription = "Avatar",
                         contentScale = ContentScale.Crop
                     )

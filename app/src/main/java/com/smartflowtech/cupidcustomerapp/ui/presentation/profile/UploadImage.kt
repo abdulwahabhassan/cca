@@ -1,6 +1,10 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -11,11 +15,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,19 +31,39 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util.getImageUri
+import timber.log.Timber
+import java.io.ByteArrayOutputStream
+
 
 @Composable
 fun UploadImage(
-    onImageSelected: (Uri) -> Unit
+    onImageSelected: (String) -> Unit
 ) {
 
+    val ctx = LocalContext.current
     val options = Util.getListOfUploadImageOptions()
-    val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
-            if (imageUri != null) {
-                onImageSelected(imageUri)
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { bitmap ->
+            if (bitmap != null) {
+                try {
+                    val uri = getImageUri(ctx, bitmap)
+                    onImageSelected(uri.toString())
+                } catch (e: Exception) {
+                    Toast.makeText(ctx, "Can't upload image!", Toast.LENGTH_LONG).show()
+                }
             }
         }
+    )
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            if (uri != null) {
+                onImageSelected(uri.toString())
+            }
+        })
 
     LazyColumn(
         modifier = Modifier
@@ -68,13 +92,16 @@ fun UploadImage(
                 item
             ) { uploadOption: UploadImageOption ->
                 if (uploadOption.title == "Choose from gallery") {
-                    galleryLauncher.launch("image/*")
+                    galleryLauncher.launch(arrayOf("image/*"))
+                } else if (uploadOption.title == "Take a photo") {
+                    cameraLauncher.launch(null)
                 }
             }
 
         }
     }
 }
+
 
 @Composable
 fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImageOption) -> Unit) {

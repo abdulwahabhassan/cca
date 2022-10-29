@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
-import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.animation.core.snap
 import androidx.compose.material.BottomSheetScaffoldState
@@ -32,7 +31,7 @@ fun BottomNavBarNavigation(
     isCardSelected: Boolean,
     onUploadImageClicked: () -> Unit,
     showProfileUpdateSuccess: () -> Unit,
-    selectedImage: Uri
+    profilePicture: String
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -137,7 +136,7 @@ fun BottomNavBarNavigation(
                 viewModel = profileViewModel,
                 onUploadImageClicked = onUploadImageClicked,
                 showProfileUpdateSuccess = showProfileUpdateSuccess,
-                selectedImage = selectedImage,
+                profilePicture = profilePicture,
                 onBackPressed = onBackPressed
             )
         }

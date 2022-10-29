@@ -118,6 +118,10 @@ fun HomeScreenModalBottomSheetLayer(
                     modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
                 }
             }
-        }
+        },
+        persistProfilePicture = { uri ->
+            viewModel.persistProfilePicture(uri)
+        },
+        profilePicture = viewModel.appConfigPreferences.profilePictureUri
     )
 }

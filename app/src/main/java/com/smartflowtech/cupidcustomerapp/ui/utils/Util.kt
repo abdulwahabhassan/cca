@@ -1,6 +1,13 @@
 package com.smartflowtech.cupidcustomerapp.ui.utils
 
+import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.*
@@ -8,7 +15,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import timber.log.Timber
-import java.io.IOException
+import java.io.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -60,6 +67,19 @@ object Util {
             e.printStackTrace()
             return null
         }
+    }
+
+    fun getImageUri(context: Context, bitmap: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(
+                context.contentResolver,
+                bitmap,
+                "SFT_${System.currentTimeMillis()}",
+                null
+            )
+        return Uri.parse(path)
     }
 
     fun getListOfBanks(): List<Bank> {

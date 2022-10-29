@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -48,7 +47,7 @@ fun HomeScreen(
     onDownloadTransactionsClicked: () -> Unit,
     onUploadImageClicked: () -> Unit,
     showProfileUpdateSuccess: () -> Unit,
-    selectedImage: Uri
+    profilePicture: String
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -284,7 +283,7 @@ fun HomeScreen(
                         isCardSelected,
                         onUploadImageClicked = onUploadImageClicked,
                         showProfileUpdateSuccess = showProfileUpdateSuccess,
-                        selectedImage = selectedImage
+                        profilePicture = profilePicture
                     )
                 }
             }) { paddingValues ->
@@ -303,7 +302,8 @@ fun HomeScreen(
                 isCardSelected = isCardSelected,
                 onProfileClicked = {
                     onBottomNavItemClicked(HomeScreen.Profile.route)
-                }
+                },
+                profilePicture = profilePicture
             )
         }
     }

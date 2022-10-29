@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
@@ -197,6 +198,12 @@ class HomeViewModel @Inject constructor(
         Timber.d("$daysFilter $mapOfFilters")
         viewModelScope.launch {
             dataStorePrefsRepository.updateTransactionFilters(daysFilter, mapOfFilters)
+        }
+    }
+
+    fun persistProfilePicture(uri: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.persistProfilePicture(uri)
         }
     }
 
