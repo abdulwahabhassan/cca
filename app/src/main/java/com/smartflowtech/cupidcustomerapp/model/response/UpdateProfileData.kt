@@ -14,7 +14,7 @@ data class UpdateProfileData(
     val email: String?,
 
     @Json(name = "username")
-    val username: Any? = null,
+    val username: String? = null,
 
     @Json(name = "is_company_set_up")
     val isCompanySetUp: Boolean? = null,
@@ -26,7 +26,7 @@ data class UpdateProfileData(
     val isVerified: Long?,
 
     @Json(name = "company_id")
-    val companyID: String?,
+    val companyId: String?,
 
     val status: String?,
 

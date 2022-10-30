@@ -1,39 +1,66 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.settings
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Logout
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 
 @Composable
-fun Settings() {
+fun Settings(
+    viewModel: SettingsViewModel,
+    onLogOutClicked: () -> Unit,
+    onEditProfileClicked: () -> Unit,
+    onBackPressed: () -> Unit,
+) {
     var toggleState by rememberSaveable {
         mutableStateOf(true)
     }
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+
+    BackHandler(true) {
+        onBackPressed()
+    }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         items(items = Util.getListOfSettingsItems()) { item ->
             Column(
                 modifier = Modifier
                     .clickable(enabled = item.name != "Appearance") {
-                        //
+                        when(item.name) {
+                            "Edit Profile" -> {
+                                onEditProfileClicked()
+                            }
+                            "Security" -> {}
+                            "Notifications" -> {}
+                            "Payment" -> {}
+                        }
                     }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -75,6 +102,30 @@ fun Settings() {
                 )
             }
         }
+
+        item {
+            Row(
+                modifier = Modifier
+                    .padding(vertical = 24.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable {
+                        viewModel.logOut()
+                        onLogOutClicked()
+                    }
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Logout",
+                    fontFamily = AthleticsFontFamily,
+                    fontWeight = FontWeight.W400,
+                    color = Color.Black
+
+                )
+
+                Icon(imageVector = Icons.Rounded.Logout, contentDescription = "")
+            }
+        }
     }
 }
 
@@ -97,7 +148,7 @@ fun AppearanceToggleButton(toggleState: Boolean, onToggled: (Boolean) -> Unit) {
 @Composable
 fun PreviewSettings() {
     CupidCustomerAppTheme {
-        Settings()
+//        Settings({})
     }
 
 }

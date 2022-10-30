@@ -59,6 +59,7 @@ fun LoginScreen(
 
     Scaffold(
         modifier = Modifier
+            .fillMaxSize()
             .navigationBarsPadding()
             .imePadding(),
         scaffoldState = scaffoldState,

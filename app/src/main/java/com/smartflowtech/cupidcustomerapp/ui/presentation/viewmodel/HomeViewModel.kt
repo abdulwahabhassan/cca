@@ -74,15 +74,16 @@ class HomeViewModel @Inject constructor(
                     is RepositoryResult.Local -> {
                         mapWalletsResponseData(walletsResult.data)
                     }
-                }?.plus(
-                    Wallet(
-                        "Smartflow Technologies",
-                        99L,
-                        "47500.20",
-                        "2022-09-01",
-                        ""
-                    )
-                )
+                }
+//                    ?.plus(
+//                    Wallet(
+//                        "Smartflow Technologies",
+//                        99L,
+//                        "47500.20",
+//                        "2022-09-01",
+//                        ""
+//                    )
+//                )
 
                 when (transactionsResult) {
                     is RepositoryResult.Success -> {
@@ -185,12 +186,6 @@ class HomeViewModel @Inject constructor(
     fun updateWalletBalanceVisibility(visibility: Boolean) {
         viewModelScope.launch {
             dataStorePrefsRepository.updateWalletBalanceVisibility(visibility)
-        }
-    }
-
-    fun logOut() {
-        viewModelScope.launch {
-            dataStorePrefsRepository.updateLoggedIn(loggedIn = false)
         }
     }
 

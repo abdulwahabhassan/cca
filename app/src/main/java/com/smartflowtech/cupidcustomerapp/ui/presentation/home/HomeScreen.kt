@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -38,7 +37,8 @@ fun HomeScreen(
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
-    fullName: String,
+    userFullName: String,
+    userName: String,
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
     homeScreenUiState: HomeScreenUiState,
@@ -46,8 +46,8 @@ fun HomeScreen(
     getTransactions: () -> Unit,
     onDownloadTransactionsClicked: () -> Unit,
     onUploadImageClicked: () -> Unit,
-    showProfileUpdateSuccess: () -> Unit,
-    profilePicture: String
+    onProfileUpdateSuccess: () -> Unit,
+    profilePicture: String,
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -137,13 +137,11 @@ fun HomeScreen(
 
     Scaffold(
         bottomBar = {
-            CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                HomeBottomAppBar(
-                    isSelected = isNavDestinationSelected,
-                    onClicked = onBottomNavItemClicked,
-                    visible = bottomAppBarVisibility
-                )
-            }
+            HomeBottomAppBar(
+                isSelected = isNavDestinationSelected,
+                onClicked = onBottomNavItemClicked,
+                visible = bottomAppBarVisibility
+            )
         }
     ) { paddingValues ->
 
@@ -282,8 +280,11 @@ fun HomeScreen(
                         onDownloadTransactionsClicked = onDownloadTransactionsClicked,
                         isCardSelected,
                         onUploadImageClicked = onUploadImageClicked,
-                        showProfileUpdateSuccess = showProfileUpdateSuccess,
-                        profilePicture = profilePicture
+                        onProfileUpdateSuccess = onProfileUpdateSuccess,
+                        profilePicture = profilePicture,
+                        onLogOutClicked = onLogOutClicked,
+                        userFullName = userFullName,
+                        userName = userName
                     )
                 }
             }) { paddingValues ->
@@ -291,10 +292,9 @@ fun HomeScreen(
             HomeDashBoard(
                 bottomSheetState = bottomSheetState,
                 onAddFundsClicked = onAddFundsClicked,
-                fullName = fullName,
+                fullName = userFullName,
                 walletBalanceVisibility = walletBalanceVisibility,
                 updateWalletVisibility = updateWalletVisibility,
-                onLogOutClicked = onLogOutClicked,
                 homeScreenUiState = homeScreenUiState,
                 onCardSelected = { bool ->
                     isCardSelected = bool

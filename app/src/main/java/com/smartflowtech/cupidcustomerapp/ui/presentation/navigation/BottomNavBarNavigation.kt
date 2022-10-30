@@ -7,6 +7,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.navOptions
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
@@ -16,6 +17,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -30,8 +32,11 @@ fun BottomNavBarNavigation(
     onDownloadTransactionsClicked: () -> Unit,
     isCardSelected: Boolean,
     onUploadImageClicked: () -> Unit,
-    showProfileUpdateSuccess: () -> Unit,
-    profilePicture: String
+    onProfileUpdateSuccess: () -> Unit,
+    profilePicture: String,
+    onLogOutClicked: () -> Unit,
+    userFullName: String,
+    userName: String
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -66,7 +71,8 @@ fun BottomNavBarNavigation(
         popEnterTransition = {
             if (targetState.destination.route == HomeScreen.Home.route) {
                 slideInVertically { -it }
-            } else {
+            }
+            else {
                 slideInHorizontally { -it }
             }
         },
@@ -128,16 +134,29 @@ fun BottomNavBarNavigation(
             Location()
         }
         composable(HomeScreen.Settings.route) {
-            Settings()
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            Settings(
+                viewModel = settingsViewModel,
+                onLogOutClicked = onLogOutClicked,
+                onEditProfileClicked = {
+                    bottomNavHostController.navigate(
+                        route = HomeScreen.Profile.route,
+                        navOptions = navOptions { launchSingleTop = true })
+                },
+                onBackPressed = onBackPressed
+            )
         }
         composable(HomeScreen.Profile.route) {
             val profileViewModel = hiltViewModel<ProfileViewModel>()
             Profile(
                 viewModel = profileViewModel,
+                uiState = profileViewModel.profileScreenUiState,
                 onUploadImageClicked = onUploadImageClicked,
-                showProfileUpdateSuccess = showProfileUpdateSuccess,
+                onProfileUpdateSuccess = onProfileUpdateSuccess,
                 profilePicture = profilePicture,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
+                userFullName = userFullName,
+                userName = userName
             )
         }
     }

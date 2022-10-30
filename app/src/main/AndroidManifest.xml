@@ -8,20 +8,22 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".CupidCustomerApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_smartflow"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/ic_smartflow"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CupidCustomerApp"
-        android:name=".CupidCustomerApp"
-        android:requestLegacyExternalStorage="true"
-    >
+        android:theme="@style/Theme.CupidCustomerApp">
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.CupidCustomerApp"
+            android:name=".ui.presentation.activity.MediaStoreActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".ui.presentation.activity.MainActivity"
             android:configChanges="orientation"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -30,9 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="co.paystack.android.PublicKey"
-            android:value="pk_test_a804b8ac54b1345aecb562758e6d23d3a604bbbb"/>
+            android:value="pk_test_a804b8ac54b1345aecb562758e6d23d3a604bbbb" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -40,7 +44,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
     </application>
 

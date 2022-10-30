@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,9 +27,8 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTra
 fun HomeScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     bottomNavBarNavHostController: NavHostController,
-    goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
-    onBackPressed: () -> Unit,
+    goBack: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
@@ -47,7 +45,7 @@ fun HomeScreenModalBottomSheet(
     shouldShowUploadImage: Boolean,
     showUploadImage: (Boolean) -> Unit,
     persistProfilePicture: (String) -> Unit,
-    profilePicture: String
+    profilePicture: String,
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
@@ -102,7 +100,7 @@ fun HomeScreenModalBottomSheet(
 
                         //Close button
                         IconButton(
-                            onClick = onBackPressed,
+                            onClick = goBack,
                             modifier = Modifier
                                 .padding(end = 8.dp),
                         ) {
@@ -118,7 +116,7 @@ fun HomeScreenModalBottomSheet(
                         UploadImage(
                             onImageSelected = { uri ->
                                 persistProfilePicture(uri)
-                                onBackPressed()
+                                goBack()
                             }
                         )
                     } else if (shouldShowDownloadTransactions) {
@@ -133,13 +131,13 @@ fun HomeScreenModalBottomSheet(
                         Success(
                             title = successTitle,
                             message = successMessage,
-                            onOkayPressed = onBackPressed
+                            onOkayPressed = goBack
                         )
                     } else {
                         FilterTransactions(
                             appConfigPreferences = appConfigPreferences,
                             onFilterSaveClicked = onSaveFilterClicked,
-                            onBackPressed = onBackPressed
+                            onBackPressed = goBack
                         )
                     }
                 }
@@ -150,11 +148,12 @@ fun HomeScreenModalBottomSheet(
             bottomNavBarNavHostController = bottomNavBarNavHostController,
             goTo = {},
             isNavDestinationSelected = isNavDestinationSelected,
-            onBackPressed = onBackPressed,
+            onBackPressed = goBack,
             onBottomNavItemClicked = onBottomNavItemClicked,
             onFilteredClicked = onFilteredClicked,
             onAddFundsClicked = onAddFundsClicked,
-            fullName = appConfigPreferences.fullName,
+            userFullName = appConfigPreferences.fullName,
+            userName = appConfigPreferences.userName,
             walletBalanceVisibility = appConfigPreferences.walletBalanceVisibility,
             updateWalletVisibility = updateWalletVisibility,
             homeScreenUiState = homeScreenUiState,
@@ -166,11 +165,12 @@ fun HomeScreenModalBottomSheet(
             onUploadImageClicked = {
                 showUploadImage(true)
             },
-            showProfileUpdateSuccess = {
+            onProfileUpdateSuccess = {
                 successTitle = "Successful"
                 successMessage = "Profile updated"
                 showSuccess(true)
-                onBackPressed()
+                goBack()
+
             },
             profilePicture = profilePicture
         )

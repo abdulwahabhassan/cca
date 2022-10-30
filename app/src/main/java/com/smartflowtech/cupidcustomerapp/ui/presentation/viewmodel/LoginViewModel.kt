@@ -33,7 +33,6 @@ class LoginViewModel @Inject constructor(
             when (val repositoryResult = loginRepository.login(loginRequestBody)) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
-                        Timber.d("View model Login Data $data")
                         dataStorePrefsRepository.persistUser(
                             userName = data.username ?: "",
                             userEmail = data.email ?: "",

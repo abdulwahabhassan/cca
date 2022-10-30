@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
+import android.content.Context
 import androidx.compose.animation.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,6 +20,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ResetPassword
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.VerifyEmailScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.splash.SplashScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
+import timber.log.Timber
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -255,6 +257,7 @@ fun RootNavigation(
                     }
                 },
                 goToDestination = { route ->
+                    Timber.d("Go to destination -> $route")
                     bottomNavBarNavHostController.navigate(route) {
                         bottomNavBarNavHostController.graph.startDestinationRoute
                             ?.let { startDestinationRoute ->

@@ -54,16 +54,11 @@ fun HomeDashBoard(
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
     homeScreenUiState: HomeScreenUiState,
-    onLogOutClicked: () -> Unit,
     onCardSelected: (Boolean) -> Unit,
     isCardSelected: Boolean,
     onProfileClicked: () -> Unit,
     profilePicture: String
 ) {
-
-    val ctx = LocalContext.current
-//    Toast.makeText(ctx, profilePicture, Toast.LENGTH_LONG).show()
-//    Timber.d(profilePicture)
 
     val pagerState = rememberPagerState()
     var visible by remember { mutableStateOf(true) }
@@ -166,13 +161,6 @@ fun HomeDashBoard(
                                         Text(text = "Trust you are good", color = Color.White)
                                     }
                                     Spacer(modifier = Modifier.width(16.dp))
-                                    IconButton(onClick = { onLogOutClicked() }) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Logout,
-                                            contentDescription = "Logout icon",
-                                            tint = Color.White,
-                                        )
-                                    }
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_notification_active),
                                         contentDescription = "Notification bell",
@@ -269,13 +257,12 @@ fun PreviewHomeDashBoard() {
                 "",
                 Util.getListsOfWallets()
             ),
-            onLogOutClicked = { },
             onCardSelected = {
                 isCardSelected = !it
             },
             isCardSelected = isCardSelected,
-            {},
-            ""
+            onProfileClicked = {},
+            profilePicture = ""
         )
     }
 }

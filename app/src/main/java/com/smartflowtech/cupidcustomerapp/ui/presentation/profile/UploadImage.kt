@@ -1,41 +1,43 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
 
+import android.Manifest
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.smartflowtech.cupidcustomerapp.contract.OpenMediaStore
 import com.smartflowtech.cupidcustomerapp.model.UploadImageOption
-import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.grey
-import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util.getImageUri
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util.getTextToShowGivenPermissions
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun UploadImage(
     onImageSelected: (String) -> Unit
@@ -57,54 +59,94 @@ fun UploadImage(
             }
         }
     )
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = { uri ->
-            if (uri != null) {
-                onImageSelected(uri.toString())
-            }
-        })
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        userScrollEnabled = true,
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        item {
-            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = "Upload Image",
-                    color = Color.Black,
-                    fontFamily = AthleticsFontFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+    val galleryLauncher = rememberLauncherForActivityResult(OpenMediaStore()) { uri ->
+        if (uri.isNotEmpty()) {
+            Toast.makeText(ctx, uri, Toast.LENGTH_LONG).show()
+            Timber.d(uri)
+            onImageSelected(uri)
+        } else Toast.makeText(ctx, "No Image was selected", Toast.LENGTH_LONG).show()
 
-        items(options) { item ->
-            UploadImageOption(
-                item
-            ) { uploadOption: UploadImageOption ->
-                if (uploadOption.title == "Choose from gallery") {
-                    galleryLauncher.launch(arrayOf("image/*"))
-                } else if (uploadOption.title == "Take a photo") {
-                    cameraLauncher.launch(null)
+    }
+
+    val multiplePermissionsState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+    )
+
+    if (multiplePermissionsState.allPermissionsGranted) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            userScrollEnabled = true,
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = "Upload Image",
+                        color = Color.Black,
+                        fontFamily = AthleticsFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
+            items(options) { item ->
+                UploadImageOption(
+                    item
+                ) { uploadOption: UploadImageOption ->
+                    if (uploadOption.title == "Choose from gallery") {
+                        galleryLauncher.launch(Unit)
+                    } else if (uploadOption.title == "Take a photo") {
+                        cameraLauncher.launch(null)
+                    }
+                }
+
+            }
+        }
+    } else {
+        Column(Modifier.fillMaxSize().padding(16.dp)) {
+            Text(
+                getTextToShowGivenPermissions(
+                    multiplePermissionsState.revokedPermissions,
+                    multiplePermissionsState.shouldShowRationale
+                ),
+                color = darkBlue,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .background(
+                        color = transparentBlue,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .padding(8.dp),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+                shape = RoundedCornerShape(10.dp),
+                onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
+                Text("Grant permission")
+            }
         }
     }
+
+
 }
 
 
 @Composable
-fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImageOption) -> Unit) {
+fun UploadImageOption(
+    data: UploadImageOption,
+    onClick: (transaction: UploadImageOption) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -160,7 +202,7 @@ fun UploadImageOption(data: UploadImageOption, onClick: (transaction: UploadImag
 @Composable
 fun UploadImageOptionPreview() {
     CupidCustomerAppTheme {
-        UploadImage({})
+//        UploadImage({})
     }
 
 }

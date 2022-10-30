@@ -287,18 +287,7 @@ fun ChangePassword() {
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-                //Update
-//                when (uiState.viewModelResult) {
-//                    ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
-//                        CircularProgressIndicator(
-//                            strokeWidth = 2.dp, modifier = Modifier
-//                                .height(54.dp)
-//                        )
-//                    }
-//                    else -> {
-//
-//                    }
-//                }
+
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()

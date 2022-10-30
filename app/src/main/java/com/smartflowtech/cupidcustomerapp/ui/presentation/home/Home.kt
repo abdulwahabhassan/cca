@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -112,12 +114,12 @@ fun Home(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-                IconButton(onClick = { goToTransactions() }, enabled = false) {
-//                    Icon(
-//                        imageVector = Icons.Rounded.ArrowForward,
-//                        contentDescription = "Forward arrow",
-//                        tint = black
-//                    )
+                IconButton(onClick = { goToTransactions() }) {
+                    Icon(
+                        imageVector = Icons.Rounded.ArrowForward,
+                        contentDescription = "Forward arrow",
+                        tint = Color.Black
+                    )
                 }
             }
 

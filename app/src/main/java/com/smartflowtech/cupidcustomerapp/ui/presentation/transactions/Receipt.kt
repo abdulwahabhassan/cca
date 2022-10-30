@@ -34,6 +34,7 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util.getTextToShowGivenPermissions
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -368,46 +369,6 @@ private fun createFile(fileName: String): File {
     val file = File(path, title)
     if (!file.exists()) file.createNewFile()
     return file
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-private fun getTextToShowGivenPermissions(
-    permissions: List<PermissionState>,
-    shouldShowRationale: Boolean
-): String {
-    val revokedPermissionsSize = permissions.size
-    if (revokedPermissionsSize == 0) return ""
-
-    val textToShow = StringBuilder()
-    textToShow.append("${if (revokedPermissionsSize == 1) "Permission" else "Permissions"} to ")
-
-    for (i in permissions.indices) {
-        textToShow.append(
-            permissions[i].permission.substringAfter("android.permission.")
-                .replace("_", " ")
-                .lowercase(Locale.ROOT)
-        )
-        when {
-            revokedPermissionsSize > 1 && i == revokedPermissionsSize - 2 -> {
-                textToShow.append(" and ")
-            }
-            i == revokedPermissionsSize - 1 -> {
-                textToShow.append(" ")
-            }
-            else -> {
-                textToShow.append(", ")
-            }
-        }
-    }
-    textToShow.append(if (revokedPermissionsSize == 1) "is" else "are")
-    textToShow.append(
-        if (shouldShowRationale) {
-            " important. Please grant all of them for the app to function properly."
-        } else {
-            " denied. The app cannot function without them. Please grant these permissions."
-        }
-    )
-    return textToShow.toString()
 }
 
 

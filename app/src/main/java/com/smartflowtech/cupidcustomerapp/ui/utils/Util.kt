@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.*
@@ -80,6 +82,52 @@ object Util {
                 null
             )
         return Uri.parse(path)
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun getTextToShowGivenPermissions(
+        permissions: List<PermissionState>,
+        shouldShowRationale: Boolean
+    ): String {
+        val revokedPermissionsSize = permissions.size
+        if (revokedPermissionsSize == 0) return ""
+
+        val textToShow = StringBuilder()
+        textToShow.append("${if (revokedPermissionsSize == 1) "Permission" else "Permissions"} to ")
+
+        for (i in permissions.indices) {
+            textToShow.append(
+                permissions[i].permission.substringAfter("android.permission.")
+                    .replace("_", " ")
+                    .lowercase(Locale.ROOT)
+            )
+            when {
+                revokedPermissionsSize > 1 && i == revokedPermissionsSize - 2 -> {
+                    textToShow.append(" and ")
+                }
+                i == revokedPermissionsSize - 1 -> {
+                    textToShow.append(" ")
+                }
+                else -> {
+                    textToShow.append(", ")
+                }
+            }
+        }
+        textToShow.append(if (revokedPermissionsSize == 1) "is" else "are")
+        textToShow.append(
+            if (shouldShowRationale) {
+                if (revokedPermissionsSize == 1)
+                    " important. Please grant it for the app to function properly."
+                else
+                    " important. Please grant all of them for the app to function properly."
+            } else {
+                if (revokedPermissionsSize == 1)
+                    " denied. The app cannot function without it. Please grant this permission."
+                else
+                    " denied. The app cannot function without them. Please grant these permissions."
+            }
+        )
+        return textToShow.toString()
     }
 
     fun getListOfBanks(): List<Bank> {

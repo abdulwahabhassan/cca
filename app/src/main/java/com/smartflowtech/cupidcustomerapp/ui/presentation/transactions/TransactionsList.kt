@@ -21,6 +21,8 @@ import com.smartflowtech.cupidcustomerapp.model.Transaction
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Header
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.Screen
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -38,30 +40,33 @@ fun TransactionsList(
 
     when (homeScreenUiState.viewModelResult) {
         ViewModelResult.LOADING -> {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                AnimatedVisibility(
-                    visible = (bottomSheetScaffoldState.bottomSheetState.isCollapsed ||
-                            bottomSheetScaffoldState.bottomSheetState.isExpanded) &&
-                            !bottomSheetScaffoldState.bottomSheetState.isAnimationRunning,
-                    enter = slideInVertically(spring()) { it / 10000 },
-                    exit = slideOutVertically(spring()) { it / 10000 }
+            if (currentBottomNavDestination != HomeScreen.Home.route) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.3f else 0.7f),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    AnimatedVisibility(
+                        visible = (bottomSheetScaffoldState.bottomSheetState.isCollapsed ||
+                                bottomSheetScaffoldState.bottomSheetState.isExpanded) &&
+                                !bottomSheetScaffoldState.bottomSheetState.isAnimationRunning,
+                        enter = slideInVertically(spring()) { it / 10000 },
+                        exit = slideOutVertically(spring()) { it / 10000 }
                     ) {
-                        CircularProgressIndicator(strokeWidth = 2.dp)
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.7f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CircularProgressIndicator(strokeWidth = 2.dp)
+                        }
                     }
                 }
             }
+
         }
         ViewModelResult.INITIAL -> {
             Column(
@@ -103,7 +108,7 @@ fun TransactionsList(
                     Column(
                         Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.3f else 0.7f),
+                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.7f),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

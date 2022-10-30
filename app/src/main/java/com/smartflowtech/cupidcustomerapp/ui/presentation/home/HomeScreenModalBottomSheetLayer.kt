@@ -19,7 +19,7 @@ fun HomeScreenModalBottomSheetLayer(
     isNavDestinationSelected: (String) -> Boolean,
     popBackStackOrFinishActivity: () -> Unit,
     goToDestination: (String) -> Unit,
-    goToAddFundsScreen: () -> Unit,
+    goToAddFundsScreen: () -> Unit
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -48,9 +48,8 @@ fun HomeScreenModalBottomSheetLayer(
     HomeScreenModalBottomSheet(
         modalBottomSheetState = modalBottomSheetState,
         bottomNavBarNavHostController = bottomNavBarNavHostController,
-        goTo = {},
         isNavDestinationSelected = isNavDestinationSelected,
-        onBackPressed = {
+        goBack = {
             if (modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
@@ -80,7 +79,6 @@ fun HomeScreenModalBottomSheetLayer(
             viewModel.updateWalletBalanceVisibility(visibility)
         },
         onLogoutClicked = {
-            viewModel.logOut()
             goToLogin()
         },
         getTransactions = {

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cupid</string>
+    <string name="image_desc">Image</string>
+    <string name="choose_an_image_text">Choose an image</string>
 </resources>

@@ -5,17 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
-import com.smartflowtech.cupidcustomerapp.data.repo.LoginRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.ProfileRepository
 import com.smartflowtech.cupidcustomerapp.model.CompanyUser
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.request.UpdateProfileRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreenUiState
-import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.ProfileScreenUiState
-import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,6 +45,14 @@ class ProfileViewModel @Inject constructor(
             )) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
+                        dataStorePrefsRepository.persistUser(
+                            userName = data.username ?: "",
+                            userEmail = data.email ?: "",
+                            phoneNumber = data.phoneNumber ?: "",
+                            companyId = data.companyId ?: "",
+                            userId = data.id?.toString() ?: "",
+                            fullName = data.fullname ?: ""
+                        )
                         profileScreenUiState =
                             ProfileScreenUiState(
                                 viewModelResult = ViewModelResult.SUCCESS,

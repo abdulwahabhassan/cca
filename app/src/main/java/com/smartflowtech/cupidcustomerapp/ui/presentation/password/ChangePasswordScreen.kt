@@ -76,6 +76,18 @@ fun ChangePasswordScreen(
 
     val scaffoldState = rememberScaffoldState()
 
+    LaunchedEffect(uiState.viewModelResult) {
+        if (
+            !uiState.message.isNullOrEmpty() &&
+            uiState.viewModelResult != ViewModelResult.SUCCESS
+        ) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = uiState.message,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding()
@@ -102,18 +114,6 @@ fun ChangePasswordScreen(
                 .background(MaterialTheme.colors.background),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            LaunchedEffect(uiState.viewModelResult) {
-                if (
-                    !uiState.message.isNullOrEmpty() &&
-                    uiState.viewModelResult != ViewModelResult.SUCCESS
-                ) {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = uiState.message,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
 
             Image(
                 modifier = Modifier.fillMaxSize(),
@@ -399,7 +399,6 @@ fun ChangePasswordScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     //Update
-
                     when (uiState.viewModelResult) {
                         ViewModelResult.INITIAL, ViewModelResult.ERROR -> {
                             Button(

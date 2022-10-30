@@ -39,7 +39,7 @@ fun WalletCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-//                onCardSelected(currentBalance)
+                onCardSelected(currentBalance)
             },
         shape = RoundedCornerShape(16.dp),
         elevation = if (isCardSelected) 16.dp else 4.dp,
@@ -146,7 +146,8 @@ fun WalletCard(
 @Preview(heightDp = 200)
 fun WalletCardPreview() {
     CupidCustomerAppTheme {
-        WalletCard(backgroundColor = transparentBlue,
+        WalletCard(
+            backgroundColor = transparentBlue,
             {},
             true,
             {},
