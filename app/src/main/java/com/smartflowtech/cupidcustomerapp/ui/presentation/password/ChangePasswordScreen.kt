@@ -39,9 +39,11 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 fun ChangePasswordScreen(
     viewModel: ChangePasswordViewModel,
     uiState: ChangePasswordScreenUiState,
-    goToHomeScreen: () -> Unit,
-    onBackArrowPressed: () -> Unit,
-    goToLogin: () -> Unit
+    onSuccessDialogOkayPressed: () -> Unit,
+    onBackArrowPressed: () -> Unit = {},
+    goToLogin: () -> Unit = {},
+    isForgotPassWord: Boolean,
+    okayButtonText: String,
 ) {
 
     // Visibility and input text
@@ -107,6 +109,7 @@ fun ChangePasswordScreen(
             }
         }
     ) { paddingValues ->
+
         Box(
             modifier = Modifier
                 .padding(paddingValues)
@@ -115,41 +118,43 @@ fun ChangePasswordScreen(
             contentAlignment = Alignment.TopCenter
         ) {
 
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds,
-                painter = painterResource(id = R.drawable.design_background),
-                contentDescription = "background"
-            )
-
-            Image(
-                modifier = Modifier
-                    .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.10f)
-                    .size(60.dp)
-                    .align(
-                        Alignment.TopCenter
-                    ),
-                painter = painterResource(id = R.drawable.ic_smartflow),
-                contentDescription = "Vendor logo"
-            )
-
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(top = 24.dp),
-                onClick = {
-                    onBackArrowPressed()
-                }) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = "Back arrow",
-                    tint = Color.White,
+            if (isForgotPassWord) {
+                Image(
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds,
+                    painter = painterResource(id = R.drawable.design_background),
+                    contentDescription = "background"
                 )
+
+                Image(
+                    modifier = Modifier
+                        .padding(top = LocalConfiguration.current.screenHeightDp.dp * 0.10f)
+                        .size(60.dp)
+                        .align(
+                            Alignment.TopCenter
+                        ),
+                    painter = painterResource(id = R.drawable.ic_smartflow),
+                    contentDescription = "Vendor logo"
+                )
+
+                IconButton(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(top = 24.dp),
+                    onClick = {
+                        onBackArrowPressed()
+                    }) {
+                    Icon(
+                        imageVector = Icons.Rounded.ArrowBack,
+                        contentDescription = "Back arrow",
+                        tint = Color.White,
+                    )
+                }
             }
 
             LazyColumn(
                 Modifier
-                    .fillMaxHeight(0.68f)
+                    .fillMaxHeight(if (isForgotPassWord) 0.68f else 1f)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
@@ -159,28 +164,32 @@ fun ChangePasswordScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 item {
-                    Spacer(
-                        modifier = Modifier
-                            .height(48.dp)
-
-                    )
                     //Change password text
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = "Change Password",
-                        style = MaterialTheme.typography.h6,
-                        color = darkBlue
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = "Please create new password",
-                        style = MaterialTheme.typography.body1,
-                        color = grey
-                    )
-                    Spacer(modifier = Modifier.height(32.dp))
+                    if (isForgotPassWord) {
+                        Spacer(
+                            modifier = Modifier
+                                .height(48.dp)
+
+                        )
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = "Change Password",
+                            style = MaterialTheme.typography.h6,
+                            color = darkBlue
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = "Please create new password",
+                            style = MaterialTheme.typography.body1,
+                            color = grey
+                        )
+                        Spacer(modifier = Modifier.height(32.dp))
+                    } else {
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
 
                     //Enter Current password
                     TextField(
@@ -459,22 +468,25 @@ fun ChangePasswordScreen(
 
                 }
 
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Text(modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable(uiState.viewModelResult != ViewModelResult.LOADING) {
-                                goToLogin()
-                            }
-                            .padding(vertical = 24.dp),
-                            text = "Back to Login",
-                            color = darkBlue
-                        )
+                if (isForgotPassWord) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            Text(modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable(uiState.viewModelResult != ViewModelResult.LOADING) {
+                                    goToLogin()
+                                }
+                                .padding(vertical = 24.dp),
+                                text = "Back to Login",
+                                color = darkBlue
+                            )
+                        }
                     }
                 }
+
             }
 
         }
@@ -485,7 +497,7 @@ fun ChangePasswordScreen(
     if (showSuccessDialog) {
         Dialog(
             onDismissRequest = {
-                goToHomeScreen()
+                onSuccessDialogOkayPressed()
             },
             properties = DialogProperties(
                 dismissOnClickOutside = false
@@ -504,10 +516,8 @@ fun ChangePasswordScreen(
                     Success(
                         title = "Successful",
                         message = uiState.message ?: "Changed Successfully",
-                        onOkayPressed = {
-                            goToHomeScreen()
-                        },
-                        buttonText = "Go To Dashboard"
+                        onOkayPressed = onSuccessDialogOkayPressed,
+                        buttonText = okayButtonText
                     )
                 }
             }

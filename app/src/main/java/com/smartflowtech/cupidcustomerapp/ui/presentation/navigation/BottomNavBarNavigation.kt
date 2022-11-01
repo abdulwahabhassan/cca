@@ -15,7 +15,11 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification_settings.NotificationSettings
+import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.payment.PaymentSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ChangePasswordViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
 
@@ -143,6 +147,21 @@ fun BottomNavBarNavigation(
                         route = HomeScreen.Profile.route,
                         navOptions = navOptions { launchSingleTop = true })
                 },
+                onSecurityClicked = {
+                    bottomNavHostController.navigate(
+                        route = HomeScreen.Security.route,
+                        navOptions = navOptions { launchSingleTop = true })
+                },
+                onNotificationClicked = {
+                    bottomNavHostController.navigate(
+                        route = HomeScreen.Notification.route,
+                        navOptions = navOptions { launchSingleTop = true })
+                },
+                onPaymentClicked = {
+                    bottomNavHostController.navigate(
+                        route = HomeScreen.Payment.route,
+                        navOptions = navOptions { launchSingleTop = true })
+                },
                 onBackPressed = onBackPressed
             )
         }
@@ -157,6 +176,30 @@ fun BottomNavBarNavigation(
                 onBackPressed = onBackPressed,
                 userFullName = userFullName,
                 userName = userName
+            )
+        }
+        composable(HomeScreen.Security.route) {
+            val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
+            ChangePasswordScreen(
+                viewModel = changePasswordViewModel,
+                uiState = changePasswordViewModel.changePasswordScreenUiState,
+                onSuccessDialogOkayPressed = onBackPressed,
+                isForgotPassWord = false,
+                okayButtonText = "Okay"
+            )
+        }
+
+        composable(HomeScreen.Notification.route) {
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            NotificationSettings(
+                viewModel = settingsViewModel
+            )
+        }
+
+        composable(HomeScreen.Payment.route) {
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            PaymentSettings(
+//                viewModel = settingsViewModel
             )
         }
     }

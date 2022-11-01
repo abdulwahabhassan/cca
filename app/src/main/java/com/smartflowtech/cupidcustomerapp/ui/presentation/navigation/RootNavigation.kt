@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.navigation
 
-import android.content.Context
 import androidx.compose.animation.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -198,7 +197,7 @@ fun RootNavigation(
             ChangePasswordScreen(
                 viewModel = changePasswordViewModel,
                 uiState = changePasswordViewModel.changePasswordScreenUiState,
-                goToHomeScreen = {
+                onSuccessDialogOkayPressed = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
                         NavOptions
@@ -223,7 +222,9 @@ fun RootNavigation(
                 },
                 onBackArrowPressed = {
                     rootNavHostController.popBackStack()
-                }
+                },
+                isForgotPassWord = true,
+                okayButtonText = "Go To Dashboard"
             )
         }
 

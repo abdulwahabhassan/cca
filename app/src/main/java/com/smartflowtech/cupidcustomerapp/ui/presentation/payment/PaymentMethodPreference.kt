@@ -22,14 +22,35 @@ import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.PaymentGateway
 import com.smartflowtech.cupidcustomerapp.model.PaymentMethodPreference
 import com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds.AddFundsCardPaymentGateway
-import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
-import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
-import com.smartflowtech.cupidcustomerapp.ui.theme.transparentBlue
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 
+
 @Composable
-fun PaymentMethodPreference(
+fun PaymentSettings() {
+    var selectedPaymentMethod by remember { mutableStateOf("") }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(
+            listOf(
+                PaymentMethodPreference.ASK_ALWAYS,
+                PaymentMethodPreference.PAYSTACK
+            )
+        ) { item ->
+            PaymentMethodItem(
+                paymentMethodPref = item,
+                onClick = { paymentMethodPref ->
+                    selectedPaymentMethod = paymentMethodPref.name
+                    //update remote and local preference
+                },
+                isSelected = selectedPaymentMethod == item.name
+            )
+        }
+
+    }
+}
+
+@Composable
+fun PaymentMethodItem(
     paymentMethodPref: PaymentMethodPreference,
     onClick: (String: PaymentMethodPreference) -> Unit,
     isSelected: Boolean
@@ -100,26 +121,11 @@ fun PaymentMethodPreference(
 
 }
 
-@Preview(showBackground = true)
 @Composable
-fun PreviewPaymentMethodSettings() {
-    var selectedPaymentMethod by remember { mutableStateOf("") }
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(
-            listOf(
-                PaymentMethodPreference.ASK_ALWAYS,
-                PaymentMethodPreference.PAYSTACK
-            )
-        ) { item ->
-            PaymentMethodPreference(
-                paymentMethodPref = item,
-                onClick = { paymentMethodPref ->
-                    selectedPaymentMethod = paymentMethodPref.name
-                    //update remote and local preference
-                },
-                isSelected = selectedPaymentMethod == item.name
-            )
-        }
-
+@Preview
+fun PreviewPaymentSettings() {
+    CupidCustomerAppTheme {
+        PaymentSettings()
     }
 }
+

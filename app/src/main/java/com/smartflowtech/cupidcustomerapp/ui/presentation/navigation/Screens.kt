@@ -43,7 +43,22 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
 
     object Profile : HomeScreen(
         "home_screen/profile",
-        "Profile",
+        "My Profile",
         R.drawable.ic_profile
+    )
+    object Security : HomeScreen(
+        "home_screen/security",
+        "Change Password",
+        R.drawable.ic_security
+    )
+    object Notification : HomeScreen(
+        "home_screen/notification",
+        "Notifications Settings",
+        R.drawable.ic_notification
+    )
+    object Payment : HomeScreen(
+        "home_screen/payment",
+        "Payment Methods",
+        R.drawable.ic_payment
     )
 }

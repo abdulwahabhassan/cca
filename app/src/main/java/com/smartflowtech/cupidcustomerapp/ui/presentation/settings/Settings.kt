@@ -2,10 +2,12 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.settings
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -35,6 +37,9 @@ fun Settings(
     viewModel: SettingsViewModel,
     onLogOutClicked: () -> Unit,
     onEditProfileClicked: () -> Unit,
+    onSecurityClicked: () -> Unit,
+    onNotificationClicked: () -> Unit,
+    onPaymentClicked: () -> Unit,
     onBackPressed: () -> Unit,
 ) {
     var toggleState by rememberSaveable {
@@ -53,13 +58,23 @@ fun Settings(
             Column(
                 modifier = Modifier
                     .clickable(enabled = item.name != "Appearance") {
-                        when(item.name) {
+                        when (item.name) {
                             "Edit Profile" -> {
                                 onEditProfileClicked()
                             }
-                            "Security" -> {}
-                            "Notifications" -> {}
-                            "Payment" -> {}
+                            "Security" -> {
+                                onSecurityClicked()
+                            }
+                            "Notifications" -> {
+                                onNotificationClicked()
+                            }
+                            "Payment" -> {
+                                onPaymentClicked()
+                            }
+                            "Logout" -> {
+                                viewModel.logOut()
+                                onLogOutClicked()
+                            }
                         }
                     }
                     .fillMaxWidth()
@@ -72,11 +87,24 @@ fun Settings(
                         .padding(start = 8.dp, end = 8.dp, top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        modifier = Modifier.size(32.dp),
-                        painter = painterResource(id = item.icon),
-                        contentDescription = "${item.name} icon"
-                    )
+                    if (item.name != "Logout") {
+                        Image(
+                            modifier = Modifier.size(32.dp),
+                            painter = painterResource(id = item.icon),
+                            contentDescription = "${item.name} icon"
+                        )
+                    } else {
+                        Icon(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(color = transparentBlue)
+                                .size(32.dp)
+                                .padding(6.5.dp),
+                            painter = painterResource(id = R.drawable.ic_logout),
+                            contentDescription = "${item.name} icon"
+                        )
+                    }
+
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
@@ -100,30 +128,6 @@ fun Settings(
                     thickness = 0.5.dp,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-            }
-        }
-
-        item {
-            Row(
-                modifier = Modifier
-                    .padding(vertical = 24.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable {
-                        viewModel.logOut()
-                        onLogOutClicked()
-                    }
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Logout",
-                    fontFamily = AthleticsFontFamily,
-                    fontWeight = FontWeight.W400,
-                    color = Color.Black
-
-                )
-
-                Icon(imageVector = Icons.Rounded.Logout, contentDescription = "")
             }
         }
     }

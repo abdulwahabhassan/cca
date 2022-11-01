@@ -11,26 +11,28 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.AppearanceToggleButton
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
+import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
+import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-@Preview(showBackground = true)
-fun NotificationSettings() {
+fun NotificationSettings(viewModel: SettingsViewModel) {
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(items = Util.getListOfNotificationSettingsItems()) { item ->
             Column(
                 modifier = Modifier
-                    .clickable {
-                        //
-                    }
+                    .clickable(false) {}
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.Center
@@ -50,8 +52,12 @@ fun NotificationSettings() {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text(text = item.name, fontWeight = FontWeight.Bold)
-                            Text(text = item.description, fontSize = 14.sp)
+                            Text(
+                                text = item.name, fontFamily = AthleticsFontFamily,
+                                fontWeight = FontWeight.W400,
+                                color = Color.Black
+                            )
+                            Text(text = item.description, fontSize = 14.sp, color = grey)
                         }
                     }
                     var toggleState by rememberSaveable {
@@ -70,5 +76,13 @@ fun NotificationSettings() {
                 )
             }
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewNotificationSettings() {
+    CupidCustomerAppTheme {
+//        NotificationSettings()
     }
 }

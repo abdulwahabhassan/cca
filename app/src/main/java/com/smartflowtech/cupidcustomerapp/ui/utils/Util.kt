@@ -290,6 +290,11 @@ object Util {
                 "Appearance",
                 "Switch between light and dark theme",
                 R.drawable.ic_appearance
+            ),
+            SettingsItem(
+                "Logout",
+                "Log out of app",
+                R.drawable.ic_logout
             )
         )
     }

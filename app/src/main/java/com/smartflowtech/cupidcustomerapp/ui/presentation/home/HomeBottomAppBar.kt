@@ -26,8 +26,7 @@ fun HomeBottomAppBar(
         HomeScreen.Home,
         HomeScreen.Transactions,
         HomeScreen.Location,
-        HomeScreen.Settings,
-        HomeScreen.Profile
+        HomeScreen.Settings
     )
 
     if (visible) {
@@ -37,28 +36,26 @@ fun HomeBottomAppBar(
                 .navigationBarsPadding()
         ) {
             items.forEach { item ->
-                if (item.route != HomeScreen.Profile.route) {
-                    BottomNavigationItem(
-                        icon = {
-                            Icon(
-                                painterResource(id = item.icon),
-                                contentDescription = item.title
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = if (item.title == "Transactions") "History" else item.title,
-                                fontSize = 11.sp
-                            )
-                        },
-                        selectedContentColor = MaterialTheme.colors.primary,
-                        unselectedContentColor = grey,
-                        alwaysShowLabel = LocalConfiguration.current.screenWidthDp.dp > 320.dp,
-                        selected = isSelected(item.route),
-                        onClick = { onClicked(item.route) },
-                        interactionSource = NoRippleInteractionSource()
-                    )
-                }
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painterResource(id = item.icon),
+                            contentDescription = item.title
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = if (item.title == "Transactions") "History" else item.title,
+                            fontSize = 11.sp
+                        )
+                    },
+                    selectedContentColor = MaterialTheme.colors.primary,
+                    unselectedContentColor = grey,
+                    alwaysShowLabel = LocalConfiguration.current.screenWidthDp.dp > 320.dp,
+                    selected = isSelected(item.route),
+                    onClick = { onClicked(item.route) },
+                    interactionSource = NoRippleInteractionSource()
+                )
             }
         }
     } else {

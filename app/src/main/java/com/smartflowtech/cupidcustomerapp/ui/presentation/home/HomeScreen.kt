@@ -110,6 +110,21 @@ fun HomeScreen(
                     HomeScreen.Profile.title
                 bottomAppBarVisibility = false
             }
+            HomeScreen.Security.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Security.title
+                bottomAppBarVisibility = false
+            }
+            HomeScreen.Notification.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Notification.title
+                bottomAppBarVisibility = false
+            }
+            HomeScreen.Payment.route -> {
+                currentBottomNavDestinationTitle =
+                    HomeScreen.Payment.title
+                bottomAppBarVisibility = false
+            }
         }
 
         coroutineScope.launch {
