@@ -1,7 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
 
 import android.Manifest
-import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.smartflowtech.cupidcustomerapp.contract.OpenMediaStore
-import com.smartflowtech.cupidcustomerapp.model.UploadImageOption
+import com.smartflowtech.cupidcustomerapp.model.domain.UploadImageOption
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util.getImageUri

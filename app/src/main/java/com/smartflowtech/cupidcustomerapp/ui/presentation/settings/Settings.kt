@@ -52,7 +52,8 @@ fun Settings(
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(top = 40.dp)
     ) {
         items(items = Util.getListOfSettingsItems()) { item ->
             Column(

@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.model
+package com.smartflowtech.cupidcustomerapp.model.domain
 
 data class SettingsItem(
     val name: String,

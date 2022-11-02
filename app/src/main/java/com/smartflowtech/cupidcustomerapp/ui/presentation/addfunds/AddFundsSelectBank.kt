@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.model.Bank
+import com.smartflowtech.cupidcustomerapp.model.domain.Bank
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme

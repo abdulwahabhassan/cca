@@ -1,6 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.model.response
 
-import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.squareup.moshi.Json
 

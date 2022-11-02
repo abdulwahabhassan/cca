@@ -19,17 +19,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.PaymentGateway
-import com.smartflowtech.cupidcustomerapp.model.PaymentMethodPreference
-import com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds.AddFundsCardPaymentGateway
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMethodPreference
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 
 
 @Composable
-fun PaymentSettings() {
-    var selectedPaymentMethod by remember { mutableStateOf("") }
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+fun PaymentSettings(viewModel: SettingsViewModel, paymentMethod: String) {
+    var selectedPaymentMethod by remember { mutableStateOf(paymentMethod) }
+    LazyColumn(
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .fillMaxSize(), contentPadding = PaddingValues(top = 40.dp)
+    ) {
         items(
             listOf(
                 PaymentMethodPreference.ASK_ALWAYS,
@@ -40,7 +43,7 @@ fun PaymentSettings() {
                 paymentMethodPref = item,
                 onClick = { paymentMethodPref ->
                     selectedPaymentMethod = paymentMethodPref.name
-                    //update remote and local preference
+                    viewModel.updatePaymentMethod(paymentMethodPref.name)
                 },
                 isSelected = selectedPaymentMethod == item.name
             )
@@ -125,7 +128,7 @@ fun PaymentMethodItem(
 @Preview
 fun PreviewPaymentSettings() {
     CupidCustomerAppTheme {
-        PaymentSettings()
+//        PaymentSettings()
     }
 }
 

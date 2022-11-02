@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
+import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.UploadImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
@@ -33,7 +33,7 @@ fun HomeScreenModalBottomSheet(
     onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
     updateWalletVisibility: (Boolean) -> Unit,
-    appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
+    appConfigPreferences: AppConfigPreferences,
     onSaveFilterClicked: (String, Map<String, Boolean>) -> Unit,
     homeScreenUiState: HomeScreenUiState,
     onLogoutClicked: () -> Unit,

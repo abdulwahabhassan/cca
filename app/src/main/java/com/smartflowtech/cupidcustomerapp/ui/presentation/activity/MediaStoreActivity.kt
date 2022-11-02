@@ -2,13 +2,12 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.activity
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import com.android.upload.viewmodel.MediaStoreViewModel
 import com.smartflowtech.cupidcustomerapp.databinding.ActivityMediaStoreBinding
-import com.smartflowtech.cupidcustomerapp.model.MediaStoreImage
+import com.smartflowtech.cupidcustomerapp.model.domain.MediaStoreImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.adapter.MediaStoreAdapter
 
 class MediaStoreActivity : ComponentActivity() {

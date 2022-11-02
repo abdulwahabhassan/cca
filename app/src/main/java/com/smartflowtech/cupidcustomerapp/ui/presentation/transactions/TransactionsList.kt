@@ -17,12 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Header
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.Screen
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

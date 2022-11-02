@@ -161,7 +161,7 @@ fun ChangePasswordScreen(
                     )
                     .align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(horizontal = 16.dp)
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = if (!isForgotPassWord) 40.dp else 0.dp)
             ) {
                 item {
                     //Change password text

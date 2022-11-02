@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.runtime.*
@@ -27,6 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
@@ -46,9 +46,44 @@ fun Location() {
     }
 
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .fillMaxSize()
+    ) {
+
+        // Show map
+        val smartflow = LatLng(6.599, 3.372)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(smartflow, 10f)
+        }
+        val uiSettings by remember { mutableStateOf(MapUiSettings()) }
+        val properties by remember {
+            mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+        }
+
+        if (selectedTab == "Map") {
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+                properties = properties,
+                uiSettings = uiSettings
+            ) {
+                Marker(
+                    state = MarkerState(position = smartflow),
+                    title = "Singapore",
+                    snippet = "Marker in Singapore"
+                )
+            }
+        }
+
+        //Search bar and Filter
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .padding(top = 24.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -78,9 +113,13 @@ fun Location() {
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().align(Alignment.TopCenter)
+            .padding(top = 100.dp)) {
+
+            //List and Map tab
             Row(
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp)
@@ -172,10 +211,11 @@ fun Location() {
 
             }
 
-            Divider(thickness = 0.5.dp, color = lineGrey)
+            Divider(thickness = 0.5.dp, color = if (selectedTab == "Map") Color.Transparent else lineGrey)
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            //List
             if (selectedTab == "List") {
                 // Show list of stations
                 LazyColumn(
@@ -221,11 +261,6 @@ fun Location() {
                         }
                     }
                 }
-            } else {
-                // Show map
-                Column(modifier = Modifier.fillMaxWidth()) {
-                }
-
             }
         }
 

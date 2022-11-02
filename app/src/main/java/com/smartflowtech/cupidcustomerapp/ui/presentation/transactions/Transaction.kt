@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 

@@ -58,7 +58,8 @@ fun AddFundsScreenModalBottomSheetLayer(
                 modalBottomSheetState.show()
             }
         },
-        goToHome = goBackToHomeScreen
+        goToHome = goBackToHomeScreen,
+        paymentMethod = viewModel.appConfigPreferences.paymentMethod
     )
 }
 

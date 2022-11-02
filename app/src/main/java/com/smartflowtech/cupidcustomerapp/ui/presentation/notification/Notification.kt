@@ -1,9 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.notification
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -16,9 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.NotificationItem
-import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.NotificationItem
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.time.LocalDateTime

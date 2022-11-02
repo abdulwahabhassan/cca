@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.model
+package com.smartflowtech.cupidcustomerapp.model.domain
 
 import com.squareup.moshi.Json
 

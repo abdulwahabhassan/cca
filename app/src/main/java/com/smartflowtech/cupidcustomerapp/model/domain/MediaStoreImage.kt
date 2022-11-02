@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.model
+package com.smartflowtech.cupidcustomerapp.model.domain
 
 import android.net.Uri
 import androidx.recyclerview.widget.DiffUtil

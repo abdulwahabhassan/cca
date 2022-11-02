@@ -26,9 +26,12 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-fun NotificationSettings(viewModel: SettingsViewModel) {
-
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+fun NotificationSettings(
+    viewModel: SettingsViewModel,
+    emailNotifications: Boolean,
+    pushNotifications: Boolean
+) {
+    LazyColumn(modifier = Modifier.fillMaxWidth(), contentPadding = PaddingValues(top = 40.dp)) {
         items(items = Util.getListOfNotificationSettingsItems()) { item ->
             Column(
                 modifier = Modifier
@@ -60,12 +63,23 @@ fun NotificationSettings(viewModel: SettingsViewModel) {
                             Text(text = item.description, fontSize = 14.sp, color = grey)
                         }
                     }
-                    var toggleState by rememberSaveable {
-                        mutableStateOf(item.active)
-                    }
+
                     Spacer(modifier = Modifier.width(16.dp))
-                    AppearanceToggleButton(toggleState = toggleState, onToggled = { bool ->
-                        toggleState = bool
+
+                    AppearanceToggleButton(toggleState = when (item.name) {
+                        "Email Notifications" -> emailNotifications
+                        "Push Notifications" -> pushNotifications
+                        else -> false
+                    }, onToggled = { bool ->
+                        when (item.name) {
+                            "Email Notifications" -> {
+                                viewModel.updateEmailNotifications(bool)
+                            }
+                            "Push Notifications" -> {
+                                viewModel.updatePushNotifications(bool)
+                            }
+                            else -> {}
+                        }
                     })
                 }
                 Spacer(modifier = Modifier.height(16.dp))

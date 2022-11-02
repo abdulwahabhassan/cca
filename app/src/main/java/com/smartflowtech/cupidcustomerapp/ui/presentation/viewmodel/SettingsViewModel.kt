@@ -16,4 +16,22 @@ class SettingsViewModel @Inject constructor(
             dataStorePrefsRepository.updateLoggedIn(loggedIn = false)
         }
     }
+
+    fun updateEmailNotifications(bool: Boolean) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateEmailNotifications(bool)
+        }
+    }
+
+    fun updatePushNotifications(bool: Boolean) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updatePushNotifications(bool)
+        }
+    }
+
+    fun updatePaymentMethod(name: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updatePaymentMethod(name)
+        }
+    }
 }

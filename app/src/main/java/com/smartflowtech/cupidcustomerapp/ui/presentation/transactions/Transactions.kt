@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
@@ -87,71 +87,76 @@ fun Transactions(
         onBackPressed()
     }
 
-    if (isCardSelected) {
-        CardTransactionHistory(
-            homeScreenUiState = homeScreenUiState,
-            onSelectTransaction = { transaction ->
-                selectedTransaction = transaction
-                showReceipt = true
-            },
-            bottomSheetScaffoldState = bottomSheetScaffoldState,
-            selectedTab = selectedTab,
-            onTabSelected = onTabSelected,
-            currentBottomNavDestination = currentBottomNavDestination
-        )
-    } else {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            horizontalAlignment = Alignment.Start
-        ) {
+    Column {
+        Spacer(modifier = Modifier.height(40.dp))
 
-            SearchBar(
-                query = queryText,
-                onQueryChange = { searchText ->
-                    queryText = searchText
-                },
-                onSearchBarClicked = onSearchBarClicked,
-                "Search transactions"
-            )
-
-            Row(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 4.dp, top = 16.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Transaction History",
-                    color = Color.Black,
-                    fontFamily = AthleticsFontFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                IconButton(onClick = { onDownloadTransactionsClicked() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_download),
-                        contentDescription = "Download icon",
-                        tint = deepBlue
-                    )
-                }
-            }
-
-            TransactionsList(
-                homeScreenUiState = filteredHomeScreenUiState,
-                onSelectTransaction = { transaction: Transaction ->
+        if (isCardSelected) {
+            CardTransactionHistory(
+                homeScreenUiState = homeScreenUiState,
+                onSelectTransaction = { transaction ->
                     selectedTransaction = transaction
                     showReceipt = true
                 },
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                getTransactions = {},
+                selectedTab = selectedTab,
+                onTabSelected = onTabSelected,
                 currentBottomNavDestination = currentBottomNavDestination
             )
+        } else {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.Start
+            ) {
+
+                SearchBar(
+                    query = queryText,
+                    onQueryChange = { searchText ->
+                        queryText = searchText
+                    },
+                    onSearchBarClicked = onSearchBarClicked,
+                    "Search transactions"
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 4.dp, top = 16.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Transaction History",
+                        color = Color.Black,
+                        fontFamily = AthleticsFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    IconButton(onClick = { onDownloadTransactionsClicked() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_download),
+                            contentDescription = "Download icon",
+                            tint = deepBlue
+                        )
+                    }
+                }
+
+                TransactionsList(
+                    homeScreenUiState = filteredHomeScreenUiState,
+                    onSelectTransaction = { transaction: Transaction ->
+                        selectedTransaction = transaction
+                        showReceipt = true
+                    },
+                    bottomSheetScaffoldState = bottomSheetScaffoldState,
+                    getTransactions = {},
+                    currentBottomNavDestination = currentBottomNavDestination
+                )
 
 
+            }
         }
+
     }
 
     if (showReceipt) {

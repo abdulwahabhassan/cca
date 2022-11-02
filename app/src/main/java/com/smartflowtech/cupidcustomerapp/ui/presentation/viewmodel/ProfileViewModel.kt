@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.ProfileRepository
-import com.smartflowtech.cupidcustomerapp.model.CompanyUser
+import com.smartflowtech.cupidcustomerapp.model.domain.CompanyUser
 import com.smartflowtech.cupidcustomerapp.model.request.UpdateProfileRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult

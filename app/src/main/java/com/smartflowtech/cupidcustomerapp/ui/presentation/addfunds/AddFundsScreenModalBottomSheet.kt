@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.smartflowtech.cupidcustomerapp.model.Bank
-import com.smartflowtech.cupidcustomerapp.model.PaymentMode
+import com.smartflowtech.cupidcustomerapp.model.domain.Bank
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -27,7 +27,8 @@ fun AddFundsScreenModalBottomSheet(
     selectedPaymentMode: String,
     onSelectBank: (Bank) -> Unit,
     onSelectPaymentMode: (PaymentMode) -> Unit,
-    goToHome: () -> Unit
+    goToHome: () -> Unit,
+    paymentMethod: String
 ) {
 
     ModalBottomSheetLayout(
@@ -96,7 +97,8 @@ fun AddFundsScreenModalBottomSheet(
                             modalBottomSheetState = modalBottomSheetState,
                             onBackPressed = closeModalBottomSheet,
                             onDismissErrorDialog = closeModalBottomSheet,
-                            onDismissSuccessDialog = goToHome
+                            onDismissSuccessDialog = goToHome,
+                            paymentMethod = paymentMethod
                         )
                     }
                 }

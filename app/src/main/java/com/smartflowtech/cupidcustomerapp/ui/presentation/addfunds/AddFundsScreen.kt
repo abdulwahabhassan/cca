@@ -19,12 +19,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.PaymentMode
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 

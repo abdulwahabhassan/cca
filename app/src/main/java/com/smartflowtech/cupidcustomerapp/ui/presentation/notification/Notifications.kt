@@ -14,11 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.NotificationItem
+import com.smartflowtech.cupidcustomerapp.model.domain.NotificationItem
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Header
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.grey
-import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.time.LocalDateTime

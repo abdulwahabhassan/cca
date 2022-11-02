@@ -19,11 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
-import com.smartflowtech.cupidcustomerapp.model.Category
-import com.smartflowtech.cupidcustomerapp.model.Period
-import com.smartflowtech.cupidcustomerapp.model.Product
-import com.smartflowtech.cupidcustomerapp.model.Status
+import com.smartflowtech.cupidcustomerapp.model.domain.*
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.deepBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
@@ -34,7 +30,7 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLett
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilterTransactions(
-    appConfigPreferences: DataStorePrefsRepository.AppConfigPreferences,
+    appConfigPreferences: AppConfigPreferences,
     onFilterSaveClicked: (String, Map<String, Boolean>) -> Unit,
     onBackPressed: () -> Unit
 ) {

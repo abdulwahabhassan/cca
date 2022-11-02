@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.model
+package com.smartflowtech.cupidcustomerapp.model.domain
 
 enum class PaymentMode {
     BANK_TRANSFER,

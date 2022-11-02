@@ -7,12 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.LoginRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.SettingsRepository
-import com.smartflowtech.cupidcustomerapp.model.CompanyUser
+import com.smartflowtech.cupidcustomerapp.model.domain.CompanyUser
 import com.smartflowtech.cupidcustomerapp.model.request.ChangePasswordRequestBody
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

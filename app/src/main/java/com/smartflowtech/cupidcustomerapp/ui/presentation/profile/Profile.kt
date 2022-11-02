@@ -94,6 +94,8 @@ fun Profile(
         }
     ) { paddingValues ->
 
+        Spacer(modifier = Modifier.height(40.dp))
+
         LazyColumn(
             Modifier
                 .padding(paddingValues)

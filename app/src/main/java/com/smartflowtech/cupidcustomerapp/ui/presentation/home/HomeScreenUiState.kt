@@ -1,7 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import com.smartflowtech.cupidcustomerapp.model.Transaction
-import com.smartflowtech.cupidcustomerapp.model.Wallet
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Wallet
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 
 data class HomeScreenUiState(

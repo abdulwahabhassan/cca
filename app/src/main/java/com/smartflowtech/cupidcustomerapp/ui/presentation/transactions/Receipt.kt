@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
-import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -29,8 +28,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.accompanist.permissions.*
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Status
-import com.smartflowtech.cupidcustomerapp.model.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Status
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
@@ -40,7 +39,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 @OptIn(ExperimentalPermissionsApi::class)

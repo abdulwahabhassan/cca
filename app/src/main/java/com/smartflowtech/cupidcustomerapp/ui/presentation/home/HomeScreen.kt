@@ -244,35 +244,39 @@ fun HomeScreen(
                         )
                         .fillMaxSize()
                 ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    if (currentBottomNavDestinationTitle == HomeScreen.Home.title) {
-                        Icon(
-                            modifier = Modifier
-                                .size(46.dp)
-                                .padding(bottom = 16.dp)
-                                .clip(RoundedCornerShape(50))
-                                .clipToBounds()
-                                .clickable {
-                                    if (
-                                        bottomNavBarNavHostController.currentDestination?.route ==
-                                        HomeScreen.Home.route
-                                    ) {
-                                        onBottomNavItemClicked(HomeScreen.Transactions.route)
-                                    } else {
-                                        onBottomNavItemClicked(HomeScreen.Home.route)
-                                    }
-                                }
-                                .align(Alignment.CenterHorizontally),
-                            imageVector = if (bottomSheetState.isExpanded)
-                                Icons.Rounded.HorizontalRule
-                            else
-                                Icons.Rounded.HorizontalRule,
-                            contentDescription = "Bottom sheet handle",
-                            tint = grey
-                        )
-                    } else {
-                        Spacer(modifier = Modifier.height(24.dp))
-                    }
+//                    if (bottomNavBarNavHostController.currentDestination?.route != HomeScreen.Location.route) {
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                    }
+//                    if (currentBottomNavDestinationTitle == HomeScreen.Home.title) {
+//                        Icon(
+//                            modifier = Modifier
+//                                .size(46.dp)
+//                                .padding(bottom = 16.dp)
+//                                .clip(RoundedCornerShape(50))
+//                                .clipToBounds()
+//                                .clickable {
+//                                    if (
+//                                        bottomNavBarNavHostController.currentDestination?.route ==
+//                                        HomeScreen.Home.route
+//                                    ) {
+//                                        onBottomNavItemClicked(HomeScreen.Transactions.route)
+//                                    } else {
+//                                        onBottomNavItemClicked(HomeScreen.Home.route)
+//                                    }
+//                                }
+//                                .align(Alignment.CenterHorizontally),
+//                            imageVector = if (bottomSheetState.isExpanded)
+//                                Icons.Rounded.HorizontalRule
+//                            else
+//                                Icons.Rounded.HorizontalRule,
+//                            contentDescription = "Bottom sheet handle",
+//                            tint = grey
+//                        )
+//                    } else {
+//                        if (bottomNavBarNavHostController.currentDestination?.route != HomeScreen.Location.route) {
+//                            Spacer(modifier = Modifier.height(24.dp))
+//                        }
+//                    }
                     BottomNavBarNavigation(
                         bottomNavHostController = bottomNavBarNavHostController,
                         onBackPressed = {
@@ -299,7 +303,8 @@ fun HomeScreen(
                         profilePicture = profilePicture,
                         onLogOutClicked = onLogOutClicked,
                         userFullName = userFullName,
-                        userName = userName
+                        userName = userName,
+                        onBottomNavItemClicked = onBottomNavItemClicked
                     )
                 }
             }) { paddingValues ->

@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
@@ -15,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.smartflowtech.cupidcustomerapp.model.PaymentMode
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 
 @Composable

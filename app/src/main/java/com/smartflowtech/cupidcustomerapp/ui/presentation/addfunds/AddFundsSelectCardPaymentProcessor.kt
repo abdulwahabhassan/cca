@@ -17,7 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.smartflowtech.cupidcustomerapp.model.PaymentGateway
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentGateway
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMethodPreference
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentError
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -28,10 +29,11 @@ fun AddFundsSelectCardPaymentProcessor(
     modalBottomSheetState: ModalBottomSheetState,
     onBackPressed: () -> Unit,
     onDismissErrorDialog: () -> Unit,
-    onDismissSuccessDialog: () -> Unit
+    onDismissSuccessDialog: () -> Unit,
+    paymentMethod: String
 ) {
 
-    var selectedCardProcessor by remember { mutableStateOf("") }
+    var selectedCardProcessor by remember { mutableStateOf(paymentMethod) }
     var showCardDetailsForm by remember { mutableStateOf(false) }
     var showSuccess by remember { mutableStateOf(false) }
     var showError by remember { mutableStateOf(false) }
@@ -186,7 +188,8 @@ fun AddFundsSelectedCardPaymentProcessorPreview() {
             ),
             {},
             {},
-            {}
+            {},
+            PaymentMethodPreference.ASK_ALWAYS.name
         )
     }
 }

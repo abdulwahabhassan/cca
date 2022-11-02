@@ -1,18 +1,14 @@
 package com.smartflowtech.cupidcustomerapp.ui.utils
 
-import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
-import androidx.annotation.RequiresApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.*
+import com.smartflowtech.cupidcustomerapp.model.domain.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

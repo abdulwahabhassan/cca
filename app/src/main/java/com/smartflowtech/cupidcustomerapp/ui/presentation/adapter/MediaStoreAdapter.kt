@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smartflowtech.cupidcustomerapp.databinding.ItemMediaStoreImageBinding
-import com.smartflowtech.cupidcustomerapp.model.MediaStoreImage
+import com.smartflowtech.cupidcustomerapp.model.domain.MediaStoreImage
 
 class MediaStoreAdapter(private val onClick: (MediaStoreImage) -> Unit) :
     ListAdapter<MediaStoreImage, MediaStoreAdapter.ImageViewHolder>(MediaStoreImage.DiffCallback) {

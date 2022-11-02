@@ -6,8 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
-import com.smartflowtech.cupidcustomerapp.data.repo.LoginRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,7 +16,7 @@ open class BaseViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository
 ) : ViewModel() {
 
-    var appConfigPreferences by mutableStateOf(DataStorePrefsRepository.AppConfigPreferences())
+    var appConfigPreferences by mutableStateOf(AppConfigPreferences())
         private set
 
     init {

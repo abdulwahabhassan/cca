@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.Transaction
-import com.smartflowtech.cupidcustomerapp.model.Wallet
+import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
+import com.smartflowtech.cupidcustomerapp.model.domain.Wallet
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*

@@ -2,9 +2,7 @@ package com.smartflowtech.cupidcustomerapp.data.repo
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import com.smartflowtech.cupidcustomerapp.model.Period
-import com.smartflowtech.cupidcustomerapp.model.Product
-import com.smartflowtech.cupidcustomerapp.model.Status
+import com.smartflowtech.cupidcustomerapp.model.domain.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -14,27 +12,6 @@ import javax.inject.Inject
 
 
 class DataStorePrefsRepository @Inject constructor(private val dataStore: DataStore<Preferences>) {
-
-    data class AppConfigPreferences(
-        val onBoarded: Boolean = false,
-        val loggedIn: Boolean = false,
-        val userName: String = "",
-        val userEmail: String = "",
-        val token: String = "",
-        val phoneNumber: String = "",
-        val walletBalanceVisibility: Boolean = true,
-        val periodFilter: String = Period.TWO_YEARS.name,
-        val completedStatusFilter: Boolean = true,
-        val failedStatusFilter: Boolean = true,
-        val pendingStatusFilter: Boolean = true,
-        val dpkProductFilter: Boolean = true,
-        val agoProductFilter: Boolean = true,
-        val pmsProductFilter: Boolean = true,
-        val companyId: String = "",
-        val userId: String = "",
-        val fullName: String = "",
-        val profilePictureUri: String = ""
-    )
 
     private object PreferencesKeys {
         val ONBOARDED = booleanPreferencesKey("onboarded")
@@ -55,6 +32,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val USER_ID = stringPreferencesKey("userId")
         val FULL_NAME = stringPreferencesKey("fullName")
         val PROFILE_PICTURE_URI = stringPreferencesKey("profilePicture")
+        val EMAIL_NOTIFICATIONS = booleanPreferencesKey("emailNotifications")
+        val PUSH_NOTIFICATIONS = booleanPreferencesKey("pushNotifications")
+        val PAYMENT_METHOD = stringPreferencesKey("paymentMethod")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -88,8 +68,29 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             companyId = preferences[PreferencesKeys.COMPANY_ID] ?: "",
             userId = preferences[PreferencesKeys.USER_ID] ?: "",
             fullName = preferences[PreferencesKeys.FULL_NAME] ?: "",
-            profilePictureUri = preferences[PreferencesKeys.PROFILE_PICTURE_URI] ?: ""
+            profilePictureUri = preferences[PreferencesKeys.PROFILE_PICTURE_URI] ?: "",
+            emailNotifications = preferences[PreferencesKeys.EMAIL_NOTIFICATIONS] ?: false,
+            pushNotifications = preferences[PreferencesKeys.PUSH_NOTIFICATIONS] ?: false,
+            paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name
         )
+    }
+
+    suspend fun updatePaymentMethod(method: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.PAYMENT_METHOD] = method
+        }
+    }
+
+    suspend fun updateEmailNotifications(bool: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.EMAIL_NOTIFICATIONS] = bool
+        }
+    }
+
+    suspend fun updatePushNotifications(bool: Boolean) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.PUSH_NOTIFICATIONS] = bool
+        }
     }
 
     suspend fun updateStarted(bool: Boolean) {

@@ -1,12 +1,11 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel
 
-import android.net.Uri
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.WalletRepository
-import com.smartflowtech.cupidcustomerapp.model.*
+import com.smartflowtech.cupidcustomerapp.model.domain.*
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsData
 import com.smartflowtech.cupidcustomerapp.model.response.WalletData
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
@@ -129,7 +128,7 @@ class HomeViewModel @Inject constructor(
 
     private fun mapTransactionsResponseData(
         result: List<TransactionsData>?,
-        prefs: DataStorePrefsRepository.AppConfigPreferences
+        prefs: AppConfigPreferences
     ): List<Transaction>? {
         return result?.map { it.mapToTransaction() }?.filter { transaction ->
             Timber.d("$transaction")

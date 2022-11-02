@@ -40,7 +40,8 @@ fun BottomNavBarNavigation(
     profilePicture: String,
     onLogOutClicked: () -> Unit,
     userFullName: String,
-    userName: String
+    userName: String,
+    onBottomNavItemClicked: (String) -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -75,8 +76,7 @@ fun BottomNavBarNavigation(
         popEnterTransition = {
             if (targetState.destination.route == HomeScreen.Home.route) {
                 slideInVertically { -it }
-            }
-            else {
+            } else {
                 slideInHorizontally { -it }
             }
         },
@@ -115,7 +115,10 @@ fun BottomNavBarNavigation(
                     selectedTab = tab
                 },
                 currentBottomNavDestination = bottomNavHostController.currentDestination?.route
-                    ?: ""
+                    ?: "",
+                bottomNavBarNavHostController = bottomNavHostController,
+                bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
+                onBottomNavItemClicked = onBottomNavItemClicked
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -192,14 +195,17 @@ fun BottomNavBarNavigation(
         composable(HomeScreen.Notification.route) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             NotificationSettings(
-                viewModel = settingsViewModel
+                viewModel = settingsViewModel,
+                emailNotifications = settingsViewModel.appConfigPreferences.emailNotifications,
+                pushNotifications = settingsViewModel.appConfigPreferences.pushNotifications
             )
         }
 
         composable(HomeScreen.Payment.route) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             PaymentSettings(
-//                viewModel = settingsViewModel
+                viewModel = settingsViewModel,
+                paymentMethod = settingsViewModel.appConfigPreferences.paymentMethod
             )
         }
     }
