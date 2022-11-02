@@ -36,6 +36,9 @@ fun HomeScreenModalBottomSheetLayer(
     var shouldShowUploadImage: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
+    var shouldShowStationFilter: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
         if (!modalBottomSheetState.isVisible) {
@@ -56,6 +59,7 @@ fun HomeScreenModalBottomSheetLayer(
                     shouldShowSuccess = false
                     shouldShowUploadImage = false
                     shouldShowDownloadTransactions = false
+                    shouldShowStationFilter = false
                 }
             } else {
                 popBackStackOrFinishActivity()
@@ -120,6 +124,21 @@ fun HomeScreenModalBottomSheetLayer(
         persistProfilePicture = { uri ->
             viewModel.persistProfilePicture(uri)
         },
-        profilePicture = viewModel.appConfigPreferences.profilePictureUri
+        profilePicture = viewModel.appConfigPreferences.profilePictureUri,
+        shouldShowStationFilter = shouldShowStationFilter,
+        showStationFilter = { bool ->
+            shouldShowStationFilter = bool
+            shouldShowDownloadTransactions = !bool
+            shouldShowSuccess = !bool
+            shouldShowUploadImage = !bool
+            if (!modalBottomSheetState.isVisible) {
+                coroutineScope.launch {
+                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded, spring())
+                }
+            }
+        },
+        onStationFilterSelected = { filter ->
+            viewModel.updateStationFilter(filter)
+        }
     )
 }

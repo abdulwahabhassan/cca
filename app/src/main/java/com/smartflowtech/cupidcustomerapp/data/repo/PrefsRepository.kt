@@ -35,6 +35,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val EMAIL_NOTIFICATIONS = booleanPreferencesKey("emailNotifications")
         val PUSH_NOTIFICATIONS = booleanPreferencesKey("pushNotifications")
         val PAYMENT_METHOD = stringPreferencesKey("paymentMethod")
+        val STATION_FILTER = stringPreferencesKey("stationFilter")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -71,7 +72,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             profilePictureUri = preferences[PreferencesKeys.PROFILE_PICTURE_URI] ?: "",
             emailNotifications = preferences[PreferencesKeys.EMAIL_NOTIFICATIONS] ?: false,
             pushNotifications = preferences[PreferencesKeys.PUSH_NOTIFICATIONS] ?: false,
-            paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name
+            paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name,
+            stationFilter = preferences[PreferencesKeys.STATION_FILTER] ?: "state"
         )
     }
 
@@ -173,6 +175,12 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
     suspend fun persistProfilePicture(uri: String) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.PROFILE_PICTURE_URI] = uri
+        }
+    }
+
+    suspend fun updateStationFilter(filter: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.STATION_FILTER] = filter
         }
     }
 }

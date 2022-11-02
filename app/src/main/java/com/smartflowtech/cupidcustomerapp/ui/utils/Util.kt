@@ -375,7 +375,7 @@ object Util {
 
     fun getListOfStationsFilter(): List<String> {
         return listOf(
-            "States",
+            "State",
             "LGA"
         )
     }

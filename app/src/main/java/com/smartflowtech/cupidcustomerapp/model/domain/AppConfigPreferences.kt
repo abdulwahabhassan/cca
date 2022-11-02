@@ -21,5 +21,6 @@ data class AppConfigPreferences(
     val profilePictureUri: String = "",
     val emailNotifications: Boolean = false,
     val pushNotifications: Boolean = false,
-    val paymentMethod: String = PaymentMethodPreference.ASK_ALWAYS.name
+    val paymentMethod: String = PaymentMethodPreference.ASK_ALWAYS.name,
+    val stationFilter: String = "state"
 )

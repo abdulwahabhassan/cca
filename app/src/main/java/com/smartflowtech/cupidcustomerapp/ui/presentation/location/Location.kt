@@ -29,11 +29,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.StationsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-fun Location() {
+fun Location(
+    onStationFilterClicked: () -> Unit,
+    stationFilter: String
+) {
 
     var selectedTab by remember { mutableStateOf("List") }
 
@@ -98,7 +102,9 @@ fun Location() {
                 maxWidthFraction = 0.85f
             )
             IconButton(
-                onClick = { },
+                onClick = {
+                    onStationFilterClicked()
+                },
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .background(
@@ -116,8 +122,12 @@ fun Location() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Column(modifier = Modifier.fillMaxSize().align(Alignment.TopCenter)
-            .padding(top = 100.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopCenter)
+                .padding(top = 100.dp)
+        ) {
 
             //List and Map tab
             Row(
@@ -211,7 +221,10 @@ fun Location() {
 
             }
 
-            Divider(thickness = 0.5.dp, color = if (selectedTab == "Map") Color.Transparent else lineGrey)
+            Divider(
+                thickness = 0.5.dp,
+                color = if (selectedTab == "Map") Color.Transparent else lineGrey
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -272,6 +285,6 @@ fun Location() {
 @Preview(showBackground = true)
 fun PreviewLocation() {
     CupidCustomerAppTheme {
-        Location()
+        Location(onStationFilterClicked = {}, "state")
     }
 }

@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.password
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +31,7 @@ fun VerifyEmailScreen(
 ) {
 
     val scaffoldState = rememberScaffoldState()
+    val ctx = LocalContext.current
 
     Scaffold(
         modifier = Modifier
@@ -73,7 +76,9 @@ fun VerifyEmailScreen(
             )
 
             IconButton(
-                modifier = Modifier.align(Alignment.TopStart).padding(top = 24.dp),
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(top = 24.dp),
                 onClick = {
                     onBackArrowPressed()
                 }) {
@@ -114,7 +119,12 @@ fun VerifyEmailScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "We sent an email to ${verifiedEmail.replace(Regex("(?<=\\w{3})(.+)(?=@)"), "********")} \nPlease verify your email",
+                        text = "We sent an email to ${
+                            verifiedEmail.replace(
+                                Regex("(?<=\\w{3})(.+)(?=@)"),
+                                "********"
+                            )
+                        } \nPlease verify your email",
                         style = MaterialTheme.typography.body1,
                         color = grey,
                         textAlign = TextAlign.Center
@@ -134,6 +144,13 @@ fun VerifyEmailScreen(
                             .fillMaxWidth()
                             .height(54.dp),
                         onClick = {
+                            val emailIntent =
+                                Intent.createChooser(
+                                    Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/message"
+                                    }, null
+                                )
+                            ctx.startActivity(emailIntent)
                             goToChangePasswordScreen()
                         },
                         shape = RoundedCornerShape(10.dp),
@@ -158,6 +175,10 @@ fun VerifyEmailScreen(
 @Preview(showBackground = true)
 fun PreviewVerificationEmail() {
     CupidCustomerAppTheme {
-        VerifyEmailScreen(goToChangePasswordScreen = {}, onBackArrowPressed = {}, "abcdefghijkllnkjn@gmail.com")
+        VerifyEmailScreen(
+            goToChangePasswordScreen = {},
+            onBackArrowPressed = {},
+            "abcdefghijkllnkjn@gmail.com"
+        )
     }
 }

@@ -19,7 +19,7 @@ object ApiModule {
     ): CupidApiService {
         return networkClient.getApiService(
             if (BuildConfig.DEBUG)
-                BuildConfig.CUPID_STAGING_BASE_URL
+                BuildConfig.CUPID_PROD_BASE_URL
             else
                 BuildConfig.CUPID_PROD_BASE_URL
         )

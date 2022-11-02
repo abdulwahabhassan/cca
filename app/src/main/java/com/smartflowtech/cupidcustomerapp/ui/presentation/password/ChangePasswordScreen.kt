@@ -93,7 +93,8 @@ fun ChangePasswordScreen(
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding()
-            .imePadding(),
+            .imePadding()
+            .padding(top = if (!isForgotPassWord) 40.dp else 0.dp),
         scaffoldState = scaffoldState,
         snackbarHost = {
             SnackbarHost(it) { data ->
@@ -161,7 +162,7 @@ fun ChangePasswordScreen(
                     )
                     .align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = if (!isForgotPassWord) 40.dp else 0.dp)
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
             ) {
                 item {
                     //Change password text

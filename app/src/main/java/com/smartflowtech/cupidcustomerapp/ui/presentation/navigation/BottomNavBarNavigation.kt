@@ -22,6 +22,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transacti
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ChangePasswordViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.StationsViewModel
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -41,7 +42,8 @@ fun BottomNavBarNavigation(
     onLogOutClicked: () -> Unit,
     userFullName: String,
     userName: String,
-    onBottomNavItemClicked: (String) -> Unit
+    onBottomNavItemClicked: (String) -> Unit,
+    onStationFilterClicked: () -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -138,7 +140,11 @@ fun BottomNavBarNavigation(
             )
         }
         composable(HomeScreen.Location.route) {
-            Location()
+            val stationViewModel = hiltViewModel<StationsViewModel>()
+            Location(
+                onStationFilterClicked = onStationFilterClicked,
+                stationFilter = stationViewModel.appConfigPreferences.stationFilter
+            )
         }
         composable(HomeScreen.Settings.route) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()

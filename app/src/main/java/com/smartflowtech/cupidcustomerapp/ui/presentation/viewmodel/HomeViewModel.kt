@@ -201,4 +201,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updateStationFilter(filter: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateStationFilter(filter)
+        }
+    }
+
 }

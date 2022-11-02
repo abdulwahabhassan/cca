@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.location
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,15 +21,10 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.grey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-@Preview(showBackground = true)
-fun StationFilter() {
+fun StationFilter(
+    onStationFilterSelected: (String) -> Unit
+) {
     Column(Modifier.fillMaxSize()) {
-        Icon(
-            imageVector = Icons.Rounded.Close,
-            contentDescription = "",
-            tint = Color.Unspecified,
-            modifier = Modifier.align(Alignment.End).padding(16.dp)
-        )
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = "Filter",
@@ -44,14 +40,18 @@ fun StationFilter() {
         )
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             items(Util.getListOfStationsFilter()) { stationFilter ->
-                Text(
-                    text = stationFilter,
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    color = grey
-                )
+                Row(modifier = Modifier.clickable {
+                    onStationFilterSelected(stationFilter)
+                }.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
+                    Text(
+                        text = stationFilter,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        color = grey
+                    )
+                }
             }
         }
     }

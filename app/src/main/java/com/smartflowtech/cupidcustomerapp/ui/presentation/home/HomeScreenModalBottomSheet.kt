@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
+import com.smartflowtech.cupidcustomerapp.ui.presentation.location.StationFilter
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.UploadImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
@@ -46,6 +47,9 @@ fun HomeScreenModalBottomSheet(
     showUploadImage: (Boolean) -> Unit,
     persistProfilePicture: (String) -> Unit,
     profilePicture: String,
+    shouldShowStationFilter: Boolean,
+    showStationFilter: (Boolean) -> Unit,
+    onStationFilterSelected: (String) -> Unit
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
@@ -112,7 +116,12 @@ fun HomeScreenModalBottomSheet(
                         }
                     }
 
-                    if (shouldShowUploadImage) {
+                    if (shouldShowStationFilter) {
+                        StationFilter(onStationFilterSelected = { filter ->
+                            onStationFilterSelected(filter)
+                            goBack()
+                        })
+                    } else if (shouldShowUploadImage) {
                         UploadImage(
                             onImageSelected = { uri ->
                                 persistProfilePicture(uri)
@@ -172,7 +181,10 @@ fun HomeScreenModalBottomSheet(
                 goBack()
 
             },
-            profilePicture = profilePicture
+            profilePicture = profilePicture,
+            onStationFilterClicked = {
+                showStationFilter(true)
+            }
         )
     }
 }

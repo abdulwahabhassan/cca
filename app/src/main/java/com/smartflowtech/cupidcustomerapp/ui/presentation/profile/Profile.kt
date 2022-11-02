@@ -77,7 +77,8 @@ fun Profile(
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding()
-            .imePadding(),
+            .imePadding()
+            .padding(top = 40.dp),
         scaffoldState = scaffoldState,
         snackbarHost = {
             SnackbarHost(it) { data ->
@@ -93,8 +94,6 @@ fun Profile(
             }
         }
     ) { paddingValues ->
-
-        Spacer(modifier = Modifier.height(40.dp))
 
         LazyColumn(
             Modifier
