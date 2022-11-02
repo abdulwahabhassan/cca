@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
@@ -43,7 +44,8 @@ fun BottomNavBarNavigation(
     userFullName: String,
     userName: String,
     onBottomNavItemClicked: (String) -> Unit,
-    onStationFilterClicked: () -> Unit
+    onStationFilterClicked: () -> Unit,
+    onStationSelected: (Station) -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -143,7 +145,8 @@ fun BottomNavBarNavigation(
             val stationViewModel = hiltViewModel<StationsViewModel>()
             Location(
                 onStationFilterClicked = onStationFilterClicked,
-                stationFilter = stationViewModel.appConfigPreferences.stationFilter
+                stationFilter = stationViewModel.appConfigPreferences.stationFilter,
+                onStationSelected = onStationSelected
             )
         }
         composable(HomeScreen.Settings.route) {

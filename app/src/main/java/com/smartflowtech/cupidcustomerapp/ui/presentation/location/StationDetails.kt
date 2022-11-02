@@ -22,7 +22,7 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 fun StationDetails(station: Station) {
-    Column(Modifier.fillMaxWidth().padding(vertical = 24.dp)) {
+    Column(Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -31,11 +31,6 @@ fun StationDetails(station: Station) {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_station_location),
-                contentDescription = "",
-                tint = Color.Unspecified,
-            )
-            Icon(
-                imageVector = Icons.Rounded.Close,
                 contentDescription = "",
                 tint = Color.Unspecified,
             )
@@ -50,7 +45,7 @@ fun StationDetails(station: Station) {
         )
         Spacer(
             modifier = Modifier
-                .height(8.dp)
+                .height(10.dp)
                 .fillMaxWidth()
         )
         Text(
@@ -61,7 +56,7 @@ fun StationDetails(station: Station) {
         )
         Spacer(
             modifier = Modifier
-                .height(8.dp)
+                .height(10.dp)
                 .fillMaxWidth()
         )
         Text(
@@ -72,7 +67,7 @@ fun StationDetails(station: Station) {
         )
         Spacer(
             modifier = Modifier
-                .height(8.dp)
+                .height(10.dp)
                 .fillMaxWidth()
         )
         Text(

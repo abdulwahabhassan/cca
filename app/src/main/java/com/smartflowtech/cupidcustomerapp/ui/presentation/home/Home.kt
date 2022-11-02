@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CardTransactionHistory
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
@@ -75,7 +77,10 @@ fun Home(
         )
     }
 
-    Column {
+    Column(
+        Modifier
+            .fillMaxSize()
+    ) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -121,23 +126,7 @@ fun Home(
 //            }
             )
         } else {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                HorizontalPager(
-                    count = 2,
-                    state = pagerState,
-                    contentPadding = PaddingValues(start = 16.dp, end = 32.dp),
-                    itemSpacing = 16.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp)
-                ) { page: Int ->
-                    AdsCard(page)
-                }
+            if (homeScreenUiState.transactions.isEmpty()) {
                 Row(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 4.dp)
@@ -152,27 +141,77 @@ fun Home(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    IconButton(onClick = { goToTransactions() }) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowForward,
-                            contentDescription = "Forward arrow",
-                            tint = Color.Black
-                        )
-                    }
                 }
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(50.dp),
+                        painter = painterResource(id = R.drawable.ic_no_transactions),
+                        contentDescription = "No transactions icon",
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "You have no transaction history yet")
+                }
+            } else {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    HorizontalPager(
+                        count = 2,
+                        state = pagerState,
+                        contentPadding = PaddingValues(start = 16.dp, end = 32.dp),
+                        itemSpacing = 16.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 32.dp)
+                    ) { page: Int ->
+                        AdsCard(page)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 4.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Transaction History",
+                            color = Color.Black,
+                            fontFamily = AthleticsFontFamily,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        IconButton(onClick = { goToTransactions() }) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowForward,
+                                contentDescription = "Forward arrow",
+                                tint = Color.Black
+                            )
+                        }
+                    }
 
-                TransactionsList(
-                    homeScreenUiState = homeScreenUiState,
-                    onSelectTransaction = { transaction ->
-                        selectedTransaction = transaction
-                        showReceipt = true
-                    },
-                    bottomSheetScaffoldState = bottomSheetScaffoldState,
-                    getTransactions = getTransactions,
-                    currentBottomNavDestination = currentBottomNavDestination
-                )
+                    TransactionsList(
+                        homeScreenUiState = homeScreenUiState,
+                        onSelectTransaction = { transaction ->
+                            selectedTransaction = transaction
+                            showReceipt = true
+                        },
+                        bottomSheetScaffoldState = bottomSheetScaffoldState,
+                        getTransactions = getTransactions,
+                        currentBottomNavDestination = currentBottomNavDestination
+                    )
+                }
             }
-
         }
     }
 

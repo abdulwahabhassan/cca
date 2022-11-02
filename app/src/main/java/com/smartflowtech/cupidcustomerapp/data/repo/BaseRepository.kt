@@ -48,7 +48,7 @@ open class BaseRepository {
             }
         } catch (t: Throwable) {
             Timber.d("Error while handling httpException $t")
-            null
+            CupidApiErrorResponse(message = "Whoops, something went wrong! ${e.code()}")
         }
     }
 

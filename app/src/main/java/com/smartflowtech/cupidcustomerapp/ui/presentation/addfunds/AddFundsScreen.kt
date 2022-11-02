@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 fun AddFundsScreen(
     onBackPressed: () -> Unit,
     onPaymentModeSelected: (PaymentMode) -> Unit,
+    onProceedClicked: (Int) -> Unit,
 ) {
 
     var amount by rememberSaveable { mutableStateOf("") }
@@ -187,6 +188,7 @@ fun AddFundsScreen(
                         .padding(horizontal = 16.dp),
                     onClick = {
                         if (amount.isNotEmpty() && amount != "0") {
+                            onProceedClicked(amount.replace(",", "").toInt())
                             coroutineScope.launch {
                                 bottomSheetScaffoldState.bottomSheetState.expand()
                             }
@@ -220,6 +222,8 @@ fun AddFundsScreen(
 @Composable
 fun AddFundsScreenPreview() {
     CupidCustomerAppTheme {
-        AddFundsScreen({}, {})
+        AddFundsScreen({}, {}) {
+
+        }
     }
 }

@@ -30,7 +30,8 @@ fun AddFundsSelectCardPaymentProcessor(
     onBackPressed: () -> Unit,
     onDismissErrorDialog: () -> Unit,
     onDismissSuccessDialog: () -> Unit,
-    paymentMethod: String
+    paymentMethod: String,
+    amount: Int
 ) {
 
     var selectedCardProcessor by remember { mutableStateOf(paymentMethod) }
@@ -108,7 +109,8 @@ fun AddFundsSelectCardPaymentProcessor(
                                 "Error!",
                                 Toast.LENGTH_LONG
                             ).show()
-                        }
+                        },
+                        amount = amount
                     )
                 }
             }
@@ -189,7 +191,8 @@ fun AddFundsSelectedCardPaymentProcessorPreview() {
             {},
             {},
             {},
-            PaymentMethodPreference.ASK_ALWAYS.name
+            PaymentMethodPreference.ASK_ALWAYS.name,
+            100
         )
     }
 }

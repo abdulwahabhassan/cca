@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
@@ -48,7 +49,8 @@ fun HomeScreen(
     onUploadImageClicked: () -> Unit,
     onProfileUpdateSuccess: () -> Unit,
     profilePicture: String,
-    onStationFilterClicked: () -> Unit
+    onStationFilterClicked: () -> Unit,
+    onStationSelected: (Station) -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -273,7 +275,8 @@ fun HomeScreen(
                         userFullName = userFullName,
                         userName = userName,
                         onBottomNavItemClicked = onBottomNavItemClicked,
-                        onStationFilterClicked = onStationFilterClicked
+                        onStationFilterClicked = onStationFilterClicked,
+                        onStationSelected = onStationSelected
                     )
                 }
             }) { paddingValues ->

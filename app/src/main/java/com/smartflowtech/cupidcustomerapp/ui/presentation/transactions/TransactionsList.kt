@@ -96,31 +96,22 @@ fun TransactionsList(
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start
             ) {
-
-                AnimatedVisibility(
-                    visible = (bottomSheetScaffoldState.bottomSheetState.isCollapsed ||
-                            bottomSheetScaffoldState.bottomSheetState.isExpanded) &&
-                            !bottomSheetScaffoldState.bottomSheetState.isAnimationRunning,
-                    enter = slideInVertically(spring()) { it / 10000 },
-                    exit = slideOutVertically(spring()) { it / 10000 }
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.7f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.7f),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .size(50.dp),
-                            painter = painterResource(id = R.drawable.ic_no_transactions),
-                            contentDescription = "No transactions icon",
-                            tint = Color.Unspecified
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = "No transactions")
-                    }
+                    Icon(
+                        modifier = Modifier
+                            .size(50.dp),
+                        painter = painterResource(id = R.drawable.ic_no_transactions),
+                        contentDescription = "No transactions icon",
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "You have no transaction history yet")
                 }
             }
 

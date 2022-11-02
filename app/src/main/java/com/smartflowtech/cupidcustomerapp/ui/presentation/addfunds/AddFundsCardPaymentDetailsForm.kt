@@ -36,7 +36,8 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.findActivity
 fun AddFundsCardPaymentDetailsForm(
     onBackPressed: () -> Unit,
     onPaymentSuccess: (reference: String) -> Unit,
-    onPaymentError: (message: String, reference: String) -> Unit
+    onPaymentError: (message: String, reference: String) -> Unit,
+    amount: Int
 ) {
 
     var cardNumber by rememberSaveable { mutableStateOf("5060666666666666666") }
@@ -57,7 +58,7 @@ fun AddFundsCardPaymentDetailsForm(
     fun chargeCardWithPayStack(card: Card) {
         if (card.isValid) {
             val charge = Charge()
-                .setAmount((100 * 100).toInt())
+                .setAmount(amount * 100)
                 .setEmail("devhassan.org@gmail.com")
                 .setCard(card)
 
@@ -345,6 +346,6 @@ fun AddFundsCardPaymentDetailsForm(
 @Composable
 fun CardDetailsFormPreview() {
     CupidCustomerAppTheme {
-        AddFundsCardPaymentDetailsForm({}, {}, {message, reference ->  })
+        AddFundsCardPaymentDetailsForm({}, {}, {message, reference ->  }, 100)
     }
 }

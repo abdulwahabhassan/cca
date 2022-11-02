@@ -17,8 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
+import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
+import com.smartflowtech.cupidcustomerapp.ui.presentation.location.StationDetails
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.StationFilter
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.ModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.UploadImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
@@ -39,21 +42,16 @@ fun HomeScreenModalBottomSheet(
     homeScreenUiState: HomeScreenUiState,
     onLogoutClicked: () -> Unit,
     getTransactions: () -> Unit,
-    shouldShowDownloadTransactions: Boolean,
-    shouldShowSuccess: Boolean,
-    showSuccess: (Boolean) -> Unit,
-    showDownloadTransactions: (Boolean) -> Unit,
-    shouldShowUploadImage: Boolean,
-    showUploadImage: (Boolean) -> Unit,
     persistProfilePicture: (String) -> Unit,
     profilePicture: String,
-    shouldShowStationFilter: Boolean,
-    showStationFilter: (Boolean) -> Unit,
-    onStationFilterSelected: (String) -> Unit
+    onStationFilterSelected: (String) -> Unit,
+    modalBottomSheetContentKey: String,
+    setModalBottomSheetContent: (String) -> Unit
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
     var successMessage: String by rememberSaveable { mutableStateOf("") }
+    var station: Station? by remember { mutableStateOf(null) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -115,39 +113,59 @@ fun HomeScreenModalBottomSheet(
                             )
                         }
                     }
-
-                    if (shouldShowStationFilter) {
-                        StationFilter(onStationFilterSelected = { filter ->
-                            onStationFilterSelected(filter)
-                            goBack()
-                        })
-                    } else if (shouldShowUploadImage) {
-                        UploadImage(
-                            onImageSelected = { uri ->
-                                persistProfilePicture(uri)
+                    when (modalBottomSheetContentKey) {
+                        ModalBottomSheetContent.DownloadTransactions.contentKey -> {
+                            DownloadTransactions(
+                                showSuccess = {
+                                    successTitle = "Sent"
+                                    successMessage =
+                                        "We've sent the requested statements to your email"
+                                    setModalBottomSheetContent(
+                                        ModalBottomSheetContent.Success.contentKey
+                                    )
+                                }
+                            )
+                        }
+                        ModalBottomSheetContent.Success.contentKey -> {
+                            Success(
+                                title = successTitle,
+                                message = successMessage,
+                                onOkayPressed = goBack
+                            )
+                        }
+                        ModalBottomSheetContent.UploadImage.contentKey -> {
+                            UploadImage(
+                                onImageSelected = { uri ->
+                                    persistProfilePicture(uri)
+                                    goBack()
+                                }
+                            )
+                        }
+                        ModalBottomSheetContent.StationFilter.contentKey -> {
+                            StationFilter(onStationFilterSelected = { filter ->
+                                onStationFilterSelected(filter)
                                 goBack()
+                            })
+                        }
+                        ModalBottomSheetContent.StationDetails.contentKey -> {
+                            station?.let { StationDetails(station = it) } ?: Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Select a station to see details",
+                                    modifier = Modifier.padding(16.dp)
+                                )
                             }
-                        )
-                    } else if (shouldShowDownloadTransactions) {
-                        DownloadTransactions(
-                            showSuccess = {
-                                successTitle = "Sent"
-                                successMessage = "We've sent the requested statements to your email"
-                                showSuccess(true)
-                            }
-                        )
-                    } else if (shouldShowSuccess) {
-                        Success(
-                            title = successTitle,
-                            message = successMessage,
-                            onOkayPressed = goBack
-                        )
-                    } else {
-                        FilterTransactions(
-                            appConfigPreferences = appConfigPreferences,
-                            onFilterSaveClicked = onSaveFilterClicked,
-                            onBackPressed = goBack
-                        )
+                        }
+                        ModalBottomSheetContent.FilterTransactions.contentKey -> {
+                            FilterTransactions(
+                                appConfigPreferences = appConfigPreferences,
+                                onFilterSaveClicked = onSaveFilterClicked,
+                                onBackPressed = goBack
+                            )
+                        }
                     }
                 }
             }
@@ -169,21 +187,35 @@ fun HomeScreenModalBottomSheet(
             onLogOutClicked = onLogoutClicked,
             getTransactions = getTransactions,
             onDownloadTransactionsClicked = {
-                showDownloadTransactions(true)
+                setModalBottomSheetContent(
+                    ModalBottomSheetContent.DownloadTransactions.contentKey
+                )
             },
             onUploadImageClicked = {
-                showUploadImage(true)
+                setModalBottomSheetContent(
+                    ModalBottomSheetContent.UploadImage.contentKey
+                )
             },
             onProfileUpdateSuccess = {
                 successTitle = "Successful"
                 successMessage = "Profile updated"
-                showSuccess(true)
+                setModalBottomSheetContent(
+                    ModalBottomSheetContent.Success.contentKey
+                )
                 goBack()
 
             },
             profilePicture = profilePicture,
             onStationFilterClicked = {
-                showStationFilter(true)
+                setModalBottomSheetContent(
+                    ModalBottomSheetContent.StationFilter.contentKey
+                )
+            },
+            onStationSelected = {
+                station = it
+                setModalBottomSheetContent(
+                    ModalBottomSheetContent.StationDetails.contentKey
+                )
             }
         )
     }

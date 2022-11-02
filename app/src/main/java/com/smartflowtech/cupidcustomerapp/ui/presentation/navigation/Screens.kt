@@ -62,3 +62,13 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
         R.drawable.ic_payment
     )
 }
+
+sealed class ModalBottomSheetContent(val contentKey: String) {
+    object DownloadTransactions : ModalBottomSheetContent("download_transactions")
+    object Success : ModalBottomSheetContent("success")
+    object UploadImage : ModalBottomSheetContent("upload_image")
+    object StationFilter : ModalBottomSheetContent("station_filter")
+    object StationDetails : ModalBottomSheetContent("station_details")
+    object FilterTransactions : ModalBottomSheetContent("filter_transactions")
+
+}

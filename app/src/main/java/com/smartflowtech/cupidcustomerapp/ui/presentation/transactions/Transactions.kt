@@ -87,7 +87,10 @@ fun Transactions(
         onBackPressed()
     }
 
-    Column {
+    Column(
+        Modifier
+            .fillMaxSize()
+    ) {
         Spacer(modifier = Modifier.height(40.dp))
 
         if (isCardSelected) {
@@ -105,8 +108,7 @@ fun Transactions(
         } else {
             Column(
                 Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.Start
             ) {
 

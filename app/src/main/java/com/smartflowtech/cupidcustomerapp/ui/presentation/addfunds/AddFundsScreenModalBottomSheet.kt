@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,8 @@ fun AddFundsScreenModalBottomSheet(
     goToHome: () -> Unit,
     paymentMethod: String
 ) {
+
+    var amount: Int by rememberSaveable { mutableStateOf(0) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -98,7 +101,8 @@ fun AddFundsScreenModalBottomSheet(
                             onBackPressed = closeModalBottomSheet,
                             onDismissErrorDialog = closeModalBottomSheet,
                             onDismissSuccessDialog = goToHome,
-                            paymentMethod = paymentMethod
+                            paymentMethod = paymentMethod,
+                            amount = amount
                         )
                     }
                 }
@@ -109,6 +113,9 @@ fun AddFundsScreenModalBottomSheet(
             onBackPressed = onBackPressed,
             onPaymentModeSelected = { mode ->
                 onSelectPaymentMode(mode)
+            },
+            onProceedClicked = {
+                amount = it
             }
         )
 

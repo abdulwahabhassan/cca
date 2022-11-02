@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.StationsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
@@ -36,7 +37,8 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 @Composable
 fun Location(
     onStationFilterClicked: () -> Unit,
-    stationFilter: String
+    stationFilter: String,
+    onStationSelected: (Station) -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("List") }
@@ -238,7 +240,7 @@ fun Location(
                         Column(
                             modifier = Modifier
                                 .clickable {
-                                    //
+                                    onStationSelected(station)
                                 }
                                 .fillMaxWidth()
                                 .padding(start = 8.dp, end = 8.dp, top = 16.dp),
@@ -285,6 +287,6 @@ fun Location(
 @Preview(showBackground = true)
 fun PreviewLocation() {
     CupidCustomerAppTheme {
-        Location(onStationFilterClicked = {}, "state")
+        Location(onStationFilterClicked = {}, "state", onStationSelected = {})
     }
 }
