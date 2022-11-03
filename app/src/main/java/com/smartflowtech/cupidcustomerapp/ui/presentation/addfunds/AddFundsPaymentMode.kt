@@ -28,17 +28,16 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 fun AddFundsPaymentMode(data: PaymentMode, onClick: (paymentMode: PaymentMode) -> Unit) {
     Column(
         modifier = Modifier
+            .clickable {
+                onClick(data)
+            }
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(horizontal = 24.dp)
     ) {
         Row(
             modifier = Modifier
-                .clickable {
-                    onClick(data)
-                }
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-
+                .padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -85,8 +84,7 @@ fun AddFundsPaymentMode(data: PaymentMode, onClick: (paymentMode: PaymentMode) -
         }
         Divider(
             color = lineGrey,
-            thickness = 0.5.dp,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            thickness = 0.5.dp
         )
     }
 

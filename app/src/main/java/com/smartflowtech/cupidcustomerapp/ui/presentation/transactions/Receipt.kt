@@ -9,6 +9,7 @@ import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -92,7 +94,11 @@ fun Receipt(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "PaymentSettings Period", color = grey, modifier = Modifier.padding(bottom = 2.dp))
+            Text(
+                text = "PaymentSettings Period",
+                color = grey,
+                modifier = Modifier.padding(bottom = 2.dp)
+            )
             Text(
                 text = transaction.date ?: "",
                 color = darkBlue,
@@ -334,24 +340,20 @@ fun Receipt(
         //Go back arrow
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 4.dp),
+                .padding(16.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onGoBackToTransactionListPressed() }
+                .padding(8.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = {
-                onGoBackToTransactionListPressed()
-            }) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = "Back arrow",
-                    tint = darkBlue,
-                )
-            }
+            Icon(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = "Back arrow",
+                tint = darkBlue,
+            )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
-                modifier = Modifier
-                    .fillMaxWidth(),
                 text = "Go back",
                 color = darkBlue,
                 fontWeight = FontWeight.Bold

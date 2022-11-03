@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -53,7 +54,7 @@ fun AddFundsCardPaymentDetailsForm(
     var isMonthError by rememberSaveable { mutableStateOf(false) }
     var isYearError by rememberSaveable { mutableStateOf(false) }
     val ctx = LocalContext.current
-    var showLoadingIndicator by remember { mutableStateOf(false)}
+    var showLoadingIndicator by remember { mutableStateOf(false) }
 
     fun chargeCardWithPayStack(card: Card) {
         if (card.isValid) {
@@ -245,7 +246,7 @@ fun AddFundsCardPaymentDetailsForm(
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             if (showLoadingIndicator) {
                 CircularProgressIndicator(
@@ -313,23 +314,22 @@ fun AddFundsCardPaymentDetailsForm(
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         //Go back arrow
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 4.dp),
-            horizontalArrangement = Arrangement.Start,
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onBackPressed() }
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = {
-                onBackPressed()
-            }) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = "Back arrow",
-                    tint = darkBlue,
-                )
-            }
+            Icon(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = "Back arrow",
+                tint = darkBlue,
+            )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
                 text = "Go back",
@@ -342,10 +342,10 @@ fun AddFundsCardPaymentDetailsForm(
 }
 
 
-@Preview()
+@Preview(showBackground = true)
 @Composable
 fun CardDetailsFormPreview() {
     CupidCustomerAppTheme {
-        AddFundsCardPaymentDetailsForm({}, {}, {message, reference ->  }, 100)
+        AddFundsCardPaymentDetailsForm({}, {}, { message, reference -> }, 100)
     }
 }

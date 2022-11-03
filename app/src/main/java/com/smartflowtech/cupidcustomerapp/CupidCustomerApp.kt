@@ -13,7 +13,7 @@ class CupidCustomerApp : Application() {
         PaystackSdk.initialize(applicationContext);
         PaystackSdk.setPublicKey(
             if (BuildConfig.DEBUG)
-                BuildConfig.PSTK_PUBLIC_TEST_KEY
+                BuildConfig.PSTK_PUBLIC_LIVE_KEY
             else
                 BuildConfig.PSTK_PUBLIC_LIVE_KEY
         )
