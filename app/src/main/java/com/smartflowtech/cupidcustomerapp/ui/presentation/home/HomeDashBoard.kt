@@ -34,6 +34,7 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import timber.log.Timber
 import java.util.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
@@ -189,6 +190,7 @@ fun HomeDashBoard(
                                 ViewModelResult.ERROR -> {
                                     LaunchedEffect(key1 = Unit, block = {
                                         if (homeScreenUiState.message != null) {
+                                            Timber.d("${homeScreenUiState.message}")
                                             val result =
                                                 bottomSheetScaffoldState.snackbarHostState.showSnackbar(
                                                     message = homeScreenUiState.message,
@@ -225,7 +227,7 @@ fun HomeDashBoard(
                                         Text(
                                             "No cards found",
                                             color = purple,
-                                            fontSize = 12.sp,
+                                            fontSize = 14.sp,
                                             modifier = Modifier
                                                 .background(
                                                     color = transparentPurple,

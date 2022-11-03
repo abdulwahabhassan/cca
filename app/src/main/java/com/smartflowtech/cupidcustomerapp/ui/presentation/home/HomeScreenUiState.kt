@@ -6,7 +6,7 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 
 data class HomeScreenUiState(
     val viewModelResult: ViewModelResult,
-    val transactions: List<Transaction>,
+    val transactions: List<Transaction> = emptyList(),
     val message: String? = null,
-    val wallets: List<Wallet>
+    val wallets: List<Wallet> = emptyList()
 )

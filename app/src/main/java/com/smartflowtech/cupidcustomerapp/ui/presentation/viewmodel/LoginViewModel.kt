@@ -26,10 +26,8 @@ class LoginViewModel @Inject constructor(
         private set
 
     fun login(loginRequestBody: LoginRequestBody) {
+        loginScreenUiState = LoginScreenUiState(viewModelResult = ViewModelResult.LOADING)
         viewModelScope.launch {
-
-            loginScreenUiState = LoginScreenUiState(viewModelResult = ViewModelResult.LOADING)
-
             when (val repositoryResult = loginRepository.login(loginRequestBody)) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->

@@ -30,9 +30,7 @@ class HomeViewModel @Inject constructor(
 
     var homeScreenUiState by mutableStateOf(
         HomeScreenUiState(
-            viewModelResult = ViewModelResult.INITIAL,
-            transactions = emptyList(),
-            wallets = emptyList()
+            viewModelResult = ViewModelResult.INITIAL
         )
     )
         private set
@@ -42,11 +40,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getTransactionsAndWallets() {
-
-        homeScreenUiState = homeScreenUiState.copy(viewModelResult = ViewModelResult.LOADING)
-
+        homeScreenUiState = HomeScreenUiState(viewModelResult = ViewModelResult.LOADING)
         viewModelScope.launch {
-
             combine(
                 flowOf(
                     transactionRepository.getTransactions(
