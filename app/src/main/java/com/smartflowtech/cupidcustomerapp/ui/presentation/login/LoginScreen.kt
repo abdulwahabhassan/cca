@@ -32,6 +32,7 @@ import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import timber.log.Timber
 
 @Composable
 fun LoginScreen(
@@ -291,7 +292,7 @@ fun LoginScreen(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
                                 .clickable(
-                                    enabled = viewModel.loginScreenUiState.viewModelResult
+                                    enabled = uiState.viewModelResult
                                             != ViewModelResult.LOADING
                                 ) {
                                     goToResetPassword("reset_password_screen")
@@ -307,7 +308,7 @@ fun LoginScreen(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .clickable(
-                                enabled = viewModel.loginScreenUiState.viewModelResult
+                                enabled = uiState.viewModelResult
                                         != ViewModelResult.LOADING
                             ) {
                                 notMe = !notMe

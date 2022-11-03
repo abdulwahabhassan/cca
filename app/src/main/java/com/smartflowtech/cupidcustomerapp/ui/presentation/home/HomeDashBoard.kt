@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +55,9 @@ fun HomeDashBoard(
     getTransactions: () -> Unit
 ) {
 
+    var retry: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
     val pagerState = rememberPagerState()
     var visible by remember { mutableStateOf(true) }
     visible =
@@ -188,7 +192,7 @@ fun HomeDashBoard(
                         ) { page: Int ->
                             when (homeScreenUiState.viewModelResult) {
                                 ViewModelResult.ERROR -> {
-                                    LaunchedEffect(key1 = Unit, block = {
+                                    LaunchedEffect(key1 = retry, block = {
                                         if (homeScreenUiState.message != null) {
                                             Timber.d("${homeScreenUiState.message}")
                                             val result =
@@ -198,6 +202,7 @@ fun HomeDashBoard(
                                                     duration = SnackbarDuration.Indefinite
                                                 )
                                             if (result == SnackbarResult.ActionPerformed) {
+                                                retry = !retry
                                                 getTransactions()
                                             }
                                         }
