@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.password
 
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.findActivity
 
 @Composable
 fun VerifyEmailScreen(
@@ -30,6 +32,9 @@ fun VerifyEmailScreen(
     verifiedEmail: String
 ) {
 
+    BackHandler(true) {
+        onBackArrowPressed()
+    }
     val scaffoldState = rememberScaffoldState()
     val ctx = LocalContext.current
 
@@ -148,6 +153,7 @@ fun VerifyEmailScreen(
                                 Intent.createChooser(
                                     Intent(Intent.ACTION_MAIN).apply {
                                         addCategory(Intent.CATEGORY_APP_EMAIL)
+                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     }, null
                                 )
                             ctx.startActivity(emailIntent)
