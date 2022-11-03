@@ -41,14 +41,14 @@ fun Home(
     onBackPressed: () -> Unit,
     homeScreenUiState: HomeScreenUiState,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    getTransactions: () -> Unit,
     isCardSelected: Boolean,
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
     bottomNavBarNavHostController: NavHostController,
     bottomSheetState: BottomSheetState,
-    onBottomNavItemClicked: (String) -> Unit
+    onBottomNavItemClicked: (String) -> Unit,
+    onGraphFilterClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -120,10 +120,7 @@ fun Home(
                 selectedTab = selectedTab,
                 onTabSelected = onTabSelected,
                 currentBottomNavDestination = currentBottomNavDestination,
-//            transactions = homeScreenUiState.transactions
-//                .filter { transaction: Transaction ->
-//                transaction.nfcTagCode
-//            }
+                onGraphFilterClicked = onGraphFilterClicked
             )
         } else {
             if (homeScreenUiState.transactions.isEmpty()) {
@@ -207,7 +204,6 @@ fun Home(
                             showReceipt = true
                         },
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
-                        getTransactions = getTransactions,
                         currentBottomNavDestination = currentBottomNavDestination
                     )
                 }

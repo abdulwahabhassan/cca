@@ -22,5 +22,6 @@ data class AppConfigPreferences(
     val emailNotifications: Boolean = false,
     val pushNotifications: Boolean = false,
     val paymentMethod: String = PaymentMethodPreference.ASK_ALWAYS.name,
-    val stationFilter: String = "state"
+    val stationFilter: String = "state",
+    val notificationsFilter: String = DaysFilter.LAST_THIRTY_DAYS.name
 )

@@ -33,7 +33,6 @@ fun TransactionsList(
     homeScreenUiState: HomeScreenUiState,
     onSelectTransaction: (transaction: Transaction) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    getTransactions: () -> Unit,
     currentBottomNavDestination: String
 ) {
 
@@ -76,20 +75,6 @@ fun TransactionsList(
             ) {}
         }
         ViewModelResult.ERROR -> {
-
-            LaunchedEffect(key1 = Unit, block = {
-                if (homeScreenUiState.message != null) {
-                    val result = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                        message = homeScreenUiState.message,
-                        actionLabel = "Retry",
-                        duration = SnackbarDuration.Indefinite
-                    )
-                    if (result == SnackbarResult.ActionPerformed) {
-                        getTransactions()
-                    }
-                }
-            })
-
             Column(
                 Modifier
                     .fillMaxWidth()

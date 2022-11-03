@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.model.domain.Bank
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -22,17 +23,16 @@ fun AddFundsScreenModalBottomSheet(
     modalBottomSheetState: ModalBottomSheetState,
     onBackPressed: () -> Unit,
     closeModalBottomSheet: () -> Unit,
-    showBanks: Boolean,
-    onShowBanksClicked: () -> Unit,
-    selectedBank: String,
     selectedPaymentMode: String,
-    onSelectBank: (Bank) -> Unit,
     onSelectPaymentMode: (PaymentMode) -> Unit,
     goToHome: () -> Unit,
-    paymentMethod: String
+    paymentMethod: String,
+    setUssdScreenContent: (String) -> Unit,
+    ussdScreenContent: String
 ) {
 
     var amount: Int by rememberSaveable { mutableStateOf(0) }
+    var selectedUssdBank: Bank? by remember { mutableStateOf(null) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -87,15 +87,25 @@ fun AddFundsScreenModalBottomSheet(
                             "Wema Bank",
                             onBackPressed = closeModalBottomSheet
                         )
-                        PaymentMode.USSD.name -> AddFundsUssdPaymentMode(
-                            modalBottomSheetState = modalBottomSheetState,
-                            code = "*243*904*09382",
-                            onShowBanksClicked = onShowBanksClicked,
-                            showBanks = showBanks,
-                            selectedBank = selectedBank,
-                            onSelectBank = onSelectBank,
-                            onBackPressed = closeModalBottomSheet
-                        )
+                        PaymentMode.USSD.name -> {
+                            AddFundsUssdPaymentMode(
+                                modalBottomSheetState = modalBottomSheetState,
+                                selectedBank = selectedUssdBank,
+                                onSelectAnotherBankClicked = {
+                                    setUssdScreenContent(
+                                        AddFundsModalBottomSheetContent.Banks.contentKey
+                                    )
+                                },
+                                onSelectUssdBank = { bank ->
+                                    selectedUssdBank = bank
+                                    setUssdScreenContent(
+                                        AddFundsModalBottomSheetContent.UssdCode.contentKey
+                                    )
+                                },
+                                onBackPressed = closeModalBottomSheet,
+                                ussdScreenContent = ussdScreenContent
+                            )
+                        }
                         PaymentMode.CARD.name -> AddFundsSelectCardPaymentProcessor(
                             modalBottomSheetState = modalBottomSheetState,
                             onBackPressed = closeModalBottomSheet,

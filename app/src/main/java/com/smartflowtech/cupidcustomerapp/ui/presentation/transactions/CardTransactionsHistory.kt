@@ -34,7 +34,8 @@ fun CardTransactionHistory(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     selectedTab: String,
     onTabSelected: (String) -> Unit,
-    currentBottomNavDestination: String
+    currentBottomNavDestination: String,
+    onGraphFilterClicked: () -> Unit
 ) {
 
 
@@ -44,87 +45,108 @@ fun CardTransactionHistory(
                 .padding(start = 8.dp, end = 8.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                modifier = Modifier
-                    .wrapContentWidth(unbounded = true)
-                    .background(color = Color.Transparent, shape = RoundedCornerShape(3.dp))
-                    .clip(RoundedCornerShape(3.dp))
-                    .clipToBounds()
-                    .clickable(
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        indication = null
-                    ) {
-                        onTabSelected("Transactions")
-                    }
-                    .padding(top = 4.dp, start = 8.dp, end = 8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Transactions",
-                    color = Color.Black,
-                    fontFamily = AthleticsFontFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.padding(4.dp))
-                Divider(
+            Row {
+                Column(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth()
-                        .width(50.dp)
-                        .height(2.dp)
-                        .background(
-                            color = if (selectedTab == "Transactions") darkBlue else Color.Transparent,
-                            shape = RoundedCornerShape(50)
-                        ),
-                    color = if (selectedTab == "Transactions") darkBlue else Color.Transparent
-                )
+                        .wrapContentWidth(unbounded = true)
+                        .background(color = Color.Transparent, shape = RoundedCornerShape(3.dp))
+                        .clip(RoundedCornerShape(3.dp))
+                        .clipToBounds()
+                        .clickable(
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
+                            indication = null
+                        ) {
+                            onTabSelected("Transactions")
+                        }
+                        .padding(top = 4.dp, start = 8.dp, end = 8.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Transactions",
+                        color = Color.Black,
+                        fontFamily = AthleticsFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Divider(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .fillMaxWidth()
+                            .width(50.dp)
+                            .height(2.dp)
+                            .background(
+                                color = if (selectedTab == "Transactions") darkBlue else Color.Transparent,
+                                shape = RoundedCornerShape(50)
+                            ),
+                        color = if (selectedTab == "Transactions") darkBlue else Color.Transparent
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(24.dp))
+
+                Column(
+                    modifier = Modifier
+                        .wrapContentWidth(unbounded = true)
+                        .background(color = Color.Transparent, shape = RoundedCornerShape(3.dp))
+                        .clip(RoundedCornerShape(3.dp))
+                        .clipToBounds()
+                        .clickable(
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
+                            indication = null
+                        ) {
+                            onTabSelected("Analytics")
+                        }
+                        .padding(top = 4.dp, start = 8.dp, end = 8.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Analytics",
+                        color = Color.Black,
+                        fontFamily = AthleticsFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Divider(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .fillMaxWidth()
+                            .width(50.dp)
+                            .height(2.dp)
+                            .background(
+                                color = if (selectedTab == "Analytics") darkBlue else Color.Transparent,
+                                shape = RoundedCornerShape(50)
+                            ),
+                        color = if (selectedTab == "Analytics") darkBlue else Color.Transparent
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.width(24.dp))
 
-            Column(
+            Row(
                 modifier = Modifier
-                    .wrapContentWidth(unbounded = true)
-                    .background(color = Color.Transparent, shape = RoundedCornerShape(3.dp))
-                    .clip(RoundedCornerShape(3.dp))
+                    .clip(RoundedCornerShape(4.dp))
                     .clipToBounds()
-                    .clickable(
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        indication = null
-                    ) {
-                        onTabSelected("Analytics")
+                    .clickable {
+                        onGraphFilterClicked()
                     }
-                    .padding(top = 4.dp, start = 8.dp, end = 8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center
+                    .padding(horizontal = 8.dp)
+                    .align(Alignment.Bottom),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Analytics",
-                    color = Color.Black,
-                    fontFamily = AthleticsFontFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.padding(4.dp))
-                Divider(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth()
-                        .width(50.dp)
-                        .height(2.dp)
-                        .background(
-                            color = if (selectedTab == "Analytics") darkBlue else Color.Transparent,
-                            shape = RoundedCornerShape(50)
-                        ),
-                    color = if (selectedTab == "Analytics") darkBlue else Color.Transparent
+                Text(text = "Filter", fontSize = 12.sp)
+                Icon(
+                    imageVector = Icons.Rounded.ExpandMore,
+                    contentDescription = "Drop down icon"
                 )
             }
 
@@ -139,7 +161,6 @@ fun CardTransactionHistory(
                 homeScreenUiState = homeScreenUiState,
                 onSelectTransaction = onSelectTransaction,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                getTransactions = {},
                 currentBottomNavDestination = currentBottomNavDestination
             )
         } else {
@@ -224,7 +245,7 @@ fun CardTransactionHistory(
                             .clip(RoundedCornerShape(4.dp))
                             .clipToBounds()
                             .clickable {
-
+                                onGraphFilterClicked()
                             }
                             .padding(start = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -284,7 +305,8 @@ fun CardTransactionHistoryPreview() {
             onSelectTransaction = {},
             selectedTab = "Analytics",
             onTabSelected = {},
-            currentBottomNavDestination = ""
+            currentBottomNavDestination = "",
+            onGraphFilterClicked = {}
         )
     }
 }

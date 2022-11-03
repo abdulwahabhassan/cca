@@ -42,12 +42,13 @@ fun Settings(
     onPaymentClicked: () -> Unit,
     onBackPressed: () -> Unit,
 ) {
-    var toggleState by rememberSaveable {
-        mutableStateOf(true)
-    }
 
     BackHandler(true) {
         onBackPressed()
+    }
+
+    var toggleState by rememberSaveable {
+        mutableStateOf(true)
     }
 
     LazyColumn(
@@ -63,13 +64,13 @@ fun Settings(
                             "Edit Profile" -> {
                                 onEditProfileClicked()
                             }
-                            "Security" -> {
+                            "SecuritySettings" -> {
                                 onSecurityClicked()
                             }
                             "Notifications" -> {
                                 onNotificationClicked()
                             }
-                            "Payment" -> {
+                            "PaymentSettings" -> {
                                 onPaymentClicked()
                             }
                             "Logout" -> {

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -54,6 +55,7 @@ fun AddFundsBankPaymentMode(
                 modifier = Modifier
                     .clip(CircleShape)
                     .clickable {
+                        Util.copyTextToClipBoard(ctx, accountNumber,"Bank Account Number")
                         Toast.makeText(ctx, "Copied!", Toast.LENGTH_SHORT).show()
                     }
                     .padding(8.dp),
@@ -69,7 +71,7 @@ fun AddFundsBankPaymentMode(
         Text(text = bankName, fontWeight = FontWeight.Bold, color = grey)
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Money sent to this account number will automatically top up your CUPID_PROD",
+            text = "Money sent to this account number will automatically top up your Cupid wallet",
             color = grey
         )
     }

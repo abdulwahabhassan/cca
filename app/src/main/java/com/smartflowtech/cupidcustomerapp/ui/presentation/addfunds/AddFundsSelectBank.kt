@@ -33,7 +33,7 @@ fun AddFundsSelectBank(onBankSelected: (Bank) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
 
         Text(
-            text = "Choose Payment Bank",
+            text = "Choose PaymentSettings Bank",
             color = Color.Black,
             fontFamily = AthleticsFontFamily,
             fontSize = 16.sp,

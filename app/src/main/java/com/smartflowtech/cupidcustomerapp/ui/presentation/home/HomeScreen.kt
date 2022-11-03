@@ -1,7 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,8 +11,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
@@ -31,12 +28,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
+    modalBottomSheetState: ModalBottomSheetState,
     bottomNavBarNavHostController: NavHostController,
     goTo: () -> Unit,
     isNavDestinationSelected: (String) -> Boolean,
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
-    onFilteredClicked: () -> Unit,
+    onTransactionsFilterClicked: () -> Unit,
+    onNotificationsFilterClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
     userFullName: String,
     userName: String,
@@ -50,8 +49,9 @@ fun HomeScreen(
     onProfileUpdateSuccess: () -> Unit,
     profilePicture: String,
     onStationFilterClicked: () -> Unit,
-    onStationSelected: (Station) -> Unit
-) {
+    onStationSelected: (Station) -> Unit,
+    onGraphFilterClicked: () -> Unit
+    ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -66,21 +66,15 @@ fun HomeScreen(
     var isCardSelected: Boolean by rememberSaveable { mutableStateOf(false) }
     var sheetPeekHeight by remember {
         mutableStateOf(
-            if (localConfig.screenWidthDp.dp > 320.dp)
-                localConfig.screenHeightDp.dp * 0.50f
-            else
-                localConfig.screenHeightDp.dp * 0.40f
+            if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.50f
+            else localConfig.screenHeightDp.dp * 0.40f
         )
     }
 
     LaunchedEffect(key1 = bottomSheetState.currentValue) {
-        if (bottomSheetState.targetValue == BottomSheetValue.Expanded &&
-            currentBottomNavDestinationTitle == HomeScreen.Home.title
-        ) {
+        if (bottomSheetState.targetValue == BottomSheetValue.Expanded && currentBottomNavDestinationTitle == HomeScreen.Home.title) {
             onBottomNavItemClicked(HomeScreen.Transactions.route)
-        } else if (bottomSheetState.targetValue == BottomSheetValue.Collapsed &&
-            currentBottomNavDestinationTitle != HomeScreen.Home.title
-        ) {
+        } else if (bottomSheetState.targetValue == BottomSheetValue.Collapsed && currentBottomNavDestinationTitle != HomeScreen.Home.title) {
             onBottomNavItemClicked(HomeScreen.Home.route)
         }
     }
@@ -89,43 +83,39 @@ fun HomeScreen(
 
         when (bottomNavBarNavHostController.currentDestination?.route) {
             HomeScreen.Home.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Home.title
+                currentBottomNavDestinationTitle = HomeScreen.Home.title
                 bottomAppBarVisibility = true
             }
             HomeScreen.Transactions.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Transactions.title
+                currentBottomNavDestinationTitle = HomeScreen.Transactions.title
                 bottomAppBarVisibility = true
             }
             HomeScreen.Location.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Location.title
+                currentBottomNavDestinationTitle = HomeScreen.Location.title
                 bottomAppBarVisibility = true
             }
             HomeScreen.Settings.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Settings.title
+                currentBottomNavDestinationTitle = HomeScreen.Settings.title
                 bottomAppBarVisibility = true
             }
             HomeScreen.Profile.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Profile.title
+                currentBottomNavDestinationTitle = HomeScreen.Profile.title
                 bottomAppBarVisibility = false
             }
-            HomeScreen.Security.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Security.title
+            HomeScreen.SecuritySettings.route -> {
+                currentBottomNavDestinationTitle = HomeScreen.SecuritySettings.title
                 bottomAppBarVisibility = false
             }
-            HomeScreen.Notification.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Notification.title
+            HomeScreen.NotificationSettings.route -> {
+                currentBottomNavDestinationTitle = HomeScreen.NotificationSettings.title
                 bottomAppBarVisibility = false
             }
-            HomeScreen.Payment.route -> {
-                currentBottomNavDestinationTitle =
-                    HomeScreen.Payment.title
+            HomeScreen.PaymentSettings.route -> {
+                currentBottomNavDestinationTitle = HomeScreen.PaymentSettings.title
+                bottomAppBarVisibility = false
+            }
+            HomeScreen.Notifications.route -> {
+                currentBottomNavDestinationTitle = HomeScreen.Notifications.title
                 bottomAppBarVisibility = false
             }
         }
@@ -146,25 +136,21 @@ fun HomeScreen(
         if (isCardSelected) {
             sheetPeekHeight *= 1.08f
         } else {
-            sheetPeekHeight = if (localConfig.screenWidthDp.dp > 320.dp)
-                localConfig.screenHeightDp.dp * 0.50f
-            else
-                localConfig.screenHeightDp.dp * 0.40f
+            sheetPeekHeight =
+                if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.50f
+                else localConfig.screenHeightDp.dp * 0.40f
         }
     })
 
-    Scaffold(
-        bottomBar = {
-            HomeBottomAppBar(
-                isSelected = isNavDestinationSelected,
-                onClicked = onBottomNavItemClicked,
-                visible = bottomAppBarVisibility
-            )
-        }
-    ) { paddingValues ->
+    Scaffold(bottomBar = {
+        HomeBottomAppBar(
+            isSelected = isNavDestinationSelected,
+            onClicked = onBottomNavItemClicked,
+            visible = bottomAppBarVisibility
+        )
+    }) { paddingValues ->
 
-        BottomSheetScaffold(
-            modifier = Modifier.padding(paddingValues),
+        BottomSheetScaffold(modifier = Modifier.padding(paddingValues),
             scaffoldState = bottomSheetScaffoldState,
             sheetElevation = 0.dp,
             sheetGesturesEnabled = true,
@@ -179,10 +165,8 @@ fun HomeScreen(
                 }
             },
             sheetBackgroundColor = Color.Transparent,
-            sheetPeekHeight = if (currentBottomNavDestinationTitle == HomeScreen.Home.title)
-                sheetPeekHeight * 1.2f
-            else
-                sheetPeekHeight,
+            sheetPeekHeight = if (currentBottomNavDestinationTitle == HomeScreen.Home.title) sheetPeekHeight * 1.2f
+            else sheetPeekHeight,
             sheetContent = {
                 Row(
                     modifier = Modifier
@@ -205,23 +189,23 @@ fun HomeScreen(
                         }
 
                         Text(
-                            text = if (
-                                currentBottomNavDestinationTitle ==
-                                HomeScreen.Transactions.title &&
-                                isCardSelected
-                            ) "Card History"
-                            else
-                                currentBottomNavDestinationTitle,
+                            text = if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title && isCardSelected) "Card History"
+                            else currentBottomNavDestinationTitle,
                             color = Color.White,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold
                         )
 
-                        if (
-                            currentBottomNavDestinationTitle == HomeScreen.Transactions.title
+                        if ((currentBottomNavDestinationTitle == HomeScreen.Transactions.title ||
+                            currentBottomNavDestinationTitle == HomeScreen.Notifications.title) && !isCardSelected
                         ) {
                             IconButton(onClick = {
-                                onFilteredClicked()
+                                if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
+                                    onTransactionsFilterClicked()
+                                } else if (currentBottomNavDestinationTitle == HomeScreen.Notifications.title) {
+                                    onNotificationsFilterClicked()
+                                }
+
                             }) {
                                 Icon(
                                     imageVector = Icons.Rounded.FilterList,
@@ -250,13 +234,16 @@ fun HomeScreen(
                     BottomNavBarNavigation(
                         bottomNavHostController = bottomNavBarNavHostController,
                         onBackPressed = {
-                            if (isCardSelected && bottomNavBarNavHostController.currentDestination
-                                    ?.route == HomeScreen.Home.route
-                            ) {
-                                isCardSelected = false
-                            } else {
+                            if (modalBottomSheetState.isVisible) {
                                 onBackPressed()
+                            } else {
+                                if (isCardSelected && bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                                    isCardSelected = false
+                                } else {
+                                    onBackPressed()
+                                }
                             }
+
                         },
                         onSearchBarClicked = {
                             coroutineScope.launch {
@@ -265,7 +252,6 @@ fun HomeScreen(
                         },
                         homeScreenUiState = homeScreenUiState,
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
-                        getTransactions = getTransactions,
                         onDownloadTransactionsClicked = onDownloadTransactionsClicked,
                         isCardSelected,
                         onUploadImageClicked = onUploadImageClicked,
@@ -276,13 +262,14 @@ fun HomeScreen(
                         userName = userName,
                         onBottomNavItemClicked = onBottomNavItemClicked,
                         onStationFilterClicked = onStationFilterClicked,
-                        onStationSelected = onStationSelected
+                        onStationSelected = onStationSelected,
+                        onGraphFilterClicked = onGraphFilterClicked
                     )
                 }
             }) { paddingValues ->
 
             HomeDashBoard(
-                bottomSheetState = bottomSheetState,
+                bottomSheetScaffoldState = bottomSheetScaffoldState,
                 onAddFundsClicked = onAddFundsClicked,
                 fullName = userFullName,
                 walletBalanceVisibility = walletBalanceVisibility,
@@ -295,7 +282,11 @@ fun HomeScreen(
                 onProfileClicked = {
                     onBottomNavItemClicked(HomeScreen.Profile.route)
                 },
-                profilePicture = profilePicture
+                profilePicture = profilePicture,
+                onNotificationsClicked = {
+                    onBottomNavItemClicked(HomeScreen.Notifications.route)
+                },
+                getTransactions = getTransactions
             )
         }
     }

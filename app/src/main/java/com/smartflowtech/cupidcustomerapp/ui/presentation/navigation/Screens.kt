@@ -46,29 +46,42 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
         "My Profile",
         R.drawable.ic_profile
     )
-    object Security : HomeScreen(
-        "home_screen/security",
+    object SecuritySettings : HomeScreen(
+        "home_screen/security_settings",
         "Change Password",
         R.drawable.ic_security
     )
-    object Notification : HomeScreen(
-        "home_screen/notification",
+    object NotificationSettings : HomeScreen(
+        "home_screen/notification_settings",
         "Notifications Settings",
         R.drawable.ic_notification
     )
-    object Payment : HomeScreen(
-        "home_screen/payment",
-        "Payment Methods",
+    object PaymentSettings : HomeScreen(
+        "home_screen/payment_settings",
+        "PaymentSettings Methods",
+        R.drawable.ic_payment
+    )
+    object Notifications : HomeScreen(
+        "home_screen/notifications",
+        "Notifications",
         R.drawable.ic_payment
     )
 }
 
-sealed class ModalBottomSheetContent(val contentKey: String) {
-    object DownloadTransactions : ModalBottomSheetContent("download_transactions")
-    object Success : ModalBottomSheetContent("success")
-    object UploadImage : ModalBottomSheetContent("upload_image")
-    object StationFilter : ModalBottomSheetContent("station_filter")
-    object StationDetails : ModalBottomSheetContent("station_details")
-    object FilterTransactions : ModalBottomSheetContent("filter_transactions")
+sealed class HomeScreenModalBottomSheetContent(val contentKey: String) {
 
+
+    object DownloadTransactions : HomeScreenModalBottomSheetContent("download_transactions")
+    object Success : HomeScreenModalBottomSheetContent("success")
+    object UploadImage : HomeScreenModalBottomSheetContent("upload_image")
+    object StationsFilter : HomeScreenModalBottomSheetContent("station_filter")
+    object StationDetails : HomeScreenModalBottomSheetContent("station_details")
+    object TransactionsFilter : HomeScreenModalBottomSheetContent("transactions_filter")
+    object DaysFilter : HomeScreenModalBottomSheetContent("days_filter")
+
+}
+
+sealed class AddFundsModalBottomSheetContent(val contentKey: String) {
+    object Banks : HomeScreenModalBottomSheetContent("banks")
+    object UssdCode : HomeScreenModalBottomSheetContent("ussd_code")
 }

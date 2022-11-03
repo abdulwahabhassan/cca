@@ -1,5 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.utils
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -132,130 +134,130 @@ object Util {
                 id = "1",
                 name = "Access Bank",
                 icon = R.drawable.ic_access,
-                code = "044"
+                ussdCode = "*393*044*738#"
             ),
             Bank(
                 id = "2",
                 name = "Citibank",
                 icon = R.drawable.ic_citi,
-                code = "023"
+                ussdCode = "*393*023*738#"
             ),
             Bank(
                 id = "3",
                 name = "Diamond Bank",
                 icon = R.drawable.ic_diamond,
-                code = "063"
+                ussdCode = "*393*063*738#"
             ),
             Bank(
                 id = "5",
                 name = "Ecobank Nigeria",
                 icon = R.drawable.ic_eco,
-                code = "050"
+                ussdCode = "*393*050*738#"
             ),
             Bank(
                 id = "6",
                 name = "Fidelity Bank Nigeria",
                 icon = R.drawable.ic_fidelity,
-                code = "070"
+                ussdCode = "*393*070*738#"
             ), Bank(
                 id = "7",
                 name = "First Bank of Nigeria",
                 icon = R.drawable.ic_first_bank,
-                code = "011"
+                ussdCode = "*393*011*738#"
             ),
             Bank(
                 id = "8",
                 name = "First City Monument Bank",
                 icon = R.drawable.ic_fcmb,
-                code = "214"
+                ussdCode = "*393*214*738#"
             ),
             Bank(
                 id = "9",
                 name = "Guaranty Trust Bank",
                 icon = R.drawable.ic_gtb,
-                code = "058"
+                ussdCode = "*393*058*738#"
             ),
             Bank(
                 id = "10",
                 name = "Heritage Bank Plc",
                 icon = R.drawable.ic_hb,
-                code = "030"
+                ussdCode = "*393*030*738#"
             ),
             Bank(
                 id = "11",
                 name = "Jaiz Bank",
                 icon = R.drawable.ic_jaiz,
-                code = "301"
+                ussdCode = "*393*301*738#"
             ),
             Bank(
                 id = "12",
                 name = "Keystone Bank Limited",
                 icon = R.drawable.ic_keystone,
-                code = "082"
+                ussdCode = "*393*082*738#"
             ),
             Bank(
                 id = "13",
                 name = "Providus Bank Plc",
                 icon = R.drawable.ic_providus,
-                code = "101"
+                ussdCode = "*393*101*738#"
             ),
             Bank(
                 id = "14",
                 name = "Polaris Bank",
                 icon = R.drawable.ic_polaris,
-                code = "076"
+                ussdCode = "*393*076*738#"
             ), Bank(
                 id = "15",
                 name = "Stanbic IBTC Bank Nigeria Limited",
                 icon = R.drawable.ic_stanbic,
-                code = "221"
+                ussdCode = "*393*221*738#"
             ),
             Bank(
                 id = "16",
                 name = "Standard Chartered Bank",
                 icon = R.drawable.ic_standard_chartered,
-                code = "068"
+                ussdCode = "*393*068*738#"
             ),
             Bank(
                 id = "17",
                 name = "Sterling Bank",
                 icon = R.drawable.ic_sterling,
-                code = "232"
+                ussdCode = "*393*232*738#"
             ), Bank(
                 id = "18",
                 name = "Suntrust Bank Nigeria Limited",
                 icon = R.drawable.ic_suntrust,
-                code = "100"
+                ussdCode = "*393*100*738#"
             ),
             Bank(
                 id = "19",
                 name = "Union Bank of Nigeria",
                 icon = R.drawable.ic_union,
-                code = "032"
+                ussdCode = "*393*032*738#"
             ),
             Bank(
                 id = "20",
                 name = "United Bank for Africa",
                 icon = R.drawable.ic_uba,
-                code = "033"
+                ussdCode = "*393*033*738#"
             ),
             Bank(
                 id = "21",
                 name = "Unity Bank Plc",
                 icon = R.drawable.ic_unity,
-                code = "215"
+                ussdCode = "*393*215*738#"
             ),
             Bank(
                 id = "22",
                 name = "Wema Bank",
                 icon = R.drawable.ic_wema,
-                code = "035"
+                ussdCode = "*393*035*738#"
             ),
             Bank(
                 id = "23",
                 name = "Zenith Bank",
                 icon = R.drawable.ic_zenith,
-                code = "057"
+                ussdCode = "*393*057*738#"
             )
         )
     }
@@ -268,7 +270,7 @@ object Util {
                 R.drawable.ic_profile
             ),
             SettingsItem(
-                "Security",
+                "SecuritySettings",
                 "Change password",
                 R.drawable.ic_security
             ),
@@ -278,7 +280,7 @@ object Util {
                 R.drawable.ic_notification
             ),
             SettingsItem(
-                "Payment",
+                "PaymentSettings",
                 "Choose default payment method",
                 R.drawable.ic_payment
             ),
@@ -318,13 +320,13 @@ object Util {
             NotificationItem(
                 "1",
                 "Your wallet was topped up with ₦600",
-                "2022-10-21T00:00:00",
+                "2022-11-03T00:00:00",
                 R.drawable.ic_debit_notification
             ),
             NotificationItem(
                 "2",
                 "₦1,000 was debited from your wallet",
-                "2022-10-21T08:00:00",
+                "2022-11-03T08:00:00",
                 R.drawable.ic_credit_notification
             ),
             NotificationItem(
@@ -336,7 +338,7 @@ object Util {
             NotificationItem(
                 "4",
                 "Your wallet was topped up with ₦5,000",
-                "2022-10-09T09:45:00",
+                "2022-11-02T09:45:00",
                 R.drawable.ic_credit_notification
             ),
             NotificationItem(
@@ -576,6 +578,13 @@ object Util {
                 "7800000",
             )
         )
+    }
+
+    fun copyTextToClipBoard(ctx: Context, text: String, label: String = "") {
+        (ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+            .setPrimaryClip(
+                ClipData.newPlainText(label, text)
+            )
     }
 
 

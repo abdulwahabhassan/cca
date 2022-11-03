@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.notification
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,16 +17,24 @@ import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.NotificationItem
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Header
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.NotificationsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.lineGrey
+import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.time.LocalDateTime
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun NotificationsList(
+fun Notifications(
+    viewModel: NotificationsViewModel,
+    onBackPressed: () -> Unit,
+    uiState: NotificationsScreenUiState
 ) {
+
+    BackHandler(true) {
+        onBackPressed()
+    }
 
     Column(
         Modifier
@@ -35,17 +44,19 @@ fun NotificationsList(
     ) {
 
         val newNotifications =
-            Util.getListOfNotifications().filter {
+            uiState.notifications.filter {
                 LocalDateTime.parse(it.dateTime).toLocalDate() == LocalDateTime.now().toLocalDate()
             }
         val olderNotifications =
-            Util.getListOfNotifications().filter {
+            uiState.notifications.filter {
                 LocalDateTime.parse(it.dateTime).toLocalDate() != LocalDateTime.now().toLocalDate()
             }
         val notifications = mapOf(
             "New" to newNotifications,
             "Older" to olderNotifications
         )
+
+        Spacer(modifier = Modifier.height(40.dp))
 
         if (notifications.values.isEmpty()) {
             Column(
@@ -75,15 +86,11 @@ fun NotificationsList(
             ) {
                 notifications.forEach { (header, notifications) ->
                     stickyHeader {
-                        Header(header, bgColor = lineGrey, fontWeight = FontWeight.Bold)
+                        Header(header, bgColor = lightGrey, fontWeight = FontWeight.Bold)
                     }
 
                     items(notifications) { item ->
-                        Notification(
-                            item
-                        ) { data: NotificationItem ->
-
-                        }
+                        Notification(item)
                     }
 
                 }
@@ -97,6 +104,6 @@ fun NotificationsList(
 @Preview(showBackground = true)
 fun PreviewNotificationsList() {
     CupidCustomerAppTheme {
-        NotificationsList()
+//        Notifications(onBackPressed = {})
     }
 }

@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.location
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,8 +39,13 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 fun Location(
     onStationFilterClicked: () -> Unit,
     stationFilter: String,
-    onStationSelected: (Station) -> Unit
+    onStationSelected: (Station) -> Unit,
+    onBackPressed: () -> Unit
 ) {
+
+    BackHandler(true) {
+        onBackPressed()
+    }
 
     var selectedTab by remember { mutableStateOf("List") }
 
@@ -50,6 +56,7 @@ fun Location(
         }
         mutableStateOf(list)
     }
+
 
 
     Box(
@@ -78,8 +85,19 @@ fun Location(
             ) {
                 Marker(
                     state = MarkerState(position = smartflow),
-                    title = "Singapore",
-                    snippet = "Marker in Singapore"
+                    title = "Smartflow ",
+                    snippet = "Marker in Singapore",
+                    onClick = {
+                        onStationSelected(
+                            Station(
+                                name = "Smartflow Technologies Limited",
+                                address = "Plot E Ikosi Road, Oregun, Ikeja, Lagos",
+                                contactEmail = "info@smartflowtech.com",
+                                phoneNumber = "+234 81 2629 1902"
+                            )
+                        )
+                        true
+                    }
                 )
             }
         }
@@ -287,6 +305,6 @@ fun Location(
 @Preview(showBackground = true)
 fun PreviewLocation() {
     CupidCustomerAppTheme {
-        Location(onStationFilterClicked = {}, "state", onStationSelected = {})
+        Location(onStationFilterClicked = {}, "state", onStationSelected = {}, onBackPressed = {})
     }
 }

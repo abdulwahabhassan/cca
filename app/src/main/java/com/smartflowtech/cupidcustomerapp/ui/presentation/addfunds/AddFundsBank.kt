@@ -40,7 +40,7 @@ fun AddFundsBank(bank: Bank, onClick: (Bank) -> Unit) {
                 .clip(RoundedCornerShape(4.dp))
                 .size(28.dp),
             painter = painterResource(id = bank.icon ?: R.drawable.ic_bank),
-            contentDescription = "Payment mode icon",
+            contentDescription = "PaymentSettings mode icon",
             tint = Color.Unspecified
         )
         Text(

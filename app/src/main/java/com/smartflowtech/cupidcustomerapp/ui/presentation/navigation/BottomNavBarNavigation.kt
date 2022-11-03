@@ -16,14 +16,11 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.Notifications
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification_settings.NotificationSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.payment.PaymentSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ChangePasswordViewModel
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.SettingsViewModel
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.StationsViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -34,7 +31,6 @@ fun BottomNavBarNavigation(
     onSearchBarClicked: () -> Unit,
     homeScreenUiState: HomeScreenUiState,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    getTransactions: () -> Unit,
     onDownloadTransactionsClicked: () -> Unit,
     isCardSelected: Boolean,
     onUploadImageClicked: () -> Unit,
@@ -45,7 +41,8 @@ fun BottomNavBarNavigation(
     userName: String,
     onBottomNavItemClicked: (String) -> Unit,
     onStationFilterClicked: () -> Unit,
-    onStationSelected: (Station) -> Unit
+    onStationSelected: (Station) -> Unit,
+    onGraphFilterClicked: () -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -112,7 +109,6 @@ fun BottomNavBarNavigation(
                 onBackPressed = onBackPressed,
                 homeScreenUiState = homeScreenUiState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                getTransactions = getTransactions,
                 isCardSelected = isCardSelected,
                 selectedTab = selectedTab,
                 onTabSelected = { tab ->
@@ -122,7 +118,8 @@ fun BottomNavBarNavigation(
                     ?: "",
                 bottomNavBarNavHostController = bottomNavHostController,
                 bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
-                onBottomNavItemClicked = onBottomNavItemClicked
+                onBottomNavItemClicked = onBottomNavItemClicked,
+                onGraphFilterClicked = onGraphFilterClicked
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -138,7 +135,8 @@ fun BottomNavBarNavigation(
                     selectedTab = tab
                 },
                 currentBottomNavDestination = bottomNavHostController.currentDestination?.route
-                    ?: ""
+                    ?: "",
+                onGraphFilterClicked = onGraphFilterClicked
             )
         }
         composable(HomeScreen.Location.route) {
@@ -146,7 +144,8 @@ fun BottomNavBarNavigation(
             Location(
                 onStationFilterClicked = onStationFilterClicked,
                 stationFilter = stationViewModel.appConfigPreferences.stationFilter,
-                onStationSelected = onStationSelected
+                onStationSelected = onStationSelected,
+                onBackPressed = onBackPressed
             )
         }
         composable(HomeScreen.Settings.route) {
@@ -161,17 +160,17 @@ fun BottomNavBarNavigation(
                 },
                 onSecurityClicked = {
                     bottomNavHostController.navigate(
-                        route = HomeScreen.Security.route,
+                        route = HomeScreen.SecuritySettings.route,
                         navOptions = navOptions { launchSingleTop = true })
                 },
                 onNotificationClicked = {
                     bottomNavHostController.navigate(
-                        route = HomeScreen.Notification.route,
+                        route = HomeScreen.NotificationSettings.route,
                         navOptions = navOptions { launchSingleTop = true })
                 },
                 onPaymentClicked = {
                     bottomNavHostController.navigate(
-                        route = HomeScreen.Payment.route,
+                        route = HomeScreen.PaymentSettings.route,
                         navOptions = navOptions { launchSingleTop = true })
                 },
                 onBackPressed = onBackPressed
@@ -190,7 +189,7 @@ fun BottomNavBarNavigation(
                 userName = userName
             )
         }
-        composable(HomeScreen.Security.route) {
+        composable(HomeScreen.SecuritySettings.route) {
             val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
             ChangePasswordScreen(
                 viewModel = changePasswordViewModel,
@@ -201,7 +200,7 @@ fun BottomNavBarNavigation(
             )
         }
 
-        composable(HomeScreen.Notification.route) {
+        composable(HomeScreen.NotificationSettings.route) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             NotificationSettings(
                 viewModel = settingsViewModel,
@@ -210,11 +209,12 @@ fun BottomNavBarNavigation(
             )
         }
 
-        composable(HomeScreen.Payment.route) {
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            PaymentSettings(
-                viewModel = settingsViewModel,
-                paymentMethod = settingsViewModel.appConfigPreferences.paymentMethod
+        composable(HomeScreen.Notifications.route) {
+            val notificationsViewModel = hiltViewModel<NotificationsViewModel>()
+            Notifications(
+                viewModel = notificationsViewModel,
+                onBackPressed = onBackPressed,
+                uiState = notificationsViewModel.notificationsScreenUiState
             )
         }
     }

@@ -135,7 +135,7 @@ fun AddFundsSelectCardPaymentProcessor(
             ) {
                 item {
                     Success(
-                        title = "Payment Successful",
+                        title = "PaymentSettings Successful",
                         message = "Ref: $transactionReference\n" +
                                 "You have successfully funded your wallet!",
                         onOkayPressed = {

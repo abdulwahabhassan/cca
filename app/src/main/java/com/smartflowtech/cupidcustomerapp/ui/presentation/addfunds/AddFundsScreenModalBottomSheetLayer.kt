@@ -5,6 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.AddFundsViewModel
 import kotlinx.coroutines.launch
 
@@ -14,18 +15,19 @@ fun AddFundsScreenModalBottomSheetLayer(
     viewModel: AddFundsViewModel,
     goBackToHomeScreen: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         animationSpec = spring()
     )
-    val coroutineScope = rememberCoroutineScope()
-    var showBanks by remember { mutableStateOf(false) }
-    var selectedBank by remember { mutableStateOf("") }
+    var ussdScreenContent by remember {
+        mutableStateOf(AddFundsModalBottomSheetContent.Banks.contentKey)
+    }
     val selectedPaymentMode = remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
         if (!modalBottomSheetState.isVisible) {
-            showBanks = false
+            ussdScreenContent = AddFundsModalBottomSheetContent.Banks.contentKey
         }
     })
 
@@ -35,21 +37,9 @@ fun AddFundsScreenModalBottomSheetLayer(
             goBackToHomeScreen()
         },
         closeModalBottomSheet = {
-            if (showBanks) {
-                showBanks = false
-            } else {
-                coroutineScope.launch {
-                    modalBottomSheetState.hide()
-                }
+            coroutineScope.launch {
+                modalBottomSheetState.hide()
             }
-        },
-        onShowBanksClicked = {
-            showBanks = true
-        },
-        showBanks = showBanks,
-        selectedBank = selectedBank,
-        onSelectBank = {
-            selectedBank = it.name ?: ""
         },
         selectedPaymentMode = selectedPaymentMode.value,
         onSelectPaymentMode = {
@@ -59,7 +49,11 @@ fun AddFundsScreenModalBottomSheetLayer(
             }
         },
         goToHome = goBackToHomeScreen,
-        paymentMethod = viewModel.appConfigPreferences.paymentMethod
+        paymentMethod = viewModel.appConfigPreferences.paymentMethod,
+        setUssdScreenContent = {
+            ussdScreenContent = it
+        },
+        ussdScreenContent = ussdScreenContent
     )
 }
 

@@ -252,5 +252,5 @@ fun FilterTransactions(
 @Composable
 @Preview(showBackground = true)
 fun FilterTransactionsPreview() {
-    //FilterTransactions(1, "", "", {}, {}, {}, {})
+    //TransactionsFilter(1, "", "", {}, {}, {}, {})
 }

@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,10 +19,11 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
+import com.smartflowtech.cupidcustomerapp.ui.presentation.common.DaysFilter
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.StationDetails
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.StationFilter
-import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.ModalBottomSheetContent
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.UploadImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
@@ -34,7 +36,6 @@ fun HomeScreenModalBottomSheet(
     isNavDestinationSelected: (String) -> Boolean,
     goBack: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
-    onFilteredClicked: () -> Unit,
     onAddFundsClicked: () -> Unit,
     updateWalletVisibility: (Boolean) -> Unit,
     appConfigPreferences: AppConfigPreferences,
@@ -46,7 +47,8 @@ fun HomeScreenModalBottomSheet(
     profilePicture: String,
     onStationFilterSelected: (String) -> Unit,
     modalBottomSheetContentKey: String,
-    setModalBottomSheetContent: (String) -> Unit
+    setModalBottomSheetContent: (String) -> Unit,
+    onDaysFilterSelected: (String) -> Unit
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
@@ -114,26 +116,26 @@ fun HomeScreenModalBottomSheet(
                         }
                     }
                     when (modalBottomSheetContentKey) {
-                        ModalBottomSheetContent.DownloadTransactions.contentKey -> {
+                        HomeScreenModalBottomSheetContent.DownloadTransactions.contentKey -> {
                             DownloadTransactions(
                                 showSuccess = {
                                     successTitle = "Sent"
                                     successMessage =
                                         "We've sent the requested statements to your email"
                                     setModalBottomSheetContent(
-                                        ModalBottomSheetContent.Success.contentKey
+                                        HomeScreenModalBottomSheetContent.Success.contentKey
                                     )
                                 }
                             )
                         }
-                        ModalBottomSheetContent.Success.contentKey -> {
+                        HomeScreenModalBottomSheetContent.Success.contentKey -> {
                             Success(
                                 title = successTitle,
                                 message = successMessage,
                                 onOkayPressed = goBack
                             )
                         }
-                        ModalBottomSheetContent.UploadImage.contentKey -> {
+                        HomeScreenModalBottomSheetContent.UploadImage.contentKey -> {
                             UploadImage(
                                 onImageSelected = { uri ->
                                     persistProfilePicture(uri)
@@ -141,13 +143,13 @@ fun HomeScreenModalBottomSheet(
                                 }
                             )
                         }
-                        ModalBottomSheetContent.StationFilter.contentKey -> {
+                        HomeScreenModalBottomSheetContent.StationsFilter.contentKey -> {
                             StationFilter(onStationFilterSelected = { filter ->
-                                onStationFilterSelected(filter)
                                 goBack()
+                                onStationFilterSelected(filter)
                             })
                         }
-                        ModalBottomSheetContent.StationDetails.contentKey -> {
+                        HomeScreenModalBottomSheetContent.StationDetails.contentKey -> {
                             station?.let { StationDetails(station = it) } ?: Column(
                                 modifier = Modifier.fillMaxSize(),
                                 verticalArrangement = Arrangement.Center,
@@ -159,12 +161,18 @@ fun HomeScreenModalBottomSheet(
                                 )
                             }
                         }
-                        ModalBottomSheetContent.FilterTransactions.contentKey -> {
+                        HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey -> {
                             FilterTransactions(
                                 appConfigPreferences = appConfigPreferences,
                                 onFilterSaveClicked = onSaveFilterClicked,
                                 onBackPressed = goBack
                             )
+                        }
+                        HomeScreenModalBottomSheetContent.DaysFilter.contentKey -> {
+                            DaysFilter(onDaysFilterSelected = { filter ->
+                                goBack()
+                                onDaysFilterSelected(filter)
+                            })
                         }
                     }
                 }
@@ -172,12 +180,22 @@ fun HomeScreenModalBottomSheet(
         }
     ) {
         HomeScreen(
+            modalBottomSheetState = modalBottomSheetState,
             bottomNavBarNavHostController = bottomNavBarNavHostController,
             goTo = {},
             isNavDestinationSelected = isNavDestinationSelected,
             onBackPressed = goBack,
             onBottomNavItemClicked = onBottomNavItemClicked,
-            onFilteredClicked = onFilteredClicked,
+            onTransactionsFilterClicked = {
+                setModalBottomSheetContent(
+                    HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
+                )
+            },
+            onNotificationsFilterClicked = {
+                setModalBottomSheetContent(
+                    HomeScreenModalBottomSheetContent.DaysFilter.contentKey
+                )
+            },
             onAddFundsClicked = onAddFundsClicked,
             userFullName = appConfigPreferences.fullName,
             userName = appConfigPreferences.userName,
@@ -188,19 +206,19 @@ fun HomeScreenModalBottomSheet(
             getTransactions = getTransactions,
             onDownloadTransactionsClicked = {
                 setModalBottomSheetContent(
-                    ModalBottomSheetContent.DownloadTransactions.contentKey
+                    HomeScreenModalBottomSheetContent.DownloadTransactions.contentKey
                 )
             },
             onUploadImageClicked = {
                 setModalBottomSheetContent(
-                    ModalBottomSheetContent.UploadImage.contentKey
+                    HomeScreenModalBottomSheetContent.UploadImage.contentKey
                 )
             },
             onProfileUpdateSuccess = {
                 successTitle = "Successful"
                 successMessage = "Profile updated"
                 setModalBottomSheetContent(
-                    ModalBottomSheetContent.Success.contentKey
+                    HomeScreenModalBottomSheetContent.Success.contentKey
                 )
                 goBack()
 
@@ -208,13 +226,18 @@ fun HomeScreenModalBottomSheet(
             profilePicture = profilePicture,
             onStationFilterClicked = {
                 setModalBottomSheetContent(
-                    ModalBottomSheetContent.StationFilter.contentKey
+                    HomeScreenModalBottomSheetContent.StationsFilter.contentKey
                 )
             },
             onStationSelected = {
                 station = it
                 setModalBottomSheetContent(
-                    ModalBottomSheetContent.StationDetails.contentKey
+                    HomeScreenModalBottomSheetContent.StationDetails.contentKey
+                )
+            },
+            onGraphFilterClicked = {
+                setModalBottomSheetContent(
+                    HomeScreenModalBottomSheetContent.DaysFilter.contentKey
                 )
             }
         )

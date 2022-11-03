@@ -37,8 +37,13 @@ fun Transactions(
     isCardSelected: Boolean,
     selectedTab: String,
     onTabSelected: (String) -> Unit,
-    currentBottomNavDestination: String
+    currentBottomNavDestination: String,
+    onGraphFilterClicked: () -> Unit
 ) {
+
+    BackHandler(true) {
+        onBackPressed()
+    }
 
     var queryText by rememberSaveable { mutableStateOf("") }
 
@@ -83,10 +88,6 @@ fun Transactions(
         )
     }
 
-    BackHandler(true) {
-        onBackPressed()
-    }
-
     Column(
         Modifier
             .fillMaxSize()
@@ -103,7 +104,8 @@ fun Transactions(
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 selectedTab = selectedTab,
                 onTabSelected = onTabSelected,
-                currentBottomNavDestination = currentBottomNavDestination
+                currentBottomNavDestination = currentBottomNavDestination,
+                onGraphFilterClicked = onGraphFilterClicked
             )
         } else {
             Column(
@@ -151,7 +153,6 @@ fun Transactions(
                         showReceipt = true
                     },
                     bottomSheetScaffoldState = bottomSheetScaffoldState,
-                    getTransactions = {},
                     currentBottomNavDestination = currentBottomNavDestination
                 )
 
@@ -208,7 +209,8 @@ fun TransactionsPreview() {
             false,
             "",
             {},
-            "Transactions"
+            "Transactions",
+            {}
         )
     }
 }

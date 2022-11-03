@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
-import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +18,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,9 +25,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -40,15 +34,12 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.io.File
 import java.util.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeDashBoard(
-    bottomSheetState: BottomSheetState,
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
     onAddFundsClicked: () -> Unit,
     fullName: String,
     walletBalanceVisibility: Boolean,
@@ -57,13 +48,16 @@ fun HomeDashBoard(
     onCardSelected: (Boolean) -> Unit,
     isCardSelected: Boolean,
     onProfileClicked: () -> Unit,
-    profilePicture: String
+    onNotificationsClicked: () -> Unit,
+    profilePicture: String,
+    getTransactions: () -> Unit
 ) {
 
     val pagerState = rememberPagerState()
     var visible by remember { mutableStateOf(true) }
     visible =
-        bottomSheetState.direction == 0f && bottomSheetState.isCollapsed
+        bottomSheetScaffoldState.bottomSheetState.direction == 0f &&
+                bottomSheetScaffoldState.bottomSheetState.isCollapsed
 
     Column(
         modifier = Modifier
@@ -162,8 +156,16 @@ fun HomeDashBoard(
                                     }
                                     Spacer(modifier = Modifier.width(16.dp))
                                     Icon(
+                                        modifier = Modifier
+                                            .padding(bottom = 16.dp)
+                                            .clip(RoundedCornerShape(50))
+                                            .clipToBounds()
+                                            .clickable {
+                                                onNotificationsClicked()
+                                            }
+                                            .padding(8.dp),
                                         painter = painterResource(id = R.drawable.ic_notification_active),
-                                        contentDescription = "Notification bell",
+                                        contentDescription = "NotificationSettings bell",
                                         tint = Color.White,
                                     )
 
@@ -184,7 +186,21 @@ fun HomeDashBoard(
                                 .padding(top = if (isCardSelected) 8.dp else 16.dp, bottom = 16.dp)
                         ) { page: Int ->
                             when (homeScreenUiState.viewModelResult) {
-                                ViewModelResult.ERROR -> {}
+                                ViewModelResult.ERROR -> {
+                                    LaunchedEffect(key1 = Unit, block = {
+                                        if (homeScreenUiState.message != null) {
+                                            val result =
+                                                bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                                                    message = homeScreenUiState.message,
+                                                    actionLabel = "Retry",
+                                                    duration = SnackbarDuration.Indefinite
+                                                )
+                                            if (result == SnackbarResult.ActionPerformed) {
+                                                getTransactions()
+                                            }
+                                        }
+                                    })
+                                }
                                 ViewModelResult.LOADING -> {
                                     CircularProgressIndicator(color = pink, strokeWidth = 2.dp)
                                 }
@@ -244,7 +260,13 @@ fun PreviewHomeDashBoard() {
     var isCardSelected by remember { mutableStateOf(false) }
     CupidCustomerAppTheme {
         HomeDashBoard(
-            bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
+            bottomSheetScaffoldState = BottomSheetScaffoldState(
+                drawerState = DrawerState(
+                    DrawerValue.Closed
+                ),
+                bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
+                snackbarHostState = SnackbarHostState()
+            ),
             onAddFundsClicked = { },
             fullName = "Mike Murdock",
             walletBalanceVisibility = visible,
@@ -262,7 +284,9 @@ fun PreviewHomeDashBoard() {
             },
             isCardSelected = isCardSelected,
             onProfileClicked = {},
-            profilePicture = ""
+            onNotificationsClicked = {},
+            profilePicture = "",
+            getTransactions = { }
         )
     }
 }

@@ -7,7 +7,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
-import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.ModalBottomSheetContent
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
@@ -27,13 +27,13 @@ fun HomeScreenModalBottomSheetLayer(
         animationSpec = spring()
     )
     val coroutineScope = rememberCoroutineScope()
-    var modalBottomSheetContent: String by rememberSaveable {
-        mutableStateOf(ModalBottomSheetContent.FilterTransactions.contentKey)
+    var homeScreenModalBottomSheetContent: String by rememberSaveable {
+        mutableStateOf(HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey)
     }
 
     LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
         if (!modalBottomSheetState.isVisible) {
-            modalBottomSheetContent = ModalBottomSheetContent.FilterTransactions.contentKey
+            homeScreenModalBottomSheetContent = HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
         }
     })
 
@@ -45,22 +45,13 @@ fun HomeScreenModalBottomSheetLayer(
             if (modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
-                    modalBottomSheetContent = ModalBottomSheetContent.FilterTransactions.contentKey
+                    homeScreenModalBottomSheetContent = HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
                 }
             } else {
                 popBackStackOrFinishActivity()
             }
         },
         onBottomNavItemClicked = goToDestination,
-        onFilteredClicked = {
-            if (!modalBottomSheetState.isVisible) {
-                coroutineScope.launch {
-                    modalBottomSheetState.animateTo(
-                        ModalBottomSheetValue.HalfExpanded, spring()
-                    )
-                }
-            }
-        },
         onAddFundsClicked = goToAddFundsScreen,
         homeScreenUiState = viewModel.homeScreenUiState,
         appConfigPreferences = viewModel.appConfigPreferences,
@@ -84,7 +75,7 @@ fun HomeScreenModalBottomSheetLayer(
             viewModel.updateStationFilter(filter)
         },
         setModalBottomSheetContent = { contentKey ->
-            modalBottomSheetContent = contentKey
+            homeScreenModalBottomSheetContent = contentKey
             if (!modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.animateTo(
@@ -93,6 +84,9 @@ fun HomeScreenModalBottomSheetLayer(
                 }
             }
         },
-        modalBottomSheetContentKey = modalBottomSheetContent
+        modalBottomSheetContentKey = homeScreenModalBottomSheetContent,
+        onDaysFilterSelected = { dayFilter ->
+            viewModel.updateNotificationsFilter(dayFilter)
+        }
     )
 }

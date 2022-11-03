@@ -42,6 +42,10 @@ fun Profile(
     onBackPressed: () -> Unit
 ) {
 
+    BackHandler(true) {
+        onBackPressed()
+    }
+
     // Visibility and input text
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -54,10 +58,6 @@ fun Profile(
     var firstNameErrorLabel by rememberSaveable { mutableStateOf("") }
     var lastNameErrorLabel by rememberSaveable { mutableStateOf("") }
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
-
-    BackHandler(true) {
-        onBackPressed()
-    }
 
     val scaffoldState = rememberScaffoldState()
 

@@ -111,7 +111,7 @@ fun AddFundsCardPaymentDetailsForm(
         ) {
 
             Text(
-                "Input Payment Details", color = Color.Black,
+                "Input PaymentSettings Details", color = Color.Black,
                 fontFamily = AthleticsFontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold

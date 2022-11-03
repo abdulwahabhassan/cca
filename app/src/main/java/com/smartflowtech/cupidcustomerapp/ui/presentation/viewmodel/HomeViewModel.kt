@@ -74,15 +74,6 @@ class HomeViewModel @Inject constructor(
                         mapWalletsResponseData(walletsResult.data)
                     }
                 }
-//                    ?.plus(
-//                    Wallet(
-//                        "Smartflow Technologies",
-//                        99L,
-//                        "47500.20",
-//                        "2022-09-01",
-//                        ""
-//                    )
-//                )
 
                 when (transactionsResult) {
                     is RepositoryResult.Success -> {
@@ -204,6 +195,12 @@ class HomeViewModel @Inject constructor(
     fun updateStationFilter(filter: String) {
         viewModelScope.launch {
             dataStorePrefsRepository.updateStationFilter(filter)
+        }
+    }
+
+    fun updateNotificationsFilter(filter: String) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateNotificationsFilter(filter)
         }
     }
 

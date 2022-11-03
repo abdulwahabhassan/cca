@@ -20,19 +20,15 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.time.LocalDateTime
 
 @Composable
-fun Notification(data: NotificationItem, onClick: (transaction: NotificationItem) -> Unit) {
+fun Notification(data: NotificationItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
     ) {
         Row(
             modifier = Modifier
-                .clickable {
-                    onClick(data)
-                }
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(horizontal = 24.dp, vertical = 12.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -78,8 +74,7 @@ fun Notification(data: NotificationItem, onClick: (transaction: NotificationItem
 fun NotificationPreview() {
     CupidCustomerAppTheme {
         Notification(
-            Util.getListOfNotifications()[0],
-            {}
+            Util.getListOfNotifications()[0]
         )
     }
 
