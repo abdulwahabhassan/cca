@@ -186,7 +186,14 @@ fun RootNavigation(
                     )
                 },
                 onBackArrowPressed = {
-                    rootNavHostController.popBackStack()
+                    rootNavHostController.navigate(
+                        Screen.ResetPassword.route,
+                        NavOptions
+                            .Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(Screen.ResetPassword.route, true)
+                            .build()
+                    )
                 },
                 verifiedEmail = verifiedEmail
             )

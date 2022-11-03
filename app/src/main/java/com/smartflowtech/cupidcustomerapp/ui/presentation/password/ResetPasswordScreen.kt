@@ -35,7 +35,7 @@ fun ResetPasswordScreen(
 
     val scaffoldState = rememberScaffoldState()
 
-    var email by rememberSaveable { mutableStateOf("abdulwahab.hassan@smartflowtech.com") }
+    var email by rememberSaveable { mutableStateOf("") }
 
     // Error and labels
     var isEmailError by rememberSaveable { mutableStateOf(false) }

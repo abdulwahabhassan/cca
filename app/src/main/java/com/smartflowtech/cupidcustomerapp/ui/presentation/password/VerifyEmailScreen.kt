@@ -146,8 +146,8 @@ fun VerifyEmailScreen(
                         onClick = {
                             val emailIntent =
                                 Intent.createChooser(
-                                    Intent(Intent.ACTION_SEND).apply {
-                                        type = "text/message"
+                                    Intent(Intent.ACTION_MAIN).apply {
+                                        addCategory(Intent.CATEGORY_APP_EMAIL)
                                     }, null
                                 )
                             ctx.startActivity(emailIntent)
