@@ -35,6 +35,7 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.HorizontalPagerIndicator
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
@@ -56,10 +57,31 @@ fun HomeDashBoard(
 ) {
 
     val pagerState = rememberPagerState()
-    var visible by remember { mutableStateOf(true) }
+    var visible by rememberSaveable { mutableStateOf(true) }
     visible =
         bottomSheetScaffoldState.bottomSheetState.direction == 0f &&
                 bottomSheetScaffoldState.bottomSheetState.isCollapsed
+    var showSnackBar by rememberSaveable { mutableStateOf(false) }
+    var showLoadingIndicator by rememberSaveable { mutableStateOf(false) }
+    var showWallets by rememberSaveable { mutableStateOf(false) }
+
+    when (homeScreenUiState.viewModelResult) {
+        ViewModelResult.ERROR -> {
+            showLoadingIndicator = false
+            showWallets = false
+            showSnackBar = true
+        }
+        ViewModelResult.LOADING -> {
+            showWallets = false
+            showSnackBar = false
+            showLoadingIndicator = true
+        }
+        ViewModelResult.SUCCESS -> {
+            showLoadingIndicator = false
+            showSnackBar = false
+            showWallets = true
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -187,27 +209,10 @@ fun HomeDashBoard(
                                 .height(LocalConfiguration.current.screenHeightDp.dp * 0.30f)
                                 .padding(top = if (isCardSelected) 8.dp else 16.dp, bottom = 16.dp)
                         ) { page: Int ->
-                            when (homeScreenUiState.viewModelResult) {
-                                ViewModelResult.ERROR -> {
-                                    LaunchedEffect(key1 = bottomSheetScaffoldState.snackbarHostState, block = {
-                                        if (homeScreenUiState.message != null) {
-                                            Timber.d("${homeScreenUiState.message}")
-                                            val result =
-                                                bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                                                    message = homeScreenUiState.message,
-                                                    actionLabel = "Retry",
-                                                    duration = SnackbarDuration.Indefinite
-                                                )
-                                            if (result == SnackbarResult.ActionPerformed) {
-                                                getTransactions()
-                                            }
-                                        }
-                                    })
-                                }
-                                ViewModelResult.LOADING -> {
-                                    CircularProgressIndicator(color = pink, strokeWidth = 2.dp)
-                                }
-                                ViewModelResult.SUCCESS -> {
+                            if (showLoadingIndicator) {
+                                CircularProgressIndicator(color = pink, strokeWidth = 2.dp)
+                            } else {
+                                if (showWallets) {
                                     if (homeScreenUiState.wallets.isNotEmpty()) {
                                         WalletCard(
                                             listOf(lightPink, lightYellow, skyBlue).random(),
@@ -237,8 +242,26 @@ fun HomeDashBoard(
                                             textAlign = TextAlign.Center
                                         )
                                     }
+                                } else if (showSnackBar) {
+                                    if (homeScreenUiState.message?.isNotEmpty() == true) {
+                                        LaunchedEffect(
+                                            key1 = Unit,
+                                            block = {
+                                                val result =
+                                                    bottomSheetScaffoldState
+                                                        .snackbarHostState
+                                                        .showSnackbar(
+                                                            message = homeScreenUiState.message,
+                                                            actionLabel = "Retry",
+                                                            duration = SnackbarDuration.Indefinite
+                                                        )
+                                                if (result == SnackbarResult.ActionPerformed) {
+                                                    getTransactions()
+                                                }
+                                            }
+                                        )
+                                    }
                                 }
-                                else -> {}
                             }
                         }
                         HorizontalPagerIndicator(

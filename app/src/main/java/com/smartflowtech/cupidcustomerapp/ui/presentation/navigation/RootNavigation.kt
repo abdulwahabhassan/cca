@@ -270,16 +270,19 @@ fun RootNavigation(
                 },
                 goToDestination = { route ->
                     Timber.d("Go to destination -> $route")
-                    bottomNavBarNavHostController.navigate(route) {
-                        bottomNavBarNavHostController.graph.startDestinationRoute
-                            ?.let { startDestinationRoute ->
-                                popUpTo(startDestinationRoute) {
-                                    saveState = true
+                    if (bottomNavBarNavHostController.currentDestination?.route != route) {
+                        bottomNavBarNavHostController.navigate(route) {
+                            bottomNavBarNavHostController.graph.startDestinationRoute
+                                ?.let { startDestinationRoute ->
+                                    popUpTo(startDestinationRoute) {
+                                        saveState = true
+                                    }
                                 }
-                            }
-                        launchSingleTop = true
-                        restoreState = true
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
+
                 },
                 goToAddFundsScreen = {
                     rootNavHostController.navigate(

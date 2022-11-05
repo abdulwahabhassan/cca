@@ -1,6 +1,8 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
@@ -76,7 +78,7 @@ class HomeViewModel @Inject constructor(
                                 prefs
                             )
                                 ?: emptyList(),
-                            wallets = wallets ?: emptyList()
+                            wallets = wallets ?: emptyList(),
                         )
                     }
                     is RepositoryResult.Error -> {
@@ -84,7 +86,7 @@ class HomeViewModel @Inject constructor(
                             viewModelResult = ViewModelResult.ERROR,
                             transactions = emptyList(),
                             message = transactionsResult.message,
-                            wallets = wallets ?: emptyList()
+                            wallets = wallets ?: emptyList(),
                         )
                     }
                 }
