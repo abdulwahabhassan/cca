@@ -69,7 +69,8 @@ fun BottomNavBarNavigation(
                 fadeOut(animationSpec = snap())
             } else if ((initialState.destination.route == HomeScreen.Transactions.route ||
                         initialState.destination.route == HomeScreen.Profile.route ||
-                        initialState.destination.route == HomeScreen.Notifications.route
+                        initialState.destination.route == HomeScreen.Notifications.route ||
+                        initialState.destination.route == HomeScreen.Location.route
                         ) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
@@ -88,7 +89,8 @@ fun BottomNavBarNavigation(
         popExitTransition = {
             if ((initialState.destination.route == HomeScreen.Transactions.route ||
                         initialState.destination.route == HomeScreen.Profile.route ||
-                        initialState.destination.route == HomeScreen.Notifications.route) &&
+                        initialState.destination.route == HomeScreen.Notifications.route ||
+                        initialState.destination.route == HomeScreen.Location.route) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
                 fadeOut(snap())

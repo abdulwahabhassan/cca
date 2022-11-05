@@ -58,7 +58,7 @@ fun AddFundsSelectCardPaymentProcessor(
                     selectedCardProcessor = cardProcessor.name
                     showCardDetailsForm = true
                 },
-                isSelected = selectedCardProcessor == cardProcessor.name
+                isSelected = paymentMethod == cardProcessor.name
             )
         }
 
@@ -125,7 +125,7 @@ fun AddFundsSelectCardPaymentProcessor(
             ) {
                 item {
                     Success(
-                        title = "PaymentSettings Successful",
+                        title = "Payment Successful",
                         message = "Ref: $transactionReference\n" +
                                 "You have successfully funded your wallet!",
                         onOkayPressed = {
