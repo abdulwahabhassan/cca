@@ -51,10 +51,10 @@ interface CupidApiService {
     ): CupidApiResponse<ChangePasswordData>
 
     @POST("payments/initiate/paystack")
-    suspend fun verifyPayStackPayment(
+    suspend fun initiatePayStackPayment(
         @Header("Authorization") token: String,
-        @Body verifyPaymentRequestBody: VerifyPaymentRequestBody
-    ): CupidApiResponse<Any>
+        @Body payStackPaymentRequestBody: PayStackPaymentRequestBody
+    ): CupidApiResponse<PayStackPaymentRequestData>
 
     @POST("auth/forgotpass/verifyemail")
     suspend fun forgotPassWordVerifyEmail(

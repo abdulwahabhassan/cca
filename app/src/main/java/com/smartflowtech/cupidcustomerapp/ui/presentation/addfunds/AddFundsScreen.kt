@@ -32,17 +32,20 @@ import kotlinx.coroutines.launch
 fun AddFundsScreen(
     onBackPressed: () -> Unit,
     onPaymentModeSelected: (PaymentMode) -> Unit,
-    onProceedClicked: (Int) -> Unit,
+    onProceedClicked: (Int) -> Unit
 ) {
 
-    var amount by rememberSaveable { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
+    var amount by rememberSaveable { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+
     var visible by rememberSaveable { mutableStateOf(true) }
     visible =
-        bottomSheetScaffoldState.bottomSheetState.direction >= 0f && bottomSheetScaffoldState.bottomSheetState.currentValue == BottomSheetValue.Collapsed
+        bottomSheetScaffoldState.bottomSheetState.direction >= 0f &&
+                bottomSheetScaffoldState.bottomSheetState.currentValue ==
+                BottomSheetValue.Collapsed
 
     BackHandler(bottomSheetScaffoldState.bottomSheetState.isExpanded) {
         coroutineScope.launch {
@@ -193,15 +196,14 @@ fun AddFundsScreen(
                                 bottomSheetScaffoldState.bottomSheetState.expand()
                             }
                         } else {
-                            if (bottomSheetScaffoldState.snackbarHostState
-                                    .currentSnackbarData == null
-                            ) {
-                                coroutineScope.launch {
+                            coroutineScope.launch {
+                                if (bottomSheetScaffoldState.snackbarHostState
+                                        .currentSnackbarData == null
+                                ) {
                                     bottomSheetScaffoldState.snackbarHostState.showSnackbar(
                                         message = "Invalid amount",
                                         duration = SnackbarDuration.Short
                                     )
-
                                 }
                             }
                         }
@@ -222,8 +224,6 @@ fun AddFundsScreen(
 @Composable
 fun AddFundsScreenPreview() {
     CupidCustomerAppTheme {
-        AddFundsScreen({}, {}) {
 
-        }
     }
 }

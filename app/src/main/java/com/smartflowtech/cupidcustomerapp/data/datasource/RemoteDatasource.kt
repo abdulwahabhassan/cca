@@ -58,13 +58,13 @@ class RemoteDatasource @Inject constructor(
         )
     }
 
-    suspend fun verifyPayStackPayment(
+    suspend fun initiatePayStackPayment(
         token: String,
-        verifyPaymentRequestBody: VerifyPaymentRequestBody
-    ): CupidApiResponse<Any> {
-        return apiService.verifyPayStackPayment(
+        payStackPaymentRequestBody: PayStackPaymentRequestBody
+    ): CupidApiResponse<PayStackPaymentRequestData> {
+        return apiService.initiatePayStackPayment(
             token = token,
-            verifyPaymentRequestBody = verifyPaymentRequestBody
+            payStackPaymentRequestBody = payStackPaymentRequestBody
         )
     }
 

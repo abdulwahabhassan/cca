@@ -26,20 +26,19 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ProfileViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
+import kotlinx.coroutines.launch
 
 @Composable
 fun Profile(
-    viewModel: ProfileViewModel,
     userFullName: String,
     userName: String,
-    uiState: ProfileScreenUiState,
     onUploadImageClicked: () -> Unit,
     onProfileUpdateSuccess: () -> Unit,
     profilePicture: String,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    updateProfile: suspend (firstname: String, lastname: String, email: String) -> UpdateProfileState
 ) {
 
     BackHandler(true) {
@@ -47,8 +46,8 @@ fun Profile(
     }
 
     // Visibility and input text
-    var firstName by rememberSaveable { mutableStateOf("") }
-    var lastName by rememberSaveable { mutableStateOf("") }
+    var firstname by rememberSaveable { mutableStateOf("") }
+    var lastname by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
 
     // Error and labels
@@ -60,16 +59,56 @@ fun Profile(
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
 
     val scaffoldState = rememberScaffoldState()
+    var showLoadingIndicator by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(uiState.viewModelResult) {
-        if (
-            !uiState.message.isNullOrEmpty() &&
-            uiState.viewModelResult != ViewModelResult.SUCCESS
+    fun resetErrorsAndLabels() {
+        firstNameErrorLabel = ""
+        firstNameError = false
+        lastNameErrorLabel = ""
+        lastNameError = false
+        emailErrorLabel = ""
+        emailError = false
+    }
+
+    fun validateEmail(email: String) {
+        if (email.isEmpty() ||
+            !email.contains("@") ||
+            !email.contains(".")
         ) {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = uiState.message,
-                duration = SnackbarDuration.Short
+            emailErrorLabel = "Input valid email"
+            emailError = true
+        }
+    }
+
+    fun doUpdateProfile() {
+        coroutineScope.launch {
+            val updateProfileState = updateProfile(
+                firstname.trim().capitalizeFirstLetter(),
+                lastname.trim().capitalizeFirstLetter(),
+                email.trim()
             )
+            when (updateProfileState.viewModelResult) {
+                ViewModelResult.ERROR -> {
+                    showLoadingIndicator = false
+                    if (
+                        updateProfileState.message?.isNotEmpty() == true
+                    ) {
+                        if (scaffoldState.snackbarHostState
+                                .currentSnackbarData == null
+                        ) {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = updateProfileState.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
+                }
+                ViewModelResult.SUCCESS -> {
+                    onProfileUpdateSuccess()
+                }
+                else -> {}
+            }
         }
     }
 
@@ -83,12 +122,8 @@ fun Profile(
         snackbarHost = {
             SnackbarHost(it) { data ->
                 Snackbar(
-                    backgroundColor = when (uiState.viewModelResult) {
-                        ViewModelResult.SUCCESS -> transparentGreen
-                        ViewModelResult.ERROR -> transparentPink
-                        else -> transparentPurple
-                    },
-                    contentColor = darkBlue,
+                    backgroundColor = transparentPink,
+                    contentColor = red,
                     snackbarData = data
                 )
             }
@@ -156,10 +191,10 @@ fun Profile(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = firstName,
+                    value = firstname,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     onValueChange = { text ->
-                        firstName = text
+                        firstname = text
                     },
                     singleLine = true,
                     label = {
@@ -184,9 +219,9 @@ fun Profile(
                 //Last name
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = lastName,
+                    value = lastname,
                     onValueChange = { text ->
-                        lastName = text
+                        lastname = text
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     label = {
@@ -238,61 +273,44 @@ fun Profile(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                when (uiState.viewModelResult) {
-                    ViewModelResult.INITIAL, ViewModelResult.ERROR -> {
-                        //Save Changes
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(54.dp),
-                            enabled = firstName.isNotEmpty() && lastName.isNotEmpty() && email.isNotEmpty(),
-                            onClick = {
-                                firstNameErrorLabel = ""
-                                firstNameError = false
-                                lastNameErrorLabel = ""
-                                lastNameError = false
-                                emailErrorLabel = ""
-                                emailError = false
+                if (showLoadingIndicator) {
+                    CircularProgressIndicator(
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.height(54.dp)
+                    )
+                } else {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(54.dp),
+                        enabled = firstname.isNotEmpty() &&
+                                lastname.isNotEmpty() &&
+                                email.isNotEmpty(),
+                        onClick = {
 
-                                val trimmedFirstName = firstName.trim().capitalizeFirstLetter()
-                                val trimmedLastName = lastName.trim().capitalizeFirstLetter()
-                                val trimmedEmail = email.trim()
+                            resetErrorsAndLabels()
 
-                                viewModel.updateProfile(
-                                    firstName = trimmedFirstName,
-                                    lastName = trimmedLastName,
-                                    email = trimmedEmail
-                                )
+                            validateEmail(email.trim())
 
-                            },
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primary
-                            )
-                        ) {
-                            Text(text = "Save Changes")
-                        }
-                    }
-                    ViewModelResult.LOADING -> {
-                        CircularProgressIndicator(
-                            strokeWidth = 2.dp,
-                            modifier = Modifier.height(54.dp)
+                            if (!emailError) {
+                                showLoadingIndicator = true
+                                doUpdateProfile()
+                            }
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary
                         )
-                    }
-                    ViewModelResult.SUCCESS -> {
-                        LaunchedEffect(key1 = uiState.viewModelResult, block = {
-                            onProfileUpdateSuccess()
-                        })
+                    ) {
+                        Text(text = "Save Changes")
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-
             }
         }
-
     }
-
 }
+
 
 @Composable
 @Preview(showBackground = true)

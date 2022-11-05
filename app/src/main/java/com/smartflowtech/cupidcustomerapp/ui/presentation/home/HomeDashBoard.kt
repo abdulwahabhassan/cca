@@ -55,9 +55,6 @@ fun HomeDashBoard(
     getTransactions: () -> Unit
 ) {
 
-    var retry: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
     val pagerState = rememberPagerState()
     var visible by remember { mutableStateOf(true) }
     visible =
@@ -192,7 +189,7 @@ fun HomeDashBoard(
                         ) { page: Int ->
                             when (homeScreenUiState.viewModelResult) {
                                 ViewModelResult.ERROR -> {
-                                    LaunchedEffect(key1 = retry, block = {
+                                    LaunchedEffect(key1 = bottomSheetScaffoldState.snackbarHostState, block = {
                                         if (homeScreenUiState.message != null) {
                                             Timber.d("${homeScreenUiState.message}")
                                             val result =
@@ -202,7 +199,6 @@ fun HomeDashBoard(
                                                     duration = SnackbarDuration.Indefinite
                                                 )
                                             if (result == SnackbarResult.ActionPerformed) {
-                                                retry = !retry
                                                 getTransactions()
                                             }
                                         }
@@ -211,7 +207,6 @@ fun HomeDashBoard(
                                 ViewModelResult.LOADING -> {
                                     CircularProgressIndicator(color = pink, strokeWidth = 2.dp)
                                 }
-                                ViewModelResult.INITIAL -> {}
                                 ViewModelResult.SUCCESS -> {
                                     if (homeScreenUiState.wallets.isNotEmpty()) {
                                         WalletCard(
@@ -243,6 +238,7 @@ fun HomeDashBoard(
                                         )
                                     }
                                 }
+                                ViewModelResult.INITIAL -> {}
                             }
                         }
                         HorizontalPagerIndicator(

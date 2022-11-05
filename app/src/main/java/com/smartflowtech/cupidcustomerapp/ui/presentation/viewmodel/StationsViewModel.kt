@@ -5,14 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
-import com.smartflowtech.cupidcustomerapp.data.repo.ProfileRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.StationsRepository
-import com.smartflowtech.cupidcustomerapp.model.request.UpdateProfileRequestBody
 import com.smartflowtech.cupidcustomerapp.model.request.VendorStationsRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.location.LocationScreenUiState
-import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.ProfileScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -55,7 +52,6 @@ class StationsViewModel @Inject constructor(
                         message = repositoryResult.message
                     )
                 }
-                is RepositoryResult.Local -> {}
             }
         }
     }

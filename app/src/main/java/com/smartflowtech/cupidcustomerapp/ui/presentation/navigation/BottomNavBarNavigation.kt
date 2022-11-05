@@ -19,6 +19,8 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.Notifications
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification_settings.NotificationSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordScreen
+import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.payment.PaymentSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
 
@@ -179,24 +181,27 @@ fun BottomNavBarNavigation(
         composable(HomeScreen.Profile.route) {
             val profileViewModel = hiltViewModel<ProfileViewModel>()
             Profile(
-                viewModel = profileViewModel,
-                uiState = profileViewModel.profileScreenUiState,
                 onUploadImageClicked = onUploadImageClicked,
                 onProfileUpdateSuccess = onProfileUpdateSuccess,
                 profilePicture = profilePicture,
                 onBackPressed = onBackPressed,
                 userFullName = userFullName,
-                userName = userName
+                userName = userName,
+                updateProfile = { firstname, lastname, email ->
+                    profileViewModel.updateProfile(firstname, lastname, email)
+
+                }
             )
         }
         composable(HomeScreen.SecuritySettings.route) {
             val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
             ChangePasswordScreen(
-                viewModel = changePasswordViewModel,
-                uiState = changePasswordViewModel.changePasswordScreenUiState,
                 onSuccessDialogOkayPressed = onBackPressed,
                 isForgotPassWord = false,
-                okayButtonText = "Okay"
+                okayButtonText = "Okay",
+                changePassword = { currentPassword, newPassword ->
+                    changePasswordViewModel.changePassword(currentPassword, newPassword)
+                }
             )
         }
 
@@ -215,6 +220,13 @@ fun BottomNavBarNavigation(
                 viewModel = notificationsViewModel,
                 onBackPressed = onBackPressed,
                 uiState = notificationsViewModel.notificationsScreenUiState
+            )
+        }
+        composable(HomeScreen.PaymentSettings.route) {
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            PaymentSettings(
+                viewModel = settingsViewModel,
+                paymentMethod = settingsViewModel.appConfigPreferences.paymentMethod
             )
         }
     }

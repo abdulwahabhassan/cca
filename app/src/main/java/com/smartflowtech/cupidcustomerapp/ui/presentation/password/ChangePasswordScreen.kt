@@ -33,17 +33,17 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ChangePasswordViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun ChangePasswordScreen(
-    viewModel: ChangePasswordViewModel,
-    uiState: ChangePasswordScreenUiState,
     onSuccessDialogOkayPressed: () -> Unit,
     onBackArrowPressed: () -> Unit = {},
     goToLogin: () -> Unit = {},
     isForgotPassWord: Boolean,
     okayButtonText: String,
+    changePassword: suspend (currentPassword: String, newPassword: String) -> ChangePasswordState
 ) {
 
     // Visibility and input text
@@ -75,20 +75,52 @@ fun ChangePasswordScreen(
     }
 
     var showSuccessDialog by remember { mutableStateOf(false) }
-
     val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    var showLoadingIndicator by remember { mutableStateOf(false) }
+    var successMessage: String by remember { mutableStateOf("") }
 
-    LaunchedEffect(uiState.viewModelResult) {
-        if (
-            !uiState.message.isNullOrEmpty() &&
-            uiState.viewModelResult != ViewModelResult.SUCCESS
-        ) {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = uiState.message,
-                duration = SnackbarDuration.Short
+    fun resetErrorsAndLabels() {
+        currentPasswordErrorLabel = ""
+        isCurrentPasswordError = false
+        newPasswordErrorLabel = ""
+        isNewPasswordError = false
+        confirmPasswordErrorLabel = ""
+        isConfirmPasswordError = false
+    }
+
+    fun doChangePassword(oldPassword: String, newPassword: String) {
+        coroutineScope.launch {
+            val changePasswordState = changePassword(
+                oldPassword, newPassword
             )
+            when (changePasswordState.viewModelResult) {
+                ViewModelResult.ERROR -> {
+                    showLoadingIndicator = false
+                    if (
+                        changePasswordState.message?.isNotEmpty() == true
+                    ) {
+                        if (scaffoldState.snackbarHostState
+                                .currentSnackbarData == null
+                        ) {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = changePasswordState.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+
+                    }
+                }
+                ViewModelResult.SUCCESS -> {
+                    showSuccessDialog = true
+                    successMessage = changePasswordState.message
+                        ?: "Changed Successfully"
+                }
+                else -> {}
+            }
         }
     }
+
 
     Scaffold(
         modifier = Modifier
@@ -99,12 +131,8 @@ fun ChangePasswordScreen(
         snackbarHost = {
             SnackbarHost(it) { data ->
                 Snackbar(
-                    backgroundColor = when (uiState.viewModelResult) {
-                        ViewModelResult.SUCCESS -> transparentGreen
-                        ViewModelResult.ERROR -> transparentPink
-                        else -> transparentPurple
-                    },
-                    contentColor = darkBlue,
+                    backgroundColor = transparentPink,
+                    contentColor = red,
                     snackbarData = data
                 )
             }
@@ -408,65 +436,51 @@ fun ChangePasswordScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    //Update
-                    when (uiState.viewModelResult) {
-                        ViewModelResult.INITIAL, ViewModelResult.ERROR -> {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(54.dp),
+                    if (showLoadingIndicator) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.height(54.dp)
+                        )
+                    } else {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(54.dp),
 
-                                enabled = currentPassword.isNotEmpty() &&
-                                        newPassword.isNotEmpty() &&
-                                        confirmPassword.isNotEmpty() &&
-                                        isEightCharactersLong &&
-                                        hasAtLeastOneLowerCaseLetter &&
-                                        hasAtLeastOneUpperCaseLetter &&
-                                        hasAtLeastOneSpecialCharacter,
-                                onClick = {
-                                    currentPasswordErrorLabel = ""
-                                    isCurrentPasswordError = false
-                                    newPasswordErrorLabel = ""
-                                    isNewPasswordError = false
-                                    confirmPasswordErrorLabel = ""
-                                    isConfirmPasswordError = false
+                            enabled = currentPassword.isNotEmpty() &&
+                                    newPassword.isNotEmpty() &&
+                                    confirmPassword.isNotEmpty() &&
+                                    isEightCharactersLong &&
+                                    hasAtLeastOneLowerCaseLetter &&
+                                    hasAtLeastOneUpperCaseLetter &&
+                                    hasAtLeastOneSpecialCharacter,
+                            onClick = {
 
-                                    val trimmedNewPassword = newPassword.trim()
-                                    val trimmedConfirmedPassword = confirmPassword.trim()
-                                    val trimmedOldPassword = currentPassword.trim()
+                                resetErrorsAndLabels()
 
-                                    //Basic validator
-                                    if (trimmedNewPassword == trimmedConfirmedPassword) {
-                                        viewModel.changePassword(
-                                            currentPassword = trimmedOldPassword,
-                                            newPassword = trimmedNewPassword
-                                        )
-                                    } else {
-                                        newPasswordErrorLabel = "Passwords do not match!"
-                                        isNewPasswordError = true
-                                        confirmPasswordErrorLabel = "Passwords do not match!"
-                                        isConfirmPasswordError = true
-                                    }
-                                },
-                                shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = MaterialTheme.colors.primary
-                                )
-                            ) {
-                                Text(text = "Update")
-                            }
-                        }
-                        ViewModelResult.LOADING -> {
-                            CircularProgressIndicator(
-                                strokeWidth = 2.dp,
-                                modifier = Modifier.height(54.dp)
+                                val trimmedNewPassword = newPassword.trim()
+                                val trimmedConfirmedPassword = confirmPassword.trim()
+                                val trimmedOldPassword = currentPassword.trim()
+
+                                if (trimmedNewPassword == trimmedConfirmedPassword) {
+                                    showLoadingIndicator = true
+                                    doChangePassword(trimmedOldPassword, trimmedNewPassword)
+
+                                } else {
+                                    newPasswordErrorLabel = "Passwords do not match!"
+                                    isNewPasswordError = true
+                                    confirmPasswordErrorLabel = "Passwords do not match!"
+                                    isConfirmPasswordError = true
+                                }
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary
                             )
-                        }
-                        ViewModelResult.SUCCESS -> {
-                            showSuccessDialog = true
+                        ) {
+                            Text(text = "Update")
                         }
                     }
-
                 }
 
                 if (isForgotPassWord) {
@@ -477,7 +491,7 @@ fun ChangePasswordScreen(
                         ) {
                             Text(modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .clickable(uiState.viewModelResult != ViewModelResult.LOADING) {
+                                .clickable(!showLoadingIndicator) {
                                     goToLogin()
                                 }
                                 .padding(vertical = 24.dp),
@@ -492,8 +506,6 @@ fun ChangePasswordScreen(
 
         }
     }
-
-
 
     if (showSuccessDialog) {
         Dialog(
@@ -516,7 +528,7 @@ fun ChangePasswordScreen(
                 item {
                     Success(
                         title = "Successful",
-                        message = uiState.message ?: "Changed Successfully",
+                        message = successMessage,
                         onOkayPressed = onSuccessDialogOkayPressed,
                         buttonText = okayButtonText
                     )

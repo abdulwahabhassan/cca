@@ -13,9 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import co.paystack.android.model.Card
 import com.smartflowtech.cupidcustomerapp.model.domain.Bank
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
+import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
+import com.smartflowtech.cupidcustomerapp.ui.theme.red
+import com.smartflowtech.cupidcustomerapp.ui.theme.transparentPink
+import com.smartflowtech.cupidcustomerapp.ui.theme.transparentPurple
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -28,9 +35,9 @@ fun AddFundsScreenModalBottomSheet(
     goToHome: () -> Unit,
     paymentMethod: String,
     setUssdScreenContent: (String) -> Unit,
-    ussdScreenContent: String
+    ussdScreenContent: String,
+    initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
 ) {
-
     var amount: Int by rememberSaveable { mutableStateOf(0) }
     var selectedUssdBank: Bank? by remember { mutableStateOf(null) }
 
@@ -39,82 +46,79 @@ fun AddFundsScreenModalBottomSheet(
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = Color.Transparent,
         sheetElevation = 0.dp,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetContentColor = Color.Transparent,
         sheetContent = {
 
-            Column {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.12f)
-                )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(LocalConfiguration.current.screenHeightDp.dp * 0.12f)
+            )
 
-                Column(
-                    Modifier
-                        .padding(top = 2.dp)
-                        .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                        )
-                        .fillMaxSize()
+            Column(
+                Modifier
+                    .padding(top = 16.dp)
+                    .background(
+                        color = Color.White,
+                        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                    )
+                    .fillMaxSize()
+            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
+                    //Close button
+                    IconButton(
+                        onClick = {
+                            closeModalBottomSheet()
+                        },
+                        modifier = Modifier
+                            .padding(end = 8.dp),
                     ) {
-                        //Close button
-                        IconButton(
-                            onClick = {
-                                closeModalBottomSheet()
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "Close icon",
+                            tint = Color.Black
+                        )
+                    }
+                }
+                when (selectedPaymentMode) {
+                    PaymentMode.BANK_TRANSFER.name -> AddFundsBankPaymentMode(
+                        modalBottomSheetState = modalBottomSheetState,
+                        "35647729920",
+                        "Wema Bank",
+                        onBackPressed = closeModalBottomSheet
+                    )
+                    PaymentMode.USSD.name -> {
+                        AddFundsUssdPaymentMode(
+                            modalBottomSheetState = modalBottomSheetState,
+                            selectedBank = selectedUssdBank,
+                            onSelectAnotherBankClicked = {
+                                setUssdScreenContent(
+                                    AddFundsModalBottomSheetContent.Banks.contentKey
+                                )
                             },
-                            modifier = Modifier
-                                .padding(end = 8.dp),
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = "Close icon",
-                                tint = Color.Black
-                            )
-                        }
-                    }
-                    when (selectedPaymentMode) {
-                        PaymentMode.BANK_TRANSFER.name -> AddFundsBankPaymentMode(
-                            modalBottomSheetState = modalBottomSheetState,
-                            "35647729920",
-                            "Wema Bank",
-                            onBackPressed = closeModalBottomSheet
-                        )
-                        PaymentMode.USSD.name -> {
-                            AddFundsUssdPaymentMode(
-                                modalBottomSheetState = modalBottomSheetState,
-                                selectedBank = selectedUssdBank,
-                                onSelectAnotherBankClicked = {
-                                    setUssdScreenContent(
-                                        AddFundsModalBottomSheetContent.Banks.contentKey
-                                    )
-                                },
-                                onSelectUssdBank = { bank ->
-                                    selectedUssdBank = bank
-                                    setUssdScreenContent(
-                                        AddFundsModalBottomSheetContent.UssdCode.contentKey
-                                    )
-                                },
-                                onBackPressed = closeModalBottomSheet,
-                                ussdScreenContent = ussdScreenContent
-                            )
-                        }
-                        PaymentMode.CARD.name -> AddFundsSelectCardPaymentProcessor(
-                            modalBottomSheetState = modalBottomSheetState,
+                            onSelectUssdBank = { bank ->
+                                selectedUssdBank = bank
+                                setUssdScreenContent(
+                                    AddFundsModalBottomSheetContent.UssdCode.contentKey
+                                )
+                            },
                             onBackPressed = closeModalBottomSheet,
-                            onDismissErrorDialog = closeModalBottomSheet,
-                            onDismissSuccessDialog = goToHome,
-                            paymentMethod = paymentMethod,
-                            amount = amount
+                            ussdScreenContent = ussdScreenContent
                         )
                     }
+                    PaymentMode.CARD.name -> AddFundsSelectCardPaymentProcessor(
+                        modalBottomSheetState = modalBottomSheetState,
+                        onBackPressed = closeModalBottomSheet,
+                        onDismissErrorDialog = closeModalBottomSheet,
+                        onDismissSuccessDialog = goToHome,
+                        paymentMethod = paymentMethod,
+                        amount = amount,
+                        initiatePayStackPaymentState = initiatePayStackPayment
+                    )
                 }
             }
         }

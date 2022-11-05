@@ -5,8 +5,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
+import co.paystack.android.model.Card
+import com.smartflowtech.cupidcustomerapp.model.request.PayStackPayment
+import com.smartflowtech.cupidcustomerapp.model.request.PayStackPaymentRequestBody
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.AddFundsViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -53,7 +57,10 @@ fun AddFundsScreenModalBottomSheetLayer(
         setUssdScreenContent = {
             ussdScreenContent = it
         },
-        ussdScreenContent = ussdScreenContent
+        ussdScreenContent = ussdScreenContent,
+        initiatePayStackPayment = { amount: Int ->
+            viewModel.initiatePayStackPayment(amountToPay = amount)
+        }
     )
 }
 

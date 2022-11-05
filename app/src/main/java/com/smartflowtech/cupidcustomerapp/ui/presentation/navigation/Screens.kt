@@ -58,7 +58,7 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
     )
     object PaymentSettings : HomeScreen(
         "home_screen/payment_settings",
-        "PaymentSettings Methods",
+        "Payment Methods",
         R.drawable.ic_payment
     )
     object Notifications : HomeScreen(
@@ -69,8 +69,6 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
 }
 
 sealed class HomeScreenModalBottomSheetContent(val contentKey: String) {
-
-
     object DownloadTransactions : HomeScreenModalBottomSheetContent("download_transactions")
     object Success : HomeScreenModalBottomSheetContent("success")
     object UploadImage : HomeScreenModalBottomSheetContent("upload_image")

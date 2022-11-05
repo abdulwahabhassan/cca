@@ -1,9 +1,8 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation.profile
+package com.smartflowtech.cupidcustomerapp.ui.presentation.login
 
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 
-data class ProfileScreenUiState(
+data class LoginState (
     val viewModelResult: ViewModelResult,
     val message: String? = null,
-    val data: Any? = null
-)
+        )

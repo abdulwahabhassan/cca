@@ -65,9 +65,6 @@ class HomeViewModel @Inject constructor(
                     is RepositoryResult.Error -> {
                         emptyList()
                     }
-                    is RepositoryResult.Local -> {
-                        mapWalletsResponseData(walletsResult.data)
-                    }
                 }
 
                 when (transactionsResult) {
@@ -87,17 +84,6 @@ class HomeViewModel @Inject constructor(
                             viewModelResult = ViewModelResult.ERROR,
                             transactions = emptyList(),
                             message = transactionsResult.message,
-                            wallets = wallets ?: emptyList()
-                        )
-                    }
-                    is RepositoryResult.Local -> {
-                        HomeScreenUiState(
-                            viewModelResult = ViewModelResult.SUCCESS,
-                            transactions = mapTransactionsResponseData(
-                                transactionsResult.data,
-                                prefs
-                            )
-                                ?: emptyList(),
                             wallets = wallets ?: emptyList()
                         )
                     }

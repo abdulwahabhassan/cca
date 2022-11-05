@@ -24,22 +24,64 @@ import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ResetPasswordViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun ResetPasswordScreen(
-    viewModel: ResetPasswordViewModel,
-    uiState: ResetPasswordScreenUiState,
     onBackArrowPressed: () -> Unit,
     goToVerifyEmailScreen: (String) -> Unit,
+    resetPassword: suspend (email: String) -> ResetPasswordState
 ) {
 
     val scaffoldState = rememberScaffoldState()
-
     var email by rememberSaveable { mutableStateOf("") }
-
-    // Error and labels
     var isEmailError by rememberSaveable { mutableStateOf(false) }
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
+    var showLoadingIndicator: Boolean by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    fun resetErrorsAndLabels() {
+        emailErrorLabel = ""
+        isEmailError = false
+    }
+
+    fun validateEmail(email: String) {
+        if (email.isEmpty() ||
+            !email.contains("@") ||
+            !email.contains(".")
+        ) {
+            emailErrorLabel = "Input valid email"
+            isEmailError = true
+        }
+
+    }
+
+    fun doResetPassword(email: String) {
+        coroutineScope.launch {
+            val resetPasswordState = resetPassword(email)
+            when (resetPasswordState.viewModelResult) {
+                ViewModelResult.ERROR -> {
+                    showLoadingIndicator = false
+                    if (
+                        resetPasswordState.message?.isNotEmpty() == true
+                    ) {
+                        if (scaffoldState.snackbarHostState
+                                .currentSnackbarData == null
+                        ) {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = resetPasswordState.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
+                }
+                ViewModelResult.SUCCESS -> {
+                    goToVerifyEmailScreen(email)
+                }
+                else -> {}
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -49,12 +91,8 @@ fun ResetPasswordScreen(
         snackbarHost = {
             SnackbarHost(it) { data ->
                 Snackbar(
-                    backgroundColor = when (uiState.viewModelResult) {
-                        ViewModelResult.SUCCESS -> transparentGreen
-                        ViewModelResult.ERROR -> transparentPink
-                        else -> transparentPurple
-                    },
-                    contentColor = darkBlue,
+                    backgroundColor = transparentPink,
+                    contentColor = red,
                     snackbarData = data
                 )
             }
@@ -67,15 +105,6 @@ fun ResetPasswordScreen(
                 .background(MaterialTheme.colors.background),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            LaunchedEffect(uiState.viewModelResult) {
-                if (!uiState.message.isNullOrEmpty()) {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = uiState.message,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
 
             Image(
                 modifier = Modifier.fillMaxSize(),
@@ -172,49 +201,36 @@ fun ResetPasswordScreen(
                     )
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    when (uiState.viewModelResult) {
-                        ViewModelResult.INITIAL, ViewModelResult.ERROR -> {
-                            //Proceed
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(54.dp),
-                                enabled = email.isNotEmpty(),
-                                onClick = {
-                                    emailErrorLabel = ""
-                                    isEmailError = false
+                    if (showLoadingIndicator) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.height(54.dp)
+                        )
+                    } else {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(54.dp),
+                            enabled = email.isNotEmpty(),
+                            onClick = {
 
-                                    val trimmedEmail = email.trim()
+                                val trimmedEmail = email.trim()
 
-                                    //Basic validator
-                                    if (trimmedEmail.isEmpty() ||
-                                        !trimmedEmail.contains("@") ||
-                                        !trimmedEmail.contains(".")
-                                    ) {
-                                        emailErrorLabel = "Input valid email"
-                                        isEmailError = true
-                                    } else {
-                                        emailErrorLabel = ""
-                                        isEmailError = false
-                                        viewModel.forgotPasswordVerifyEmail(email = trimmedEmail)
-                                    }
-                                },
-                                shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = MaterialTheme.colors.primary
-                                )
-                            ) {
-                                Text(text = "Proceed")
-                            }
-                        }
-                        ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
-                            CircularProgressIndicator(
-                                strokeWidth = 2.dp,
-                                modifier = Modifier.height(54.dp)
+                                resetErrorsAndLabels()
+
+                                validateEmail(trimmedEmail)
+
+                                if (!isEmailError) {
+                                    showLoadingIndicator = true
+                                    doResetPassword(trimmedEmail)
+                                }
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary
                             )
-                            if (uiState.viewModelResult == ViewModelResult.SUCCESS) {
-                                goToVerifyEmailScreen(email)
-                            }
+                        ) {
+                            Text(text = "Proceed")
                         }
                     }
                     Spacer(modifier = Modifier.height(24.dp))

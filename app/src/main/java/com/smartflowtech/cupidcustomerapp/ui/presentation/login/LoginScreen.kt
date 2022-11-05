@@ -28,19 +28,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    uiState: LoginScreenUiState,
     goToHomeScreen: () -> Unit,
     goToResetPassword: (String) -> Unit,
-    finishActivity: () -> Unit
+    finishActivity: () -> Unit,
+    login: suspend (email: String, password: String) -> LoginState
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -52,11 +51,61 @@ fun LoginScreen(
     var isPasswordError by rememberSaveable(notMe) { mutableStateOf(false) }
     var emailErrorLabel by rememberSaveable(notMe) { mutableStateOf("") }
     var passwordErrorLabel by rememberSaveable(notMe) { mutableStateOf("") }
+    var showLoadingIndicator by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    fun validateEmail(trimmedEmail: String) {
+        if (trimmedEmail.isEmpty() ||
+            !trimmedEmail.contains("@") ||
+            !trimmedEmail.contains(".")
+        ) {
+            emailErrorLabel = "Input valid email"
+            isEmailError = true
+        } else {
+            emailErrorLabel = ""
+            isEmailError = false
+        }
+    }
+
+    fun validatePassword(password: String) {
+        if (password.isEmpty()) {
+            passwordErrorLabel = "Input valid password"
+            isPasswordError = true
+        } else {
+            passwordErrorLabel = ""
+            isPasswordError = false
+        }
+    }
+
+    fun doLogin(email: String, password: String) {
+        coroutineScope.launch {
+            val loginState = login(email, password)
+            when (loginState.viewModelResult) {
+                ViewModelResult.ERROR -> {
+                    showLoadingIndicator = false
+                    if (loginState.message?.isNotEmpty() == true) {
+                        if (scaffoldState.snackbarHostState
+                                .currentSnackbarData == null
+                        ) {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = loginState.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+
+                    }
+                }
+                ViewModelResult.SUCCESS -> {
+                    goToHomeScreen()
+                }
+                else -> {}
+            }
+        }
+    }
 
     BackHandler(viewModel.appConfigPreferences.onBoarded) {
         finishActivity()
     }
-
 
     Scaffold(
         modifier = Modifier
@@ -67,12 +116,8 @@ fun LoginScreen(
         snackbarHost = {
             SnackbarHost(it) { data ->
                 Snackbar(
-                    backgroundColor = when (uiState.viewModelResult) {
-                        ViewModelResult.SUCCESS -> transparentGreen
-                        ViewModelResult.ERROR -> transparentPink
-                        else -> transparentPurple
-                    },
-                    contentColor = darkBlue,
+                    backgroundColor = transparentPink,
+                    contentColor = red,
                     snackbarData = data
                 )
             }
@@ -85,15 +130,6 @@ fun LoginScreen(
                 .background(MaterialTheme.colors.background),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            LaunchedEffect(uiState.viewModelResult) {
-                if (!uiState.message.isNullOrEmpty()) {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = uiState.message,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
 
             Image(
                 modifier = Modifier.fillMaxSize(),
@@ -228,61 +264,40 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(32.dp))
 
                     //Login
-                    when (uiState.viewModelResult) {
-                        ViewModelResult.LOADING, ViewModelResult.SUCCESS -> {
-                            CircularProgressIndicator(
-                                strokeWidth = 2.dp, modifier = Modifier
-                                    .height(54.dp)
+                    if (showLoadingIndicator) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp, modifier = Modifier
+                                .height(54.dp)
+                        )
+                    } else {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(54.dp),
+                            enabled = email.isNotEmpty() && password.isNotEmpty(),
+                            onClick = {
+
+                                val trimmedEmail = email.trim()
+                                validateEmail(trimmedEmail)
+
+                                validatePassword(password)
+
+                                if (!isEmailError && !isPasswordError) {
+                                    showLoadingIndicator = true
+                                    doLogin(trimmedEmail, password)
+                                }
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary
                             )
-                            if (uiState.viewModelResult == ViewModelResult.SUCCESS) {
-                                goToHomeScreen()
-                            }
-                        }
-                        else -> {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(54.dp),
-                                enabled = email.isNotEmpty() && password.isNotEmpty(),
-                                onClick = {
-                                    val trimmedEmail = email.trim()
-
-                                    //Basic validator
-                                    if (trimmedEmail.isEmpty() ||
-                                        !trimmedEmail.contains("@") ||
-                                        !trimmedEmail.contains(".")
-                                    ) {
-                                        emailErrorLabel = "Input valid email"
-                                        isEmailError = true
-                                    } else {
-                                        emailErrorLabel = ""
-                                        isEmailError = false
-                                    }
-
-                                    if (password.isEmpty()) {
-                                        passwordErrorLabel = "Input valid password"
-                                        isPasswordError = true
-                                    } else {
-                                        passwordErrorLabel = ""
-                                        isPasswordError = false
-                                    }
-
-                                    if (!isEmailError &&
-                                        !isPasswordError
-                                    ) {
-                                        viewModel.login(LoginRequestBody(trimmedEmail, password))
-                                    }
-                                },
-                                shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = MaterialTheme.colors.primary
-                                )
-                            ) {
-                                Text(text = "Login")
-                            }
+                        ) {
+                            Text(text = "Login")
                         }
                     }
+
                     Spacer(modifier = Modifier.height(16.dp))
+
                     //Forgot password
                     Row(
                         Modifier.fillMaxWidth(),
@@ -292,8 +307,7 @@ fun LoginScreen(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
                                 .clickable(
-                                    enabled = uiState.viewModelResult
-                                            != ViewModelResult.LOADING
+                                    enabled = !showLoadingIndicator
                                 ) {
                                     goToResetPassword("reset_password_screen")
                                 }
@@ -308,8 +322,7 @@ fun LoginScreen(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .clickable(
-                                enabled = uiState.viewModelResult
-                                        != ViewModelResult.LOADING
+                                enabled = !showLoadingIndicator
                             ) {
                                 notMe = !notMe
                             }
@@ -347,6 +360,7 @@ fun LoginScreen(
     }
 
 }
+
 
 @Preview(showBackground = true)
 @Composable

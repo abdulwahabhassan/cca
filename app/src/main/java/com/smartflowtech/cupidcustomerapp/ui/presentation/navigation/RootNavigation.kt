@@ -133,7 +133,6 @@ fun RootNavigation(
             val loginViewModel = hiltViewModel<LoginViewModel>()
             LoginScreen(
                 viewModel = loginViewModel,
-                uiState = loginViewModel.loginScreenUiState,
                 goToHomeScreen = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
@@ -154,6 +153,9 @@ fun RootNavigation(
                 },
                 finishActivity = {
                     finishActivity()
+                },
+                login = { email, password ->
+                    loginViewModel.login(email, password)
                 }
             )
 
@@ -162,8 +164,6 @@ fun RootNavigation(
         composable(route = Screen.ResetPassword.route) {
             val resetPasswordViewModel = hiltViewModel<ResetPasswordViewModel>()
             ResetPasswordScreen(
-                viewModel = resetPasswordViewModel,
-                uiState = resetPasswordViewModel.resetPasswordScreenUiState,
                 goToVerifyEmailScreen = { email ->
                     verifiedEmail = email
                     rootNavHostController.navigate(
@@ -174,6 +174,9 @@ fun RootNavigation(
                 onBackArrowPressed = {
                     rootNavHostController.popBackStack()
                 },
+                resetPassword = { email ->
+                    resetPasswordViewModel.forgotPasswordVerifyEmail(email)
+                }
             )
         }
 
@@ -186,14 +189,7 @@ fun RootNavigation(
                     )
                 },
                 onBackArrowPressed = {
-                    rootNavHostController.navigate(
-                        Screen.ResetPassword.route,
-                        NavOptions
-                            .Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.ResetPassword.route, true)
-                            .build()
-                    )
+                    rootNavHostController.popBackStack()
                 },
                 verifiedEmail = verifiedEmail
             )
@@ -202,8 +198,6 @@ fun RootNavigation(
         composable(route = Screen.ChangePassword.route) {
             val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
             ChangePasswordScreen(
-                viewModel = changePasswordViewModel,
-                uiState = changePasswordViewModel.changePasswordScreenUiState,
                 onSuccessDialogOkayPressed = {
                     rootNavHostController.navigate(
                         Screen.Login.route,
@@ -231,7 +225,10 @@ fun RootNavigation(
                     rootNavHostController.popBackStack()
                 },
                 isForgotPassWord = true,
-                okayButtonText = "Go To Dashboard"
+                okayButtonText = "Go To Dashboard",
+                changePassword = { currentPassword, newPassword ->
+                    changePasswordViewModel.changePassword(currentPassword, newPassword)
+                }
             )
         }
 

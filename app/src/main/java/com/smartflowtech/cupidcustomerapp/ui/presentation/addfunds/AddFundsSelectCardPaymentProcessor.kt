@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,8 +15,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import co.paystack.android.model.Card
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentGateway
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMethodPreference
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PaymentError
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -31,7 +31,8 @@ fun AddFundsSelectCardPaymentProcessor(
     onDismissErrorDialog: () -> Unit,
     onDismissSuccessDialog: () -> Unit,
     paymentMethod: String,
-    amount: Int
+    amount: Int,
+    initiatePayStackPaymentState: suspend (amount: Int) -> PayStackPaymentState,
 ) {
 
     var selectedCardProcessor by remember { mutableStateOf(paymentMethod) }
@@ -40,7 +41,6 @@ fun AddFundsSelectCardPaymentProcessor(
     var showError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var transactionReference by remember { mutableStateOf("") }
-    val ctx = LocalContext.current
 
     BackHandler(modalBottomSheetState.isVisible) {
         onBackPressed()
@@ -91,12 +91,6 @@ fun AddFundsSelectCardPaymentProcessor(
                             selectedCardProcessor = ""
                             transactionReference = reference
                             showSuccess = true
-                            //send ref to business owner for confirmation
-                            Toast.makeText(
-                                ctx,
-                                "Success!",
-                                Toast.LENGTH_LONG
-                            ).show()
                         },
                         onPaymentError = { message, reference ->
                             showCardDetailsForm = false
@@ -104,13 +98,9 @@ fun AddFundsSelectCardPaymentProcessor(
                             errorMessage = message
                             transactionReference = reference
                             showError = true
-                            Toast.makeText(
-                                ctx,
-                                "Error!",
-                                Toast.LENGTH_LONG
-                            ).show()
                         },
-                        amount = amount
+                        amount = amount,
+                        initiatePayStackPayment = initiatePayStackPaymentState
                     )
                 }
             }
@@ -192,7 +182,8 @@ fun AddFundsSelectedCardPaymentProcessorPreview() {
             {},
             {},
             PaymentMethodPreference.ASK_ALWAYS.name,
-            100
+            100,
+            { PayStackPaymentState(ViewModelResult.INITIAL) }
         )
     }
 }

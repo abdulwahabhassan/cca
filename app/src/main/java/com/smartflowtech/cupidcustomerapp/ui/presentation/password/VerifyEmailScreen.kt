@@ -32,9 +32,6 @@ fun VerifyEmailScreen(
     verifiedEmail: String
 ) {
 
-    BackHandler(true) {
-        onBackArrowPressed()
-    }
     val scaffoldState = rememberScaffoldState()
     val ctx = LocalContext.current
 

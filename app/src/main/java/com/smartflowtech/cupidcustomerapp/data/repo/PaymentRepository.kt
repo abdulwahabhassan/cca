@@ -1,8 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.data.repo
 
 import com.smartflowtech.cupidcustomerapp.data.datasource.RemoteDatasource
-import com.smartflowtech.cupidcustomerapp.model.request.VerifyEmailRequestBody
-import com.smartflowtech.cupidcustomerapp.model.request.VerifyPaymentRequestBody
+import com.smartflowtech.cupidcustomerapp.model.request.PayStackPaymentRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.NetworkResult
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.network.NetworkConnectivityManager
@@ -17,15 +16,15 @@ class PaymentRepository @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) : BaseRepository() {
 
-    suspend fun verifyPayStackPayment(
+    suspend fun initiatePayStackPayment(
         token: String,
-        verifyPaymentRequestBody: VerifyPaymentRequestBody
+        payStackPaymentRequestBody: PayStackPaymentRequestBody
     ) = withContext(dispatcher) {
         when (
             val networkResult = coroutineHandler(dispatcher, networkConnectivityManager) {
-                remoteDatasource.verifyPayStackPayment(
+                remoteDatasource.initiatePayStackPayment(
                     token = token,
-                    verifyPaymentRequestBody = verifyPaymentRequestBody
+                    payStackPaymentRequestBody = payStackPaymentRequestBody
                 )
             }
         ) {

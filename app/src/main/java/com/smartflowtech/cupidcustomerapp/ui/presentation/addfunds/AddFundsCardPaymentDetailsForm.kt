@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,74 +26,101 @@ import co.paystack.android.PaystackSdk
 import co.paystack.android.Transaction
 import co.paystack.android.model.Card
 import co.paystack.android.model.Charge
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.findActivity
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddFundsCardPaymentDetailsForm(
     onBackPressed: () -> Unit,
     onPaymentSuccess: (reference: String) -> Unit,
     onPaymentError: (message: String, reference: String) -> Unit,
-    amount: Int
+    amount: Int,
+    initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState
 ) {
 
     var cardNumber by rememberSaveable { mutableStateOf("5060666666666666666") }
     var cvv by rememberSaveable { mutableStateOf("123") }
     var month by rememberSaveable { mutableStateOf("") }
     var year by rememberSaveable { mutableStateOf("") }
-    var cardNumberErrorLabel by rememberSaveable { mutableStateOf("") }
-    var cvvErrorLabel by rememberSaveable { mutableStateOf("") }
+    val cardNumberErrorLabel by rememberSaveable { mutableStateOf("") }
+    val cvvErrorLabel by rememberSaveable { mutableStateOf("") }
     var monthErrorLabel by rememberSaveable { mutableStateOf("") }
     var yearErrorLabel by rememberSaveable { mutableStateOf("") }
-    var isCardNumberError by rememberSaveable { mutableStateOf(false) }
-    var isCvvError by rememberSaveable { mutableStateOf(false) }
+    val isCardNumberError by rememberSaveable { mutableStateOf(false) }
+    val isCvvError by rememberSaveable { mutableStateOf(false) }
     var isMonthError by rememberSaveable { mutableStateOf(false) }
     var isYearError by rememberSaveable { mutableStateOf(false) }
     val ctx = LocalContext.current
     var showLoadingIndicator by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    fun chargeCardWithPayStack(card: Card) {
+    fun chargeCardWithAccessCode(card: Card, accessCode: String) {
+
+        val charge = Charge()
+            .setAccessCode(accessCode)
+            .setCard(card)
+
+        PaystackSdk.chargeCard(
+            ctx.findActivity(),
+            charge,
+            object : Paystack.TransactionCallback {
+                override fun onSuccess(transaction: Transaction?) {
+                    onPaymentSuccess(transaction?.reference ?: "No ref")
+                }
+
+                override fun beforeValidate(transaction: Transaction?) {}
+
+                override fun onError(
+                    error: Throwable?,
+                    transaction: Transaction?
+                ) {
+                    onPaymentError(
+                        error?.message ?: "No message",
+                        transaction?.reference ?: "No ref"
+                    )
+                    showLoadingIndicator = false
+                }
+
+            })
+    }
+
+    fun initiatePayStackPayment(card: Card) {
         if (card.isValid) {
-            val charge = Charge()
-                .setAmount(amount * 100)
-                .setEmail("devhassan.org@gmail.com")
-                .setCard(card)
-
-            PaystackSdk.chargeCard(
-                ctx.findActivity(),
-                charge,
-                object : Paystack.TransactionCallback {
-                    override fun onSuccess(transaction: Transaction?) {
-                        onPaymentSuccess(transaction?.reference ?: "No ref")
-                    }
-
-                    override fun beforeValidate(transaction: Transaction?) {
+            coroutineScope.launch {
+                val paymentState = initiatePayStackPayment(amount)
+                when (paymentState.viewModelResult) {
+                    ViewModelResult.ERROR -> {
+                        showLoadingIndicator = false
                         Toast.makeText(
                             ctx,
-                            "Validating.. ${transaction?.reference}",
-                            Toast.LENGTH_SHORT
+                            paymentState.message ?: "Oops! An error occurred!, Retry",
+                            Toast.LENGTH_LONG
                         ).show()
                     }
+                    ViewModelResult.SUCCESS -> {
+                        paymentState.data?.accessCode?.let { accessCode ->
+                            chargeCardWithAccessCode(card, accessCode)
+                        } ?: Toast.makeText(
+                            ctx,
+                            paymentState.message ?: "Oops! Access code not found!",
+                            Toast.LENGTH_LONG
+                        ).show()
 
-                    override fun onError(
-                        error: Throwable?,
-                        transaction: Transaction?
-                    ) {
-                        onPaymentError(
-                            error?.message ?: "No message",
-                            transaction?.reference ?: "No ref"
-                        )
-                        showLoadingIndicator = false
                     }
+                    else -> {}
+                }
 
-                })
+            }
+
         } else {
             Toast.makeText(
                 ctx,
-                "Invalid Card: Please select a valid card",
+                "Invalid Card! Please try a valid card",
                 Toast.LENGTH_SHORT
             ).show()
             showLoadingIndicator = false
@@ -262,6 +288,8 @@ fun AddFundsCardPaymentDetailsForm(
                         .height(54.dp),
                     enabled = cardNumber.isNotEmpty() && month.isNotEmpty() && year.isNotEmpty() && cvv.isNotEmpty(),
                     onClick = {
+                        showLoadingIndicator = true
+
                         val trimmedCardNumber = cardNumber.trim()
                         val trimmedMonth = month.trim()
                         val trimmedYear = year.trim()
@@ -285,8 +313,6 @@ fun AddFundsCardPaymentDetailsForm(
 
                         if (!isCardNumberError && !isMonthError && !isCvvError) {
 
-                            showLoadingIndicator = true
-
                             val card = Card(
                                 trimmedCardNumber,
                                 trimmedMonth.toInt(),
@@ -294,7 +320,7 @@ fun AddFundsCardPaymentDetailsForm(
                                 trimmedCvv
                             )
 
-                            chargeCardWithPayStack(card)
+                            initiatePayStackPayment(card)
 
                         } else {
                             Toast.makeText(
@@ -346,6 +372,12 @@ fun AddFundsCardPaymentDetailsForm(
 @Composable
 fun CardDetailsFormPreview() {
     CupidCustomerAppTheme {
-        AddFundsCardPaymentDetailsForm({}, {}, { message, reference -> }, 100)
+        AddFundsCardPaymentDetailsForm(
+            {},
+            {},
+            { message, reference -> },
+            100,
+            { PayStackPaymentState(ViewModelResult.INITIAL) },
+        )
     }
 }
