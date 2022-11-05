@@ -66,46 +66,48 @@ fun RootNavigation(
     ) {
 
         composable(route = Screen.Splash.route) {
-            val splashViewModel = hiltViewModel<SplashViewModel>()
-            SplashScreen(
-                onboarded = splashViewModel.appConfigPreferences.onBoarded,
-                loggedIn = splashViewModel.appConfigPreferences.loggedIn,
-                goToHomeScreen = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route,
-                        NavOptions
-                            .Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.Splash.route, true)
-                            .build()
-                    )
-                    rootNavHostController.navigate(
-                        Screen.Home.route,
-                        NavOptions
-                            .Builder()
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
-                },
-                goToGetStartedScreen = {
-                    rootNavHostController.navigate(
-                        Screen.GetStartedFirst.route,
-                        NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.Splash.route, true)
-                            .build()
-                    )
-                },
-                goToLoginScreen = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route,
-                        NavOptions
-                            .Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.Splash.route, true)
-                            .build()
-                    )
-                })
+            hiltViewModel<SplashViewModel>().apply {
+                SplashScreen(
+                    onboarded = appConfigPreferences.onBoarded,
+                    loggedIn = appConfigPreferences.loggedIn,
+                    goToHomeScreen = {
+                        rootNavHostController.navigate(
+                            Screen.Login.route,
+                            NavOptions
+                                .Builder()
+                                .setLaunchSingleTop(true)
+                                .setPopUpTo(Screen.Splash.route, true)
+                                .build()
+                        )
+                        rootNavHostController.navigate(
+                            Screen.Home.route,
+                            NavOptions
+                                .Builder()
+                                .setLaunchSingleTop(true)
+                                .build()
+                        )
+                    },
+                    goToGetStartedScreen = {
+                        rootNavHostController.navigate(
+                            Screen.GetStartedFirst.route,
+                            NavOptions.Builder()
+                                .setLaunchSingleTop(true)
+                                .setPopUpTo(Screen.Splash.route, true)
+                                .build()
+                        )
+                    },
+                    goToLoginScreen = {
+                        rootNavHostController.navigate(
+                            Screen.Login.route,
+                            NavOptions
+                                .Builder()
+                                .setLaunchSingleTop(true)
+                                .setPopUpTo(Screen.Splash.route, true)
+                                .build()
+                        )
+                    })
+            }
+
         }
         composable(route = Screen.GetStartedFirst.route) {
             GetStartedFirstScreen {
@@ -116,68 +118,71 @@ fun RootNavigation(
             }
         }
         composable(route = Screen.GetStartedSecond.route) {
-            val getStartedViewModel = hiltViewModel<GetStartedViewModel>()
-            GetStartedSecondScreen(
-                goToLoginScreen = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route,
-                        NavOptions.Builder().setLaunchSingleTop(true).build()
-                    )
-                },
-                getStarted = {
-                    getStartedViewModel.updateStarted(true)
-                }
-            )
+            hiltViewModel<GetStartedViewModel>().apply {
+                GetStartedSecondScreen(
+                    goToLoginScreen = {
+                        rootNavHostController.navigate(
+                            Screen.Login.route,
+                            NavOptions.Builder().setLaunchSingleTop(true).build()
+                        )
+                    },
+                    getStarted = { updateStarted(true) }
+                )
+            }
+
         }
         composable(route = Screen.Login.route) {
-            val loginViewModel = hiltViewModel<LoginViewModel>()
-            LoginScreen(
-                viewModel = loginViewModel,
-                goToHomeScreen = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route,
-                        NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.Splash.route, true)
-                            .build()
-                    )
-                    rootNavHostController.navigate(
-                        Screen.Home.route,
-                    )
-                },
-                goToResetPassword = {
-                    rootNavHostController.navigate(
-                        Screen.ResetPassword.route,
-                        NavOptions.Builder().setLaunchSingleTop(true).build()
-                    )
-                },
-                finishActivity = {
-                    finishActivity()
-                },
-                login = { email, password ->
-                    loginViewModel.login(email, password)
-                }
-            )
+            hiltViewModel<LoginViewModel>().apply {
+                LoginScreen(
+                    goToHomeScreen = {
+                        rootNavHostController.navigate(
+                            Screen.Login.route,
+                            NavOptions.Builder()
+                                .setLaunchSingleTop(true)
+                                .setPopUpTo(Screen.Splash.route, true)
+                                .build()
+                        )
+                        rootNavHostController.navigate(
+                            Screen.Home.route,
+                        )
+                    },
+                    goToResetPassword = {
+                        rootNavHostController.navigate(
+                            Screen.ResetPassword.route,
+                            NavOptions.Builder().setLaunchSingleTop(true).build()
+                        )
+                    },
+                    finishActivity = {
+                        finishActivity()
+                    },
+                    login = { email, password -> login(email, password) },
+                    userEmail = appConfigPreferences.userEmail,
+                    username = appConfigPreferences.userName,
+                    onboarded = appConfigPreferences.onBoarded
+                )
+            }
 
         }
 
         composable(route = Screen.ResetPassword.route) {
-            val resetPasswordViewModel = hiltViewModel<ResetPasswordViewModel>()
-            ResetPasswordScreen(
-                goToVerifyEmailScreen = { email ->
-                    verifiedEmail = email
-                    rootNavHostController.navigate(
-                        Screen.VerifyEmail.route,
-                        NavOptions.Builder().setLaunchSingleTop(true).build()
-                    )
-                },
-                onBackArrowPressed = {
-                    rootNavHostController.popBackStack()
-                },
-                resetPassword = { email ->
-                    resetPasswordViewModel.forgotPasswordVerifyEmail(email)
-                }
-            )
+            hiltViewModel<ResetPasswordViewModel>().apply {
+                ResetPasswordScreen(
+                    goToVerifyEmailScreen = { email ->
+                        verifiedEmail = email
+                        rootNavHostController.navigate(
+                            Screen.VerifyEmail.route,
+                            NavOptions.Builder().setLaunchSingleTop(true).build()
+                        )
+                    },
+                    onBackArrowPressed = {
+                        rootNavHostController.popBackStack()
+                    },
+                    resetPassword = { email ->
+                        forgotPasswordVerifyEmail(email)
+                    }
+                )
+            }
+
         }
 
         composable(route = Screen.VerifyEmail.route) {
@@ -196,40 +201,42 @@ fun RootNavigation(
         }
 
         composable(route = Screen.ChangePassword.route) {
-            val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
-            ChangePasswordScreen(
-                onSuccessDialogOkayPressed = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route,
-                        NavOptions
-                            .Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.Splash.route, true)
-                            .build()
-                    )
-                    rootNavHostController.navigate(
-                        Screen.Home.route,
-                    )
-                },
-                goToLogin = {
-                    rootNavHostController.navigate(
-                        Screen.Login.route,
-                        NavOptions
-                            .Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(Screen.Splash.route, true)
-                            .build()
-                    )
-                },
-                onBackArrowPressed = {
-                    rootNavHostController.popBackStack()
-                },
-                isForgotPassWord = true,
-                okayButtonText = "Go To Dashboard",
-                changePassword = { currentPassword, newPassword ->
-                    changePasswordViewModel.changePassword(currentPassword, newPassword)
-                }
-            )
+            hiltViewModel<ChangePasswordViewModel>().apply {
+                ChangePasswordScreen(
+                    onSuccessDialogOkayPressed = {
+                        rootNavHostController.navigate(
+                            Screen.Login.route,
+                            NavOptions
+                                .Builder()
+                                .setLaunchSingleTop(true)
+                                .setPopUpTo(Screen.Splash.route, true)
+                                .build()
+                        )
+                        rootNavHostController.navigate(
+                            Screen.Home.route,
+                        )
+                    },
+                    goToLogin = {
+                        rootNavHostController.navigate(
+                            Screen.Login.route,
+                            NavOptions
+                                .Builder()
+                                .setLaunchSingleTop(true)
+                                .setPopUpTo(Screen.Splash.route, true)
+                                .build()
+                        )
+                    },
+                    onBackArrowPressed = {
+                        rootNavHostController.popBackStack()
+                    },
+                    isForgotPassWord = true,
+                    okayButtonText = "Go To Dashboard",
+                    changePassword = { currentPassword, newPassword ->
+                        changePassword(currentPassword, newPassword)
+                    }
+                )
+            }
+
         }
 
 
@@ -284,14 +291,17 @@ fun RootNavigation(
         }
 
         composable(route = Screen.AddFunds.route) {
-            val addFundsViewModel = hiltViewModel<AddFundsViewModel>()
-            AddFundsScreenModalBottomSheetLayer(
-                viewModel = addFundsViewModel,
-                goBackToHomeScreen = {
-                    rootNavHostController.popBackStack()
-                }
-            )
-
+            hiltViewModel<AddFundsViewModel>().apply {
+                AddFundsScreenModalBottomSheetLayer(
+                    goBackToHomeScreen = {
+                        rootNavHostController.popBackStack()
+                    },
+                    initiatePayStackPayment = { amount: Int ->
+                        initiatePayStackPayment(amountToPay = amount)
+                    },
+                    paymentMethod = appConfigPreferences.paymentMethod
+                )
+            }
         }
 
     }

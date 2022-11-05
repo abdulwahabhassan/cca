@@ -200,7 +200,7 @@ fun TransactionsPreview() {
             {},
             {},
             {},
-            HomeScreenUiState(ViewModelResult.INITIAL, listOf(), "", listOf()),
+            HomeScreenUiState(ViewModelResult.SUCCESS, listOf(), "", listOf()),
             BottomSheetScaffoldState(
                 DrawerState(DrawerValue.Closed),
                 BottomSheetState(BottomSheetValue.Collapsed),

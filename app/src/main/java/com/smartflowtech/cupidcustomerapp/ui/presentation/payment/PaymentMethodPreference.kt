@@ -26,7 +26,7 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 
 
 @Composable
-fun PaymentSettings(viewModel: SettingsViewModel, paymentMethod: String) {
+fun PaymentSettings(paymentMethod: String, updatePaymentMethod: (String) -> Unit) {
     var selectedPaymentMethod by remember { mutableStateOf(paymentMethod) }
     LazyColumn(
         modifier = Modifier
@@ -43,7 +43,7 @@ fun PaymentSettings(viewModel: SettingsViewModel, paymentMethod: String) {
                 paymentMethodPref = item,
                 onClick = { paymentMethodPref ->
                     selectedPaymentMethod = paymentMethodPref.name
-                    viewModel.updatePaymentMethod(paymentMethodPref.name)
+                    updatePaymentMethod(paymentMethodPref.name)
                 },
                 isSelected = selectedPaymentMethod == item.name
             )

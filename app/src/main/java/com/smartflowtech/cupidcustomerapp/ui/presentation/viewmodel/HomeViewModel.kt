@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
 
     var homeScreenUiState by mutableStateOf(
         HomeScreenUiState(
-            viewModelResult = ViewModelResult.INITIAL
+            viewModelResult = ViewModelResult.LOADING
         )
     )
         private set

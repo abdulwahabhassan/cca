@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.NotificationItem
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Header
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.NotificationsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -27,7 +28,6 @@ import java.time.LocalDateTime
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun Notifications(
-    viewModel: NotificationsViewModel,
     onBackPressed: () -> Unit,
     uiState: NotificationsScreenUiState
 ) {
@@ -85,14 +85,15 @@ fun Notifications(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 notifications.forEach { (header, notifications) ->
-                    stickyHeader {
-                        Header(header, bgColor = lightGrey, fontWeight = FontWeight.Bold)
-                    }
+                    if (notifications.isNotEmpty()) {
+                        stickyHeader {
+                            Header(header, bgColor = lightGrey, fontWeight = FontWeight.Bold)
+                        }
 
-                    items(notifications) { item ->
-                        Notification(item)
+                        items(notifications) { item ->
+                            Notification(item)
+                        }
                     }
-
                 }
             }
         }
@@ -104,6 +105,12 @@ fun Notifications(
 @Preview(showBackground = true)
 fun PreviewNotificationsList() {
     CupidCustomerAppTheme {
-//        Notifications(onBackPressed = {})
+        Notifications(
+            onBackPressed = {},
+            uiState = NotificationsScreenUiState(
+                ViewModelResult.LOADING,
+                notifications = Util.getListOfNotifications()
+            )
+        )
     }
 }

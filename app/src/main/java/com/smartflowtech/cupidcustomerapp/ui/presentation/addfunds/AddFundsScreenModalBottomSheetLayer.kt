@@ -5,19 +5,15 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
-import co.paystack.android.model.Card
-import com.smartflowtech.cupidcustomerapp.model.request.PayStackPayment
-import com.smartflowtech.cupidcustomerapp.model.request.PayStackPaymentRequestBody
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.AddFundsViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddFundsScreenModalBottomSheetLayer(
-    viewModel: AddFundsViewModel,
-    goBackToHomeScreen: () -> Unit
+    goBackToHomeScreen: () -> Unit,
+    initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
+    paymentMethod: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(
@@ -53,14 +49,12 @@ fun AddFundsScreenModalBottomSheetLayer(
             }
         },
         goToHome = goBackToHomeScreen,
-        paymentMethod = viewModel.appConfigPreferences.paymentMethod,
+        paymentMethod = paymentMethod,
         setUssdScreenContent = {
             ussdScreenContent = it
         },
         ussdScreenContent = ussdScreenContent,
-        initiatePayStackPayment = { amount: Int ->
-            viewModel.initiatePayStackPayment(amountToPay = amount)
-        }
+        initiatePayStackPayment = initiatePayStackPayment
     )
 }
 

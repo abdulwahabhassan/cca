@@ -4,6 +4,7 @@ import com.smartflowtech.cupidcustomerapp.data.api.CupidApiErrorResponse
 import com.smartflowtech.cupidcustomerapp.data.api.CupidApiResponse
 import com.smartflowtech.cupidcustomerapp.model.result.NetworkResult
 import com.smartflowtech.cupidcustomerapp.network.NetworkConnectivityManager
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,7 +29,7 @@ open class BaseRepository {
                 } catch (e: HttpException) {
                     Timber.d("Http Error Http Status Code - ${e.code()} ")
                     val response = handleHttpException(e)
-                    NetworkResult.Error(message = response?.message)
+                    NetworkResult.Error(message = response?.message?.capitalizeFirstLetter())
                 } catch (e: Exception) {
                     Timber.d("Exception Error ${e.message}")
                     NetworkResult.Error(message = e.localizedMessage)
@@ -48,7 +49,7 @@ open class BaseRepository {
             }
         } catch (t: Throwable) {
             Timber.d("Error while handling httpException $t")
-            CupidApiErrorResponse(message = "Whoops, something went wrong! ${e.code()}")
+            CupidApiErrorResponse(message = "Oops! Service is unavailable")
         }
     }
 

@@ -29,23 +29,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.LoginViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel,
     goToHomeScreen: () -> Unit,
     goToResetPassword: (String) -> Unit,
     finishActivity: () -> Unit,
-    login: suspend (email: String, password: String) -> LoginState
+    login: suspend (email: String, password: String) -> LoginState,
+    username: String,
+    userEmail: String,
+    onboarded: Boolean
 ) {
 
     val scaffoldState = rememberScaffoldState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var notMe by rememberSaveable { mutableStateOf(false) }
-    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else viewModel.appConfigPreferences.userEmail) }
+    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else userEmail) }
     var password by rememberSaveable(notMe) { mutableStateOf("") }
     var isEmailError by rememberSaveable(notMe) { mutableStateOf(false) }
     var isPasswordError by rememberSaveable(notMe) { mutableStateOf(false) }
@@ -103,7 +104,7 @@ fun LoginScreen(
         }
     }
 
-    BackHandler(viewModel.appConfigPreferences.onBoarded) {
+    BackHandler(onboarded) {
         finishActivity()
     }
 
@@ -171,8 +172,8 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.CenterStart),
-                        text = if (!notMe && viewModel.appConfigPreferences.userName.isNotEmpty())
-                            "Welcome Back, ${viewModel.appConfigPreferences.userName}"
+                        text = if (!notMe && username.isNotEmpty())
+                            "Welcome Back, ${username}"
                         else
                             "Login to your account",
                         style = MaterialTheme.typography.h6,
@@ -366,6 +367,14 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     CupidCustomerAppTheme {
-        //LoginScreen({  }, {}, {}, { _ -> })
+        LoginScreen(
+            goToHomeScreen = {},
+            goToResetPassword = {},
+            finishActivity = {},
+            login = { _, _ -> LoginState((ViewModelResult.SUCCESS)) },
+            username = "Hassan Abdulwahab",
+            userEmail = "abc@gmail.com",
+            onboarded = true
+        )
     }
 }

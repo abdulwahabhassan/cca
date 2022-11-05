@@ -27,9 +27,10 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 fun NotificationSettings(
-    viewModel: SettingsViewModel,
     emailNotifications: Boolean,
-    pushNotifications: Boolean
+    pushNotifications: Boolean,
+    updateEmailNotification: (Boolean) -> Unit,
+    updatePushNotification: (Boolean) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth(), contentPadding = PaddingValues(top = 40.dp)) {
         items(items = Util.getListOfNotificationSettingsItems()) { item ->
@@ -73,10 +74,10 @@ fun NotificationSettings(
                     }, onToggled = { bool ->
                         when (item.name) {
                             "Email Notifications" -> {
-                                viewModel.updateEmailNotifications(bool)
+                                updateEmailNotification(bool)
                             }
                             "Push Notifications" -> {
-                                viewModel.updatePushNotifications(bool)
+                                updatePushNotification(bool)
                             }
                             else -> {}
                         }

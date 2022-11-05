@@ -26,7 +26,7 @@ class NotificationsViewModel @Inject constructor(
 
     var notificationsScreenUiState by mutableStateOf(
         NotificationsScreenUiState(
-            viewModelResult = ViewModelResult.INITIAL,
+            viewModelResult = ViewModelResult.LOADING,
             notifications = emptyList()
         )
     )

@@ -20,7 +20,7 @@ class StationsViewModel @Inject constructor(
     private val stationsRepository: StationsRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
-    var locationScreenUiState by mutableStateOf(LocationScreenUiState(ViewModelResult.INITIAL))
+    var locationScreenUiState by mutableStateOf(LocationScreenUiState(ViewModelResult.LOADING))
         private set
 
     fun vendorStations() {

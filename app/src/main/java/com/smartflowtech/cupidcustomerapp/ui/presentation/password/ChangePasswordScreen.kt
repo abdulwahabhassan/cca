@@ -31,7 +31,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.ChangePasswordViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -486,18 +485,24 @@ fun ChangePasswordScreen(
                 if (isForgotPassWord) {
                     item {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .clickable(!showLoadingIndicator) {
-                                    goToLogin()
-                                }
-                                .padding(vertical = 24.dp),
-                                text = "Back to Login",
-                                color = darkBlue
-                            )
+                            Row(
+                                modifier = Modifier
+                                    .padding(vertical = 24.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable(!showLoadingIndicator) {
+                                        goToLogin()
+                                    }
+                                    .padding(8.dp),
+                            ) {
+                                Text(
+                                    modifier = Modifier,
+                                    text = "Back to Login",
+                                    color = darkBlue
+                                )
+                            }
                         }
                     }
                 }
@@ -542,6 +547,11 @@ fun ChangePasswordScreen(
 @Preview(showBackground = true)
 fun ForgotPasswordPreview() {
     CupidCustomerAppTheme {
-        //ChangePassword()
+        ChangePasswordScreen(
+            onSuccessDialogOkayPressed = { },
+            isForgotPassWord = true,
+            okayButtonText = "Update",
+            changePassword = { _, _ -> ChangePasswordState(ViewModelResult.SUCCESS) }
+        )
     }
 }

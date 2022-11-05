@@ -183,7 +183,7 @@ fun AddFundsSelectedCardPaymentProcessorPreview() {
             {},
             PaymentMethodPreference.ASK_ALWAYS.name,
             100,
-            { PayStackPaymentState(ViewModelResult.INITIAL) }
+            { PayStackPaymentState(ViewModelResult.SUCCESS) }
         )
     }
 }

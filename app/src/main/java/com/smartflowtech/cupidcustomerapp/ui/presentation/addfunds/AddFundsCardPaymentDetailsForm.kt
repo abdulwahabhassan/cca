@@ -109,7 +109,9 @@ fun AddFundsCardPaymentDetailsForm(
                             ctx,
                             paymentState.message ?: "Oops! Access code not found!",
                             Toast.LENGTH_LONG
-                        ).show()
+                        ).show().also {
+                            showLoadingIndicator = false
+                        }
 
                     }
                     else -> {}
@@ -377,7 +379,7 @@ fun CardDetailsFormPreview() {
             {},
             { message, reference -> },
             100,
-            { PayStackPaymentState(ViewModelResult.INITIAL) },
+            { PayStackPaymentState(ViewModelResult.SUCCESS) },
         )
     }
 }

@@ -68,7 +68,9 @@ fun BottomNavBarNavigation(
             ) {
                 fadeOut(animationSpec = snap())
             } else if ((initialState.destination.route == HomeScreen.Transactions.route ||
-                        initialState.destination.route == HomeScreen.Profile.route) &&
+                        initialState.destination.route == HomeScreen.Profile.route ||
+                        initialState.destination.route == HomeScreen.Notifications.route
+                        ) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
                 slideOutVertically { -it }
@@ -85,7 +87,8 @@ fun BottomNavBarNavigation(
         },
         popExitTransition = {
             if ((initialState.destination.route == HomeScreen.Transactions.route ||
-                        initialState.destination.route == HomeScreen.Profile.route) &&
+                        initialState.destination.route == HomeScreen.Profile.route ||
+                        initialState.destination.route == HomeScreen.Notifications.route) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
                 fadeOut(snap())
@@ -142,92 +145,114 @@ fun BottomNavBarNavigation(
             )
         }
         composable(HomeScreen.Location.route) {
-            val stationViewModel = hiltViewModel<StationsViewModel>()
-            Location(
-                onStationFilterClicked = onStationFilterClicked,
-                stationFilter = stationViewModel.appConfigPreferences.stationFilter,
-                onStationSelected = onStationSelected,
-                onBackPressed = onBackPressed
-            )
+            hiltViewModel<StationsViewModel>().apply {
+                Location(
+                    onStationFilterClicked = onStationFilterClicked,
+                    stationFilter = appConfigPreferences.stationFilter,
+                    onStationSelected = onStationSelected,
+                    onBackPressed = onBackPressed
+                )
+            }
+
         }
         composable(HomeScreen.Settings.route) {
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            Settings(
-                viewModel = settingsViewModel,
-                onLogOutClicked = onLogOutClicked,
-                onEditProfileClicked = {
-                    bottomNavHostController.navigate(
-                        route = HomeScreen.Profile.route,
-                        navOptions = navOptions { launchSingleTop = true })
-                },
-                onSecurityClicked = {
-                    bottomNavHostController.navigate(
-                        route = HomeScreen.SecuritySettings.route,
-                        navOptions = navOptions { launchSingleTop = true })
-                },
-                onNotificationClicked = {
-                    bottomNavHostController.navigate(
-                        route = HomeScreen.NotificationSettings.route,
-                        navOptions = navOptions { launchSingleTop = true })
-                },
-                onPaymentClicked = {
-                    bottomNavHostController.navigate(
-                        route = HomeScreen.PaymentSettings.route,
-                        navOptions = navOptions { launchSingleTop = true })
-                },
-                onBackPressed = onBackPressed
-            )
+            hiltViewModel<SettingsViewModel>().apply {
+                Settings(
+                    onEditProfileClicked = {
+                        bottomNavHostController.navigate(
+                            route = HomeScreen.Profile.route,
+                            navOptions = navOptions { launchSingleTop = true })
+                    },
+                    onSecurityClicked = {
+                        bottomNavHostController.navigate(
+                            route = HomeScreen.SecuritySettings.route,
+                            navOptions = navOptions { launchSingleTop = true })
+                    },
+                    onNotificationClicked = {
+                        bottomNavHostController.navigate(
+                            route = HomeScreen.NotificationSettings.route,
+                            navOptions = navOptions { launchSingleTop = true })
+                    },
+                    onPaymentClicked = {
+                        bottomNavHostController.navigate(
+                            route = HomeScreen.PaymentSettings.route,
+                            navOptions = navOptions { launchSingleTop = true })
+                    },
+                    onBackPressed = onBackPressed,
+                    logOut = {
+                        logOut()
+                        onLogOutClicked()
+                    }
+                )
+            }
+
         }
         composable(HomeScreen.Profile.route) {
-            val profileViewModel = hiltViewModel<ProfileViewModel>()
-            Profile(
-                onUploadImageClicked = onUploadImageClicked,
-                onProfileUpdateSuccess = onProfileUpdateSuccess,
-                profilePicture = profilePicture,
-                onBackPressed = onBackPressed,
-                userFullName = userFullName,
-                userName = userName,
-                updateProfile = { firstname, lastname, email ->
-                    profileViewModel.updateProfile(firstname, lastname, email)
+            hiltViewModel<ProfileViewModel>().apply {
+                Profile(
+                    onUploadImageClicked = onUploadImageClicked,
+                    onProfileUpdateSuccess = onProfileUpdateSuccess,
+                    profilePicture = profilePicture,
+                    onBackPressed = onBackPressed,
+                    userFullName = userFullName,
+                    userName = userName,
+                    updateProfile = { firstname, lastname, email ->
+                        updateProfile(firstname, lastname, email)
 
-                }
-            )
+                    }
+                )
+            }
+
         }
         composable(HomeScreen.SecuritySettings.route) {
-            val changePasswordViewModel = hiltViewModel<ChangePasswordViewModel>()
-            ChangePasswordScreen(
-                onSuccessDialogOkayPressed = onBackPressed,
-                isForgotPassWord = false,
-                okayButtonText = "Okay",
-                changePassword = { currentPassword, newPassword ->
-                    changePasswordViewModel.changePassword(currentPassword, newPassword)
-                }
-            )
+            hiltViewModel<ChangePasswordViewModel>().apply {
+                ChangePasswordScreen(
+                    onSuccessDialogOkayPressed = onBackPressed,
+                    isForgotPassWord = false,
+                    okayButtonText = "Okay",
+                    changePassword = { currentPassword, newPassword ->
+                        changePassword(currentPassword, newPassword)
+                    }
+                )
+            }
+
         }
 
         composable(HomeScreen.NotificationSettings.route) {
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            NotificationSettings(
-                viewModel = settingsViewModel,
-                emailNotifications = settingsViewModel.appConfigPreferences.emailNotifications,
-                pushNotifications = settingsViewModel.appConfigPreferences.pushNotifications
-            )
+            hiltViewModel<SettingsViewModel>().apply {
+                NotificationSettings(
+                    emailNotifications = appConfigPreferences.emailNotifications,
+                    pushNotifications = appConfigPreferences.pushNotifications,
+                    updateEmailNotification = { bool ->
+                        updateEmailNotifications(bool)
+                    },
+                    updatePushNotification = { bool ->
+                        updatePushNotifications(bool)
+                    }
+                )
+            }
+
         }
 
         composable(HomeScreen.Notifications.route) {
-            val notificationsViewModel = hiltViewModel<NotificationsViewModel>()
-            Notifications(
-                viewModel = notificationsViewModel,
-                onBackPressed = onBackPressed,
-                uiState = notificationsViewModel.notificationsScreenUiState
-            )
+            hiltViewModel<NotificationsViewModel>().apply {
+                Notifications(
+                    onBackPressed = onBackPressed,
+                    uiState = notificationsScreenUiState
+                )
+            }
+
         }
         composable(HomeScreen.PaymentSettings.route) {
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            PaymentSettings(
-                viewModel = settingsViewModel,
-                paymentMethod = settingsViewModel.appConfigPreferences.paymentMethod
-            )
+            hiltViewModel<SettingsViewModel>().apply {
+                PaymentSettings(
+                    paymentMethod = appConfigPreferences.paymentMethod,
+                    updatePaymentMethod = { paymentMethod ->
+                        updatePaymentMethod(paymentMethod)
+                    }
+                )
+            }
+
         }
     }
 }

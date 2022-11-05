@@ -34,13 +34,12 @@ import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
 fun Settings(
-    viewModel: SettingsViewModel,
-    onLogOutClicked: () -> Unit,
     onEditProfileClicked: () -> Unit,
     onSecurityClicked: () -> Unit,
     onNotificationClicked: () -> Unit,
     onPaymentClicked: () -> Unit,
     onBackPressed: () -> Unit,
+    logOut: () -> Unit
 ) {
 
     BackHandler(true) {
@@ -74,8 +73,7 @@ fun Settings(
                                 onPaymentClicked()
                             }
                             "Logout" -> {
-                                viewModel.logOut()
-                                onLogOutClicked()
+                                logOut()
                             }
                         }
                     }

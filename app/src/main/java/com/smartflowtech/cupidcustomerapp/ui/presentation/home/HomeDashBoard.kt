@@ -238,7 +238,7 @@ fun HomeDashBoard(
                                         )
                                     }
                                 }
-                                ViewModelResult.INITIAL -> {}
+                                else -> {}
                             }
                         }
                         HorizontalPagerIndicator(
