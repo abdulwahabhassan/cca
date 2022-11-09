@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-kapt'
     //Secrets gradle plugin for providing secrets securely to android projects
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    //Google services Gradle plugin
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -29,15 +31,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-//        release {
-//            buildConfigField("String", "PAYSTACK_PUBLIC_KEY", PSTK_PUBLIC_LIVE_KEY)
-//            buildConfigField("String", "CUPID_BASE_URL", CUPID_PROD_BASE_URL)
-//        }
-//
-//        debug {
-//            buildConfigField("String", "PAYSTACK_PUBLIC_KEY", PSTK_PUBLIC_TEST_KEY)
-//            buildConfigField("String", "CUPID_BASE_URL", CUPID_PROD_BASE_URL)
-//        }
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -125,4 +118,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     //Compose map
     implementation 'com.google.maps.android:maps-compose:2.7.2'
+    //Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    //Firebase cloud messaging
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    //Firebase google analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

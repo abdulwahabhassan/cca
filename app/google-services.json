@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "546198805147",
+    "project_id": "cupid-customer-app",
+    "storage_bucket": "cupid-customer-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546198805147:android:495f73ad85b93bc290043e",
+        "android_client_info": {
+          "package_name": "com.smartflowtech.cupidcustomerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546198805147-v46c3fcjfh44sasqm22iins8i4mjqdo9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smartflowtech.cupidcustomerapp",
+            "certificate_hash": "9b898664cf3efd68ff59ea1383a0175e8d0bfecd"
+          }
+        },
+        {
+          "client_id": "546198805147-ooct7bubccid5b18h28u3p00nnmq0bdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqrKYgxpBTDWszj-uHofbLRqE4cXy559c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546198805147-ooct7bubccid5b18h28u3p00nnmq0bdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
