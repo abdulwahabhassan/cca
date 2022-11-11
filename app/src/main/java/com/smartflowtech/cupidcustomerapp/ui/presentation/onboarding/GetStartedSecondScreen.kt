@@ -46,7 +46,7 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
                 .background(
                     brush = Brush.verticalGradient(
                         gradientWhiteBlue,
-                        endY = LocalConfiguration.current.screenHeightDp.toFloat() / 0.45f
+                        endY = LocalConfiguration.current.screenHeightDp.toFloat() / 0.35f
                     )
                 )
         )

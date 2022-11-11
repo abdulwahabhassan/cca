@@ -90,8 +90,8 @@ fun HomeScreen(
                 currentBottomNavDestinationTitle = HomeScreen.Transactions.title
                 bottomAppBarVisibility = true
             }
-            HomeScreen.Location.route -> {
-                currentBottomNavDestinationTitle = HomeScreen.Location.title
+            HomeScreen.Stations.route -> {
+                currentBottomNavDestinationTitle = HomeScreen.Stations.title
                 bottomAppBarVisibility = true
             }
             HomeScreen.Settings.route -> {
@@ -102,8 +102,8 @@ fun HomeScreen(
                 currentBottomNavDestinationTitle = HomeScreen.Profile.title
                 bottomAppBarVisibility = false
             }
-            HomeScreen.SecuritySettings.route -> {
-                currentBottomNavDestinationTitle = HomeScreen.SecuritySettings.title
+            HomeScreen.Security.route -> {
+                currentBottomNavDestinationTitle = HomeScreen.Security.title
                 bottomAppBarVisibility = false
             }
             HomeScreen.NotificationSettings.route -> {

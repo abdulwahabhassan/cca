@@ -9,7 +9,7 @@ import com.smartflowtech.cupidcustomerapp.data.repo.StationsRepository
 import com.smartflowtech.cupidcustomerapp.model.request.VendorStationsRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.location.LocationScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.station.StationsScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,13 +20,13 @@ class StationsViewModel @Inject constructor(
     private val stationsRepository: StationsRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
-    var locationScreenUiState by mutableStateOf(LocationScreenUiState(ViewModelResult.LOADING))
+    var stationsScreenUiState by mutableStateOf(StationsScreenUiState(ViewModelResult.LOADING))
         private set
 
     fun vendorStations() {
         viewModelScope.launch {
 
-            locationScreenUiState = LocationScreenUiState(viewModelResult = ViewModelResult.LOADING)
+            stationsScreenUiState = StationsScreenUiState(viewModelResult = ViewModelResult.LOADING)
 
             when (val repositoryResult = stationsRepository.vendorStations(
                 token = appConfigPreferences.token,
@@ -38,8 +38,8 @@ class StationsViewModel @Inject constructor(
             ) {
                 is RepositoryResult.Success -> {
                     repositoryResult.data?.let { data ->
-                        locationScreenUiState =
-                            LocationScreenUiState(
+                        stationsScreenUiState =
+                            StationsScreenUiState(
                                 viewModelResult = ViewModelResult.SUCCESS,
                                 data = data,
                                 message = repositoryResult.message
@@ -47,7 +47,7 @@ class StationsViewModel @Inject constructor(
                     }
                 }
                 is RepositoryResult.Error -> {
-                    locationScreenUiState = LocationScreenUiState(
+                    stationsScreenUiState = StationsScreenUiState(
                         viewModelResult = ViewModelResult.ERROR,
                         message = repositoryResult.message
                     )

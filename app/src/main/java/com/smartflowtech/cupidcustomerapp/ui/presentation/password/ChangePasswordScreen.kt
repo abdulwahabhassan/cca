@@ -41,7 +41,6 @@ fun ChangePasswordScreen(
     onBackArrowPressed: () -> Unit = {},
     goToLogin: () -> Unit = {},
     isForgotPassWord: Boolean,
-    okayButtonText: String,
     changePassword: suspend (currentPassword: String, newPassword: String) -> ChangePasswordState
 ) {
 
@@ -76,7 +75,7 @@ fun ChangePasswordScreen(
     var showSuccessDialog by remember { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    var showLoadingIndicator by remember { mutableStateOf(false) }
+    var showLoadingIndicator: Boolean? by remember { mutableStateOf(false) }
     var successMessage: String by remember { mutableStateOf("") }
 
     fun resetErrorsAndLabels() {
@@ -111,9 +110,11 @@ fun ChangePasswordScreen(
                     }
                 }
                 ViewModelResult.SUCCESS -> {
-                    showSuccessDialog = true
                     successMessage = changePasswordState.message
                         ?: "Changed Successfully"
+                    showSuccessDialog = true
+                    showLoadingIndicator = null
+
                 }
                 else -> {}
             }
@@ -435,12 +436,12 @@ fun ChangePasswordScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    if (showLoadingIndicator) {
+                    if (showLoadingIndicator == true) {
                         CircularProgressIndicator(
                             strokeWidth = 2.dp,
                             modifier = Modifier.height(54.dp)
                         )
-                    } else {
+                    } else if (showLoadingIndicator == false) {
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -479,6 +480,8 @@ fun ChangePasswordScreen(
                         ) {
                             Text(text = "Update")
                         }
+                    } else {
+                        Spacer(modifier = Modifier.height(54.dp))
                     }
                 }
 
@@ -492,7 +495,7 @@ fun ChangePasswordScreen(
                                 modifier = Modifier
                                     .padding(vertical = 24.dp)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .clickable(!showLoadingIndicator) {
+                                    .clickable(showLoadingIndicator == false) {
                                         goToLogin()
                                     }
                                     .padding(8.dp),
@@ -534,8 +537,8 @@ fun ChangePasswordScreen(
                     Success(
                         title = "Successful",
                         message = successMessage,
-                        onOkayPressed = onSuccessDialogOkayPressed,
-                        buttonText = okayButtonText
+                        buttonText = if (isForgotPassWord) "Go To Dashboard" else "Okay",
+                        onOkayPressed = onSuccessDialogOkayPressed
                     )
                 }
             }
@@ -550,7 +553,6 @@ fun ForgotPasswordPreview() {
         ChangePasswordScreen(
             onSuccessDialogOkayPressed = { },
             isForgotPassWord = true,
-            okayButtonText = "Update",
             changePassword = { _, _ -> ChangePasswordState(ViewModelResult.SUCCESS) }
         )
     }

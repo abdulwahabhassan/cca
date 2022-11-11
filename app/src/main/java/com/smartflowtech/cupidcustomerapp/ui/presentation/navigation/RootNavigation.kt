@@ -157,7 +157,9 @@ fun RootNavigation(
                     },
                     login = { email, password -> login(email, password) },
                     userEmail = appConfigPreferences.userEmail,
-                    username = appConfigPreferences.userName,
+                    username = appConfigPreferences.userName.ifEmpty {
+                        appConfigPreferences.fullName.split(" ")[0]
+                    },
                     onboarded = appConfigPreferences.onBoarded
                 )
             }
@@ -230,7 +232,6 @@ fun RootNavigation(
                         rootNavHostController.popBackStack()
                     },
                     isForgotPassWord = true,
-                    okayButtonText = "Go To Dashboard",
                     changePassword = { currentPassword, newPassword ->
                         changePassword(currentPassword, newPassword)
                     }

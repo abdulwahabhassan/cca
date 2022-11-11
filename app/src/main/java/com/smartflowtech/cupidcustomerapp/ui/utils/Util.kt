@@ -270,7 +270,7 @@ object Util {
                 R.drawable.ic_profile
             ),
             SettingsItem(
-                "SecuritySettings",
+                "Security",
                 "Change password",
                 R.drawable.ic_security
             ),
@@ -280,7 +280,7 @@ object Util {
                 R.drawable.ic_notification
             ),
             SettingsItem(
-                "PaymentSettings",
+                "Payment",
                 "Choose default payment method",
                 R.drawable.ic_payment
             ),
@@ -385,7 +385,7 @@ object Util {
     fun getListOfStations(): List<Station> {
         return listOf(
             Station(
-                "Ardova Gas Station",
+                "Ardova Gas Stations",
                 "10, Koka Road, Iyana Ipaja",
                 "ardova@gmail.com",
                 "08167039661"
@@ -403,7 +403,7 @@ object Util {
                 "07038271927"
             ),
             Station(
-                "Mobil Gas Station",
+                "Mobil Gas Stations",
                 "Ijesha",
                 "mobilgasstation@gmail.com",
                 ""

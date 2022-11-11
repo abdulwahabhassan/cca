@@ -53,7 +53,7 @@ fun AddFundsPaymentMode(data: PaymentMode, onClick: (paymentMode: PaymentMode) -
                         PaymentMode.CARD  -> R.drawable.ic_card
                     }
                 ),
-                contentDescription = "PaymentSettings mode icon",
+                contentDescription = "Payment mode icon",
                 tint = Color.Unspecified
             )
 

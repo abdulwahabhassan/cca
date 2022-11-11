@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation.location
+package com.smartflowtech.cupidcustomerapp.ui.presentation.station
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -31,12 +31,11 @@ import com.google.maps.android.compose.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.StationsViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-fun Location(
+fun Stations(
     onStationFilterClicked: () -> Unit,
     stationFilter: String,
     onStationSelected: (Station) -> Unit,
@@ -273,7 +272,7 @@ fun Location(
                                 Image(
                                     modifier = Modifier.size(32.dp),
                                     painter = painterResource(id = R.drawable.ic_station),
-                                    contentDescription = "Station icon"
+                                    contentDescription = "Stations icon"
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
@@ -305,6 +304,6 @@ fun Location(
 @Preview(showBackground = true)
 fun PreviewLocation() {
     CupidCustomerAppTheme {
-        Location(onStationFilterClicked = {}, "state", onStationSelected = {}, onBackPressed = {})
+        Stations(onStationFilterClicked = {}, "state", onStationSelected = {}, onBackPressed = {})
     }
 }

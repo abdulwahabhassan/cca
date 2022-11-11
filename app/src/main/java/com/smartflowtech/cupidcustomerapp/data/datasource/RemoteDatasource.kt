@@ -89,4 +89,14 @@ class RemoteDatasource @Inject constructor(
             vendorStationsRequestBody = vendorStationsRequestBody
         )
     }
+
+    suspend fun updateDeviceToken(
+        token: String,
+        updateDeviceTokenRequestBody: UpdateDeviceTokenRequestBody
+    ): CupidApiResponse<Any> {
+        return apiService.updateDeviceToken(
+            token = token,
+            updateDeviceTokenRequestBody = updateDeviceTokenRequestBody
+        )
+    }
 }

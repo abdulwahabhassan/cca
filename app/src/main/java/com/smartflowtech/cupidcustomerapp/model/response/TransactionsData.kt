@@ -46,7 +46,7 @@ data class TransactionsData(
     val lastAmountPaid: String?,
 
     @Json(name = "is_balanced")
-    val isBalanced: String?,
+    val isBalanced: Boolean?,
 
     @Json(name = "verified_volume")
     val verifiedVolume: String?,
@@ -72,8 +72,8 @@ data class TransactionsData(
     fun mapToTransaction(): Transaction {
         return Transaction(
             status = when (this.isBalanced) {
-                "1" -> "Completed"
-                "0" -> "Failed"
+                true -> "Completed"
+                false -> "Failed"
                 else -> "Pending"
             },
             time = this.createdAt?.substring(11),

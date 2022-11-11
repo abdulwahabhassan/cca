@@ -19,14 +19,12 @@ interface CupidApiService {
         @Query("company_id") companyId: String,
         @Query("start_date") startDate: String =
             LocalDate.now().minusDays(730).format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        )
-        ,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            ),
         @Query("end_date") endDate: String =
             LocalDate.now().format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        )
-        ,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            ),
         @Query("vendor_id") vendorId: String = "",
     ): CupidApiResponse<List<TransactionsData>>
 
@@ -67,6 +65,12 @@ interface CupidApiService {
         @Header("Authorization") token: String,
         @Path("vendor_id") vendorId: Long,
         @Body vendorStationsRequestBody: VendorStationsRequestBody
-    ) : CupidApiResponse<VendorStationsData>
+    ): CupidApiResponse<VendorStationsData>
+
+    @PATCH("update_device_token")
+    suspend fun updateDeviceToken(
+        @Header("Authorization") token: String,
+        @Body updateDeviceTokenRequestBody: UpdateDeviceTokenRequestBody
+    ): CupidApiResponse<Any>
 
 }

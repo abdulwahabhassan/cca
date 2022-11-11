@@ -49,7 +49,7 @@ open class BaseRepository {
             }
         } catch (t: Throwable) {
             Timber.d("Error while handling httpException $t")
-            CupidApiErrorResponse(message = "Oops! Service is unavailable")
+            CupidApiErrorResponse(message = "Oops! Service is unavailable (${e.code()})")
         }
     }
 

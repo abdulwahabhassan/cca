@@ -29,10 +29,10 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
         R.drawable.ic_receipt
     )
 
-    object Location : HomeScreen(
-        "home_screen/location",
-        "Location",
-        R.drawable.ic_location
+    object Stations : HomeScreen(
+        "home_screen/stations",
+        "Stations",
+        R.drawable.ic_stations
     )
 
     object Settings : HomeScreen(
@@ -46,8 +46,8 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
         "My Profile",
         R.drawable.ic_profile
     )
-    object SecuritySettings : HomeScreen(
-        "home_screen/security_settings",
+    object Security : HomeScreen(
+        "home_screen/security",
         "Change Password",
         R.drawable.ic_security
     )
@@ -57,7 +57,7 @@ sealed class HomeScreen(val route: String, var title: String, var icon: Int) {
         R.drawable.ic_notification
     )
     object PaymentSettings : HomeScreen(
-        "home_screen/payment_settings",
+        "home_screen/payment",
         "Payment Methods",
         R.drawable.ic_payment
     )
@@ -72,7 +72,7 @@ sealed class HomeScreenModalBottomSheetContent(val contentKey: String) {
     object DownloadTransactions : HomeScreenModalBottomSheetContent("download_transactions")
     object Success : HomeScreenModalBottomSheetContent("success")
     object UploadImage : HomeScreenModalBottomSheetContent("upload_image")
-    object StationsFilter : HomeScreenModalBottomSheetContent("station_filter")
+    object StationsFilter : HomeScreenModalBottomSheetContent("stations_filter")
     object StationDetails : HomeScreenModalBottomSheetContent("station_details")
     object TransactionsFilter : HomeScreenModalBottomSheetContent("transactions_filter")
     object DaysFilter : HomeScreenModalBottomSheetContent("days_filter")

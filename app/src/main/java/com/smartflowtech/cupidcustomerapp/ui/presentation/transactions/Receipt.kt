@@ -95,7 +95,7 @@ fun Receipt(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "PaymentSettings Period",
+                text = "Payment Period",
                 color = grey,
                 modifier = Modifier.padding(bottom = 2.dp)
             )
@@ -230,7 +230,7 @@ fun Receipt(
                                 textDarkBluePaint
                             )
 
-                            canvas.drawText("PaymentSettings Date", 109F, 320F, titleGreyPaint)
+                            canvas.drawText("Payment Date", 109F, 320F, titleGreyPaint)
                             canvas.drawText(
                                 buildString {
                                     append(

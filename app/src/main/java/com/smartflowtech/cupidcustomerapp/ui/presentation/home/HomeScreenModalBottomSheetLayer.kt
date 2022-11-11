@@ -33,7 +33,8 @@ fun HomeScreenModalBottomSheetLayer(
 
     LaunchedEffect(key1 = modalBottomSheetState.isVisible, block = {
         if (!modalBottomSheetState.isVisible) {
-            homeScreenModalBottomSheetContent = HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
+            homeScreenModalBottomSheetContent =
+                HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
         }
     })
 
@@ -45,7 +46,8 @@ fun HomeScreenModalBottomSheetLayer(
             if (modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
-                    homeScreenModalBottomSheetContent = HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
+                    homeScreenModalBottomSheetContent =
+                        HomeScreenModalBottomSheetContent.TransactionsFilter.contentKey
                 }
             } else {
                 popBackStackOrFinishActivity()
@@ -79,7 +81,7 @@ fun HomeScreenModalBottomSheetLayer(
             if (!modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.animateTo(
-                        ModalBottomSheetValue.HalfExpanded, spring()
+                        ModalBottomSheetValue.Expanded, spring()
                     )
                 }
             }

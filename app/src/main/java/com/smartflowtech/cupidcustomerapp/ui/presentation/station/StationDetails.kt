@@ -1,10 +1,8 @@
-package com.smartflowtech.cupidcustomerapp.ui.presentation.location
+package com.smartflowtech.cupidcustomerapp.ui.presentation.station
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color

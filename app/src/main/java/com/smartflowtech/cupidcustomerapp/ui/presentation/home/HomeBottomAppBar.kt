@@ -25,7 +25,7 @@ fun HomeBottomAppBar(
     val items = listOf(
         HomeScreen.Home,
         HomeScreen.Transactions,
-        HomeScreen.Location,
+        HomeScreen.Stations,
         HomeScreen.Settings
     )
 

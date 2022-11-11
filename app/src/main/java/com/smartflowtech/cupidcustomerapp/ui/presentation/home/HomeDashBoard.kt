@@ -189,7 +189,7 @@ fun HomeDashBoard(
                                             }
                                             .padding(8.dp),
                                         painter = painterResource(id = R.drawable.ic_notification_active),
-                                        contentDescription = "NotificationSettings bell",
+                                        contentDescription = "Notification bell",
                                         tint = Color.White,
                                     )
 

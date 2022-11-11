@@ -1,4 +1,4 @@
-package com.android.upload.viewmodel
+package com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel
 
 import android.app.Application
 import android.content.ContentUris

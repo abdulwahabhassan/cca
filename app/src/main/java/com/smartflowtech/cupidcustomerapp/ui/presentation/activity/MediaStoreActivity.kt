@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import com.android.upload.viewmodel.MediaStoreViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.MediaStoreViewModel
 import com.smartflowtech.cupidcustomerapp.databinding.ActivityMediaStoreBinding
 import com.smartflowtech.cupidcustomerapp.model.domain.MediaStoreImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.adapter.MediaStoreAdapter

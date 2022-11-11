@@ -63,13 +63,13 @@ fun Settings(
                             "Edit Profile" -> {
                                 onEditProfileClicked()
                             }
-                            "SecuritySettings" -> {
+                            "Security" -> {
                                 onSecurityClicked()
                             }
                             "Notifications" -> {
                                 onNotificationClicked()
                             }
-                            "PaymentSettings" -> {
+                            "Payment" -> {
                                 onPaymentClicked()
                             }
                             "Logout" -> {

@@ -14,12 +14,11 @@ import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
-import com.smartflowtech.cupidcustomerapp.ui.presentation.location.Location
+import com.smartflowtech.cupidcustomerapp.ui.presentation.station.Stations
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.Notifications
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification_settings.NotificationSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordScreen
-import com.smartflowtech.cupidcustomerapp.ui.presentation.password.ChangePasswordState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.payment.PaymentSettings
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Transactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.*
@@ -70,7 +69,7 @@ fun BottomNavBarNavigation(
             } else if ((initialState.destination.route == HomeScreen.Transactions.route ||
                         initialState.destination.route == HomeScreen.Profile.route ||
                         initialState.destination.route == HomeScreen.Notifications.route ||
-                        initialState.destination.route == HomeScreen.Location.route
+                        initialState.destination.route == HomeScreen.Stations.route
                         ) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
@@ -90,7 +89,7 @@ fun BottomNavBarNavigation(
             if ((initialState.destination.route == HomeScreen.Transactions.route ||
                         initialState.destination.route == HomeScreen.Profile.route ||
                         initialState.destination.route == HomeScreen.Notifications.route ||
-                        initialState.destination.route == HomeScreen.Location.route) &&
+                        initialState.destination.route == HomeScreen.Stations.route) &&
                 targetState.destination.route == HomeScreen.Home.route
             ) {
                 fadeOut(snap())
@@ -146,9 +145,9 @@ fun BottomNavBarNavigation(
                 onGraphFilterClicked = onGraphFilterClicked
             )
         }
-        composable(HomeScreen.Location.route) {
+        composable(HomeScreen.Stations.route) {
             hiltViewModel<StationsViewModel>().apply {
-                Location(
+                Stations(
                     onStationFilterClicked = onStationFilterClicked,
                     stationFilter = appConfigPreferences.stationFilter,
                     onStationSelected = onStationSelected,
@@ -167,7 +166,7 @@ fun BottomNavBarNavigation(
                     },
                     onSecurityClicked = {
                         bottomNavHostController.navigate(
-                            route = HomeScreen.SecuritySettings.route,
+                            route = HomeScreen.Security.route,
                             navOptions = navOptions { launchSingleTop = true })
                     },
                     onNotificationClicked = {
@@ -206,12 +205,11 @@ fun BottomNavBarNavigation(
             }
 
         }
-        composable(HomeScreen.SecuritySettings.route) {
+        composable(HomeScreen.Security.route) {
             hiltViewModel<ChangePasswordViewModel>().apply {
                 ChangePasswordScreen(
                     onSuccessDialogOkayPressed = onBackPressed,
                     isForgotPassWord = false,
-                    okayButtonText = "Okay",
                     changePassword = { currentPassword, newPassword ->
                         changePassword(currentPassword, newPassword)
                     }

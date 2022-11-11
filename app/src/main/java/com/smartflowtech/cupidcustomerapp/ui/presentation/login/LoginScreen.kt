@@ -173,7 +173,7 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .align(Alignment.CenterStart),
                         text = if (!notMe && username.isNotEmpty())
-                            "Welcome Back, ${username}"
+                            "Welcome Back, $username"
                         else
                             "Login to your account",
                         style = MaterialTheme.typography.h6,

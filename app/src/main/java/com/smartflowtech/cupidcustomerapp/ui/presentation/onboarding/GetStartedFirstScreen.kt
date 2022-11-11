@@ -92,7 +92,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
             verticalArrangement = Arrangement.Top,
         ) {
             Text(
-                text = "First start screen",
+                text = "Payments made easy",
                 color = Color.White,
                 style = MaterialTheme.typography.h6
             )

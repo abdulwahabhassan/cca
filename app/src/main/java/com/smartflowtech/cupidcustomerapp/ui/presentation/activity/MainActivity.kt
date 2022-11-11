@@ -18,14 +18,18 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.request.UpdateDeviceTokenRequestBody
+import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.service.CupidCustomerFirebaseMessagingService
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.RootNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.BaseViewModel
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.MainActivityViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.utils.NotificationBuilder.Companion.DATA_PAYLOAD_BODY_KEY
 import com.smartflowtech.cupidcustomerapp.utils.NotificationBuilder.Companion.DATA_PAYLOAD_TITLE_KEY
@@ -36,7 +40,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var activityViewModel: BaseViewModel
+    private lateinit var activityViewModel: MainActivityViewModel
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -94,7 +98,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityViewModel = ViewModelProvider(this)[BaseViewModel::class.java]
+        activityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
@@ -200,12 +204,13 @@ class MainActivity : ComponentActivity() {
 
             //Get new FCM registration token if task was successful
             val token = task.result
+            activityViewModel.updateDeviceToken(fcmToken = token)
 
             //The device token is a unique identifier that contains two things:
             //- Which device will receive the notification.
             //- The app within that device that will receive the notification.
 
-            // Retrieve token as a String, Log and toast it
+            //Retrieve token as a String, Log and toast it
             val msg = getString(R.string.msg_token_fmt, token)
             Timber.d(msg)
 
