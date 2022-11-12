@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.station
 
+import android.Manifest
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,24 +23,36 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
+import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun Stations(
     onStationFilterClicked: () -> Unit,
     stationFilter: String,
-    onStationSelected: (Station) -> Unit,
-    onBackPressed: () -> Unit
+    onStationSelected: (VendorStation) -> Unit,
+    onBackPressed: () -> Unit,
+    uiState: StationsScreenUiState,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
 
     BackHandler(true) {
@@ -49,14 +62,30 @@ fun Stations(
     var selectedTab by remember { mutableStateOf("List") }
 
     var queryText by rememberSaveable { mutableStateOf("") }
-    val stations by remember(queryText) {
-        val list = Util.getListOfStations().filter { station ->
-            (station.name.contains(queryText, true))
-        }
+    val stations by remember(queryText, uiState) {
+        val list = uiState.data?.filter { station ->
+            (station.name?.contains(queryText, true) == true)
+        } ?: emptyList()
         mutableStateOf(list)
     }
+    val coroutineScope = rememberCoroutineScope()
+
+    val multiplePermissionsState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    )
 
 
+    fun showSnackBar(message: String) {
+        coroutineScope.launch {
+            bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                message,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -65,40 +94,74 @@ fun Stations(
     ) {
 
         // Show map
-        val smartflow = LatLng(6.599, 3.372)
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(smartflow, 10f)
+            position = CameraPosition.fromLatLngZoom(LatLng(9.0820, 8.6753), 10f)
         }
         val uiSettings by remember { mutableStateOf(MapUiSettings()) }
         val properties by remember {
-            mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+            mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = false))
         }
 
         if (selectedTab == "Map") {
-            GoogleMap(
-                modifier = Modifier
-                    .fillMaxSize(),
-                cameraPositionState = cameraPositionState,
-                properties = properties,
-                uiSettings = uiSettings
-            ) {
-                Marker(
-                    state = MarkerState(position = smartflow),
-                    title = "Smartflow ",
-                    snippet = "Marker in Singapore",
-                    onClick = {
-                        onStationSelected(
-                            Station(
-                                name = "Smartflow Technologies Limited",
-                                address = "Plot E Ikosi Road, Oregun, Ikeja, Lagos",
-                                contactEmail = "info@smartflowtech.com",
-                                phoneNumber = "+234 81 2629 1902"
+            if (multiplePermissionsState.allPermissionsGranted) {
+                GoogleMap(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    cameraPositionState = cameraPositionState,
+                    properties = properties,
+                    uiSettings = uiSettings
+                ) {
+                    uiState.data?.filterNot { it.latitude == null || it.longitude == null }
+                        ?.forEach { vendorStation ->
+                            Marker(
+                                state = MarkerState(
+                                    position = LatLng(
+                                        vendorStation.latitude?.toDouble()!!,
+                                        vendorStation.longitude?.toDouble()!!
+                                    )
+                                ),
+                                title = vendorStation.name,
+                                onClick = {
+                                    onStationSelected(vendorStation)
+                                    true
+                                }
                             )
-                        )
-                        true
+                        }
+                }
+            } else {
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        Util.getTextToShowGivenPermissions(
+                            multiplePermissionsState.revokedPermissions,
+                            multiplePermissionsState.shouldShowRationale
+                        ),
+                        color = darkBlue,
+                        fontSize = 12.sp,
+                        modifier = Modifier
+                            .background(
+                                color = transparentBlue,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .padding(8.dp),
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
+                        Text("Grant permission")
                     }
-                )
+                }
             }
+
         }
 
         //Search bar and Filter
@@ -245,54 +308,81 @@ fun Stations(
                 color = if (selectedTab == "Map") Color.Transparent else lineGrey
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            //List
+            //List of stations
             if (selectedTab == "List") {
-                // Show list of stations
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(stations) { station ->
+                when (uiState.viewModelResult) {
+                    ViewModelResult.LOADING -> {
                         Column(
-                            modifier = Modifier
-                                .clickable {
-                                    onStationSelected(station)
-                                }
-                                .fillMaxWidth()
-                                .padding(start = 8.dp, end = 8.dp, top = 16.dp),
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    modifier = Modifier.size(32.dp),
-                                    painter = painterResource(id = R.drawable.ic_station),
-                                    contentDescription = "Stations icon"
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Column {
-                                    Text(
-                                        text = station.name, fontFamily = AthleticsFontFamily,
-                                        fontWeight = FontWeight.W400,
-                                        color = Color.Black
+                            CircularProgressIndicator(
+                                strokeWidth = 2.dp, modifier = Modifier
+                                    .height(54.dp)
+                            )
+                        }
+
+                    }
+                    ViewModelResult.ERROR -> {
+                        if (uiState.message?.isNotEmpty() == true) {
+                            showSnackBar(uiState.message)
+                        }
+                    }
+                    ViewModelResult.SUCCESS -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+
+                            items(stations) { station ->
+                                Column(
+                                    modifier = Modifier
+                                        .clickable {
+                                            onStationSelected(station)
+                                        }
+                                        .fillMaxWidth()
+                                        .padding(start = 8.dp, end = 8.dp, top = 16.dp),
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Image(
+                                            modifier = Modifier.size(32.dp),
+                                            painter = painterResource(id = R.drawable.ic_station),
+                                            contentDescription = "Stations icon"
+                                        )
+                                        Spacer(modifier = Modifier.width(12.dp))
+                                        Column {
+                                            Text(
+                                                text = station.name?.capitalizeEachWord() ?: "",
+                                                fontFamily = AthleticsFontFamily,
+                                                fontWeight = FontWeight.W400,
+                                                color = Color.Black
+                                            )
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(
+                                                text = station.address?.capitalizeEachWord() ?: "",
+                                                fontSize = 14.sp,
+                                                color = grey
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Divider(
+                                        color = lineGrey,
+                                        thickness = 0.5.dp,
+                                        modifier = Modifier.padding(horizontal = 8.dp)
                                     )
-                                    Text(text = station.address, fontSize = 14.sp, color = grey)
                                 }
                             }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Divider(
-                                color = lineGrey,
-                                thickness = 0.5.dp,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
                         }
                     }
                 }
+
             }
         }
 
@@ -300,10 +390,23 @@ fun Stations(
 
 }
 
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview(showBackground = true)
 fun PreviewLocation() {
     CupidCustomerAppTheme {
-        Stations(onStationFilterClicked = {}, "state", onStationSelected = {}, onBackPressed = {})
+        Stations(
+            onStationFilterClicked = {},
+            "state",
+            onStationSelected = {},
+            onBackPressed = {},
+            uiState = StationsScreenUiState(ViewModelResult.LOADING),
+            bottomSheetScaffoldState = BottomSheetScaffoldState(
+                DrawerState(DrawerValue.Closed),
+                BottomSheetState(BottomSheetValue.Collapsed),
+                SnackbarHostState()
+            )
+        )
     }
 }

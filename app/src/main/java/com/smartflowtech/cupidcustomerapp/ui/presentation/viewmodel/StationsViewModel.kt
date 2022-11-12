@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.StationsRepository
-import com.smartflowtech.cupidcustomerapp.model.request.VendorStationsRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.station.StationsScreenUiState
@@ -23,36 +22,45 @@ class StationsViewModel @Inject constructor(
     var stationsScreenUiState by mutableStateOf(StationsScreenUiState(ViewModelResult.LOADING))
         private set
 
-    fun vendorStations() {
+    init {
+        vendorStations()
+    }
+
+    private fun vendorStations() {
         viewModelScope.launch {
+            if (appConfigPreferences.vendorId != -1L) {
+                stationsScreenUiState =
+                    StationsScreenUiState(viewModelResult = ViewModelResult.LOADING)
 
-            stationsScreenUiState = StationsScreenUiState(viewModelResult = ViewModelResult.LOADING)
-
-            when (val repositoryResult = stationsRepository.vendorStations(
-                token = appConfigPreferences.token,
-                vendorId = appConfigPreferences.companyId.toLong(),
-                vendorStationsRequestBody = VendorStationsRequestBody(
-                    appConfigPreferences.companyId.toLong()
+                when (val repositoryResult = stationsRepository.vendorStations(
+                    token = appConfigPreferences.token,
+                    vendorId = appConfigPreferences.vendorId,
                 )
-            )
-            ) {
-                is RepositoryResult.Success -> {
-                    repositoryResult.data?.let { data ->
-                        stationsScreenUiState =
-                            StationsScreenUiState(
-                                viewModelResult = ViewModelResult.SUCCESS,
-                                data = data,
-                                message = repositoryResult.message
-                            )
+                ) {
+                    is RepositoryResult.Success -> {
+                        repositoryResult.data?.let { data ->
+                            stationsScreenUiState =
+                                StationsScreenUiState(
+                                    viewModelResult = ViewModelResult.SUCCESS,
+                                    data = data,
+                                    message = repositoryResult.message
+                                )
+                        }
+                    }
+                    is RepositoryResult.Error -> {
+                        stationsScreenUiState = StationsScreenUiState(
+                            viewModelResult = ViewModelResult.ERROR,
+                            message = repositoryResult.message
+                        )
                     }
                 }
-                is RepositoryResult.Error -> {
-                    stationsScreenUiState = StationsScreenUiState(
-                        viewModelResult = ViewModelResult.ERROR,
-                        message = repositoryResult.message
-                    )
-                }
+            } else {
+                stationsScreenUiState = StationsScreenUiState(
+                    viewModelResult = ViewModelResult.ERROR,
+                    message = "Vendor stations could not be retrieved!"
+                )
             }
+
         }
     }
 

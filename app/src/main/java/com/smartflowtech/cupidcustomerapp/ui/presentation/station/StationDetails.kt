@@ -13,13 +13,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
+import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.grey
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
-fun StationDetails(station: Station) {
+fun StationDetails(station: VendorStation) {
     Column(Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -35,45 +37,54 @@ fun StationDetails(station: Station) {
         }
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = station.name,
+            text = station.name?.capitalizeEachWord() ?: "",
             color = darkBlue,
             fontFamily = AthleticsFontFamily,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(
-            modifier = Modifier
-                .height(10.dp)
-                .fillMaxWidth()
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = station.address,
-            color = grey,
-            fontFamily = AthleticsFontFamily,
-        )
-        Spacer(
-            modifier = Modifier
-                .height(10.dp)
-                .fillMaxWidth()
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = station.phoneNumber,
-            color = darkBlue,
-            fontFamily = AthleticsFontFamily,
-        )
-        Spacer(
-            modifier = Modifier
-                .height(10.dp)
-                .fillMaxWidth()
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = station.contactEmail,
-            color = darkBlue,
-            fontFamily = AthleticsFontFamily,
-        )
+
+        station.address?.capitalizeEachWord()?.let {
+            Spacer(
+                modifier = Modifier
+                    .height(10.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = it,
+                color = grey,
+                fontFamily = AthleticsFontFamily,
+            )
+        }
+
+        station.managerPhone?.let {
+            Spacer(
+                modifier = Modifier
+                    .height(10.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = it,
+                color = darkBlue,
+                fontFamily = AthleticsFontFamily,
+            )
+        }
+
+        station.managerEmail?.let {
+            Spacer(
+                modifier = Modifier
+                    .height(10.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = it,
+                color = darkBlue,
+                fontFamily = AthleticsFontFamily,
+            )
+        }
 
     }
 
@@ -82,5 +93,23 @@ fun StationDetails(station: Station) {
 @Composable
 @Preview(showBackground = true)
 fun PreviewStationDetails() {
-    StationDetails(station = Util.getListOfStations()[0])
+    StationDetails(
+        station = VendorStation(
+            1,
+            "Ardova Gas Station",
+            "",
+            "10 Koka Road, Iyana Ipaja",
+            "",
+            "",
+            "",
+            "ardova@gmail.com",
+            "Ikeja",
+            "Lagos",
+            1,
+            1,
+            1,
+            "",
+            ""
+        )
+    )
 }

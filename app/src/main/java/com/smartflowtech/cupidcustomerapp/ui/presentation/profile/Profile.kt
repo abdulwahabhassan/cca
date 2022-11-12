@@ -81,12 +81,12 @@ fun Profile(
         }
     }
 
-    fun doUpdateProfile() {
+    fun doUpdateProfile(firstNameInput: String, lastNameInput: String, emailInput: String) {
         coroutineScope.launch {
             val updateProfileState = updateProfile(
-                firstname.trim().capitalizeFirstLetter(),
-                lastname.trim().capitalizeFirstLetter(),
-                email.trim()
+                firstNameInput,
+                lastNameInput,
+                emailInput
             )
             when (updateProfileState.viewModelResult) {
                 ViewModelResult.ERROR -> {
@@ -181,7 +181,10 @@ fun Profile(
                             color = darkBlue,
                             fontSize = 18.sp
                         )
-                        Text(text = "@$userName", color = grey)
+
+                        if (userName.isNotEmpty()) {
+                            Text(text = "@$userName", color = grey)
+                        }
                     }
                 }
 
@@ -290,11 +293,16 @@ fun Profile(
 
                             resetErrorsAndLabels()
 
-                            validateEmail(email.trim())
+                            val trimmedEmail = email.trim()
+                            validateEmail(trimmedEmail)
 
                             if (!emailError) {
                                 showLoadingIndicator = true
-                                doUpdateProfile()
+                                doUpdateProfile(
+                                    firstname.trim().capitalizeFirstLetter(),
+                                    lastname.trim().capitalizeFirstLetter(),
+                                    trimmedEmail
+                                )
                             }
                         },
                         shape = RoundedCornerShape(10.dp),

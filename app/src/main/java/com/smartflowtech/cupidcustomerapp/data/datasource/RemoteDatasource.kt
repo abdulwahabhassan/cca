@@ -61,7 +61,7 @@ class RemoteDatasource @Inject constructor(
     suspend fun initiatePayStackPayment(
         token: String,
         payStackPaymentRequestBody: PayStackPaymentRequestBody
-    ): CupidApiResponse<PayStackPaymentRequestData> {
+    ): CupidApiResponse<PayStackPaymentData> {
         return apiService.initiatePayStackPayment(
             token = token,
             payStackPaymentRequestBody = payStackPaymentRequestBody
@@ -80,13 +80,11 @@ class RemoteDatasource @Inject constructor(
 
     suspend fun vendorStations(
         token: String,
-        vendorId: Long,
-        vendorStationsRequestBody: VendorStationsRequestBody
+        vendorId: Long
     ): CupidApiResponse<VendorStationsData> {
         return apiService.vendorStations(
             token = token,
-            vendorId = vendorId,
-            vendorStationsRequestBody = vendorStationsRequestBody
+            vendorId = vendorId
         )
     }
 
@@ -97,6 +95,16 @@ class RemoteDatasource @Inject constructor(
         return apiService.updateDeviceToken(
             token = token,
             updateDeviceTokenRequestBody = updateDeviceTokenRequestBody
+        )
+    }
+
+    suspend fun getTransactionReport(
+        token: String,
+        transactionReportRequestBody: TransactionReportRequestBody
+    ): CupidApiResponse<Any> {
+        return apiService.getTransactionReport(
+            token = token,
+            transactionReportRequestBody = transactionReportRequestBody
         )
     }
 }

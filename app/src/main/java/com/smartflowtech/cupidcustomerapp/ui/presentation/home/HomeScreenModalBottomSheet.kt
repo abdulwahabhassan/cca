@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
+import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.DaysFilter
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
 import com.smartflowtech.cupidcustomerapp.ui.presentation.station.StationDetails
@@ -26,6 +27,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenM
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.UploadImage
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.DownloadTransactions
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.FilterTransactions
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.PrintTransactionReportState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -47,12 +49,13 @@ fun HomeScreenModalBottomSheet(
     onStationFilterSelected: (String) -> Unit,
     modalBottomSheetContentKey: String,
     setModalBottomSheetContent: (String) -> Unit,
-    onDaysFilterSelected: (String) -> Unit
+    onDaysFilterSelected: (String) -> Unit,
+    printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
     var successMessage: String by rememberSaveable { mutableStateOf("") }
-    var station: Station? by remember { mutableStateOf(null) }
+    var station: VendorStation? by remember { mutableStateOf(null) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -117,10 +120,10 @@ fun HomeScreenModalBottomSheet(
                     when (modalBottomSheetContentKey) {
                         HomeScreenModalBottomSheetContent.DownloadTransactions.contentKey -> {
                             DownloadTransactions(
-                                showSuccess = {
+                                printTransactionReport = printTransactionReport,
+                                showSuccess = { message ->
                                     successTitle = "Sent"
-                                    successMessage =
-                                        "We've sent the requested statements to your email"
+                                    successMessage = message
                                     setModalBottomSheetContent(
                                         HomeScreenModalBottomSheetContent.Success.contentKey
                                     )

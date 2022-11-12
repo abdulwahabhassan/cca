@@ -52,8 +52,16 @@ fun LoginScreen(
     var isPasswordError by rememberSaveable(notMe) { mutableStateOf(false) }
     var emailErrorLabel by rememberSaveable(notMe) { mutableStateOf("") }
     var passwordErrorLabel by rememberSaveable(notMe) { mutableStateOf("") }
-    var showLoadingIndicator by remember { mutableStateOf(false) }
+    var showLoadingIndicator by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+
+
+    fun resetErrorsAndLabels() {
+        emailErrorLabel = ""
+        isEmailError = false
+        passwordErrorLabel = ""
+        isPasswordError = false
+    }
 
     fun validateEmail(trimmedEmail: String) {
         if (trimmedEmail.isEmpty() ||
@@ -62,9 +70,6 @@ fun LoginScreen(
         ) {
             emailErrorLabel = "Input valid email"
             isEmailError = true
-        } else {
-            emailErrorLabel = ""
-            isEmailError = false
         }
     }
 
@@ -72,9 +77,6 @@ fun LoginScreen(
         if (password.isEmpty()) {
             passwordErrorLabel = "Input valid password"
             isPasswordError = true
-        } else {
-            passwordErrorLabel = ""
-            isPasswordError = false
         }
     }
 
@@ -277,6 +279,8 @@ fun LoginScreen(
                                 .height(54.dp),
                             enabled = email.isNotEmpty() && password.isNotEmpty(),
                             onClick = {
+
+                                resetErrorsAndLabels()
 
                                 val trimmedEmail = email.trim()
                                 validateEmail(trimmedEmail)

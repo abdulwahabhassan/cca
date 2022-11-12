@@ -33,6 +33,9 @@ class LoginData(
     @Json(name = "phone_number")
     val phoneNumber: String?,
 
+    @Json(name = "vendor_id")
+    val vendorId: Long?,
+
     @Json(name = "token")
     val token: String?,
 
@@ -47,4 +50,8 @@ class LoginData(
 
     @Json(name = "deleted_at")
     val deletedAt: String?,
-)
+
+    @Json(name = "bank_account")
+    val vendorBankAccountData: VendorBankAccountData?,
+
+    )

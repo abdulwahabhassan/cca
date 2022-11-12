@@ -37,6 +37,10 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val PAYMENT_METHOD = stringPreferencesKey("paymentMethod")
         val STATION_FILTER = stringPreferencesKey("stationFilter")
         val NOTIFICATION_FILTER = stringPreferencesKey("notificationsFilter")
+        val VENDOR_ID = longPreferencesKey("vendorId")
+        val VENDOR_BANK_ACCOUNT_NUMBER = stringPreferencesKey("vendorAccountNumber")
+        val VENDOR_BANK_ACCOUNT_NAME = stringPreferencesKey("vendorAccountName")
+        val VENDOR_BANK_NAME = stringPreferencesKey("vendorBanKName")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -75,7 +79,11 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             pushNotifications = preferences[PreferencesKeys.PUSH_NOTIFICATIONS] ?: false,
             paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name,
             stationFilter = preferences[PreferencesKeys.STATION_FILTER] ?: "state",
-            notificationsFilter = preferences[PreferencesKeys.NOTIFICATION_FILTER] ?: DaysFilter.LAST_THIRTY_DAYS.name
+            notificationsFilter = preferences[PreferencesKeys.NOTIFICATION_FILTER] ?: DaysFilter.LAST_THIRTY_DAYS.name,
+            vendorId = preferences[PreferencesKeys.VENDOR_ID] ?: -1,
+            vendorAccountName = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] ?: "",
+            vendorAccountNumber = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NUMBER] ?: "",
+            vendorBankName = preferences[PreferencesKeys.VENDOR_BANK_NAME] ?: ""
         )
     }
 
@@ -189,6 +197,15 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
     suspend fun updateNotificationsFilter(filter: String) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.NOTIFICATION_FILTER] = filter
+        }
+    }
+
+    suspend fun updateVendorData(vendorId: Long, bankAcctName: String, bankAcctNum: String, bankName: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.VENDOR_ID] = vendorId
+            mutablePreferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] = bankAcctName
+            mutablePreferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NUMBER] = bankAcctNum
+            mutablePreferences[PreferencesKeys.VENDOR_BANK_NAME] = bankAcctName
         }
     }
 }

@@ -6,11 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,13 +16,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
-import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
+import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginState
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import kotlinx.coroutines.launch
 
 @Composable
-fun DownloadTransactions(showSuccess: () -> Unit) {
+fun DownloadTransactions(
+    printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState,
+    showSuccess: (String) -> Unit
+) {
 
     var startDate by rememberSaveable { mutableStateOf("") }
     var endDate by rememberSaveable { mutableStateOf("") }
@@ -36,13 +36,81 @@ fun DownloadTransactions(showSuccess: () -> Unit) {
     var printFormatSelection by rememberSaveable {
         mutableStateOf("")
     }
+    val coroutineScope = rememberCoroutineScope()
+    var showLoadingIndicator: Boolean by rememberSaveable { mutableStateOf(false) }
+    val scaffoldState = rememberScaffoldState()
 
-    Column(
+
+    fun resetErrorsAndLabels() {
+        startDateErrorLabel = ""
+        isStartDateError = false
+        endDateErrorLabel = ""
+        isEndDateError = false
+    }
+
+    fun validateInput(trimmedStartDate: String, trimmedEndDate: String) {
+        if (trimmedStartDate.isEmpty() ||
+            !trimmedStartDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
+        ) {
+            startDateErrorLabel = "Input valid date format"
+            isStartDateError = true
+        }
+
+        if (trimmedEndDate.isEmpty() ||
+            !trimmedEndDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
+        ) {
+            endDateErrorLabel = "Input valid date format"
+            isEndDateError = true
+        }
+    }
+
+    fun doPrintTransactionReport(dateFrom: String, dateTo: String) {
+        coroutineScope.launch {
+            val printTransactionReportState = printTransactionReport(dateFrom, dateTo)
+            when (printTransactionReportState.viewModelResult) {
+                ViewModelResult.ERROR -> {
+                    showLoadingIndicator = false
+                    if (printTransactionReportState.message?.isNotEmpty() == true) {
+                        if (scaffoldState.snackbarHostState
+                                .currentSnackbarData == null
+                        ) {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = printTransactionReportState.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+
+                    }
+                }
+                ViewModelResult.SUCCESS -> {
+                    showSuccess(
+                        printTransactionReportState.message
+                            ?: "Your request was sent. The report will be sent to your email"
+                    )
+                }
+                else -> {}
+            }
+        }
+    }
+
+
+    Scaffold(
         modifier = Modifier
-            .fillMaxWidth()
-    ) {
+            .fillMaxWidth(),
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(it) { data ->
+                Snackbar(
+                    backgroundColor = transparentPink,
+                    contentColor = red,
+                    snackbarData = data
+                )
+            }
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
+                .padding(paddingValues)
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
@@ -173,55 +241,49 @@ fun DownloadTransactions(showSuccess: () -> Unit) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            //Print button
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                enabled = startDate.isNotEmpty() && endDate.isNotEmpty(),
-                onClick = {
-                    val trimmedStartDate = startDate.trim()
-                    val trimmedEndDate = endDate.trim()
+            if (showLoadingIndicator) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.height(54.dp)
+                )
+            } else {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    enabled = startDate.isNotEmpty() && endDate.isNotEmpty(),
+                    onClick = {
 
-                    //Basic validator
-                    if (trimmedStartDate.isEmpty() ||
-                        !trimmedStartDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
-                    ) {
-                        startDateErrorLabel = "Input valid date format"
-                        isStartDateError = true
-                    } else {
-                        startDateErrorLabel = ""
-                        isStartDateError = false
-                    }
+                        resetErrorsAndLabels()
 
-                    if (trimmedEndDate.isEmpty() ||
-                        !trimmedEndDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
-                    ) {
-                        endDateErrorLabel = "Input valid date format"
-                        isEndDateError = true
-                    } else {
-                        endDateErrorLabel = ""
-                        isEndDateError = false
-                    }
+                        val trimmedStartDate = startDate.trim()
+                        val trimmedEndDate = endDate.trim()
 
-                    if (!isStartDateError && !isEndDateError) {
-                        showSuccess()
-                    }
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-            ) {
-                Text(text = "Print")
+                        validateInput(trimmedStartDate, trimmedEndDate)
+
+                        if (!isStartDateError && !isEndDateError) {
+                            showLoadingIndicator = true
+                            doPrintTransactionReport(dateFrom = trimmedStartDate, trimmedEndDate)
+                        }
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                ) {
+                    Text(text = "Print")
+                }
             }
+
+
         }
 
     }
 }
 
+
 @Composable
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 fun CustomDateSearchPreview() {
     CupidCustomerAppTheme {
-        DownloadTransactions({})
+        DownloadTransactions({ _, _ -> PrintTransactionReportState(ViewModelResult.SUCCESS) }, {})
     }
 }

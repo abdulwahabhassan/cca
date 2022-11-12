@@ -37,7 +37,7 @@ fun ResetPasswordScreen(
     var email by rememberSaveable { mutableStateOf("") }
     var isEmailError by rememberSaveable { mutableStateOf(false) }
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
-    var showLoadingIndicator: Boolean by remember { mutableStateOf(false) }
+    var showLoadingIndicator: Boolean by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     fun resetErrorsAndLabels() {

@@ -1,8 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.data.repo
 
 import com.smartflowtech.cupidcustomerapp.data.datasource.RemoteDatasource
-import com.smartflowtech.cupidcustomerapp.model.request.UpdateProfileRequestBody
-import com.smartflowtech.cupidcustomerapp.model.request.VendorStationsRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.NetworkResult
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.network.NetworkConnectivityManager
@@ -19,15 +17,13 @@ class StationsRepository @Inject constructor(
 
     suspend fun vendorStations(
         token: String,
-        vendorId: Long,
-        vendorStationsRequestBody: VendorStationsRequestBody
+        vendorId: Long
     ) = withContext(dispatcher) {
         when (
             val networkResult = coroutineHandler(dispatcher, networkConnectivityManager) {
                 remoteDatasource.vendorStations(
                     token = token,
                     vendorId = vendorId,
-                    vendorStationsRequestBody = vendorStationsRequestBody
                 )
             }
         ) {

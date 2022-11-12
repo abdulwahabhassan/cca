@@ -21,9 +21,9 @@ class ChangePasswordViewModel @Inject constructor(
 ) : BaseViewModel(dataStorePrefsRepository) {
 
     suspend fun changePassword(currentPassword: String, newPassword: String): ChangePasswordState {
-            //Automatically log the user in first, using email persisted in reset password view model,
-            //if successful,
-            //Persist the token from the response which will be used to change password
+        //Attempt to log the user in first, using email persisted in reset password view model,
+        //if successful, persist login data including the token from the response
+        //which will be used to change password
         return when (val repositoryResult = loginRepository.login(
             loginRequestBody = LoginRequestBody(
                 email = appConfigPreferences.userEmail,
@@ -34,7 +34,12 @@ class ChangePasswordViewModel @Inject constructor(
                 repositoryResult.data?.let { data ->
                     Timber.d("View model Login Data $data")
                     dataStorePrefsRepository.persistToken(token = "Bearer ${data.token}")
-                    dataStorePrefsRepository.updateLoggedIn(true)
+                    dataStorePrefsRepository.updateVendorData(
+                        vendorId = data.vendorId ?: -1,
+                        bankAcctName = data.vendorBankAccountData?.bankName ?: "",
+                        bankAcctNum = data.vendorBankAccountData?.accountNumber ?: "",
+                        bankName = data.vendorBankAccountData?.bankName ?: ""
+                    )
                     doChangePassword(currentPassword, newPassword)
                 } ?: ChangePasswordState(
                     viewModelResult = ViewModelResult.ERROR,
@@ -50,7 +55,10 @@ class ChangePasswordViewModel @Inject constructor(
         }
     }
 
-    private suspend fun doChangePassword(currentPassword: String, newPassword: String): ChangePasswordState {
+    private suspend fun doChangePassword(
+        currentPassword: String,
+        newPassword: String
+    ): ChangePasswordState {
         return when (val repositoryResult = settingsRepository.changePassword(
             token = appConfigPreferences.token,
             userId = appConfigPreferences.userId,
@@ -67,7 +75,9 @@ class ChangePasswordViewModel @Inject constructor(
             )
         )) {
             is RepositoryResult.Success -> {
+                //Automatically log user in to the app if password change was successful
                 repositoryResult.data?.let { data ->
+                    dataStorePrefsRepository.updateLoggedIn(true)
                     ChangePasswordState(
                         viewModelResult = ViewModelResult.SUCCESS,
                         data = data,

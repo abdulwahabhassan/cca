@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
+import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
 import com.smartflowtech.cupidcustomerapp.ui.presentation.settings.Settings
@@ -42,7 +43,7 @@ fun BottomNavBarNavigation(
     userName: String,
     onBottomNavItemClicked: (String) -> Unit,
     onStationFilterClicked: () -> Unit,
-    onStationSelected: (Station) -> Unit,
+    onStationSelected: (VendorStation) -> Unit,
     onGraphFilterClicked: () -> Unit
 ) {
 
@@ -151,7 +152,9 @@ fun BottomNavBarNavigation(
                     onStationFilterClicked = onStationFilterClicked,
                     stationFilter = appConfigPreferences.stationFilter,
                     onStationSelected = onStationSelected,
-                    onBackPressed = onBackPressed
+                    onBackPressed = onBackPressed,
+                    uiState = stationsScreenUiState,
+                    bottomSheetScaffoldState = bottomSheetScaffoldState,
                 )
             }
 

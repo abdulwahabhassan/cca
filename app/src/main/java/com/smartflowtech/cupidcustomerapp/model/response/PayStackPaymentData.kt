@@ -3,7 +3,7 @@ package com.smartflowtech.cupidcustomerapp.model.response
 import com.squareup.moshi.Json
 
 
-data class PayStackPaymentRequestData(
+data class PayStackPaymentData(
     val ref: String,
 
     @Json(name = "company_wallet_id")

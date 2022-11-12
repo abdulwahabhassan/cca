@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.model.domain.Station
+import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
@@ -49,7 +50,7 @@ fun HomeScreen(
     onProfileUpdateSuccess: () -> Unit,
     profilePicture: String,
     onStationFilterClicked: () -> Unit,
-    onStationSelected: (Station) -> Unit,
+    onStationSelected: (VendorStation) -> Unit,
     onGraphFilterClicked: () -> Unit
     ) {
 

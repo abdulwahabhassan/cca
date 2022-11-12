@@ -75,7 +75,7 @@ fun ChangePasswordScreen(
     var showSuccessDialog by remember { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    var showLoadingIndicator: Boolean? by remember { mutableStateOf(false) }
+    var showLoadingIndicator: Boolean? by rememberSaveable { mutableStateOf(false) }
     var successMessage: String by remember { mutableStateOf("") }
 
     fun resetErrorsAndLabels() {
@@ -436,52 +436,56 @@ fun ChangePasswordScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    if (showLoadingIndicator == true) {
-                        CircularProgressIndicator(
-                            strokeWidth = 2.dp,
-                            modifier = Modifier.height(54.dp)
-                        )
-                    } else if (showLoadingIndicator == false) {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(54.dp),
-
-                            enabled = currentPassword.isNotEmpty() &&
-                                    newPassword.isNotEmpty() &&
-                                    confirmPassword.isNotEmpty() &&
-                                    isEightCharactersLong &&
-                                    hasAtLeastOneLowerCaseLetter &&
-                                    hasAtLeastOneUpperCaseLetter &&
-                                    hasAtLeastOneSpecialCharacter,
-                            onClick = {
-
-                                resetErrorsAndLabels()
-
-                                val trimmedNewPassword = newPassword.trim()
-                                val trimmedConfirmedPassword = confirmPassword.trim()
-                                val trimmedOldPassword = currentPassword.trim()
-
-                                if (trimmedNewPassword == trimmedConfirmedPassword) {
-                                    showLoadingIndicator = true
-                                    doChangePassword(trimmedOldPassword, trimmedNewPassword)
-
-                                } else {
-                                    newPasswordErrorLabel = "Passwords do not match!"
-                                    isNewPasswordError = true
-                                    confirmPasswordErrorLabel = "Passwords do not match!"
-                                    isConfirmPasswordError = true
-                                }
-                            },
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primary
+                    when (showLoadingIndicator) {
+                        true -> {
+                            CircularProgressIndicator(
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.height(54.dp)
                             )
-                        ) {
-                            Text(text = "Update")
                         }
-                    } else {
-                        Spacer(modifier = Modifier.height(54.dp))
+                        false -> {
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(54.dp),
+
+                                enabled = currentPassword.isNotEmpty() &&
+                                        newPassword.isNotEmpty() &&
+                                        confirmPassword.isNotEmpty() &&
+                                        isEightCharactersLong &&
+                                        hasAtLeastOneLowerCaseLetter &&
+                                        hasAtLeastOneUpperCaseLetter &&
+                                        hasAtLeastOneSpecialCharacter,
+                                onClick = {
+
+                                    resetErrorsAndLabels()
+
+                                    val trimmedNewPassword = newPassword.trim()
+                                    val trimmedConfirmedPassword = confirmPassword.trim()
+                                    val trimmedOldPassword = currentPassword.trim()
+
+                                    if (trimmedNewPassword == trimmedConfirmedPassword) {
+                                        showLoadingIndicator = true
+                                        doChangePassword(trimmedOldPassword, trimmedNewPassword)
+
+                                    } else {
+                                        newPasswordErrorLabel = "Passwords do not match!"
+                                        isNewPasswordError = true
+                                        confirmPasswordErrorLabel = "Passwords do not match!"
+                                        isConfirmPasswordError = true
+                                    }
+                                },
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = MaterialTheme.colors.primary
+                                )
+                            ) {
+                                Text(text = "Update")
+                            }
+                        }
+                        else -> {
+                            Spacer(modifier = Modifier.height(54.dp))
+                        }
                     }
                 }
 

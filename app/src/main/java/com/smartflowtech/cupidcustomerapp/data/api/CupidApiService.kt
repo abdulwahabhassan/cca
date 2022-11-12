@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.data.api
 
 import com.smartflowtech.cupidcustomerapp.model.request.*
 import com.smartflowtech.cupidcustomerapp.model.response.*
+import com.squareup.moshi.Json
 import retrofit2.http.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -52,7 +53,7 @@ interface CupidApiService {
     suspend fun initiatePayStackPayment(
         @Header("Authorization") token: String,
         @Body payStackPaymentRequestBody: PayStackPaymentRequestBody
-    ): CupidApiResponse<PayStackPaymentRequestData>
+    ): CupidApiResponse<PayStackPaymentData>
 
     @POST("auth/forgotpass/verifyemail")
     suspend fun forgotPassWordVerifyEmail(
@@ -60,17 +61,22 @@ interface CupidApiService {
         @Body verifyEmailRequestBody: VerifyEmailRequestBody
     ): CupidApiResponse<VerifyEmailData>
 
-    @POST("sm_stations/{vendor_id}")
+    @GET("sm_stations/{vendor_id}")
     suspend fun vendorStations(
         @Header("Authorization") token: String,
         @Path("vendor_id") vendorId: Long,
-        @Body vendorStationsRequestBody: VendorStationsRequestBody
     ): CupidApiResponse<VendorStationsData>
 
     @PATCH("update_device_token")
     suspend fun updateDeviceToken(
         @Header("Authorization") token: String,
         @Body updateDeviceTokenRequestBody: UpdateDeviceTokenRequestBody
+    ): CupidApiResponse<Any>
+
+    @GET("purchase_export")
+    suspend fun getTransactionReport(
+        @Header("Authorization") token: String,
+        @Body transactionReportRequestBody: TransactionReportRequestBody
     ): CupidApiResponse<Any>
 
 }

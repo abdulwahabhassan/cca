@@ -8,11 +8,13 @@ import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.TransactionRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.WalletRepository
 import com.smartflowtech.cupidcustomerapp.model.domain.*
+import com.smartflowtech.cupidcustomerapp.model.request.TransactionReportRequestBody
 import com.smartflowtech.cupidcustomerapp.model.response.TransactionsData
 import com.smartflowtech.cupidcustomerapp.model.response.WalletData
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.PrintTransactionReportState
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -184,6 +186,40 @@ class HomeViewModel @Inject constructor(
     fun updateNotificationsFilter(filter: String) {
         viewModelScope.launch {
             dataStorePrefsRepository.updateNotificationsFilter(filter)
+        }
+    }
+
+
+    suspend fun getTransactionReport(
+        dateFrom: String,
+        dateTo: String
+    ): PrintTransactionReportState {
+        return when (
+            val repositoryResult = transactionRepository.getTransactionReport(
+                token = appConfigPreferences.token,
+                transactionReportRequestBody = TransactionReportRequestBody(
+                    dateFrom = dateFrom,
+                    dateTo = dateTo,
+                    companyId = appConfigPreferences.companyId.toLong(),
+                    email = appConfigPreferences.userEmail
+                )
+            )
+        ) {
+
+            is RepositoryResult.Success -> {
+                PrintTransactionReportState(
+                    viewModelResult = ViewModelResult.SUCCESS,
+                    message = repositoryResult.message
+                )
+            }
+
+            is RepositoryResult.Error -> {
+                PrintTransactionReportState(
+                    viewModelResult = ViewModelResult.ERROR,
+                    message = repositoryResult.message
+                )
+            }
+
         }
     }
 

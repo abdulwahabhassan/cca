@@ -89,6 +89,9 @@ fun HomeScreenModalBottomSheetLayer(
         modalBottomSheetContentKey = homeScreenModalBottomSheetContent,
         onDaysFilterSelected = { dayFilter ->
             viewModel.updateNotificationsFilter(dayFilter)
+        },
+        printTransactionReport = { from, to ->
+            viewModel.getTransactionReport(dateFrom = from, dateTo = to)
         }
     )
 }

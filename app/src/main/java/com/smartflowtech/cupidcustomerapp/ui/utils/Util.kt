@@ -11,6 +11,7 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.*
+import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -45,28 +46,6 @@ object Util {
         val formatter = SimpleDateFormat("E, dd MMM yyyy", Locale.UK)
         formatter.timeZone = TimeZone.getTimeZone("Africa/Lagos")
         return formatter.format(parser.parse(dateTime) ?: "")
-    }
-
-    fun <T> loadJsonFromAsset(context: Context, fileName: String): T? {
-        try {
-            val stream = context.assets.open(fileName)
-            val size = stream.available()
-            val buffer = ByteArray(size)
-            stream.read(buffer)
-            stream.close()
-            val stringJson = String(buffer, charset("UTF-8"))
-            val moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-            val listType = object : TypeToken<T>() {}.type
-            val adapter: JsonAdapter<T> = moshi.adapter(listType)
-            val data = adapter.fromJson(stringJson)
-            Timber.d("UpdateProfileData $data")
-            return data
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return null
-        }
     }
 
     fun getImageUri(context: Context, bitmap: Bitmap): Uri? {
@@ -120,12 +99,34 @@ object Util {
                     " important. Please grant all of them for the app to function properly."
             } else {
                 if (revokedPermissionsSize == 1)
-                    " denied. The app cannot function without it. Please grant this permission."
+                    " denied. The app cannot function properly without it. Please grant this permission."
                 else
-                    " denied. The app cannot function without them. Please grant these permissions."
+                    " denied. The app cannot function properly without them. Please grant these permissions."
             }
         )
         return textToShow.toString()
+    }
+
+    fun <T> loadJsonFromAsset(context: Context, fileName: String): T? {
+        try {
+            val stream = context.assets.open(fileName)
+            val size = stream.available()
+            val buffer = ByteArray(size)
+            stream.read(buffer)
+            stream.close()
+            val stringJson = String(buffer, charset("UTF-8"))
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+            val listType = object : TypeToken<T>() {}.type
+            val adapter: JsonAdapter<T> = moshi.adapter(listType)
+            val data = adapter.fromJson(stringJson)
+            Timber.d("UpdateProfileData $data")
+            return data
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     fun getListOfBanks(): List<Bank> {
@@ -379,35 +380,6 @@ object Util {
         return listOf(
             "State",
             "LGA"
-        )
-    }
-
-    fun getListOfStations(): List<Station> {
-        return listOf(
-            Station(
-                "Ardova Gas Stations",
-                "10, Koka Road, Iyana Ipaja",
-                "ardova@gmail.com",
-                "08167039661"
-            ),
-            Station(
-                "Orlando Petrol",
-                "21, Allen junction, Ikeja, Lagos",
-                "orlandopetrol@gmail.com",
-                "09039393918"
-            ),
-            Station(
-                "Petrocam",
-                "Block 50B, Festac",
-                "petrocam@gmail.com",
-                "07038271927"
-            ),
-            Station(
-                "Mobil Gas Stations",
-                "Ijesha",
-                "mobilgasstation@gmail.com",
-                ""
-            )
         )
     }
 

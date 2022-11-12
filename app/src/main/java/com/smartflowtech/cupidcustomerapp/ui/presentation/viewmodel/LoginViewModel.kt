@@ -35,6 +35,12 @@ class LoginViewModel @Inject constructor(
                     )
                     dataStorePrefsRepository.persistToken(token = "Bearer ${data.token}")
                     dataStorePrefsRepository.updateLoggedIn(loggedIn = true)
+                    dataStorePrefsRepository.updateVendorData(
+                        vendorId = data.vendorId ?: -1,
+                        bankAcctName = data.vendorBankAccountData?.bankName ?: "",
+                        bankAcctNum = data.vendorBankAccountData?.accountNumber ?: "",
+                        bankName = data.vendorBankAccountData?.bankName ?: ""
+                    )
 
                     LoginState(
                         viewModelResult = ViewModelResult.SUCCESS,

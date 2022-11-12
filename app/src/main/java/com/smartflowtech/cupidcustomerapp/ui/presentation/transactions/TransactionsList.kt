@@ -66,14 +66,7 @@ fun TransactionsList(
             }
 
         }
-//        ViewModelResult.INITIAL -> {
-//            Column(
-//                Modifier
-//                    .fillMaxWidth()
-//                    .fillMaxHeight(),
-//                horizontalAlignment = Alignment.Start
-//            ) {}
-//        }
+
         ViewModelResult.ERROR -> {
             Column(
                 Modifier
