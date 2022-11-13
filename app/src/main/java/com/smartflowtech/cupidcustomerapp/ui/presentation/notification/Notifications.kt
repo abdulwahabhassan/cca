@@ -22,6 +22,7 @@ import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.Notification
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import timber.log.Timber
 import java.time.LocalDateTime
 
 
@@ -58,7 +59,7 @@ fun Notifications(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        if (notifications.values.isEmpty()) {
+        if (notifications.values.flatten().isEmpty()) {
             Column(
                 Modifier
                     .fillMaxSize(),
@@ -73,7 +74,7 @@ fun Notifications(
                     tint = Color.Unspecified
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "No notification")
+                Text(text = "There are no notifications")
             }
         } else {
             LazyColumn(
