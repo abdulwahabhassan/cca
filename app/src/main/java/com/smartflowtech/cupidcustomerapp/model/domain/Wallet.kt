@@ -7,5 +7,7 @@ data class Wallet(
     val vendorID: Long,
     val currentBalance: String,
     val updatedAt: String,
-    val currentCreditLimit: String
+    val currentCreditLimit: String,
+    val nfcTagId: Long,
+    val nfcTagCode: String
 )

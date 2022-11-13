@@ -17,7 +17,13 @@ data class WalletData(
     val updatedAt: String,
 
     @Json(name = "current_credit_limit")
-    val currentCreditLimit: String
+    val currentCreditLimit: String,
+
+    @Json(name = "nfctags_id")
+    val nfcTagId: Long,
+
+    @Json(name = "nfctags_code")
+    val nfcTagCode: String
 ) {
     fun mapToWallet(): Wallet {
         return Wallet(
@@ -25,7 +31,9 @@ data class WalletData(
             vendorID = this.vendorID,
             currentBalance = this.currentBalance,
             updatedAt = this.updatedAt,
-            currentCreditLimit = this.currentCreditLimit
+            currentCreditLimit = this.currentCreditLimit,
+            nfcTagId = this.nfcTagId,
+            nfcTagCode = this.nfcTagCode
         )
     }
 }

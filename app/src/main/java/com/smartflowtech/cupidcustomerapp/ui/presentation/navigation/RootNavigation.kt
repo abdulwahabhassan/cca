@@ -303,7 +303,9 @@ fun RootNavigation(
                     initiatePayStackPayment = { amount: Int ->
                         initiatePayStackPayment(amountToPay = amount)
                     },
-                    paymentMethod = appConfigPreferences.paymentMethod
+                    paymentMethod = appConfigPreferences.paymentMethod,
+                    vendorBankAccountNumber = appConfigPreferences.vendorAccountNumber,
+                    vendorBankName = appConfigPreferences.vendorBankName
                 )
             }
         }

@@ -37,6 +37,8 @@ fun AddFundsScreenModalBottomSheet(
     setUssdScreenContent: (String) -> Unit,
     ussdScreenContent: String,
     initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
+    vendorBankAccountNumber: String,
+    vendorBankName: String,
 ) {
     var amount: Int by rememberSaveable { mutableStateOf(0) }
     var selectedUssdBank: Bank? by remember { mutableStateOf(null) }
@@ -69,7 +71,6 @@ fun AddFundsScreenModalBottomSheet(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    //Close button
                     IconButton(
                         onClick = {
                             closeModalBottomSheet()
@@ -87,8 +88,8 @@ fun AddFundsScreenModalBottomSheet(
                 when (selectedPaymentMode) {
                     PaymentMode.BANK_TRANSFER.name -> AddFundsBankPaymentMode(
                         modalBottomSheetState = modalBottomSheetState,
-                        "35647729920",
-                        "Wema Bank",
+                        accountNumber = vendorBankAccountNumber,
+                        bankName = vendorBankName,
                         onBackPressed = closeModalBottomSheet
                     )
                     PaymentMode.USSD.name -> {

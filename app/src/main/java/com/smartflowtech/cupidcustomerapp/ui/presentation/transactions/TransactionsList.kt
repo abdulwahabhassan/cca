@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter
 fun TransactionsList(
     homeScreenUiState: HomeScreenUiState,
     onSelectTransaction: (transaction: Transaction) -> Unit,
+    selectedCardNfcTagCode: String,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     currentBottomNavDestination: String
 ) {
@@ -130,8 +131,13 @@ fun TransactionsList(
                     }
                 }
 
-                val grouped = homeScreenUiState.transactions.sortedByDescending { it.date }
-                    .groupBy { it.date }
+                val grouped =
+                    homeScreenUiState.transactions.filter {
+                        if (selectedCardNfcTagCode.isNotEmpty())
+                            it.nfcTagCode == selectedCardNfcTagCode else true
+                    }
+                        .sortedByDescending { it.date }
+                        .groupBy { it.date }
 
                 LazyColumn(
                     modifier = Modifier
@@ -161,7 +167,8 @@ fun TransactionsList(
                     }
                 }
             }
-        } else -> {}
+        }
+        else -> {}
     }
 }
 

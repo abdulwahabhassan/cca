@@ -35,6 +35,7 @@ fun Transactions(
     homeScreenUiState: HomeScreenUiState,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     isCardSelected: Boolean,
+    selectedCardNfcTagCode: String,
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
@@ -102,6 +103,7 @@ fun Transactions(
                     showReceipt = true
                 },
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
+                selectedCardNfcTagCode = selectedCardNfcTagCode,
                 selectedTab = selectedTab,
                 onTabSelected = onTabSelected,
                 currentBottomNavDestination = currentBottomNavDestination,
@@ -153,7 +155,8 @@ fun Transactions(
                         showReceipt = true
                     },
                     bottomSheetScaffoldState = bottomSheetScaffoldState,
-                    currentBottomNavDestination = currentBottomNavDestination
+                    currentBottomNavDestination = currentBottomNavDestination,
+                    selectedCardNfcTagCode = selectedCardNfcTagCode
                 )
 
 
@@ -207,6 +210,7 @@ fun TransactionsPreview() {
                 SnackbarHostState()
             ),
             false,
+            "",
             "",
             {},
             "Transactions",

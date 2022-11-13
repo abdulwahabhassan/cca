@@ -64,7 +64,7 @@ class HomeViewModel @Inject constructor(
 
                 val wallets = when (walletsResult) {
                     is RepositoryResult.Success -> {
-                        mapWalletsResponseData(walletsResult.data)
+                        mapWalletsResponseData(walletsResult.data?.distinctBy { it.nfcTagCode })
                     }
                     is RepositoryResult.Error -> {
                         emptyList()

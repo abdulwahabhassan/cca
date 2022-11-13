@@ -48,7 +48,7 @@ fun HomeDashBoard(
     walletBalanceVisibility: Boolean,
     updateWalletVisibility: (Boolean) -> Unit,
     homeScreenUiState: HomeScreenUiState,
-    onCardSelected: (Boolean) -> Unit,
+    onCardSelected: (Boolean, String) -> Unit,
     isCardSelected: Boolean,
     onProfileClicked: () -> Unit,
     onNotificationsClicked: () -> Unit,
@@ -117,7 +117,7 @@ fun HomeDashBoard(
                             ) {
                                 IconButton(
                                     onClick = {
-                                        onCardSelected(false)
+                                        onCardSelected(false, "")
                                     }) {
                                     Icon(
                                         imageVector = Icons.Rounded.ArrowBack,
@@ -221,9 +221,10 @@ fun HomeDashBoard(
                                             updateWalletVisibility = updateWalletVisibility,
                                             vendorName = homeScreenUiState.wallets[page].vendorName,
                                             currentBalance = homeScreenUiState.wallets[page].currentBalance,
-                                            onCardSelected = { cardId ->
+                                            nfcTagCode = homeScreenUiState.wallets[page].nfcTagCode,
+                                            onCardSelected = { tagCode ->
                                                 if (!isCardSelected) {
-                                                    onCardSelected(true)
+                                                    onCardSelected(true, tagCode)
                                                 }
                                             },
                                             isCardSelected
@@ -305,8 +306,8 @@ fun PreviewHomeDashBoard() {
                 "",
                 Util.getListsOfWallets()
             ),
-            onCardSelected = {
-                isCardSelected = !it
+            onCardSelected = { bool, _ ->
+                isCardSelected = !bool
             },
             isCardSelected = isCardSelected,
             onProfileClicked = {},

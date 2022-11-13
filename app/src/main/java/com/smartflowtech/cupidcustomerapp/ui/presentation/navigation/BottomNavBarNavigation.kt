@@ -35,6 +35,7 @@ fun BottomNavBarNavigation(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     onDownloadTransactionsClicked: () -> Unit,
     isCardSelected: Boolean,
+    selectedCardNfcTagCode: String,
     onUploadImageClicked: () -> Unit,
     onProfileUpdateSuccess: () -> Unit,
     profilePicture: String,
@@ -117,6 +118,7 @@ fun BottomNavBarNavigation(
                 homeScreenUiState = homeScreenUiState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 isCardSelected = isCardSelected,
+                selectedCardNfcTagCode = selectedCardNfcTagCode,
                 selectedTab = selectedTab,
                 onTabSelected = { tab ->
                     selectedTab = tab
@@ -137,6 +139,7 @@ fun BottomNavBarNavigation(
                 homeScreenUiState = homeScreenUiState,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 isCardSelected = isCardSelected,
+                selectedCardNfcTagCode = selectedCardNfcTagCode,
                 selectedTab = selectedTab,
                 onTabSelected = { tab ->
                     selectedTab = tab

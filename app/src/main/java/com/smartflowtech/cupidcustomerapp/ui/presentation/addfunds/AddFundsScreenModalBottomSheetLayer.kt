@@ -13,7 +13,9 @@ import kotlinx.coroutines.launch
 fun AddFundsScreenModalBottomSheetLayer(
     goBackToHomeScreen: () -> Unit,
     initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
-    paymentMethod: String
+    paymentMethod: String,
+    vendorBankAccountNumber: String,
+    vendorBankName: String,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(
@@ -54,7 +56,9 @@ fun AddFundsScreenModalBottomSheetLayer(
             ussdScreenContent = it
         },
         ussdScreenContent = ussdScreenContent,
-        initiatePayStackPayment = initiatePayStackPayment
+        initiatePayStackPayment = initiatePayStackPayment,
+        vendorBankAccountNumber = vendorBankAccountNumber,
+        vendorBankName = vendorBankName,
     )
 }
 

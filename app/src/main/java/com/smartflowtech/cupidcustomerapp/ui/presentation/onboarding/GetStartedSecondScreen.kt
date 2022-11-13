@@ -56,7 +56,7 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
             verticalArrangement = Arrangement.Bottom,
         ) {
             Text(
-                text = "Second start screen",
+                text = "Payments made easy",
                 color = Color.White,
                 style = MaterialTheme.typography.h6
             )

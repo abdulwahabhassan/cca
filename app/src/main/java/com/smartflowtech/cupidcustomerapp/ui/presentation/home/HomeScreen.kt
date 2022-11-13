@@ -65,6 +65,8 @@ fun HomeScreen(
     var bottomAppBarVisibility by rememberSaveable { mutableStateOf(true) }
 
     var isCardSelected: Boolean by rememberSaveable { mutableStateOf(false) }
+    var selectedCardNfcTagCode: String by rememberSaveable { mutableStateOf("") }
+
     var sheetPeekHeight by remember {
         mutableStateOf(
             if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.50f
@@ -240,6 +242,7 @@ fun HomeScreen(
                             } else {
                                 if (isCardSelected && bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
                                     isCardSelected = false
+                                    selectedCardNfcTagCode = ""
                                 } else {
                                     onBackPressed()
                                 }
@@ -254,7 +257,8 @@ fun HomeScreen(
                         homeScreenUiState = homeScreenUiState,
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
                         onDownloadTransactionsClicked = onDownloadTransactionsClicked,
-                        isCardSelected,
+                        isCardSelected = isCardSelected,
+                        selectedCardNfcTagCode = selectedCardNfcTagCode,
                         onUploadImageClicked = onUploadImageClicked,
                         onProfileUpdateSuccess = onProfileUpdateSuccess,
                         profilePicture = profilePicture,
@@ -276,7 +280,8 @@ fun HomeScreen(
                 walletBalanceVisibility = walletBalanceVisibility,
                 updateWalletVisibility = updateWalletVisibility,
                 homeScreenUiState = homeScreenUiState,
-                onCardSelected = { bool ->
+                onCardSelected = { bool, nfcTagCode ->
+                    selectedCardNfcTagCode = nfcTagCode
                     isCardSelected = bool
                 },
                 isCardSelected = isCardSelected,

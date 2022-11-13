@@ -32,6 +32,7 @@ fun WalletCard(
     updateWalletVisibility: (Boolean) -> Unit,
     vendorName: String,
     currentBalance: String,
+    nfcTagCode: String,
     onCardSelected: (String) -> Unit,
     isCardSelected: Boolean
 ) {
@@ -39,7 +40,7 @@ fun WalletCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onCardSelected(currentBalance)
+                onCardSelected(nfcTagCode)
             },
         shape = RoundedCornerShape(16.dp),
         elevation = if (isCardSelected) 16.dp else 4.dp,
@@ -131,7 +132,7 @@ fun WalletCard(
                     Text(text = "Vendor: ${vendorName}", fontSize = 12.sp)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Loyalty Points: 0",
+                        text = nfcTagCode,
                         fontSize = 12.sp,
                         color = brightBlue,
                     )
@@ -153,6 +154,7 @@ fun WalletCardPreview() {
             {},
             "Smartflow",
             "₦30,000",
+            "VLX-SJS32",
             {},
             false
         )

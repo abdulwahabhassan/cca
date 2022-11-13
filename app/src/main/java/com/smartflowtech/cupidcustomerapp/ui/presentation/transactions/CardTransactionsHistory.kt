@@ -32,6 +32,7 @@ fun CardTransactionHistory(
     homeScreenUiState: HomeScreenUiState,
     onSelectTransaction: (Transaction) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
+    selectedCardNfcTagCode: String,
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
@@ -160,6 +161,7 @@ fun CardTransactionHistory(
             TransactionsList(
                 homeScreenUiState = homeScreenUiState,
                 onSelectTransaction = onSelectTransaction,
+                selectedCardNfcTagCode = selectedCardNfcTagCode,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 currentBottomNavDestination = currentBottomNavDestination
             )
@@ -294,7 +296,10 @@ fun CardTransactionHistoryPreview() {
                         1L,
                         "123000.00",
                         "2022-19-05",
-                        "450000.00"
+                        "450000.00",
+                        39930,
+                        "VLX-5324"
+
                     )
                 )
             ),
@@ -303,6 +308,7 @@ fun CardTransactionHistoryPreview() {
                 SnackbarHostState()
             ),
             onSelectTransaction = {},
+            selectedCardNfcTagCode = "VLX-E8393",
             selectedTab = "Analytics",
             onTabSelected = {},
             currentBottomNavDestination = "",

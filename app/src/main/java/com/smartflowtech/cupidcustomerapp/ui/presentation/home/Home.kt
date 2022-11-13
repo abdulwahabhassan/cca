@@ -42,6 +42,7 @@ fun Home(
     homeScreenUiState: HomeScreenUiState,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     isCardSelected: Boolean,
+    selectedCardNfcTagCode: String,
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
@@ -117,6 +118,7 @@ fun Home(
                     selectedTransaction = transaction
                     showReceipt = true
                 },
+                selectedCardNfcTagCode = selectedCardNfcTagCode,
                 selectedTab = selectedTab,
                 onTabSelected = onTabSelected,
                 currentBottomNavDestination = currentBottomNavDestination,
@@ -204,7 +206,8 @@ fun Home(
                             showReceipt = true
                         },
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
-                        currentBottomNavDestination = currentBottomNavDestination
+                        currentBottomNavDestination = currentBottomNavDestination,
+                        selectedCardNfcTagCode = selectedCardNfcTagCode
                     )
                 }
             }

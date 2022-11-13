@@ -1,7 +1,9 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.station
 
 import android.Manifest
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,20 +23,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.SemanticsProperties.Error
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.android.gms.maps.LocationSource
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.domain.Station
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
@@ -42,8 +45,8 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun Stations(
@@ -72,20 +75,18 @@ fun Stations(
 
     val multiplePermissionsState = rememberMultiplePermissionsState(
         listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     )
+    var showSnackBar by remember { mutableStateOf(false) }
 
-
-    fun showSnackBar(message: String) {
-        coroutineScope.launch {
+    if (showSnackBar && uiState.viewModelResult == ViewModelResult.ERROR && uiState.message?.isNotEmpty() == true)
+        LaunchedEffect(key1 = Unit, block = {
             bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                message,
+                uiState.message,
                 duration = SnackbarDuration.Short
             )
-        }
-    }
+        })
 
     Box(
         modifier = Modifier
@@ -93,17 +94,34 @@ fun Stations(
             .fillMaxSize()
     ) {
 
-        // Show map
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(LatLng(9.0820, 8.6753), 10f)
-        }
-        val uiSettings by remember { mutableStateOf(MapUiSettings()) }
-        val properties by remember {
-            mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = false))
-        }
 
         if (selectedTab == "Map") {
             if (multiplePermissionsState.allPermissionsGranted) {
+                //Default location is SmartFlow's HQ
+                var currentDeviceLat by remember { mutableStateOf(6.5998) }
+                var currentDeviceLong by remember { mutableStateOf(3.3727) }
+
+                val fusedLocationClient = LocationServices
+                    .getFusedLocationProviderClient(LocalContext.current)
+
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    if (location != null) {
+                        currentDeviceLat = location.latitude
+                        currentDeviceLong = location.longitude
+                    }
+                }
+
+                val cameraPositionState = rememberCameraPositionState() {
+                    position = CameraPosition.fromLatLngZoom(
+                        LatLng(currentDeviceLat, currentDeviceLong),
+                        10f
+                    )
+                }
+                val uiSettings by remember { mutableStateOf(MapUiSettings()) }
+                val properties by remember {
+                    mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+                }
+
                 GoogleMap(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -111,6 +129,31 @@ fun Stations(
                     properties = properties,
                     uiSettings = uiSettings
                 ) {
+
+                    val currentLocationDrawable = AppCompatResources.getDrawable(
+                        LocalContext.current,
+                        R.drawable.ic_device_location
+                    )
+                    Marker(
+                        state = MarkerState(
+                            position = LatLng(
+                                currentDeviceLat,
+                                currentDeviceLong
+                            )
+                        ),
+                        title = "My position",
+                        icon = currentLocationDrawable?.intrinsicWidth?.let {
+                            currentLocationDrawable.intrinsicHeight.let { it1 ->
+                                currentLocationDrawable.toBitmap(it, it1)
+                                    .let { BitmapDescriptorFactory.fromBitmap(it) }
+                            }
+                        }
+                            ?: BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN),
+                        onClick = {
+                            true
+                        }
+                    )
+
                     uiState.data?.filterNot { it.latitude == null || it.longitude == null }
                         ?.forEach { vendorStation ->
                             Marker(
@@ -325,9 +368,7 @@ fun Stations(
 
                     }
                     ViewModelResult.ERROR -> {
-                        if (uiState.message?.isNotEmpty() == true) {
-                            showSnackBar(uiState.message)
-                        }
+                        showSnackBar = true
                     }
                     ViewModelResult.SUCCESS -> {
                         LazyColumn(

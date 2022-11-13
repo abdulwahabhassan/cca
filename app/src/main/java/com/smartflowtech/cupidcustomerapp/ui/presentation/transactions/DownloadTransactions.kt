@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +22,7 @@ import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @Composable
 fun DownloadTransactions(
@@ -34,11 +37,12 @@ fun DownloadTransactions(
     var isStartDateError by rememberSaveable { mutableStateOf(false) }
     var isEndDateError by rememberSaveable { mutableStateOf(false) }
     var printFormatSelection by rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf("PDF")
     }
     val coroutineScope = rememberCoroutineScope()
     var showLoadingIndicator: Boolean by rememberSaveable { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
+    val ctx = LocalContext.current
 
 
     fun resetErrorsAndLabels() {
@@ -262,8 +266,20 @@ fun DownloadTransactions(
                         validateInput(trimmedStartDate, trimmedEndDate)
 
                         if (!isStartDateError && !isEndDateError) {
-                            showLoadingIndicator = true
-                            doPrintTransactionReport(dateFrom = trimmedStartDate, trimmedEndDate)
+                            if (LocalDate.parse(trimmedStartDate) > LocalDate.parse(trimmedEndDate)) {
+                                Toast.makeText(
+                                    ctx,
+                                    "Invalid Dates Selected!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                showLoadingIndicator = true
+                                doPrintTransactionReport(
+                                    dateFrom = trimmedStartDate,
+                                    trimmedEndDate
+                                )
+                            }
+
                         }
                     },
                     shape = RoundedCornerShape(10.dp),
