@@ -73,7 +73,7 @@ interface CupidApiService {
         @Body updateDeviceTokenRequestBody: UpdateDeviceTokenRequestBody
     ): CupidApiResponse<Any>
 
-    @GET("purchase_export")
+    @POST("purchase_export")
     suspend fun getTransactionReport(
         @Header("Authorization") token: String,
         @Body transactionReportRequestBody: TransactionReportRequestBody

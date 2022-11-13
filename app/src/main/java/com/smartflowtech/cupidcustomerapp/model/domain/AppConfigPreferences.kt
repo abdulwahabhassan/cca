@@ -22,7 +22,7 @@ data class AppConfigPreferences(
     val emailNotifications: Boolean = false,
     val pushNotifications: Boolean = false,
     val paymentMethod: String = PaymentMethodPreference.ASK_ALWAYS.name,
-    val stationFilter: String = "state",
+    val stationFilter: String = StationFilter.STATE.name,
     val notificationsFilter: String = DaysFilter.LAST_THIRTY_DAYS.name,
     val vendorId: Long = -1,
     val vendorAccountNumber: String = "",

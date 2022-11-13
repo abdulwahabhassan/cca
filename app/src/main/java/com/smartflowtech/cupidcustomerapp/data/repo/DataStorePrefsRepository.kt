@@ -78,7 +78,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             emailNotifications = preferences[PreferencesKeys.EMAIL_NOTIFICATIONS] ?: false,
             pushNotifications = preferences[PreferencesKeys.PUSH_NOTIFICATIONS] ?: false,
             paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name,
-            stationFilter = preferences[PreferencesKeys.STATION_FILTER] ?: "state",
+            stationFilter = preferences[PreferencesKeys.STATION_FILTER] ?: StationFilter.STATE.name,
             notificationsFilter = preferences[PreferencesKeys.NOTIFICATION_FILTER] ?: DaysFilter.LAST_THIRTY_DAYS.name,
             vendorId = preferences[PreferencesKeys.VENDOR_ID] ?: -1,
             vendorAccountName = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] ?: "",

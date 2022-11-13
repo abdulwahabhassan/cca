@@ -50,8 +50,12 @@ fun UploadImage(
         onResult = { bitmap ->
             if (bitmap != null) {
                 try {
-                    val uri = getImageUri(ctx, bitmap)
-                    onImageSelected(uri.toString())
+                    val uri = getImageUri(ctx, bitmap).toString()
+                    if (uri.isNotEmpty()) {
+                        Timber.d(uri)
+                        Toast.makeText(ctx, "Uploaded successfully", Toast.LENGTH_LONG).show()
+                        onImageSelected(uri)
+                    }
                 } catch (e: Exception) {
                     Toast.makeText(ctx, "Can't upload image!", Toast.LENGTH_LONG).show()
                 }
@@ -61,10 +65,10 @@ fun UploadImage(
 
     val galleryLauncher = rememberLauncherForActivityResult(OpenMediaStore()) { uri ->
         if (uri.isNotEmpty()) {
-            Toast.makeText(ctx, uri, Toast.LENGTH_LONG).show()
             Timber.d(uri)
+            Toast.makeText(ctx, "Uploaded successfully", Toast.LENGTH_LONG).show()
             onImageSelected(uri)
-        } else Toast.makeText(ctx, "No Image was selected", Toast.LENGTH_LONG).show()
+        }
 
     }
 
@@ -110,7 +114,10 @@ fun UploadImage(
             }
         }
     } else {
-        Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)) {
             Text(
                 getTextToShowGivenPermissions(
                     multiplePermissionsState.revokedPermissions,

@@ -116,15 +116,19 @@ fun DownloadTransactions(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text(
-                "Input History Range", color = Color.Black,
-                fontFamily = AthleticsFontFamily,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    "Input History Range", color = Color.Black,
+                    fontFamily = AthleticsFontFamily,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -269,7 +273,7 @@ fun DownloadTransactions(
                             if (LocalDate.parse(trimmedStartDate) > LocalDate.parse(trimmedEndDate)) {
                                 Toast.makeText(
                                     ctx,
-                                    "Invalid Dates Selected!",
+                                    "Invalid input! Check dates",
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {

@@ -378,8 +378,8 @@ object Util {
 
     fun getListOfStationsFilter(): List<String> {
         return listOf(
-            "State",
-            "LGA"
+            StationFilter.STATE.name,
+            StationFilter.CITY.name
         )
     }
 

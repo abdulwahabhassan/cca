@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +26,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.SemanticsProperties.Error
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,13 +41,16 @@ import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
+import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Header
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
-import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun Stations(
     onStationFilterClicked: () -> Unit,
@@ -71,7 +74,6 @@ fun Stations(
         } ?: emptyList()
         mutableStateOf(list)
     }
-    val coroutineScope = rememberCoroutineScope()
 
     val multiplePermissionsState = rememberMultiplePermissionsState(
         listOf(
@@ -79,6 +81,17 @@ fun Stations(
         )
     )
     var showSnackBar by remember { mutableStateOf(false) }
+
+    val ctx = LocalContext.current
+
+    val deviceCurrentLocationDrawable = AppCompatResources.getDrawable(
+        ctx,
+        R.drawable.ic_device_location
+    )
+    val vendorStationLocationDrawable = AppCompatResources.getDrawable(
+        ctx,
+        R.drawable.ic_gas_station
+    )
 
     if (showSnackBar && uiState.viewModelResult == ViewModelResult.ERROR && uiState.message?.isNotEmpty() == true)
         LaunchedEffect(key1 = Unit, block = {
@@ -97,12 +110,14 @@ fun Stations(
 
         if (selectedTab == "Map") {
             if (multiplePermissionsState.allPermissionsGranted) {
-                //Default location is SmartFlow's HQ
-                var currentDeviceLat by remember { mutableStateOf(6.5998) }
-                var currentDeviceLong by remember { mutableStateOf(3.3727) }
 
                 val fusedLocationClient = LocationServices
                     .getFusedLocationProviderClient(LocalContext.current)
+
+                //Default device location is SmartFlow's HQ
+                var currentDeviceLat by remember { mutableStateOf(6.5999) }
+                var currentDeviceLong by remember { mutableStateOf(3.3727) }
+                val zoom by remember { mutableStateOf(11f) }
 
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     if (location != null) {
@@ -111,15 +126,18 @@ fun Stations(
                     }
                 }
 
-                val cameraPositionState = rememberCameraPositionState() {
-                    position = CameraPosition.fromLatLngZoom(
-                        LatLng(currentDeviceLat, currentDeviceLong),
-                        10f
-                    )
-                }
                 val uiSettings by remember { mutableStateOf(MapUiSettings()) }
                 val properties by remember {
                     mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+                }
+
+                val cameraPositionState = remember(currentDeviceLat, currentDeviceLong) {
+                    CameraPositionState(
+                        CameraPosition.fromLatLngZoom(
+                            LatLng(currentDeviceLat, currentDeviceLong),
+                            zoom
+                        )
+                    )
                 }
 
                 GoogleMap(
@@ -130,10 +148,6 @@ fun Stations(
                     uiSettings = uiSettings
                 ) {
 
-                    val currentLocationDrawable = AppCompatResources.getDrawable(
-                        LocalContext.current,
-                        R.drawable.ic_device_location
-                    )
                     Marker(
                         state = MarkerState(
                             position = LatLng(
@@ -141,10 +155,9 @@ fun Stations(
                                 currentDeviceLong
                             )
                         ),
-                        title = "My position",
-                        icon = currentLocationDrawable?.intrinsicWidth?.let {
-                            currentLocationDrawable.intrinsicHeight.let { it1 ->
-                                currentLocationDrawable.toBitmap(it, it1)
+                        icon = deviceCurrentLocationDrawable?.intrinsicWidth?.let {
+                            deviceCurrentLocationDrawable.intrinsicHeight.let { it1 ->
+                                deviceCurrentLocationDrawable.toBitmap(it, it1)
                                     .let { BitmapDescriptorFactory.fromBitmap(it) }
                             }
                         }
@@ -163,6 +176,13 @@ fun Stations(
                                         vendorStation.longitude?.toDouble()!!
                                     )
                                 ),
+                                icon = vendorStationLocationDrawable?.intrinsicWidth?.let {
+                                    vendorStationLocationDrawable.intrinsicHeight.let { it1 ->
+                                        vendorStationLocationDrawable.toBitmap(it, it1)
+                                            .let { BitmapDescriptorFactory.fromBitmap(it) }
+                                    }
+                                }
+                                    ?: BitmapDescriptorFactory.defaultMarker(),
                                 title = vendorStation.name,
                                 onClick = {
                                     onStationSelected(vendorStation)
@@ -365,61 +385,48 @@ fun Stations(
                                     .height(54.dp)
                             )
                         }
-
                     }
                     ViewModelResult.ERROR -> {
                         showSnackBar = true
                     }
                     ViewModelResult.SUCCESS -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
 
-                            items(stations) { station ->
-                                Column(
+                        val filteredStations = when {
+                            stationFilter.contains(
+                                com.smartflowtech.cupidcustomerapp.model.domain.StationFilter.STATE.name,
+                                true
+                            ) -> stations
+                                .filter { it.state?.isNotEmpty() == true }
+                                .groupBy { it.state }
+                            stationFilter.contains(
+                                com.smartflowtech.cupidcustomerapp.model.domain.StationFilter.CITY.name,
+                                true
+                            ) -> stations
+                                .filter { it.city?.isNotEmpty() == true }
+                                .groupBy { it.city }
+                            else -> emptyMap()
+                        }
+
+                        if (filteredStations.isEmpty()) {
+                            Column(
+                                Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
                                     modifier = Modifier
-                                        .clickable {
-                                            onStationSelected(station)
-                                        }
-                                        .fillMaxWidth()
-                                        .padding(start = 8.dp, end = 8.dp, top = 16.dp),
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 8.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Image(
-                                            modifier = Modifier.size(32.dp),
-                                            painter = painterResource(id = R.drawable.ic_station),
-                                            contentDescription = "Stations icon"
-                                        )
-                                        Spacer(modifier = Modifier.width(12.dp))
-                                        Column {
-                                            Text(
-                                                text = station.name?.capitalizeEachWord() ?: "",
-                                                fontFamily = AthleticsFontFamily,
-                                                fontWeight = FontWeight.W400,
-                                                color = Color.Black
-                                            )
-                                            Spacer(modifier = Modifier.height(4.dp))
-                                            Text(
-                                                text = station.address?.capitalizeEachWord() ?: "",
-                                                fontSize = 14.sp,
-                                                color = grey
-                                            )
-                                        }
-                                    }
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    Divider(
-                                        color = lineGrey,
-                                        thickness = 0.5.dp,
-                                        modifier = Modifier.padding(horizontal = 8.dp)
-                                    )
-                                }
+                                        .size(50.dp),
+                                    painter = painterResource(id = R.drawable.ic_notification),
+                                    contentDescription = "No stations icon",
+                                    tint = Color.Unspecified
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(text = "There are no stations currently available")
                             }
+                        } else {
+                            StationList(filteredStations, onStationSelected)
+
                         }
                     }
                 }
@@ -429,6 +436,77 @@ fun Stations(
 
     }
 
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun StationList(
+    filteredStations: Map<String?, List<VendorStation>>,
+    onStationSelected: (VendorStation) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        filteredStations.forEach { (header, stations) ->
+            if (stations.isNotEmpty() && header != null) {
+                stickyHeader {
+                    Header(
+                        header,
+                        bgColor = lightGrey,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                items(stations) { station ->
+                    Column(
+                        modifier = Modifier
+                            .clickable {
+                                onStationSelected(station)
+                            }
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp, top = 16.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                modifier = Modifier.size(32.dp),
+                                painter = painterResource(id = R.drawable.ic_station),
+                                contentDescription = "Stations icon"
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = station.name?.capitalizeEachWord()
+                                        ?: "",
+                                    fontFamily = AthleticsFontFamily,
+                                    fontWeight = FontWeight.W400,
+                                    color = Color.Black
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = station.address?.capitalizeEachWord()
+                                        ?: "",
+                                    fontSize = 14.sp,
+                                    color = grey
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Divider(
+                            color = lineGrey,
+                            thickness = 0.5.dp,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+                }
+            }
+
+        }
+    }
 }
 
 

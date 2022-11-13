@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 
 @Composable
@@ -22,7 +23,8 @@ fun Header(title: String, bgColor: Color = Color.White, fontWeight: FontWeight =
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
         text = title,
         style = MaterialTheme.typography.caption,
-        fontWeight = fontWeight
+        fontWeight = fontWeight,
+        fontSize = 14.sp
     )
 }
 

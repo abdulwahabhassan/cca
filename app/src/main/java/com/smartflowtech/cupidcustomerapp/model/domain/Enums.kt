@@ -42,3 +42,9 @@ enum class PaymentMethodPreference {
     PAYSTACK,
     ASK_ALWAYS
 }
+
+
+enum class StationFilter {
+    STATE,
+    CITY
+}
