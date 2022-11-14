@@ -51,7 +51,7 @@ fun HomeScreen(
     onStationFilterClicked: () -> Unit,
     onStationSelected: (VendorStation) -> Unit,
     onGraphFilterClicked: () -> Unit
-    ) {
+) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -74,9 +74,13 @@ fun HomeScreen(
     }
 
     LaunchedEffect(key1 = bottomSheetState.currentValue) {
-        if (bottomSheetState.targetValue == BottomSheetValue.Expanded && currentBottomNavDestinationTitle == HomeScreen.Home.title) {
+        if (bottomSheetState.targetValue == BottomSheetValue.Expanded &&
+            currentBottomNavDestinationTitle == HomeScreen.Home.title
+        ) {
             onBottomNavItemClicked(HomeScreen.Transactions.route)
-        } else if (bottomSheetState.targetValue == BottomSheetValue.Collapsed && currentBottomNavDestinationTitle != HomeScreen.Home.title) {
+        } else if (bottomSheetState.targetValue == BottomSheetValue.Collapsed &&
+            currentBottomNavDestinationTitle != HomeScreen.Home.title
+        ) {
             onBottomNavItemClicked(HomeScreen.Home.route)
         }
     }
@@ -167,8 +171,10 @@ fun HomeScreen(
                 }
             },
             sheetBackgroundColor = Color.Transparent,
-            sheetPeekHeight = if (currentBottomNavDestinationTitle == HomeScreen.Home.title) sheetPeekHeight * 1.2f
-            else sheetPeekHeight,
+            sheetPeekHeight = if (currentBottomNavDestinationTitle == HomeScreen.Home.title)
+                sheetPeekHeight * 1.2f
+            else
+                sheetPeekHeight,
             sheetContent = {
                 Row(
                     modifier = Modifier
@@ -191,20 +197,28 @@ fun HomeScreen(
                         }
 
                         Text(
-                            text = if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title && isCardSelected) "Card History"
-                            else currentBottomNavDestinationTitle,
+                            text = if (currentBottomNavDestinationTitle ==
+                                HomeScreen.Transactions.title && isCardSelected
+                            ) "Card History"
+                            else
+                                currentBottomNavDestinationTitle,
                             color = Color.White,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold
                         )
 
                         if ((currentBottomNavDestinationTitle == HomeScreen.Transactions.title ||
-                            currentBottomNavDestinationTitle == HomeScreen.Notifications.title) && !isCardSelected
+                                    currentBottomNavDestinationTitle ==
+                                    HomeScreen.Notifications.title) && !isCardSelected
                         ) {
                             IconButton(onClick = {
-                                if (currentBottomNavDestinationTitle == HomeScreen.Transactions.title) {
+                                if (currentBottomNavDestinationTitle ==
+                                    HomeScreen.Transactions.title
+                                ) {
                                     onTransactionsFilterClicked()
-                                } else if (currentBottomNavDestinationTitle == HomeScreen.Notifications.title) {
+                                } else if (currentBottomNavDestinationTitle ==
+                                    HomeScreen.Notifications.title
+                                ) {
                                     onNotificationsFilterClicked()
                                 }
 

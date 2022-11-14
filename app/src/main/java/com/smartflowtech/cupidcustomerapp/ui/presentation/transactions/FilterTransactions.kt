@@ -36,7 +36,7 @@ fun FilterTransactions(
 ) {
 
     val daysFilter =
-        remember { mutableStateOf(appConfigPreferences.periodFilter) }
+        remember { mutableStateOf(appConfigPreferences.transactionPeriodFilter) }
     val completedStatusFilter =
         remember { mutableStateOf(appConfigPreferences.completedStatusFilter) }
     val pendingStatusFilter =
@@ -186,34 +186,6 @@ fun FilterTransactions(
                         )
                     }
                 }
-
-//                if (category == Category.DATE) {
-//                    item {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(start = 16.dp),
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            Text(
-//                                modifier = Modifier.padding(vertical = 8.dp),
-//                                text = "Custom search",
-//                                color = grey,
-//                                fontFamily = AthleticsFontFamily
-//                            )
-//                            Spacer(modifier = Modifier.width(4.dp))
-//                            IconButton(onClick = {
-//
-//                            }) {
-//                                Icon(
-//                                    imageVector = Icons.Rounded.ArrowForward,
-//                                    contentDescription = "Forward arrow",
-//                                    tint = grey
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
             }
 
             item {

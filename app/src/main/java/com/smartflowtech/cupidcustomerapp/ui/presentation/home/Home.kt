@@ -61,20 +61,9 @@ fun Home(
         mutableStateOf(false)
     }
 
-    var selectedTransaction: Transaction by remember {
+    var selectedTransaction: Transaction? by remember {
         mutableStateOf(
-            Transaction(
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
-            )
+            null
         )
     }
 

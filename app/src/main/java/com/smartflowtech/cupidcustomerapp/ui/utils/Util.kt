@@ -11,7 +11,6 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.gson.reflect.TypeToken
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.*
-import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -368,11 +367,11 @@ object Util {
         )
     }
 
-    fun getListOfDaysFilter(): List<DaysFilter> {
+    fun getPeriodFilter(): List<Period> {
         return listOf(
-            DaysFilter.TODAY,
-            DaysFilter.LAST_SEVEN_DAYS,
-            DaysFilter.LAST_THIRTY_DAYS
+            Period.TODAY,
+            Period.ONE_WEEK,
+            Period.ONE_MONTH
         )
     }
 
@@ -395,7 +394,8 @@ object Util {
                 transactionSeqNumber = "TRS90399291",
                 vendorStationName = "Purchase on CUPID_PROD",
                 product = "PMS",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Pending",
@@ -407,7 +407,8 @@ object Util {
                 transactionSeqNumber = "TRS765599291",
                 vendorStationName = "Wallet Top-Up",
                 product = "PMS",
-                nfcTagCode = "456"
+                nfcTagCode = "456",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Completed",
@@ -419,7 +420,8 @@ object Util {
                 transactionSeqNumber = "TRS765599291",
                 vendorStationName = "Wallet Top-Up",
                 product = "AGO",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Failed",
@@ -431,7 +433,8 @@ object Util {
                 transactionSeqNumber = "TRS723599291",
                 vendorStationName = "Mobile Transfer",
                 product = "AGO",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Completed",
@@ -443,7 +446,8 @@ object Util {
                 transactionSeqNumber = "TRS0949482392",
                 vendorStationName = "Mobile Transfer",
                 product = "DPK",
-                nfcTagCode = "456"
+                nfcTagCode = "456",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Completed",
@@ -455,7 +459,8 @@ object Util {
                 transactionSeqNumber = "TRS501499291",
                 vendorStationName = "Purchase on CUPID_PROD",
                 product = "DPK",
-                nfcTagCode = "456"
+                nfcTagCode = "456",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Pending",
@@ -467,7 +472,8 @@ object Util {
                 transactionSeqNumber = "TRS501499291",
                 vendorStationName = "Wallet Top-Up",
                 product = "PMS",
-                nfcTagCode = "456"
+                nfcTagCode = "456",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Failed",
@@ -479,7 +485,8 @@ object Util {
                 transactionSeqNumber = "TRS97814937841",
                 vendorStationName = "Purchase on CUPID_PROD",
                 product = "AGO",
-                nfcTagCode = "456"
+                nfcTagCode = "456",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Completed",
@@ -491,7 +498,8 @@ object Util {
                 transactionSeqNumber = "TRS501499291",
                 vendorStationName = "Purchase on CUPID_PROD",
                 product = "DPK",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Pending",
@@ -503,7 +511,8 @@ object Util {
                 transactionSeqNumber = "TRS5011235591",
                 vendorStationName = "Purchase on CUPID_PROD",
                 product = "PMS",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Pending",
@@ -515,7 +524,8 @@ object Util {
                 transactionSeqNumber = "TRS504299291",
                 vendorStationName = "Cash Back",
                 product = "AGO",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
                 "Pending",
@@ -527,7 +537,8 @@ object Util {
                 transactionSeqNumber = "TRS3819499291",
                 vendorStationName = "Transaction Fee",
                 product = "DPK",
-                nfcTagCode = "123"
+                nfcTagCode = "123",
+                dateTime = "2022-01-01 12:00:00"
             )
 
         )

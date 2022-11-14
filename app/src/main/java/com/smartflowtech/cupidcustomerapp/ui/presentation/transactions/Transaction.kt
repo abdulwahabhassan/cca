@@ -108,16 +108,22 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
 @Preview(showBackground = true)
 @Composable
 fun TransactionPreview() {
-    Transaction(
-        "Completed",
-        "11:24PM",
-        "Transaction",
-        "₦167,000.00",
-        "",
-        "Credit",
-        "TRS283883920",
-        "Wallet Top-Up",
-        "PMS",
-        "VLX-5324"
-    )
+    CupidCustomerAppTheme {
+        Transaction(
+            data = Transaction(
+                "Completed",
+                "11:24PM",
+                "Transaction",
+                "160000",
+                "2022-01-01",
+                "Credit",
+                "TRS283883920",
+                "Wallet Top-Up",
+                "PMS",
+                "VLX-5324",
+                "2022-01-01T12:00:00"
+            ),
+            onClick = {}
+        )
+    }
 }

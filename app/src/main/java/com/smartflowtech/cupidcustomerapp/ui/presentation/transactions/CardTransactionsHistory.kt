@@ -19,16 +19,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.domain.Period
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.model.domain.Wallet
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.CardHistoryViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CardTransactionHistory(
+    viewModel: CardHistoryViewModel = hiltViewModel(),
     homeScreenUiState: HomeScreenUiState,
     onSelectTransaction: (Transaction) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
@@ -38,7 +43,6 @@ fun CardTransactionHistory(
     currentBottomNavDestination: String,
     onGraphFilterClicked: () -> Unit
 ) {
-
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -124,7 +128,10 @@ fun CardTransactionHistory(
                             .width(50.dp)
                             .height(2.dp)
                             .background(
-                                color = if (selectedTab == "Analytics") darkBlue else Color.Transparent,
+                                color = if (selectedTab == "Analytics")
+                                    darkBlue
+                                else
+                                    Color.Transparent,
                                 shape = RoundedCornerShape(50)
                             ),
                         color = if (selectedTab == "Analytics") darkBlue else Color.Transparent
@@ -260,9 +267,128 @@ fun CardTransactionHistory(
                     }
                 }
 
+                val transactions = when (viewModel.appConfigPreferences.transactionPeriodFilter) {
+                    Period.ONE_WEEK.name -> {
+                        homeScreenUiState.transactions
+                            .filter {
+                                if (selectedCardNfcTagCode.isNotEmpty())
+                                    it.nfcTagCode == selectedCardNfcTagCode else true
+                            }
+                            .filter { it.date != null }
+                            .filter {
+                                LocalDate.parse(it.date) >=
+                                        LocalDate.now().minusDays(7)
+                            }
+                            .groupBy { it.date }
+                    }
+                    Period.TWO_WEEKS.name -> {
+                        homeScreenUiState.transactions
+                            .filter {
+                                if (selectedCardNfcTagCode.isNotEmpty())
+                                    it.nfcTagCode == selectedCardNfcTagCode else true
+                            }
+                            .filter { it.date != null }
+                            .filter {
+                                LocalDate.parse(it.date) >=
+                                        LocalDate.now().minusDays(14)
+                            }
+                            .groupBy { it.date }
+                    }
+                    Period.ONE_MONTH.name -> {
+                        homeScreenUiState.transactions
+                            .filter {
+                                if (selectedCardNfcTagCode.isNotEmpty())
+                                    it.nfcTagCode == selectedCardNfcTagCode else true
+                            }
+                            .filter { it.date != null }
+                            .filter {
+                                LocalDate.parse(it.date) >=
+                                        LocalDate.now().minusDays(30)
+                            }
+                            .groupBy { it.date }
+                    }
+                    else -> {
+                        //One year
+                        homeScreenUiState.transactions
+                            .filter {
+                                if (selectedCardNfcTagCode.isNotEmpty())
+                                    it.nfcTagCode == selectedCardNfcTagCode else true
+                            }
+                            .filter { it.date != null }
+                            .filter {
+                                LocalDate.parse(it.date) >=
+                                        LocalDate.now().minusDays(720)
+                            }
+                            .groupBy { it.date?.substring(3, 5) }
+                    }
+                }
+
+                val averageTransactions = transactions.mapValues { entry ->
+                    val totalAmount = entry.value.filterNot { it.amount == null }
+                        .sumOf { it.amount?.toDouble()!! }
+                    totalAmount / entry.value.size
+                }
+
+                val range = when (viewModel.appConfigPreferences.transactionPeriodFilter) {
+                    Period.ONE_WEEK.name -> {
+                        0 until 7
+                    }
+                    Period.TWO_WEEKS.name -> {
+                        0 until 14
+                    }
+                    Period.ONE_MONTH.name -> {
+                        0 until 31
+                    }
+                    else -> {
+                        0 until 12
+                    }
+                }
+
+                val yStep = averageTransactions.values.sum() / averageTransactions.size
+                val points = averageTransactions.values.map { it.toFloat() }
+
+                Box(
+                    modifier = Modifier
+                        .padding(start = 24.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
+                        .fillMaxSize()
+                        .background(Color.Transparent)
+                ) {
+                    if (averageTransactions.isEmpty()) {
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.2f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(50.dp),
+                                painter = painterResource(id = R.drawable.ic_no_transactions),
+                                contentDescription = "No analytics available icon",
+                                tint = Color.Unspecified
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(text = "No Analytics available to show")
+                        }
+                    } else {
+                        Graph(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(500.dp),
+                            xValues = range.map { it + 1 },
+                            yValues = (
+                                    0..(averageTransactions.values.max() /
+                                            averageTransactions.values.min()).toInt()
+                                    ).map { (it + 1) * yStep.toInt() },
+                            points = points,
+                            paddingSpace = 16.dp,
+                            verticalStep = yStep.toInt(),
+                            periodFilter = viewModel.appConfigPreferences.transactionPeriodFilter
+                        )
+                    }
+                }
             }
-
-
         }
     }
 }
@@ -286,7 +412,8 @@ fun CardTransactionHistoryPreview() {
                         "26716727",
                         "NNPC",
                         "PMS",
-                        "VLX-5324"
+                        "VLX-5324",
+                        "2022-01-01 12:00:00"
                     )
                 ),
                 message = null,

@@ -21,7 +21,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val TOKEN = stringPreferencesKey("token")
         val PHONE_NUMBER = stringPreferencesKey("phoneNumber")
         val WALLET_BALANCE_VISIBILITY = booleanPreferencesKey("walletVisibility")
-        val DAYS_FILTER = stringPreferencesKey("periodFilter")
+        val TRANSACTION_PERIOD_FILTER = stringPreferencesKey("periodFilter")
         val COMPLETED_STATUS_FILTER = booleanPreferencesKey("completedStatusFilter")
         val FAILED_STATUS_FILTER = booleanPreferencesKey("failedStatusFilter")
         val PENDING_STATUS_FILTER = booleanPreferencesKey("pendingStatusFilter")
@@ -36,7 +36,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val PUSH_NOTIFICATIONS = booleanPreferencesKey("pushNotifications")
         val PAYMENT_METHOD = stringPreferencesKey("paymentMethod")
         val STATION_FILTER = stringPreferencesKey("stationFilter")
-        val NOTIFICATION_FILTER = stringPreferencesKey("notificationsFilter")
+        val NOTIFICATION_PERIOD_FILTER = stringPreferencesKey("notificationsFilter")
         val VENDOR_ID = longPreferencesKey("vendorId")
         val VENDOR_BANK_ACCOUNT_NUMBER = stringPreferencesKey("vendorAccountNumber")
         val VENDOR_BANK_ACCOUNT_NAME = stringPreferencesKey("vendorAccountName")
@@ -64,7 +64,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
             walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY]
                 ?: true,
-            periodFilter = preferences[PreferencesKeys.DAYS_FILTER] ?: Period.TWO_YEARS.name,
+            transactionPeriodFilter = preferences[PreferencesKeys.TRANSACTION_PERIOD_FILTER] ?: Period.TWO_YEARS.name,
             completedStatusFilter = preferences[PreferencesKeys.COMPLETED_STATUS_FILTER] ?: true,
             failedStatusFilter = preferences[PreferencesKeys.FAILED_STATUS_FILTER] ?: true,
             pendingStatusFilter = preferences[PreferencesKeys.PENDING_STATUS_FILTER] ?: true,
@@ -79,7 +79,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             pushNotifications = preferences[PreferencesKeys.PUSH_NOTIFICATIONS] ?: false,
             paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name,
             stationFilter = preferences[PreferencesKeys.STATION_FILTER] ?: StationFilter.STATE.name,
-            notificationsFilter = preferences[PreferencesKeys.NOTIFICATION_FILTER] ?: DaysFilter.LAST_THIRTY_DAYS.name,
+            notificationPeriodFilter = preferences[PreferencesKeys.NOTIFICATION_PERIOD_FILTER] ?: Period.ONE_MONTH.name,
             vendorId = preferences[PreferencesKeys.VENDOR_ID] ?: -1,
             vendorAccountName = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] ?: "",
             vendorAccountNumber = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NUMBER] ?: "",
@@ -155,7 +155,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         mapOfFilters: Map<String, Boolean>
     ) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.DAYS_FILTER] = daysFilter
+            mutablePreferences[PreferencesKeys.TRANSACTION_PERIOD_FILTER] = daysFilter
         }
 
         mapOfFilters.forEach { (filter, bool) ->
@@ -194,9 +194,9 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-    suspend fun updateNotificationsFilter(filter: String) {
+    suspend fun updateNotificationPeriodFilter(filter: String) {
         dataStore.edit { mutablePreferences ->
-            mutablePreferences[PreferencesKeys.NOTIFICATION_FILTER] = filter
+            mutablePreferences[PreferencesKeys.NOTIFICATION_PERIOD_FILTER] = filter
         }
     }
 
@@ -206,6 +206,12 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             mutablePreferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] = bankAcctName
             mutablePreferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NUMBER] = bankAcctNum
             mutablePreferences[PreferencesKeys.VENDOR_BANK_NAME] = bankAcctName
+        }
+    }
+
+    suspend fun updateTransactionPeriodFilter(period: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[PreferencesKeys.TRANSACTION_PERIOD_FILTER] = period
         }
     }
 }

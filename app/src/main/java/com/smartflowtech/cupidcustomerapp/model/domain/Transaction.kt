@@ -1,6 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.model.domain
 
-data class Transaction(
+data class Transaction (
     val status: String?,
     val time: String?,
     val title: String?,
@@ -11,5 +11,5 @@ data class Transaction(
     val vendorStationName: String?,
     val product: String?,
     val nfcTagCode: String?,
-    val dateTime: String? = "2022-01-01 12:00:00"
+    val dateTime: String?
 )

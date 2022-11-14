@@ -7,6 +7,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
@@ -87,8 +88,17 @@ fun HomeScreenModalBottomSheetLayer(
             }
         },
         modalBottomSheetContentKey = homeScreenModalBottomSheetContent,
-        onDaysFilterSelected = { dayFilter ->
-            viewModel.updateNotificationsFilter(dayFilter)
+        onDaysFilterSelected = { filter, context ->
+            when (context) {
+                HomeScreen.Notifications -> {
+                    viewModel.updateNotificationPeriodFilter(filter)
+                }
+                HomeScreen.Transactions -> {
+                    viewModel.updateTransactionPeriodFilter(filter)
+                }
+                else -> {}
+            }
+
         },
         printTransactionReport = { from, to ->
             viewModel.getTransactionReport(dateFrom = from, dateTo = to)

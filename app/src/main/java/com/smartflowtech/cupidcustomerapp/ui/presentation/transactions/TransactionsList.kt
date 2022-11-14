@@ -56,7 +56,12 @@ fun TransactionsList(
                         Column(
                             Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.2f else 0.7f),
+                                .fillMaxHeight(
+                                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed)
+                                        0.3f
+                                    else
+                                        0.7f
+                                ),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -65,7 +70,6 @@ fun TransactionsList(
                     }
                 }
             }
-
         }
 
         ViewModelResult.ERROR -> {
@@ -90,12 +94,19 @@ fun TransactionsList(
                         tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "You have no transaction history yet")
+                    Text(text = "No transaction history currently available")
                 }
             }
 
         }
         ViewModelResult.SUCCESS -> {
+            val groupedTransactions = homeScreenUiState.transactions.filter {
+                if (selectedCardNfcTagCode.isNotEmpty())
+                    it.nfcTagCode == selectedCardNfcTagCode else true
+            }
+                .sortedByDescending { it.date }
+                .groupBy { it.date }
+
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -103,7 +114,7 @@ fun TransactionsList(
                 horizontalAlignment = Alignment.Start
             ) {
 
-                if (homeScreenUiState.transactions.isEmpty()) {
+                if (groupedTransactions.isEmpty()) {
                     AnimatedVisibility(
                         visible = (bottomSheetScaffoldState.bottomSheetState.isCollapsed ||
                                 bottomSheetScaffoldState.bottomSheetState.isExpanded) &&
@@ -114,7 +125,12 @@ fun TransactionsList(
                         Column(
                             Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) 0.3f else 0.7f),
+                                .fillMaxHeight(
+                                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed)
+                                        0.3f
+                                    else
+                                        0.7f
+                                ),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -126,44 +142,35 @@ fun TransactionsList(
                                 tint = Color.Unspecified
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text(text = "No transactions")
+                            Text(text = "You have no transaction history yet")
                         }
                     }
-                }
-
-                val grouped =
-                    homeScreenUiState.transactions.filter {
-                        if (selectedCardNfcTagCode.isNotEmpty())
-                            it.nfcTagCode == selectedCardNfcTagCode else true
-                    }
-                        .sortedByDescending { it.date }
-                        .groupBy { it.date }
-
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    userScrollEnabled = true,
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        userScrollEnabled = true,
 //                    userScrollEnabled = currentBottomNavDestination != HomeScreen.Home.route,
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    grouped.forEach { (date, transactions) ->
-                        stickyHeader {
-                            Header(
-                                LocalDate.parse(date)
-                                    .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
-                            )
-                        }
-
-                        items(transactions) { transaction ->
-                            Transaction(
-                                transaction
-                            ) { data: Transaction ->
-                                onSelectTransaction(data)
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        groupedTransactions.forEach { (date, transactions) ->
+                            stickyHeader {
+                                Header(
+                                    LocalDate.parse(date)
+                                        .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
+                                )
                             }
-                        }
+                            items(transactions) { transaction ->
+                                Transaction(
+                                    transaction
+                                ) { data: Transaction ->
+                                    onSelectTransaction(data)
+                                }
+                            }
 
+                        }
                     }
                 }
             }

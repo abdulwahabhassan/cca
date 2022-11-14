@@ -20,6 +20,7 @@ import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.DaysFilter
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
+import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.station.StationDetails
 import com.smartflowtech.cupidcustomerapp.ui.presentation.station.StationFilter
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenModalBottomSheetContent
@@ -48,13 +49,14 @@ fun HomeScreenModalBottomSheet(
     onStationFilterSelected: (String) -> Unit,
     modalBottomSheetContentKey: String,
     setModalBottomSheetContent: (String) -> Unit,
-    onDaysFilterSelected: (String) -> Unit,
+    onDaysFilterSelected: (String, HomeScreen) -> Unit,
     printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
     var successMessage: String by rememberSaveable { mutableStateOf("") }
     var station: VendorStation? by remember { mutableStateOf(null) }
+    var filterContext: HomeScreen by remember { mutableStateOf(HomeScreen.Transactions) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -170,10 +172,12 @@ fun HomeScreenModalBottomSheet(
                             )
                         }
                         HomeScreenModalBottomSheetContent.DaysFilter.contentKey -> {
-                            DaysFilter(onDaysFilterSelected = { filter ->
+                            DaysFilter(onDaysFilterSelected = { filter, context ->
                                 goBack()
-                                onDaysFilterSelected(filter)
-                            })
+                                onDaysFilterSelected(filter, context)
+                            },
+                                context = filterContext
+                            )
                         }
                     }
                 }
@@ -193,6 +197,7 @@ fun HomeScreenModalBottomSheet(
                 )
             },
             onNotificationsFilterClicked = {
+                filterContext = HomeScreen.Notifications
                 setModalBottomSheetContent(
                     HomeScreenModalBottomSheetContent.DaysFilter.contentKey
                 )
@@ -237,6 +242,7 @@ fun HomeScreenModalBottomSheet(
                 )
             },
             onGraphFilterClicked = {
+                filterContext = HomeScreen.Transactions
                 setModalBottomSheetContent(
                     HomeScreenModalBottomSheetContent.DaysFilter.contentKey
                 )

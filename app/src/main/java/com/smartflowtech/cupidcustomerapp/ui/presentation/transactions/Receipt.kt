@@ -46,7 +46,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Receipt(
-    transaction: Transaction,
+    transaction: Transaction?,
     onGoBackToTransactionListPressed: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -74,7 +74,7 @@ fun Receipt(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = transaction.authType ?: "",
+                text = transaction?.authType ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -87,7 +87,7 @@ fun Receipt(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = transaction.transactionSeqNumber ?: "",
+                text = transaction?.transactionSeqNumber ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -100,13 +100,13 @@ fun Receipt(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = transaction.date ?: "",
+                text = transaction?.date ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = transaction.time ?: "",
+                text = transaction?.time ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -115,7 +115,7 @@ fun Receipt(
 
             Text(text = "Description", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = transaction.vendorStationName ?: "",
+                text = transaction?.vendorStationName ?: "",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -124,7 +124,7 @@ fun Receipt(
 
             Text(text = "Amount", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = """₦${transaction.amount?.let { Util.formatAmount(it) }}""",
+                text = """₦${transaction?.amount?.let { Util.formatAmount(it) }}""",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
@@ -133,8 +133,8 @@ fun Receipt(
 
             Text(text = "Status", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = transaction.status ?: "",
-                color = when (transaction.status) {
+                text = transaction?.status ?: "",
+                color = when (transaction?.status) {
                     Status.COMPLETED.name.capitalizeFirstLetter() -> green
                     Status.PENDING.name.capitalizeFirstLetter() -> darkBlue
                     Status.FAILED.name.capitalizeFirstLetter() -> red
@@ -216,7 +216,7 @@ fun Receipt(
 
                             canvas.drawText("Transaction Type", 109F, 200F, titleGreyPaint)
                             canvas.drawText(
-                                transaction.authType ?: "",
+                                transaction?.authType ?: "",
                                 109F,
                                 225F,
                                 textDarkBluePaint
@@ -224,7 +224,7 @@ fun Receipt(
 
                             canvas.drawText("Reference Number", 109F, 260F, titleGreyPaint)
                             canvas.drawText(
-                                transaction.transactionSeqNumber ?: "",
+                                transaction?.transactionSeqNumber ?: "",
                                 109F,
                                 285F,
                                 textDarkBluePaint
@@ -234,11 +234,11 @@ fun Receipt(
                             canvas.drawText(
                                 buildString {
                                     append(
-                                        LocalDate.parse(transaction.date)
+                                        LocalDate.parse(transaction?.date)
                                             .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
                                             ?: ""
                                     )
-                                    append(", ${transaction.time}")
+                                    append(", ${transaction?.time}")
                                 },
                                 109F,
                                 345F,
@@ -246,23 +246,23 @@ fun Receipt(
                             )
 
                             canvas.drawText("Description", 109F, 380F, titleGreyPaint)
-                            canvas.drawText(transaction.title ?: "", 109F, 405F, textDarkBluePaint)
+                            canvas.drawText(transaction?.title ?: "", 109F, 405F, textDarkBluePaint)
 
                             canvas.drawText("Amount", 109F, 440F, titleGreyPaint)
                             canvas.drawText(
-                                """₦${transaction.amount?.let { Util.formatAmount(it) }}""" ?: "",
+                                """₦${transaction?.amount?.let { Util.formatAmount(it) }}""" ?: "",
                                 109F,
                                 465F,
                                 textDarkBluePaint
                             )
 
                             canvas.drawText("Status", 109F, 500F, titleGreyPaint)
-                            canvas.drawText(transaction.status ?: "", 109F, 525F, textDarkBluePaint)
+                            canvas.drawText(transaction?.status ?: "", 109F, 525F, textDarkBluePaint)
 
                             document.finishPage(page)
 
                             //Save pdf to storage
-                            val file = createFile(transaction.transactionSeqNumber ?: "")
+                            val file = createFile(transaction?.transactionSeqNumber ?: "")
 
                             try {
                                 document.writeTo(FileOutputStream(file))
@@ -387,7 +387,8 @@ fun ReceiptPreview() {
                 time = "08:21AM",
                 title = "Mobile Transfer",
                 product = "DPK",
-                nfcTagCode = "VLX-5324"
+                nfcTagCode = "VLX-5324",
+                dateTime = "2022-01-01 12:00:00"
             ),
             {}
         )

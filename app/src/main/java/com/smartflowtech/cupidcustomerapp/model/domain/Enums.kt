@@ -22,12 +22,6 @@ enum class Period {
     TWO_YEARS
 }
 
-enum class DaysFilter {
-    TODAY,
-    LAST_SEVEN_DAYS,
-    LAST_THIRTY_DAYS,
-}
-
 enum class Category {
     STATUS,
     PRODUCT,

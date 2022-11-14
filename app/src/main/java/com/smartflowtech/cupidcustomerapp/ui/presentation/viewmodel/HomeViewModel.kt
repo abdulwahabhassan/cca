@@ -110,7 +110,7 @@ class HomeViewModel @Inject constructor(
             Timber.d("$transaction")
             LocalDate.parse(transaction.date) >= LocalDate.now()
                 .minusDays(
-                    when (prefs.periodFilter) {
+                    when (prefs.transactionPeriodFilter) {
                         Period.TODAY.name -> 0L
                         Period.ONE_WEEK.name -> 7L
                         Period.TWO_WEEKS.name -> 14L
@@ -183,12 +183,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateNotificationsFilter(filter: String) {
+    fun updateNotificationPeriodFilter(filter: String) {
         viewModelScope.launch {
-            dataStorePrefsRepository.updateNotificationsFilter(filter)
+            dataStorePrefsRepository.updateNotificationPeriodFilter(filter)
         }
     }
 
+    fun updateTransactionPeriodFilter(daysFilter: String) {
+        Timber.d(daysFilter)
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateTransactionPeriodFilter(daysFilter)
+        }
+    }
 
     suspend fun getTransactionReport(
         dateFrom: String,

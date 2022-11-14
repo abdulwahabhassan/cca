@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.NotificationsRepository
-import com.smartflowtech.cupidcustomerapp.model.domain.DaysFilter
+import com.smartflowtech.cupidcustomerapp.model.domain.Period
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationsScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,19 +44,36 @@ class NotificationsViewModel @Inject constructor(
             ) { prefs, notificationsResult ->
                 Timber.d("Local date time now ${LocalDateTime.now()}")
                 val notifications = notificationsResult.data.filter {
-                    when (prefs.notificationsFilter) {
-                        DaysFilter.TODAY.name -> {
+                    when (prefs.notificationPeriodFilter) {
+                        Period.TODAY.name -> {
                             LocalDateTime.parse(it.dateTime).toLocalDate() == LocalDateTime.now()
                                 .toLocalDate()
                         }
-                        DaysFilter.LAST_SEVEN_DAYS.name -> {
+                        Period.ONE_WEEK.name -> {
                             LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
                                 .toLocalDate().minusDays(7)
                         }
-                        DaysFilter.LAST_THIRTY_DAYS.name -> {
+                        Period.TWO_WEEKS.name -> {
+                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
+                                .toLocalDate().minusDays(14)
+                        }
+                        Period.ONE_MONTH.name -> {
                             LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
                                 .toLocalDate().minusDays(30)
                         }
+                        Period.SIX_MONTHS.name -> {
+                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
+                                .toLocalDate().minusDays(182)
+                        }
+                        Period.ONE_YEAR.name -> {
+                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
+                                .toLocalDate().minusDays(365)
+                        }
+                        Period.TWO_YEARS.name -> {
+                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
+                                .toLocalDate().minusDays(365)
+                        }
+
                         else -> true
                     }
                 }
