@@ -18,21 +18,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.request.UpdateDeviceTokenRequestBody
-import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.service.CupidCustomerFirebaseMessagingService
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.RootNavigation
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.BaseViewModel
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.MainActivityViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
-import com.smartflowtech.cupidcustomerapp.utils.NotificationBuilder.Companion.DATA_PAYLOAD_BODY_KEY
-import com.smartflowtech.cupidcustomerapp.utils.NotificationBuilder.Companion.DATA_PAYLOAD_TITLE_KEY
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder.Companion.DATA_PAYLOAD_BODY_KEY
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder.Companion.DATA_PAYLOAD_TITLE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

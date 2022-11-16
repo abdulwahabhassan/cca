@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.data.repo
 
 import com.smartflowtech.cupidcustomerapp.data.datasource.RemoteDatasource
+import com.smartflowtech.cupidcustomerapp.model.request.FundWalletRequestBody
 import com.smartflowtech.cupidcustomerapp.model.request.PayStackPaymentRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.NetworkResult
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
@@ -25,6 +26,38 @@ class PaymentRepository @Inject constructor(
                 remoteDatasource.initiatePayStackPayment(
                     token = token,
                     payStackPaymentRequestBody = payStackPaymentRequestBody
+                )
+            }
+        ) {
+            is NetworkResult.Success -> {
+                Timber.d(
+                    "Success -> ${networkResult.payload.data}"
+                )
+                if (networkResult.payload.status) {
+                    RepositoryResult.Success(
+                        data = networkResult.payload.data,
+                        message = networkResult.payload.message
+                    )
+                } else {
+                    RepositoryResult.Error(message = networkResult.payload.message)
+                }
+            }
+            is NetworkResult.Error -> {
+                Timber.d("Error -> ${networkResult.message}")
+                RepositoryResult.Error(message = networkResult.message)
+            }
+        }
+    }
+
+    suspend fun funWalletAfterPayStackPayment(
+        token: String,
+        fundWalletRequestBody: FundWalletRequestBody
+    ) = withContext(dispatcher) {
+        when (
+            val networkResult = coroutineHandler(dispatcher, networkConnectivityManager) {
+                remoteDatasource.fundWalletAfterPayStackPayment(
+                    token = token,
+                    fundWalletRequestBody = fundWalletRequestBody
                 )
             }
         ) {

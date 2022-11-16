@@ -367,13 +367,12 @@ object Util {
         )
     }
 
-    fun getPeriodFilter(): List<Period> {
-        return listOf(
-            Period.TODAY,
-            Period.ONE_WEEK,
-            Period.ONE_MONTH
+    val defaultPeriods: List<String>
+        get() = listOf(
+            Period.TODAY.name,
+            Period.ONE_WEEK.name,
+            Period.ONE_MONTH.name
         )
-    }
 
     fun getListOfStationsFilter(): List<String> {
         return listOf(

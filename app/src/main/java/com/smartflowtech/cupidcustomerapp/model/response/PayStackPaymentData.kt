@@ -15,7 +15,7 @@ data class PayStackPaymentData(
     val totalChargedAmount: Long,
 
     @Json(name = "original_amount")
-    val originalAmount: Long,
+    val originalAmount: Int,
 
     @Json(name = "gateway_charged")
     val gatewayCharged: Double,

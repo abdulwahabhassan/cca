@@ -6,7 +6,7 @@ import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.NotificationsRepository
 import com.smartflowtech.cupidcustomerapp.model.request.UpdateDeviceTokenRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
-import com.smartflowtech.cupidcustomerapp.utils.NotificationBuilder
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber

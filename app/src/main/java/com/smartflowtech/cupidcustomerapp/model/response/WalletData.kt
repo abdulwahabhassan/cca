@@ -8,22 +8,22 @@ data class WalletData(
     val vendorName: String,
 
     @Json(name = "vendor_id")
-    val vendorID: Long,
+    val vendorID: Long?,
 
     @Json(name = "current_balance")
-    val currentBalance: String,
+    val currentBalance: String?,
 
     @Json(name = "updated_at")
-    val updatedAt: String,
+    val updatedAt: String?,
 
     @Json(name = "current_credit_limit")
-    val currentCreditLimit: String,
+    val currentCreditLimit: String?,
 
     @Json(name = "nfctags_id")
-    val nfcTagId: Long,
+    val nfcTagId: Long?,
 
     @Json(name = "nfctags_code")
-    val nfcTagCode: String
+    val nfcTagCode: String?
 ) {
     fun mapToWallet(): Wallet {
         return Wallet(

@@ -53,27 +53,10 @@ class NotificationsViewModel @Inject constructor(
                             LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
                                 .toLocalDate().minusDays(7)
                         }
-                        Period.TWO_WEEKS.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
-                                .toLocalDate().minusDays(14)
-                        }
                         Period.ONE_MONTH.name -> {
                             LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
                                 .toLocalDate().minusDays(30)
                         }
-                        Period.SIX_MONTHS.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
-                                .toLocalDate().minusDays(182)
-                        }
-                        Period.ONE_YEAR.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
-                                .toLocalDate().minusDays(365)
-                        }
-                        Period.TWO_YEARS.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
-                                .toLocalDate().minusDays(365)
-                        }
-
                         else -> true
                     }
                 }

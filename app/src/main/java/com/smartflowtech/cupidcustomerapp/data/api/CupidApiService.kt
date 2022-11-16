@@ -55,6 +55,12 @@ interface CupidApiService {
         @Body payStackPaymentRequestBody: PayStackPaymentRequestBody
     ): CupidApiResponse<PayStackPaymentData>
 
+    @POST("payments/paystack")
+    suspend fun fundWalletAfterPayStackPayment(
+        @Header("Authorization") token: String,
+        @Body fundWalletRequestBody: FundWalletRequestBody
+    ): CupidApiResponse<FundWalletData>
+
     @POST("auth/forgotpass/verifyemail")
     suspend fun forgotPassWordVerifyEmail(
         @Header("Authorization") token: String,

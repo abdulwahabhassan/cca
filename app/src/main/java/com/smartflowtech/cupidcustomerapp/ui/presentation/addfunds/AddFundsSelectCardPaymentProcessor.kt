@@ -33,6 +33,7 @@ fun AddFundsSelectCardPaymentProcessor(
     paymentMethod: String,
     amount: Int,
     initiatePayStackPaymentState: suspend (amount: Int) -> PayStackPaymentState,
+    fundWalletAfterPayStackPayment: suspend (amount: Int, reference: String) -> FundWalletState,
 ) {
 
     var selectedCardProcessor by remember { mutableStateOf(paymentMethod) }
@@ -100,7 +101,8 @@ fun AddFundsSelectCardPaymentProcessor(
                             showError = true
                         },
                         amount = amount,
-                        initiatePayStackPayment = initiatePayStackPaymentState
+                        initiatePayStackPayment = initiatePayStackPaymentState,
+                        fundWalletAfterPayStackPayment = fundWalletAfterPayStackPayment
                     )
                 }
             }
@@ -183,7 +185,8 @@ fun AddFundsSelectedCardPaymentProcessorPreview() {
             {},
             PaymentMethodPreference.ASK_ALWAYS.name,
             100,
-            { PayStackPaymentState(ViewModelResult.SUCCESS) }
+            { PayStackPaymentState(ViewModelResult.SUCCESS) },
+            { _, _ -> FundWalletState(ViewModelResult.SUCCESS) }
         )
     }
 }

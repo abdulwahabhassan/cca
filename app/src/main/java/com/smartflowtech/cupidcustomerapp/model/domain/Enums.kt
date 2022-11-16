@@ -15,11 +15,14 @@ enum class Product {
 enum class Period {
     TODAY,
     ONE_WEEK,
-    TWO_WEEKS,
     ONE_MONTH,
-    SIX_MONTHS,
     ONE_YEAR,
     TWO_YEARS
+}
+
+enum class PeriodContext {
+    MONTH_YEAR,
+    DEFAULT
 }
 
 enum class Category {

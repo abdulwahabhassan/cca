@@ -1,4 +1,4 @@
-package com.smartflowtech.cupidcustomerapp.utils
+package com.smartflowtech.cupidcustomerapp.ui.presentation.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,7 +14,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.service.CupidCustomerFirebaseMessagingService
 import com.smartflowtech.cupidcustomerapp.ui.presentation.activity.MainActivity
-import java.time.LocalDateTime
 
 class NotificationBuilder(
     private val context: Context,

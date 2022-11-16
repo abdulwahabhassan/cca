@@ -7,4 +7,6 @@ data class CupidApiErrorResponse(
     var status: Boolean = false,
     @Json(name = "message")
     var message: String? = null,
+    @Json(name = "error")
+    var error: String? = null,
 )

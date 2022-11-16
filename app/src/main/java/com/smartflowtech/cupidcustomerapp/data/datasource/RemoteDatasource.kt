@@ -68,6 +68,16 @@ class RemoteDatasource @Inject constructor(
         )
     }
 
+    suspend fun fundWalletAfterPayStackPayment(
+        token: String,
+        fundWalletRequestBody: FundWalletRequestBody
+    ): CupidApiResponse<FundWalletData> {
+        return apiService.fundWalletAfterPayStackPayment(
+            token = token,
+            fundWalletRequestBody = fundWalletRequestBody
+        )
+    }
+
     suspend fun forgotPasswordVerifyEmail(
         token: String,
         verifyEmailRequestBody: VerifyEmailRequestBody

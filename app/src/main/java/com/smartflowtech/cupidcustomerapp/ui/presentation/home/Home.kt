@@ -27,6 +27,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.R
+import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CardTransactionHistory
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
@@ -49,7 +50,9 @@ fun Home(
     bottomNavBarNavHostController: NavHostController,
     bottomSheetState: BottomSheetState,
     onBottomNavItemClicked: (String) -> Unit,
-    onGraphFilterClicked: () -> Unit
+    onGraphFilterClicked:  (context: PeriodContext, periods: List<String>) -> Unit,
+    selectedMonthYearPeriod: String,
+    cardTransactionsPeriodFilterContext: PeriodContext
 ) {
     val pagerState = rememberPagerState()
 
@@ -111,7 +114,9 @@ fun Home(
                 selectedTab = selectedTab,
                 onTabSelected = onTabSelected,
                 currentBottomNavDestination = currentBottomNavDestination,
-                onGraphFilterClicked = onGraphFilterClicked
+                onGraphFilterClicked = onGraphFilterClicked,
+                selectedMonthYearPeriod = selectedMonthYearPeriod,
+                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
             )
         } else {
             if (homeScreenUiState.transactions.isEmpty()) {

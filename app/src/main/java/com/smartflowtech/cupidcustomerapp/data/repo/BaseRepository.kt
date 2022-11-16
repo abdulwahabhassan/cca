@@ -29,7 +29,10 @@ open class BaseRepository {
                 } catch (e: HttpException) {
                     Timber.d("Http Error Http Status Code - ${e.code()} ")
                     val response = handleHttpException(e)
-                    NetworkResult.Error(message = response?.message?.capitalizeFirstLetter())
+                    NetworkResult.Error(
+                        message = response?.message?.capitalizeFirstLetter()
+                            ?: response?.error?.capitalizeFirstLetter()
+                    )
                 } catch (e: Exception) {
                     Timber.d("Exception Error ${e.message}")
                     NetworkResult.Error(message = e.localizedMessage)

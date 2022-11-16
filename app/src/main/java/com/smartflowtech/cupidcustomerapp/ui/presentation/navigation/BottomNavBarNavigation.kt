@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
@@ -44,12 +45,15 @@ fun BottomNavBarNavigation(
     onBottomNavItemClicked: (String) -> Unit,
     onStationFilterClicked: () -> Unit,
     onStationSelected: (VendorStation) -> Unit,
-    onGraphFilterClicked: () -> Unit
+    onGraphFilterClicked: (context: PeriodContext, periods: List<String>) -> Unit,
+    selectedMonthYearPeriod: String,
+    cardTransactionsPeriodFilterContext: PeriodContext
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
 
-    AnimatedNavHost(bottomNavHostController,
+    AnimatedNavHost(
+        navController = bottomNavHostController,
         startDestination = HomeScreen.Home.route,
         enterTransition = {
             if (targetState.destination.route == HomeScreen.Transactions.route ||
@@ -127,7 +131,9 @@ fun BottomNavBarNavigation(
                 bottomNavBarNavHostController = bottomNavHostController,
                 bottomSheetState = bottomSheetScaffoldState.bottomSheetState,
                 onBottomNavItemClicked = onBottomNavItemClicked,
-                onGraphFilterClicked = onGraphFilterClicked
+                onGraphFilterClicked = onGraphFilterClicked,
+                selectedMonthYearPeriod = selectedMonthYearPeriod,
+                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -145,7 +151,9 @@ fun BottomNavBarNavigation(
                 },
                 currentBottomNavDestination = bottomNavHostController.currentDestination?.route
                     ?: "",
-                onGraphFilterClicked = onGraphFilterClicked
+                onGraphFilterClicked = onGraphFilterClicked,
+                selectedMonthYearPeriod = selectedMonthYearPeriod,
+                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
             )
         }
         composable(HomeScreen.Stations.route) {

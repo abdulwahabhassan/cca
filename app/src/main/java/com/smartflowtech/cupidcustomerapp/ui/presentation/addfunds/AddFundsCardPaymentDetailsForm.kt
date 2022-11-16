@@ -26,6 +26,7 @@ import co.paystack.android.PaystackSdk
 import co.paystack.android.Transaction
 import co.paystack.android.model.Card
 import co.paystack.android.model.Charge
+import com.smartflowtech.cupidcustomerapp.model.response.PayStackPaymentData
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
@@ -33,6 +34,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.theme.lightGrey
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.findActivity
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun AddFundsCardPaymentDetailsForm(
@@ -40,7 +42,8 @@ fun AddFundsCardPaymentDetailsForm(
     onPaymentSuccess: (reference: String) -> Unit,
     onPaymentError: (message: String, reference: String) -> Unit,
     amount: Int,
-    initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState
+    initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
+    fundWalletAfterPayStackPayment: suspend (amount: Int, reference: String) -> FundWalletState,
 ) {
 
     var cardNumber by rememberSaveable { mutableStateOf("5060666666666666666") }
@@ -59,18 +62,51 @@ fun AddFundsCardPaymentDetailsForm(
     var showLoadingIndicator by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
-    fun chargeCardWithAccessCode(card: Card, accessCode: String) {
+    fun initFreshPayStackTransaction(card: Card, data: PayStackPaymentData, userEmail: String) {
 
         val charge = Charge()
-            .setAccessCode(accessCode)
             .setCard(card)
+            .setCurrency("NGN")
+            .setSubaccount(data.paystackSubaccountCode)
+            .setAmount(data.amountToPayKobo.toInt())
+            .setEmail(userEmail)
+            .setReference(data.ref)
+            .setBearer(Charge.Bearer.subaccount)
+
 
         PaystackSdk.chargeCard(
             ctx.findActivity(),
             charge,
             object : Paystack.TransactionCallback {
                 override fun onSuccess(transaction: Transaction?) {
-                    onPaymentSuccess(transaction?.reference ?: "No ref")
+                    coroutineScope.launch {
+                        if (transaction?.reference != null) {
+                            Timber.d("Transaction Ref -> ${transaction.reference}")
+                            val fundWalletState = fundWalletAfterPayStackPayment(
+                                data.originalAmount,
+                                transaction.reference!!
+                            )
+                            when (fundWalletState.viewModelResult) {
+                                ViewModelResult.SUCCESS -> {
+                                    onPaymentSuccess(transaction.reference)
+                                }
+                                ViewModelResult.ERROR -> {
+                                    onPaymentError(
+                                        fundWalletState.message
+                                            ?: "Your wallet could not be funded",
+                                        transaction.reference
+                                    )
+                                }
+                                else -> {}
+                            }
+                        } else {
+                            onPaymentError(
+                                "Transaction reference not found",
+                                ""
+                            )
+                        }
+
+                    }
                 }
 
                 override fun beforeValidate(transaction: Transaction?) {}
@@ -103,8 +139,8 @@ fun AddFundsCardPaymentDetailsForm(
                         ).show()
                     }
                     ViewModelResult.SUCCESS -> {
-                        paymentState.data?.accessCode?.let { accessCode ->
-                            chargeCardWithAccessCode(card, accessCode)
+                        paymentState.data?.let { data ->
+                            initFreshPayStackTransaction(card, data, paymentState.userEmail ?: "")
                         } ?: Toast.makeText(
                             ctx,
                             paymentState.message ?: "Oops! Access code not found!",
@@ -380,6 +416,7 @@ fun CardDetailsFormPreview() {
             { message, reference -> },
             100,
             { PayStackPaymentState(ViewModelResult.SUCCESS) },
+            { _, _ -> FundWalletState(ViewModelResult.SUCCESS) }
         )
     }
 }

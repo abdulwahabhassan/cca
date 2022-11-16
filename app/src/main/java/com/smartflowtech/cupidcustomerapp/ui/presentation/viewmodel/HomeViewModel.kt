@@ -113,9 +113,7 @@ class HomeViewModel @Inject constructor(
                     when (prefs.transactionPeriodFilter) {
                         Period.TODAY.name -> 0L
                         Period.ONE_WEEK.name -> 7L
-                        Period.TWO_WEEKS.name -> 14L
                         Period.ONE_MONTH.name -> 30L
-                        Period.SIX_MONTHS.name -> 182L
                         Period.ONE_YEAR.name -> 365L
                         Period.TWO_YEARS.name -> 720L
                         else -> {

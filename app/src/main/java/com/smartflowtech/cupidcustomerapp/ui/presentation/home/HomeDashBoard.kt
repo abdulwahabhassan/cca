@@ -219,9 +219,9 @@ fun HomeDashBoard(
                                             onAddFundsClicked = onAddFundsClicked,
                                             walletBalanceVisibility = walletBalanceVisibility,
                                             updateWalletVisibility = updateWalletVisibility,
-                                            vendorName = homeScreenUiState.wallets[page].vendorName,
-                                            currentBalance = homeScreenUiState.wallets[page].currentBalance,
-                                            nfcTagCode = homeScreenUiState.wallets[page].nfcTagCode,
+                                            vendorName = homeScreenUiState.wallets[page].vendorName ?: "",
+                                            currentBalance = homeScreenUiState.wallets[page].currentBalance ?: "0.00",
+                                            nfcTagCode = homeScreenUiState.wallets[page].nfcTagCode ?: "",
                                             onCardSelected = { tagCode ->
                                                 if (!isCardSelected) {
                                                     onCardSelected(true, tagCode)

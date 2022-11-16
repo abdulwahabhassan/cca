@@ -22,13 +22,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.Period
+import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.model.domain.Wallet
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenUiState
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.CardHistoryViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Util
+import timber.log.Timber
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -41,8 +46,27 @@ fun CardTransactionHistory(
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
-    onGraphFilterClicked: () -> Unit
+    onGraphFilterClicked: (context: PeriodContext, periods: List<String>) -> Unit,
+    selectedMonthYearPeriod: String,
+    cardTransactionsPeriodFilterContext: PeriodContext
 ) {
+
+    val monthYearPeriodFilterList = remember {
+        (0..11).map { currentValue ->
+            LocalDate
+                .now()
+                .minusMonths(currentValue.toLong())
+                .format(DateTimeFormatter.ofPattern("MMM yyyy"))
+        }
+    }
+
+    val customPeriodFilterList = remember {
+        listOf(
+            Period.ONE_WEEK.name,
+            Period.ONE_MONTH.name,
+            Period.ONE_YEAR.name
+        )
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -139,25 +163,29 @@ fun CardTransactionHistory(
                 }
             }
 
+            if (selectedTab != "Transactions") {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .clipToBounds()
+                        .clickable {
+                            onGraphFilterClicked(
+                                PeriodContext.MONTH_YEAR,
+                                monthYearPeriodFilterList
+                            )
+                        }
+                        .padding(horizontal = 8.dp)
+                        .align(Alignment.Bottom),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = selectedMonthYearPeriod, fontSize = 12.sp)
+                    Icon(
+                        imageVector = Icons.Rounded.ExpandMore,
+                        contentDescription = "Drop down icon"
+                    )
+                }
 
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .clipToBounds()
-                    .clickable {
-                        onGraphFilterClicked()
-                    }
-                    .padding(horizontal = 8.dp)
-                    .align(Alignment.Bottom),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "Filter", fontSize = 12.sp)
-                Icon(
-                    imageVector = Icons.Rounded.ExpandMore,
-                    contentDescription = "Drop down icon"
-                )
             }
-
         }
 
         Divider(thickness = 0.5.dp, color = lineGrey)
@@ -165,14 +193,115 @@ fun CardTransactionHistory(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (selectedTab == "Transactions") {
+
+//            val monthYearContextTransactions =
+//                remember(cardTransactionsPeriodFilterContext, selectedMonthYearPeriod) {
+//                    homeScreenUiState.transactions
+//                        .asSequence()
+//                        .sortedBy { it.date }
+//                        .filter {
+//                            if (selectedCardNfcTagCode.isNotEmpty())
+//                                it.nfcTagCode == selectedCardNfcTagCode else true
+//                        }
+//                        .filter { it.date != null }
+//                        .filter {
+//                            val dateMonthYear = LocalDate.parse(it.date).format(
+//                                DateTimeFormatter.ofPattern("MMM yyyy")
+//                            )
+//                            dateMonthYear == selectedMonthYearPeriod
+//                        }.toList()
+//                }
+
             TransactionsList(
                 homeScreenUiState = homeScreenUiState,
                 onSelectTransaction = onSelectTransaction,
                 selectedCardNfcTagCode = selectedCardNfcTagCode,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                currentBottomNavDestination = currentBottomNavDestination
+                currentBottomNavDestination = currentBottomNavDestination,
             )
         } else {
+
+            val transactions =
+                remember(selectedMonthYearPeriod, cardTransactionsPeriodFilterContext) {
+                    when (cardTransactionsPeriodFilterContext) {
+                        PeriodContext.DEFAULT -> {
+                            when (viewModel.appConfigPreferences.transactionPeriodFilter) {
+                                Period.ONE_WEEK.name -> {
+                                    homeScreenUiState.transactions
+                                        .asSequence()
+                                        .sortedBy { it.date }
+                                        .filter {
+                                            if (selectedCardNfcTagCode.isNotEmpty())
+                                                it.nfcTagCode == selectedCardNfcTagCode else true
+                                        }
+                                        .filter { it.date != null }
+                                        .filter {
+                                            LocalDate.parse(it.date) >=
+                                                    LocalDate.now().minusDays(7)
+                                        }
+                                        .groupBy { it.date?.substring(8) }
+                                }
+                                Period.ONE_MONTH.name -> {
+                                    homeScreenUiState.transactions
+                                        .asSequence()
+                                        .sortedBy { it.date }
+                                        .filter {
+                                            if (selectedCardNfcTagCode.isNotEmpty())
+                                                it.nfcTagCode == selectedCardNfcTagCode else true
+                                        }
+                                        .filter { it.date != null }
+                                        .filter {
+                                            LocalDate.parse(it.date) >=
+                                                    LocalDate.now().minusDays(30)
+                                        }
+                                        .groupBy { it.date?.substring(8) }
+                                }
+                                else -> {
+                                    //TWO YEAR
+                                    homeScreenUiState.transactions
+                                        .asSequence()
+                                        .sortedBy { it.date }
+                                        .filter {
+                                            if (selectedCardNfcTagCode.isNotEmpty())
+                                                it.nfcTagCode == selectedCardNfcTagCode else true
+                                        }
+                                        .filter { it.date != null }
+                                        .filter {
+                                            LocalDate.parse(it.date) >=
+                                                    LocalDate.now().minusDays(720)
+                                        }
+                                        .groupBy { it.date?.substring(5, 7) }
+                                }
+                            }
+                        }
+                        PeriodContext.MONTH_YEAR -> {
+                            homeScreenUiState.transactions
+                                .asSequence()
+                                .sortedBy { it.date }
+                                .filter {
+                                    if (selectedCardNfcTagCode.isNotEmpty())
+                                        it.nfcTagCode == selectedCardNfcTagCode else true
+                                }
+                                .filter { it.date != null }
+                                .filter {
+                                    val dateMonthYear = LocalDate.parse(it.date).format(
+                                        DateTimeFormatter.ofPattern("MMM yyyy")
+                                    )
+                                    dateMonthYear == selectedMonthYearPeriod
+                                }
+                                .groupBy { it.date?.substring(8) }
+                        }
+                    }
+                }
+
+            val averageTransactions = remember(transactions) {
+                transactions.mapValues { entry ->
+                    val totalAmount = entry.value.filterNot { it.amount == null }
+                        .sumOf { it.amount?.toDouble()!! }
+                    totalAmount / entry.value.size
+                }
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -206,7 +335,14 @@ fun CardTransactionHistory(
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(text = "Debit", color = grey)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "₦123,000.00", fontWeight = FontWeight.Bold)
+                            Text(
+                                text = "₦${
+                                    Util.formatAmount(transactions.values.sumOf { list ->
+                                        list.sumOf { it.amount?.toDouble() ?: 0.00 }
+                                    })
+                                }",
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
 
@@ -232,7 +368,7 @@ fun CardTransactionHistory(
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(text = "Credit", color = grey)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "₦500,000.00", fontWeight = FontWeight.Bold)
+                            Text(text = "₦0.00", fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -254,7 +390,7 @@ fun CardTransactionHistory(
                             .clip(RoundedCornerShape(4.dp))
                             .clipToBounds()
                             .clickable {
-                                onGraphFilterClicked()
+                                onGraphFilterClicked(PeriodContext.DEFAULT, customPeriodFilterList)
                             }
                             .padding(start = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -267,85 +403,14 @@ fun CardTransactionHistory(
                     }
                 }
 
-                val transactions = when (viewModel.appConfigPreferences.transactionPeriodFilter) {
-                    Period.ONE_WEEK.name -> {
-                        homeScreenUiState.transactions
-                            .filter {
-                                if (selectedCardNfcTagCode.isNotEmpty())
-                                    it.nfcTagCode == selectedCardNfcTagCode else true
-                            }
-                            .filter { it.date != null }
-                            .filter {
-                                LocalDate.parse(it.date) >=
-                                        LocalDate.now().minusDays(7)
-                            }
-                            .groupBy { it.date }
-                    }
-                    Period.TWO_WEEKS.name -> {
-                        homeScreenUiState.transactions
-                            .filter {
-                                if (selectedCardNfcTagCode.isNotEmpty())
-                                    it.nfcTagCode == selectedCardNfcTagCode else true
-                            }
-                            .filter { it.date != null }
-                            .filter {
-                                LocalDate.parse(it.date) >=
-                                        LocalDate.now().minusDays(14)
-                            }
-                            .groupBy { it.date }
-                    }
-                    Period.ONE_MONTH.name -> {
-                        homeScreenUiState.transactions
-                            .filter {
-                                if (selectedCardNfcTagCode.isNotEmpty())
-                                    it.nfcTagCode == selectedCardNfcTagCode else true
-                            }
-                            .filter { it.date != null }
-                            .filter {
-                                LocalDate.parse(it.date) >=
-                                        LocalDate.now().minusDays(30)
-                            }
-                            .groupBy { it.date }
-                    }
-                    else -> {
-                        //One year
-                        homeScreenUiState.transactions
-                            .filter {
-                                if (selectedCardNfcTagCode.isNotEmpty())
-                                    it.nfcTagCode == selectedCardNfcTagCode else true
-                            }
-                            .filter { it.date != null }
-                            .filter {
-                                LocalDate.parse(it.date) >=
-                                        LocalDate.now().minusDays(720)
-                            }
-                            .groupBy { it.date?.substring(3, 5) }
-                    }
-                }
+//                val averageTransactions = transactions.mapValues { entry ->
+//                    val totalAmount = entry.value.filterNot { it.amount == null }
+//                        .sumOf { it.amount?.toDouble()!! }
+//                    totalAmount / entry.value.size
+//                }
 
-                val averageTransactions = transactions.mapValues { entry ->
-                    val totalAmount = entry.value.filterNot { it.amount == null }
-                        .sumOf { it.amount?.toDouble()!! }
-                    totalAmount / entry.value.size
-                }
-
-                val range = when (viewModel.appConfigPreferences.transactionPeriodFilter) {
-                    Period.ONE_WEEK.name -> {
-                        0 until 7
-                    }
-                    Period.TWO_WEEKS.name -> {
-                        0 until 14
-                    }
-                    Period.ONE_MONTH.name -> {
-                        0 until 31
-                    }
-                    else -> {
-                        0 until 12
-                    }
-                }
-
-                val yStep = averageTransactions.values.sum() / averageTransactions.size
-                val points = averageTransactions.values.map { it.toFloat() }
+//                Timber.d("Transactions $transactions")
+                Timber.d("Avg Transactions $averageTransactions")
 
                 Box(
                     modifier = Modifier
@@ -372,11 +437,66 @@ fun CardTransactionHistory(
                             Text(text = "No Analytics available to show")
                         }
                     } else {
+                        val yStep = averageTransactions.values.sum() / averageTransactions.size
+                        val points = averageTransactions.values.map { it.toFloat() }.toMutableList()
+                        val xValues = averageTransactions.keys.map { it?.toInt()!! }.toMutableList()
+                        val initialXValues = xValues.toList()
+                        initialXValues.forEachIndexed { index, elem ->
+                            if (index != 0 && index != initialXValues.lastIndex) {
+                                val absDiff = abs(initialXValues[index + 1] - elem)
+                                Timber.d("abs Diff -> $absDiff")
+                                if (absDiff != 1 && absDiff < when (
+                                        viewModel.appConfigPreferences.transactionPeriodFilter
+                                    ) {
+                                        Period.ONE_WEEK.name -> 7 - 1
+                                        Period.ONE_MONTH.name -> 30 - 1
+                                        else -> 12 - 1
+                                    }
+                                ) {
+                                    xValues.addAll(
+                                        index + 1,
+                                        ((elem + 1)..absDiff).toList()
+                                    )
+                                    points.addAll(
+                                        index + 1,
+                                        ((elem + 1)..absDiff).toList().map { 0f }
+                                    )
+                                }
+                            }
+                        }
+
+                        var nextValue: Int
+
+                        do {
+                            nextValue = if (xValues.last() + 1 > when (
+                                    viewModel.appConfigPreferences.transactionPeriodFilter
+                                ) {
+                                    Period.ONE_WEEK.name -> 7
+                                    Period.ONE_MONTH.name -> 30
+                                    else -> 12
+                                }
+                            ) 1 else xValues.last() + 1
+
+                            if (nextValue != xValues.first()) {
+                                xValues.add(nextValue)
+                                points.add(0f)
+                            }
+                        } while (xValues.size != when (
+                                viewModel.appConfigPreferences.transactionPeriodFilter
+                            ) {
+                                Period.ONE_WEEK.name -> 7
+                                Period.ONE_MONTH.name -> 30
+                                else -> 12
+                            }
+                        )
+
+                        Timber.d("$xValues")
+                        Timber.d("$points")
                         Graph(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(500.dp),
-                            xValues = range.map { it + 1 },
+                                .height(300.dp),
+                            xValues = xValues,
                             yValues = (
                                     0..(averageTransactions.values.max() /
                                             averageTransactions.values.min()).toInt()
@@ -439,7 +559,9 @@ fun CardTransactionHistoryPreview() {
             selectedTab = "Analytics",
             onTabSelected = {},
             currentBottomNavDestination = "",
-            onGraphFilterClicked = {}
+            onGraphFilterClicked = { _, _ -> },
+            selectedMonthYearPeriod = "May 2022",
+            cardTransactionsPeriodFilterContext = PeriodContext.DEFAULT
         )
     }
 }

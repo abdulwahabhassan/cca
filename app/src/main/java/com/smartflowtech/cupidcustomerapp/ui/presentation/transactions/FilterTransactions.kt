@@ -68,9 +68,7 @@ fun FilterTransactions(
                 Category.DATE to listOf(
                     Period.TODAY.name,
                     Period.ONE_WEEK.name,
-                    Period.TWO_WEEKS.name,
                     Period.ONE_MONTH.name,
-                    Period.SIX_MONTHS.name,
                     Period.ONE_YEAR.name,
                     Period.TWO_YEARS.name
                 ),

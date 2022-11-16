@@ -43,6 +43,14 @@ fun Graph(
         }
     }
 
+    val markerPaint = remember(density) {
+        Paint().apply {
+            color = android.graphics.Color.BLACK
+            textAlign = Paint.Align.CENTER
+            textSize = density.run { 18.sp.toPx() }
+        }
+    }
+
     Box(
         modifier = modifier
             .background(Color.Transparent)
@@ -57,56 +65,56 @@ fun Graph(
             /** placing x axis points */
             for (i in xValues.indices) {
                 drawContext.canvas.nativeCanvas.drawText(
-                    "${
-                        when (periodFilter) {
-                            Period.ONE_WEEK.name -> {
-                                when (xValues[i]) {
-                                    1 -> "Mon"
-                                    2 -> "Tue"
-                                    3 -> "Wed"
-                                    4 -> "Thu"
-                                    5 -> "Fri"
-                                    6 -> "Sat"
-                                    7 -> "Sun"
-                                    else -> ""
-                                }
-                            }
-                            Period.TWO_WEEKS.name -> {
-                                if (xValues[i].toString().last() == '1') {
-                                    "${xValues[i]}st"
-                                } else if (xValues[i].toString().last() == '2') {
-                                    "${xValues[i]}nd"
-                                } else if (xValues[i].toString().last() == '3') {
-                                    "${xValues[i]}rd"
-                                } else {
-                                    "${xValues[i]}th"
-                                }
-                            }
-                            Period.ONE_MONTH.name -> {
-                                xValues[i]
-                            }
-                            else -> {
-                                when (xValues[i]) {
-                                    1 -> "Jan"
-                                    2 -> "Feb"
-                                    3 -> "Mar"
-                                    4 -> "Apr"
-                                    5 -> "May"
-                                    6 -> "Jun"
-                                    7 -> "Jul"
-                                    8 -> "Aug"
-                                    9 -> "Sep"
-                                    10 -> "Oct"
-                                    11 -> "Nov"
-                                    12 -> "Dec"
-                                    else -> ""
-                                }
+                    when (periodFilter) {
+                        Period.ONE_WEEK.name -> {
+                            when (xValues[i]) {
+                                1 -> "Mon"
+                                2 -> "Tue"
+                                3 -> "Wed"
+                                4 -> "Thu"
+                                5 -> "Fri"
+                                6 -> "Sat"
+                                7 -> "Sun"
+                                else -> ""
                             }
                         }
-                    }",
+                        Period.ONE_MONTH.name -> {
+                            if (xValues[i] % 2 == 0) {
+                                "${xValues[i]}"
+                            } else {
+                                ""
+                            }
+                        }
+                        else -> {
+                            when (xValues[i]) {
+                                1 -> "Jan"
+                                2 -> "Feb"
+                                3 -> "Mar"
+                                4 -> "Apr"
+                                5 -> "May"
+                                6 -> "Jun"
+                                7 -> "Jul"
+                                8 -> "Aug"
+                                9 -> "Sep"
+                                10 -> "Oct"
+                                11 -> "Nov"
+                                12 -> "Dec"
+                                else -> ""
+                            }
+                        }
+                    },
                     xAxisSpace * (i + 1),
-                    size.height - 30,
+                    size.height + 100,
                     textPaint
+                )
+            }
+
+            for (i in xValues.indices) {
+                drawContext.canvas.nativeCanvas.drawText(
+                    ".",
+                    xAxisSpace * (i + 1),
+                    size.height + 50,
+                    markerPaint
                 )
             }
 
@@ -114,10 +122,10 @@ fun Graph(
             for (i in yValues.indices) {
                 drawContext.canvas.nativeCanvas.drawText(
                     when (yValues[i]) {
-                        in 1_000_000..999_999_999 -> "₦${yValues[i].toString().dropLast(6)}M"
-                        in 1000..999_999 -> "₦${yValues[i].toString().dropLast(3)}K"
-                        in 100..999 -> "₦${yValues[i].toString().dropLast(2)}H"
-                        else -> "₦${Util.formatAmount(yValues[i])}"
+                        in 1_000_000..999_999_999 -> "₦${yValues[i].toString().dropLast(6)}M - "
+                        in 1000..999_999 -> "₦${yValues[i].toString().dropLast(3)}K - "
+                        in 100..999 -> "₦${yValues[i].toString().dropLast(2)}H - "
+                        else -> "₦${Util.formatAmount(yValues[i])} - "
                     },
                     paddingSpace.toPx() / 2f,
                     size.height - yAxisSpace * (i + 1),
@@ -127,15 +135,18 @@ fun Graph(
             /** placing our x axis points */
             coordinates.clear()
             for (i in points.indices) {
-                val x1 = xAxisSpace * xValues[i]
+                val x1 = xAxisSpace * (i + 1)
                 val y1 = size.height - (yAxisSpace * (points[i] / verticalStep.toFloat()))
                 coordinates.add(PointF(x1, y1))
-                /** drawing circles to indicate all the points */
-                drawCircle(
-                    color = Color.Red,
-                    radius = 10f,
-                    center = Offset(x1, y1)
-                )
+                if (points[i] != 0f) {
+                    /** drawing circles to indicate all the points */
+                    drawCircle(
+                        color = Color.Red,
+                        radius = 10f,
+                        center = Offset(x1, y1)
+                    )
+                }
+
             }
             /** calculating the connection points */
             controlPoints1.clear()

@@ -37,6 +37,7 @@ fun AddFundsScreenModalBottomSheet(
     setUssdScreenContent: (String) -> Unit,
     ussdScreenContent: String,
     initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
+    fundWalletAfterPayStackPayment: suspend (amount: Int, reference: String) -> FundWalletState,
     vendorBankAccountNumber: String,
     vendorBankName: String,
 ) {
@@ -118,7 +119,8 @@ fun AddFundsScreenModalBottomSheet(
                         onDismissSuccessDialog = goToHome,
                         paymentMethod = paymentMethod,
                         amount = amount,
-                        initiatePayStackPaymentState = initiatePayStackPayment
+                        initiatePayStackPaymentState = initiatePayStackPayment,
+                        fundWalletAfterPayStackPayment = fundWalletAfterPayStackPayment
                     )
                 }
             }

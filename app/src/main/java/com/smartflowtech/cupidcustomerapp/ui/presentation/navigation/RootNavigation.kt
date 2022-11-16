@@ -29,6 +29,7 @@ fun RootNavigation(
 
     val rootNavHostController = rememberAnimatedNavController()
     var verifiedEmail: String by rememberSaveable { mutableStateOf("") }
+    val homeViewModel = hiltViewModel<HomeViewModel>()
 
     AnimatedNavHost(
         navController = rootNavHostController,
@@ -242,7 +243,6 @@ fun RootNavigation(
 
 
         composable(route = Screen.Home.route) {
-            val homeViewModel = hiltViewModel<HomeViewModel>()
             val bottomNavBarNavHostController = rememberAnimatedNavController()
             val currentRoute =
                 bottomNavBarNavHostController.currentBackStackEntryAsState().value?.destination?.route
@@ -297,15 +297,21 @@ fun RootNavigation(
         composable(route = Screen.AddFunds.route) {
             hiltViewModel<AddFundsViewModel>().apply {
                 AddFundsScreenModalBottomSheetLayer(
-                    goBackToHomeScreen = {
+                    goBackToHomeScreen = { refresh ->
                         rootNavHostController.popBackStack()
+                        if (refresh) {
+                            homeViewModel.getTransactionsAndWallets()
+                        }
                     },
                     initiatePayStackPayment = { amount: Int ->
                         initiatePayStackPayment(amountToPay = amount)
                     },
                     paymentMethod = appConfigPreferences.paymentMethod,
                     vendorBankAccountNumber = appConfigPreferences.vendorAccountNumber,
-                    vendorBankName = appConfigPreferences.vendorBankName
+                    vendorBankName = appConfigPreferences.vendorBankName,
+                    fundWalletAfterPayStackPayment = { amount: Int, reference: String ->
+                        fundWalletAfterPayStackPayment(amountPaid = amount, reference = reference)
+                    },
                 )
             }
         }
