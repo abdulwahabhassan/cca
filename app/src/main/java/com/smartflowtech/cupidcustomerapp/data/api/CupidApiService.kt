@@ -2,7 +2,6 @@ package com.smartflowtech.cupidcustomerapp.data.api
 
 import com.smartflowtech.cupidcustomerapp.model.request.*
 import com.smartflowtech.cupidcustomerapp.model.response.*
-import com.squareup.moshi.Json
 import retrofit2.http.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -73,11 +72,18 @@ interface CupidApiService {
         @Path("vendor_id") vendorId: Long,
     ): CupidApiResponse<VendorStationsData>
 
-    @PATCH("update_device_token")
-    suspend fun updateDeviceToken(
+    @POST("add_device_token")
+    suspend fun addDeviceToken(
         @Header("Authorization") token: String,
-        @Body updateDeviceTokenRequestBody: UpdateDeviceTokenRequestBody
-    ): CupidApiResponse<Any>
+        @Body addDeviceTokenRequestBody: AddDeviceTokenRequestBody
+    ): CupidApiResponse<DeviceTokenData>
+
+    @GET("user_notification_history/{user_id}")
+    suspend fun getNotifications(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: String,
+    ): CupidApiResponse<GetNotificationsData>
+
 
     @POST("purchase_export")
     suspend fun getTransactionReport(

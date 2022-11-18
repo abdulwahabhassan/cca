@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.SearchBar
@@ -40,9 +40,9 @@ fun Transactions(
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
-    onGraphFilterClicked: (context: PeriodContext, periods: List<String>) -> Unit,
+    onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardTransactionsPeriodFilterContext: PeriodContext
+    cardTransactionsPeriodFilterContext: CardHistoryPeriodFilterContext
 ) {
 
     BackHandler(true) {
@@ -113,7 +113,7 @@ fun Transactions(
                 currentBottomNavDestination = currentBottomNavDestination,
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
+                cardHistoryPeriodFilterContext = cardTransactionsPeriodFilterContext
             )
         } else {
             Column(
@@ -222,7 +222,7 @@ fun TransactionsPreview() {
             "Transactions",
             {_, _ -> },
             "",
-            PeriodContext.DEFAULT
+            CardHistoryPeriodFilterContext.DEFAULT
         )
     }
 }

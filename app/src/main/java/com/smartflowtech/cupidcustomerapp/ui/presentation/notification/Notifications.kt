@@ -46,11 +46,11 @@ fun Notifications(
 
         val newNotifications =
             uiState.notifications.filter {
-                LocalDateTime.parse(it.dateTime).toLocalDate() == LocalDateTime.now().toLocalDate()
+                LocalDateTime.parse(it.createdAt).toLocalDate() == LocalDateTime.now().toLocalDate()
             }
         val olderNotifications =
             uiState.notifications.filter {
-                LocalDateTime.parse(it.dateTime).toLocalDate() != LocalDateTime.now().toLocalDate()
+                LocalDateTime.parse(it.createdAt).toLocalDate() != LocalDateTime.now().toLocalDate()
             }
         val notifications = mapOf(
             "New" to newNotifications,
@@ -110,7 +110,7 @@ fun PreviewNotificationsList() {
             onBackPressed = {},
             uiState = NotificationsScreenUiState(
                 ViewModelResult.LOADING,
-                notifications = Util.getListOfNotifications()
+                notifications = emptyList()
             )
         )
     }

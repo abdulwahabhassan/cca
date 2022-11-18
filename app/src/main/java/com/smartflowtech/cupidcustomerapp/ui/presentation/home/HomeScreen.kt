@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.BottomNavBarNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
@@ -36,7 +36,7 @@ fun HomeScreen(
     onBackPressed: () -> Unit,
     onBottomNavItemClicked: (String) -> Unit,
     onTransactionsFilterClicked: () -> Unit,
-    onNotificationsFilterClicked: (PeriodContext) -> Unit,
+    onNotificationsFilterClicked: (CardHistoryPeriodFilterContext) -> Unit,
     onAddFundsClicked: () -> Unit,
     userFullName: String,
     userName: String,
@@ -51,9 +51,9 @@ fun HomeScreen(
     profilePicture: String,
     onStationFilterClicked: () -> Unit,
     onStationSelected: (VendorStation) -> Unit,
-    onGraphFilterClicked: (context: PeriodContext, periods: List<String>) -> Unit,
+    onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardTransactionsPeriodFilterContext: PeriodContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -222,7 +222,7 @@ fun HomeScreen(
                                 } else if (currentBottomNavDestinationTitle ==
                                     HomeScreen.Notifications.title
                                 ) {
-                                    onNotificationsFilterClicked(PeriodContext.DEFAULT)
+                                    onNotificationsFilterClicked(CardHistoryPeriodFilterContext.DEFAULT)
                                 }
 
                             }) {
@@ -286,7 +286,7 @@ fun HomeScreen(
                         onStationSelected = onStationSelected,
                         onGraphFilterClicked = onGraphFilterClicked,
                         selectedMonthYearPeriod = selectedMonthYearPeriod,
-                        cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
+                        cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
                     )
                 }
             }) { paddingValues ->

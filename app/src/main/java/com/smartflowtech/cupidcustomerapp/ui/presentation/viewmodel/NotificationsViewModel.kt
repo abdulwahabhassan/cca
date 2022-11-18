@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.NotificationsRepository
 import com.smartflowtech.cupidcustomerapp.model.domain.Period
+import com.smartflowtech.cupidcustomerapp.model.response.mapToNotificationItem
+import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationsScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,31 +42,52 @@ class NotificationsViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 dataStorePrefsRepository.appConfigPreferencesAsFlow,
-                flowOf(notificationsRepository.getNotifications())
+                flowOf(
+                    notificationsRepository.getNotifications(
+                        appConfigPreferences.token,
+                        appConfigPreferences.userId
+                    )
+                )
             ) { prefs, notificationsResult ->
                 Timber.d("Local date time now ${LocalDateTime.now()}")
-                val notifications = notificationsResult.data.filter {
-                    when (prefs.notificationPeriodFilter) {
-                        Period.TODAY.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() == LocalDateTime.now()
-                                .toLocalDate()
+
+                when (notificationsResult) {
+                    is RepositoryResult.Success -> {
+                        val notifications = notificationsResult.data?.filter {
+                            when (prefs.notificationPeriodFilter) {
+                                Period.TODAY.name -> {
+                                    LocalDateTime.parse(it.createdAt)
+                                        .toLocalDate() == LocalDateTime.now()
+                                        .toLocalDate()
+                                }
+                                Period.ONE_WEEK.name -> {
+                                    LocalDateTime.parse(it.createdAt)
+                                        .toLocalDate() >= LocalDateTime.now()
+                                        .toLocalDate().minusDays(7)
+                                }
+                                Period.ONE_MONTH.name -> {
+                                    LocalDateTime.parse(it.createdAt)
+                                        .toLocalDate() >= LocalDateTime.now()
+                                        .toLocalDate().minusDays(30)
+                                }
+                                else -> true
+                            }
                         }
-                        Period.ONE_WEEK.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
-                                .toLocalDate().minusDays(7)
-                        }
-                        Period.ONE_MONTH.name -> {
-                            LocalDateTime.parse(it.dateTime).toLocalDate() >= LocalDateTime.now()
-                                .toLocalDate().minusDays(30)
-                        }
-                        else -> true
+
+                        NotificationsScreenUiState(
+                            viewModelResult = ViewModelResult.SUCCESS,
+                            notifications = notifications?.map { it.mapToNotificationItem() }
+                                ?: emptyList()
+                        )
+                    }
+                    is RepositoryResult.Error -> {
+                        NotificationsScreenUiState(
+                            viewModelResult = ViewModelResult.ERROR,
+                            message = notificationsResult.message,
+                            notifications = emptyList()
+                        )
                     }
                 }
-                NotificationsScreenUiState(
-                    viewModelResult = ViewModelResult.SUCCESS,
-                    notifications = notifications
-                )
-
             }.collectLatest {
                 notificationsScreenUiState = it
             }

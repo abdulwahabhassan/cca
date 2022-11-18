@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smartflowtech.cupidcustomerapp.model.domain.Period
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
+import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 
 @Composable
@@ -29,7 +31,8 @@ fun Graph(
     points: List<Float>,
     paddingSpace: Dp,
     verticalStep: Int,
-    periodFilter: String
+    periodFilter: String,
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
 ) {
     val controlPoints1 = mutableListOf<PointF>()
     val controlPoints2 = mutableListOf<PointF>()
@@ -65,44 +68,56 @@ fun Graph(
             /** placing x axis points */
             for (i in xValues.indices) {
                 drawContext.canvas.nativeCanvas.drawText(
-                    when (periodFilter) {
-                        Period.ONE_WEEK.name -> {
-                            when (xValues[i]) {
-                                1 -> "Mon"
-                                2 -> "Tue"
-                                3 -> "Wed"
-                                4 -> "Thu"
-                                5 -> "Fri"
-                                6 -> "Sat"
-                                7 -> "Sun"
-                                else -> ""
+                    when(cardHistoryPeriodFilterContext) {
+                        CardHistoryPeriodFilterContext.DEFAULT -> {
+                            when (periodFilter) {
+                                Period.ONE_WEEK.name -> {
+                                    when (xValues[i]) {
+                                        1 -> "Mon"
+                                        2 -> "Tue"
+                                        3 -> "Wed"
+                                        4 -> "Thu"
+                                        5 -> "Fri"
+                                        6 -> "Sat"
+                                        7 -> "Sun"
+                                        else -> ""
+                                    }
+                                }
+                                Period.ONE_MONTH.name -> {
+                                    if (xValues[i] % 2 == 0) {
+                                        "${xValues[i]}"
+                                    } else {
+                                        ""
+                                    }
+                                }
+                                else -> {
+                                    when (xValues[i]) {
+                                        1 -> "Jan"
+                                        2 -> ""
+                                        3 -> "Mar"
+                                        4 -> ""
+                                        5 -> "May"
+                                        6 -> ""
+                                        7 -> "Jul"
+                                        8 -> ""
+                                        9 -> "Sep"
+                                        10 -> ""
+                                        11 -> "Nov"
+                                        12 -> ""
+                                        else -> ""
+                                    }
+                                }
                             }
                         }
-                        Period.ONE_MONTH.name -> {
+                        CardHistoryPeriodFilterContext.MONTH_YEAR -> {
                             if (xValues[i] % 2 == 0) {
                                 "${xValues[i]}"
                             } else {
                                 ""
                             }
                         }
-                        else -> {
-                            when (xValues[i]) {
-                                1 -> "Jan"
-                                2 -> "Feb"
-                                3 -> "Mar"
-                                4 -> "Apr"
-                                5 -> "May"
-                                6 -> "Jun"
-                                7 -> "Jul"
-                                8 -> "Aug"
-                                9 -> "Sep"
-                                10 -> "Oct"
-                                11 -> "Nov"
-                                12 -> "Dec"
-                                else -> ""
-                            }
-                        }
-                    },
+                    }
+                    ,
                     xAxisSpace * (i + 1),
                     size.height + 100,
                     textPaint
@@ -142,7 +157,7 @@ fun Graph(
                     /** drawing circles to indicate all the points */
                     drawCircle(
                         color = Color.Red,
-                        radius = 10f,
+                        radius = 5f,
                         center = Offset(x1, y1)
                     )
                 }
@@ -198,9 +213,9 @@ fun Graph(
             )
             drawPath(
                 stroke,
-                color = Color.Black,
+                color = darkBlue,
                 style = Stroke(
-                    width = 5f,
+                    width = 2f,
                     cap = StrokeCap.Round
                 )
             )

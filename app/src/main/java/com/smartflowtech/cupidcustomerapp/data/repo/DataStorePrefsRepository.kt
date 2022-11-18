@@ -41,6 +41,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         val VENDOR_BANK_ACCOUNT_NUMBER = stringPreferencesKey("vendorAccountNumber")
         val VENDOR_BANK_ACCOUNT_NAME = stringPreferencesKey("vendorAccountName")
         val VENDOR_BANK_NAME = stringPreferencesKey("vendorBanKName")
+        val PAYMENT_MODE_ID = stringPreferencesKey("paymentModeId")
     }
 
     val appConfigPreferencesAsFlow: Flow<AppConfigPreferences> = dataStore.data.catch { exception ->
@@ -64,7 +65,8 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             phoneNumber = preferences[PreferencesKeys.PHONE_NUMBER] ?: "",
             walletBalanceVisibility = preferences[PreferencesKeys.WALLET_BALANCE_VISIBILITY]
                 ?: true,
-            transactionPeriodFilter = preferences[PreferencesKeys.TRANSACTION_PERIOD_FILTER] ?: Period.TWO_YEARS.name,
+            transactionPeriodFilter = preferences[PreferencesKeys.TRANSACTION_PERIOD_FILTER]
+                ?: Period.TWO_YEARS.name, //to be changed to one year
             completedStatusFilter = preferences[PreferencesKeys.COMPLETED_STATUS_FILTER] ?: true,
             failedStatusFilter = preferences[PreferencesKeys.FAILED_STATUS_FILTER] ?: true,
             pendingStatusFilter = preferences[PreferencesKeys.PENDING_STATUS_FILTER] ?: true,
@@ -77,13 +79,16 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
             profilePictureUri = preferences[PreferencesKeys.PROFILE_PICTURE_URI] ?: "",
             emailNotifications = preferences[PreferencesKeys.EMAIL_NOTIFICATIONS] ?: false,
             pushNotifications = preferences[PreferencesKeys.PUSH_NOTIFICATIONS] ?: false,
-            paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD] ?: PaymentMethodPreference.ASK_ALWAYS.name,
+            paymentMethod = preferences[PreferencesKeys.PAYMENT_METHOD]
+                ?: PaymentMethodPreference.ASK_ALWAYS.name,
             stationFilter = preferences[PreferencesKeys.STATION_FILTER] ?: StationFilter.STATE.name,
-            notificationPeriodFilter = preferences[PreferencesKeys.NOTIFICATION_PERIOD_FILTER] ?: Period.ONE_MONTH.name,
+            notificationPeriodFilter = preferences[PreferencesKeys.NOTIFICATION_PERIOD_FILTER]
+                ?: Period.ONE_MONTH.name,
             vendorId = preferences[PreferencesKeys.VENDOR_ID] ?: -1,
             vendorAccountName = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] ?: "",
             vendorAccountNumber = preferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NUMBER] ?: "",
-            vendorBankName = preferences[PreferencesKeys.VENDOR_BANK_NAME] ?: ""
+            vendorBankName = preferences[PreferencesKeys.VENDOR_BANK_NAME] ?: "",
+            paymentModeId = preferences[PreferencesKeys.PAYMENT_MODE_ID] ?: ""
         )
     }
 
@@ -200,12 +205,19 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-    suspend fun updateVendorData(vendorId: Long, bankAcctName: String, bankAcctNum: String, bankName: String) {
+    suspend fun updateVendorData(
+        vendorId: Long,
+        bankAcctName: String,
+        bankAcctNum: String,
+        bankName: String,
+        paymentModeId: String
+    ) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.VENDOR_ID] = vendorId
             mutablePreferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NAME] = bankAcctName
             mutablePreferences[PreferencesKeys.VENDOR_BANK_ACCOUNT_NUMBER] = bankAcctNum
             mutablePreferences[PreferencesKeys.VENDOR_BANK_NAME] = bankAcctName
+            mutablePreferences[PreferencesKeys.PAYMENT_MODE_ID] = paymentModeId
         }
     }
 

@@ -1,12 +1,10 @@
 package com.smartflowtech.cupidcustomerapp.data.repo
 
 import com.smartflowtech.cupidcustomerapp.data.datasource.RemoteDatasource
-import com.smartflowtech.cupidcustomerapp.model.request.UpdateDeviceTokenRequestBody
-import com.smartflowtech.cupidcustomerapp.model.request.UpdateProfileRequestBody
+import com.smartflowtech.cupidcustomerapp.model.request.AddDeviceTokenRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.NetworkResult
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.network.NetworkConnectivityManager
-import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -18,21 +16,52 @@ class NotificationsRepository @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) : BaseRepository() {
 
-    suspend fun getNotifications() = withContext(dispatcher) {
-        RepositoryResult.Success(
-            data = Util.getListOfNotifications()
-        )
-    }
+//    suspend fun getNotifications() = withContext(dispatcher) {
+//
+//        RepositoryResult.Success(
+//            data = Util.getListOfNotifications()
+//        )
+//    }
 
-    suspend fun updateDeviceToken(
+    suspend fun getNotifications(
         token: String,
-        updateDeviceTokenRequestBody: UpdateDeviceTokenRequestBody
+        userId: String
     ) = withContext(dispatcher) {
         when (
             val networkResult = coroutineHandler(dispatcher, networkConnectivityManager) {
-                remoteDatasource.updateDeviceToken(
+                remoteDatasource.getNotifications(
                     token = token,
-                    updateDeviceTokenRequestBody = updateDeviceTokenRequestBody
+                    userId = userId
+                )
+            }
+        ) {
+            is NetworkResult.Success -> {
+                Timber.d("Success -> ${networkResult.payload.data}")
+                if (networkResult.payload.status) {
+                    RepositoryResult.Success(
+                        data = networkResult.payload.data,
+                        message = networkResult.payload.message
+                    )
+                } else {
+                    RepositoryResult.Error(message = networkResult.payload.message)
+                }
+            }
+            is NetworkResult.Error -> {
+                Timber.d("Error -> ${networkResult.message}")
+                RepositoryResult.Error(message = networkResult.message)
+            }
+        }
+    }
+
+    suspend fun addDeviceToken(
+        token: String,
+        addDeviceTokenRequestBody: AddDeviceTokenRequestBody
+    ) = withContext(dispatcher) {
+        when (
+            val networkResult = coroutineHandler(dispatcher, networkConnectivityManager) {
+                remoteDatasource.addDeviceToken(
+                    token = token,
+                    addDeviceTokenRequestBody = addDeviceTokenRequestBody
                 )
             }
         ) {

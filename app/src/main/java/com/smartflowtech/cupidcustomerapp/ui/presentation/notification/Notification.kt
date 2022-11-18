@@ -47,14 +47,14 @@ fun Notification(data: NotificationItem) {
                     .padding(start = 16.dp)
             ) {
                 Text(
-                    text = data.message,
+                    text = data.messageBody,
                     fontFamily = AthleticsFontFamily,
                     fontWeight = FontWeight.W400
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     Text(
-                        text = LocalDateTime.parse(data.dateTime).toString().replace("T", " "),
+                        text = LocalDateTime.parse(data.createdAt).toString().replace("T", " "),
                         fontSize = 12.sp,
                         color = grey
                     )
@@ -73,9 +73,9 @@ fun Notification(data: NotificationItem) {
 @Composable
 fun NotificationPreview() {
     CupidCustomerAppTheme {
-        Notification(
-            Util.getListOfNotifications()[0]
-        )
+//        Notification(
+//
+//        )
     }
 
 }

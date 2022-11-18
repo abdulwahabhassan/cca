@@ -1,6 +1,5 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
@@ -11,11 +10,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import co.paystack.android.model.Card
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentGateway
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMethodPreference
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
@@ -32,7 +29,7 @@ fun AddFundsSelectCardPaymentProcessor(
     onDismissSuccessDialog: () -> Unit,
     paymentMethod: String,
     amount: Int,
-    initiatePayStackPaymentState: suspend (amount: Int) -> PayStackPaymentState,
+    initiatePayStackPayment: suspend (amount: Int) -> PayStackPaymentState,
     fundWalletAfterPayStackPayment: suspend (amount: Int, reference: String) -> FundWalletState,
 ) {
 
@@ -101,7 +98,7 @@ fun AddFundsSelectCardPaymentProcessor(
                             showError = true
                         },
                         amount = amount,
-                        initiatePayStackPayment = initiatePayStackPaymentState,
+                        initiatePayStackPayment = initiatePayStackPayment,
                         fundWalletAfterPayStackPayment = fundWalletAfterPayStackPayment
                     )
                 }

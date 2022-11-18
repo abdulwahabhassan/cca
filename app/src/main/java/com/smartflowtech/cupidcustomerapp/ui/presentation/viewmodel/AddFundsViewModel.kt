@@ -24,7 +24,7 @@ class AddFundsViewModel @Inject constructor(
             token = appConfigPreferences.token,
             payStackPaymentRequestBody = PayStackPaymentRequestBody(
                 payStackPayment = PayStackPayment(
-                    paymentModeID = 1,
+                    paymentModeID = appConfigPreferences.paymentModeId.toLong(),
                     companyID = appConfigPreferences.companyId.toLong(),
                     paymentInitiatedBy = appConfigPreferences.fullName,
                     amountToPay = amountToPay

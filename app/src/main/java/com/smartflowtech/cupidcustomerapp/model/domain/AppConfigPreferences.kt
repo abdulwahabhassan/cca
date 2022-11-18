@@ -8,7 +8,7 @@ data class AppConfigPreferences(
     val token: String = "",
     val phoneNumber: String = "",
     val walletBalanceVisibility: Boolean = true,
-    val transactionPeriodFilter: String = Period.TWO_YEARS.name,
+    val transactionPeriodFilter: String = Period.TWO_YEARS.name, //to be changed to one year
     val completedStatusFilter: Boolean = true,
     val failedStatusFilter: Boolean = true,
     val pendingStatusFilter: Boolean = true,
@@ -27,5 +27,8 @@ data class AppConfigPreferences(
     val vendorId: Long = -1,
     val vendorAccountNumber: String = "",
     val vendorAccountName: String = "",
-    val vendorBankName: String = ""
-)
+    val vendorBankName: String = "",
+    val paymentModeId: String = ""
+) {
+
+}

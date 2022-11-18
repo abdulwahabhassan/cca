@@ -39,7 +39,8 @@ class LoginViewModel @Inject constructor(
                         vendorId = data.vendorId ?: -1,
                         bankAcctName = data.vendorBankAccountData?.bankName ?: "",
                         bankAcctNum = data.vendorBankAccountData?.accountNumber ?: "",
-                        bankName = data.vendorBankAccountData?.bankName ?: ""
+                        bankName = data.vendorBankAccountData?.bankName ?: "",
+                        paymentModeId = data.vendorBankAccountData?.id?.toString() ?: ""
                     )
 
                     LoginState(

@@ -13,16 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import co.paystack.android.model.Card
 import com.smartflowtech.cupidcustomerapp.model.domain.Bank
 import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
-import com.smartflowtech.cupidcustomerapp.ui.theme.darkBlue
-import com.smartflowtech.cupidcustomerapp.ui.theme.red
-import com.smartflowtech.cupidcustomerapp.ui.theme.transparentPink
-import com.smartflowtech.cupidcustomerapp.ui.theme.transparentPurple
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -119,7 +112,7 @@ fun AddFundsScreenModalBottomSheet(
                         onDismissSuccessDialog = goToHome,
                         paymentMethod = paymentMethod,
                         amount = amount,
-                        initiatePayStackPaymentState = initiatePayStackPayment,
+                        initiatePayStackPayment = initiatePayStackPayment,
                         fundWalletAfterPayStackPayment = fundWalletAfterPayStackPayment
                     )
                 }

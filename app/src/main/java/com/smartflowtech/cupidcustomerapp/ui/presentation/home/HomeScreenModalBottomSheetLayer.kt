@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.model.domain.Period
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreen
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.HomeScreenModalBottomSheetContent
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.HomeViewModel
@@ -99,11 +99,15 @@ fun HomeScreenModalBottomSheetLayer(
             when (bottomNavBarNavHostController.currentDestination?.route) {
                 HomeScreen.Notifications.route -> viewModel.updateNotificationPeriodFilter(filter)
                 HomeScreen.Home.route, HomeScreen.Transactions.route -> {
-                    if (context == PeriodContext.DEFAULT) {
-                        viewModel.updateTransactionPeriodFilter(filter)
-                    } else {
-                        viewModel.updateTransactionPeriodFilter(Period.TWO_YEARS.name)
-                        selectedMonthYearPeriod = filter
+                    when (context) {
+                        CardHistoryPeriodFilterContext.DEFAULT -> {
+                            viewModel.updateTransactionPeriodFilter(filter)
+                        }
+                        CardHistoryPeriodFilterContext.MONTH_YEAR -> {
+                            //to be changed to one year
+                            viewModel.updateTransactionPeriodFilter(Period.TWO_YEARS.name)
+                            selectedMonthYearPeriod = filter
+                        }
                     }
                 }
             }

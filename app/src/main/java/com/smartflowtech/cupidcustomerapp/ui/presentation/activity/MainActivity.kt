@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.activity
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -25,10 +26,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.service.CupidCustomerFirebaseMessagingService
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.RootNavigation
-import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.MainActivityViewModel
-import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder.Companion.DATA_PAYLOAD_BODY_KEY
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder.Companion.DATA_PAYLOAD_TITLE_KEY
+import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.MainActivityViewModel
+import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
             initFCMPushNotification()
         } else {
             //Inform user that that your app will not show notifications
-            androidx.appcompat.app.AlertDialog.Builder(this)
+            AlertDialog.Builder(this, R.style.AlertDialogStyle)
                 .setTitle("Push Notification Declined")
                 .setMessage("You will not be able to receive notifications unless granted")
                 .setNegativeButton("Dismiss") { dialog, _ ->
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 // FCM SDK (and your app) can post notifications.
                 initFCMPushNotification()
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                androidx.appcompat.app.AlertDialog.Builder(this)
+                AlertDialog.Builder(this,  R.style.AlertDialogStyle)
                     .setTitle("Enable Notifications")
                     .setMessage(
                         "Notifications allow us to be able to deliver urgent information " +
@@ -118,7 +120,7 @@ class MainActivity : ComponentActivity() {
                     Timber.d("OnCreate -> payload title: $title payload body: $body")
 
                     if (title != null && body != null) {
-                        goToNotifications(title, body)
+                        showNotificationDialog(title, body)
                     }
 
                 }
@@ -164,7 +166,7 @@ class MainActivity : ComponentActivity() {
                         )
 
                         if (title != null && body != null) {
-                            goToNotifications(title, body)
+                            showNotificationDialog(title, body)
                         }
                     }
                 }
@@ -172,7 +174,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun goToNotifications(title: String, body: String) {}
+    private fun showNotificationDialog(title: String, body: String) {
+        AlertDialog.Builder(this, R.style.AlertDialogStyle)
+            .setTitle(title)
+            .setMessage(body.capitalizeFirstLetter())
+            .setPositiveButton("Ok") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .setIcon(R.drawable.ic_smartflow)
+            .show()
+    }
 
     private fun checkGooglePlayServices(): Boolean {
         val status = GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this)
@@ -199,8 +211,10 @@ class MainActivity : ComponentActivity() {
             }
 
             //Get new FCM registration token if task was successful
+            //This action may have already been performed in onNewToken()
+            //in FirebaseMessagingService, nevertheless
             val token = task.result
-            activityViewModel.updateDeviceToken(fcmToken = token)
+            activityViewModel.addDeviceToken(fcmToken = token)
 
             //The device token is a unique identifier that contains two things:
             //- Which device will receive the notification.

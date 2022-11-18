@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.Period
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.model.domain.Wallet
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
@@ -46,9 +46,9 @@ fun CardTransactionHistory(
     selectedTab: String,
     onTabSelected: (String) -> Unit,
     currentBottomNavDestination: String,
-    onGraphFilterClicked: (context: PeriodContext, periods: List<String>) -> Unit,
+    onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardTransactionsPeriodFilterContext: PeriodContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
 ) {
 
     val monthYearPeriodFilterList = remember {
@@ -170,7 +170,7 @@ fun CardTransactionHistory(
                         .clipToBounds()
                         .clickable {
                             onGraphFilterClicked(
-                                PeriodContext.MONTH_YEAR,
+                                CardHistoryPeriodFilterContext.MONTH_YEAR,
                                 monthYearPeriodFilterList
                             )
                         }
@@ -194,24 +194,6 @@ fun CardTransactionHistory(
 
         if (selectedTab == "Transactions") {
 
-//            val monthYearContextTransactions =
-//                remember(cardTransactionsPeriodFilterContext, selectedMonthYearPeriod) {
-//                    homeScreenUiState.transactions
-//                        .asSequence()
-//                        .sortedBy { it.date }
-//                        .filter {
-//                            if (selectedCardNfcTagCode.isNotEmpty())
-//                                it.nfcTagCode == selectedCardNfcTagCode else true
-//                        }
-//                        .filter { it.date != null }
-//                        .filter {
-//                            val dateMonthYear = LocalDate.parse(it.date).format(
-//                                DateTimeFormatter.ofPattern("MMM yyyy")
-//                            )
-//                            dateMonthYear == selectedMonthYearPeriod
-//                        }.toList()
-//                }
-
             TransactionsList(
                 homeScreenUiState = homeScreenUiState,
                 onSelectTransaction = onSelectTransaction,
@@ -222,9 +204,9 @@ fun CardTransactionHistory(
         } else {
 
             val transactions =
-                remember(selectedMonthYearPeriod, cardTransactionsPeriodFilterContext) {
-                    when (cardTransactionsPeriodFilterContext) {
-                        PeriodContext.DEFAULT -> {
+                remember(selectedMonthYearPeriod, cardHistoryPeriodFilterContext) {
+                    when (cardHistoryPeriodFilterContext) {
+                        CardHistoryPeriodFilterContext.DEFAULT -> {
                             when (viewModel.appConfigPreferences.transactionPeriodFilter) {
                                 Period.ONE_WEEK.name -> {
                                     homeScreenUiState.transactions
@@ -274,7 +256,7 @@ fun CardTransactionHistory(
                                 }
                             }
                         }
-                        PeriodContext.MONTH_YEAR -> {
+                        CardHistoryPeriodFilterContext.MONTH_YEAR -> {
                             homeScreenUiState.transactions
                                 .asSequence()
                                 .sortedBy { it.date }
@@ -390,7 +372,10 @@ fun CardTransactionHistory(
                             .clip(RoundedCornerShape(4.dp))
                             .clipToBounds()
                             .clickable {
-                                onGraphFilterClicked(PeriodContext.DEFAULT, customPeriodFilterList)
+                                onGraphFilterClicked(
+                                    CardHistoryPeriodFilterContext.DEFAULT,
+                                    customPeriodFilterList
+                                )
                             }
                             .padding(start = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -422,7 +407,7 @@ fun CardTransactionHistory(
                         Column(
                             Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.2f),
+                                .fillMaxHeight(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -434,7 +419,7 @@ fun CardTransactionHistory(
                                 tint = Color.Unspecified
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text(text = "No Analytics available to show")
+                            Text(text = "No Analytics available to show", color = darkBlue)
                         }
                     } else {
                         val yStep = averageTransactions.values.sum() / averageTransactions.size
@@ -445,12 +430,19 @@ fun CardTransactionHistory(
                             if (index != 0 && index != initialXValues.lastIndex) {
                                 val absDiff = abs(initialXValues[index + 1] - elem)
                                 Timber.d("abs Diff -> $absDiff")
-                                if (absDiff != 1 && absDiff < when (
-                                        viewModel.appConfigPreferences.transactionPeriodFilter
-                                    ) {
-                                        Period.ONE_WEEK.name -> 7 - 1
-                                        Period.ONE_MONTH.name -> 30 - 1
-                                        else -> 12 - 1
+                                if (absDiff != 1 && absDiff < when (cardHistoryPeriodFilterContext) {
+                                        CardHistoryPeriodFilterContext.DEFAULT -> {
+                                            when (
+                                                viewModel.appConfigPreferences.transactionPeriodFilter
+                                            ) {
+                                                Period.ONE_WEEK.name -> 7 - 1
+                                                Period.ONE_MONTH.name -> 30 - 1
+                                                else -> 12 - 1
+                                            }
+                                        }
+                                        CardHistoryPeriodFilterContext.MONTH_YEAR -> {
+                                            30 - 1
+                                        }
                                     }
                                 ) {
                                     xValues.addAll(
@@ -462,20 +454,29 @@ fun CardTransactionHistory(
                                         ((elem + 1)..absDiff).toList().map { 0f }
                                     )
                                 }
+
                             }
                         }
 
                         var nextValue: Int
 
                         do {
-                            nextValue = if (xValues.last() + 1 > when (
-                                    viewModel.appConfigPreferences.transactionPeriodFilter
-                                ) {
-                                    Period.ONE_WEEK.name -> 7
-                                    Period.ONE_MONTH.name -> 30
-                                    else -> 12
-                                }
-                            ) 1 else xValues.last() + 1
+                            nextValue =
+                                if (xValues.last() + 1 > when (cardHistoryPeriodFilterContext) {
+                                        CardHistoryPeriodFilterContext.DEFAULT -> {
+                                            when (
+                                                viewModel.appConfigPreferences.transactionPeriodFilter
+                                            ) {
+                                                Period.ONE_WEEK.name -> 7
+                                                Period.ONE_MONTH.name -> 30
+                                                else -> 12
+                                            }
+                                        }
+                                        CardHistoryPeriodFilterContext.MONTH_YEAR -> {
+                                            30
+                                        }
+                                    }
+                                ) 1 else xValues.last() + 1
 
                             if (nextValue != xValues.first()) {
                                 xValues.add(nextValue)
@@ -495,7 +496,7 @@ fun CardTransactionHistory(
                         Graph(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(300.dp),
+                                .height(200.dp),
                             xValues = xValues,
                             yValues = (
                                     0..(averageTransactions.values.max() /
@@ -504,7 +505,8 @@ fun CardTransactionHistory(
                             points = points,
                             paddingSpace = 16.dp,
                             verticalStep = yStep.toInt(),
-                            periodFilter = viewModel.appConfigPreferences.transactionPeriodFilter
+                            periodFilter = viewModel.appConfigPreferences.transactionPeriodFilter,
+                            cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
                         )
                     }
                 }
@@ -561,7 +563,7 @@ fun CardTransactionHistoryPreview() {
             currentBottomNavDestination = "",
             onGraphFilterClicked = { _, _ -> },
             selectedMonthYearPeriod = "May 2022",
-            cardTransactionsPeriodFilterContext = PeriodContext.DEFAULT
+            cardHistoryPeriodFilterContext = CardHistoryPeriodFilterContext.DEFAULT
         )
     }
 }

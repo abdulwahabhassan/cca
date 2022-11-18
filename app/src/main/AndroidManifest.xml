@@ -49,12 +49,6 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_smartflow" />
 
-        <!-- Set color used with incoming notification messages.
-        Used when no color is set for the incoming notification message -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
-
         <!-- This embeds the stored google maps api key from gradle local.properties file -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

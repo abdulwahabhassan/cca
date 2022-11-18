@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.Home
 import com.smartflowtech.cupidcustomerapp.ui.presentation.profile.Profile
@@ -45,9 +45,9 @@ fun BottomNavBarNavigation(
     onBottomNavItemClicked: (String) -> Unit,
     onStationFilterClicked: () -> Unit,
     onStationSelected: (VendorStation) -> Unit,
-    onGraphFilterClicked: (context: PeriodContext, periods: List<String>) -> Unit,
+    onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardTransactionsPeriodFilterContext: PeriodContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -133,7 +133,7 @@ fun BottomNavBarNavigation(
                 onBottomNavItemClicked = onBottomNavItemClicked,
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
+                cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -153,7 +153,7 @@ fun BottomNavBarNavigation(
                     ?: "",
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
+                cardTransactionsPeriodFilterContext = cardHistoryPeriodFilterContext
             )
         }
         composable(HomeScreen.Stations.route) {

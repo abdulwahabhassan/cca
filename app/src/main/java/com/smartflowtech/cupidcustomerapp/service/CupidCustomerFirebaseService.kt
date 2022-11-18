@@ -4,11 +4,13 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.smartflowtech.cupidcustomerapp.data.repo.DataStorePrefsRepository
 import com.smartflowtech.cupidcustomerapp.data.repo.NotificationsRepository
-import com.smartflowtech.cupidcustomerapp.model.request.UpdateDeviceTokenRequestBody
+import com.smartflowtech.cupidcustomerapp.model.request.AddDeviceTokenRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.RepositoryResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,9 +40,9 @@ class CupidCustomerFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendFCMTokenToServer(token: String) {
         CoroutineScope(dispatcher).launch {
-            val result = notificationsRepository.updateDeviceToken(
+            val result = notificationsRepository.addDeviceToken(
                 token = token,
-                updateDeviceTokenRequestBody = UpdateDeviceTokenRequestBody(
+                addDeviceTokenRequestBody = AddDeviceTokenRequestBody(
                     prefsRepository.getAppConfigPreferences().userId,
                     deviceToken = token
                 )

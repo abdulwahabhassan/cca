@@ -315,42 +315,6 @@ object Util {
             )
     }
 
-    fun getListOfNotifications(): List<NotificationItem> {
-        return listOf(
-            NotificationItem(
-                "1",
-                "Your wallet was topped up with ₦600",
-                "2022-11-03T00:00:00",
-                R.drawable.ic_debit_notification
-            ),
-            NotificationItem(
-                "2",
-                "₦1,000 was debited from your wallet",
-                "2022-11-03T08:00:00",
-                R.drawable.ic_credit_notification
-            ),
-            NotificationItem(
-                "3",
-                "Get 10% off any payment you make today",
-                "2022-10-15T10:20:30",
-                R.drawable.ic_gift_notification
-            ),
-            NotificationItem(
-                "4",
-                "Your wallet was topped up with ₦5,000",
-                "2022-11-02T09:45:00",
-                R.drawable.ic_credit_notification
-            ),
-            NotificationItem(
-                "5",
-                "You have received 40 loyalty points",
-                "2022-10-01T13:00:00",
-                R.drawable.ic_gift_notification
-            )
-
-        )
-    }
-
     fun getListOfUploadImageOptions(): List<UploadImageOption> {
         return listOf(
             UploadImageOption(

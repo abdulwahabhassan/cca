@@ -17,10 +17,10 @@ enum class Period {
     ONE_WEEK,
     ONE_MONTH,
     ONE_YEAR,
-    TWO_YEARS
+    TWO_YEARS //to be removed
 }
 
-enum class PeriodContext {
+enum class CardHistoryPeriodFilterContext {
     MONTH_YEAR,
     DEFAULT
 }

@@ -27,7 +27,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.smartflowtech.cupidcustomerapp.R
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CardTransactionHistory
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
@@ -50,9 +50,9 @@ fun Home(
     bottomNavBarNavHostController: NavHostController,
     bottomSheetState: BottomSheetState,
     onBottomNavItemClicked: (String) -> Unit,
-    onGraphFilterClicked:  (context: PeriodContext, periods: List<String>) -> Unit,
+    onGraphFilterClicked:  (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardTransactionsPeriodFilterContext: PeriodContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
 ) {
     val pagerState = rememberPagerState()
 
@@ -116,7 +116,7 @@ fun Home(
                 currentBottomNavDestination = currentBottomNavDestination,
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
+                cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
             )
         } else {
             if (homeScreenUiState.transactions.isEmpty()) {

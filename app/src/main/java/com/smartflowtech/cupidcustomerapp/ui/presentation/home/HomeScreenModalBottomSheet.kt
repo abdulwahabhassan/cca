@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
-import com.smartflowtech.cupidcustomerapp.model.domain.PeriodContext
+import com.smartflowtech.cupidcustomerapp.model.domain.CardHistoryPeriodFilterContext
 import com.smartflowtech.cupidcustomerapp.model.response.VendorStation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.PeriodFilter
 import com.smartflowtech.cupidcustomerapp.ui.presentation.common.Success
@@ -50,7 +50,7 @@ fun HomeScreenModalBottomSheet(
     onStationFilterSelected: (String) -> Unit,
     modalBottomSheetContentKey: String,
     setModalBottomSheetContent: (String) -> Unit,
-    onDaysPeriodFilterSelected: (String, PeriodContext) -> Unit,
+    onDaysPeriodFilterSelected: (String, CardHistoryPeriodFilterContext) -> Unit,
     selectedMonthYearPeriod: String,
     printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState
 ) {
@@ -59,8 +59,8 @@ fun HomeScreenModalBottomSheet(
     var successMessage: String by rememberSaveable { mutableStateOf("") }
     var station: VendorStation? by remember { mutableStateOf(null) }
     var filterPeriods: List<String> by remember { mutableStateOf(Util.defaultPeriods) }
-    var preCardTransactionsPeriodFilterContext: PeriodContext by remember { mutableStateOf(PeriodContext.MONTH_YEAR) }
-    var cardTransactionsPeriodFilterContext: PeriodContext by remember { mutableStateOf(PeriodContext.MONTH_YEAR) }
+    var preCardTransactionsPeriodFilterContext: CardHistoryPeriodFilterContext by remember { mutableStateOf(CardHistoryPeriodFilterContext.MONTH_YEAR) }
+    var cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext by remember { mutableStateOf(CardHistoryPeriodFilterContext.MONTH_YEAR) }
 
     ModalBottomSheetLayout(
         modifier = Modifier.navigationBarsPadding(),
@@ -178,10 +178,9 @@ fun HomeScreenModalBottomSheet(
                         HomeScreenModalBottomSheetContent.DaysFilter.contentKey -> {
                             PeriodFilter(
                                 onPeriodFilterSelected = { filter, context ->
-                                    cardTransactionsPeriodFilterContext = context
+                                    cardHistoryPeriodFilterContext = context
                                     goBack()
                                     onDaysPeriodFilterSelected(filter, context)
-
                                 },
                                 context = preCardTransactionsPeriodFilterContext,
                                 periods = filterPeriods
@@ -205,7 +204,7 @@ fun HomeScreenModalBottomSheet(
                 )
             },
             onNotificationsFilterClicked = { context ->
-                cardTransactionsPeriodFilterContext = context
+                cardHistoryPeriodFilterContext = context
                 setModalBottomSheetContent(
                     HomeScreenModalBottomSheetContent.DaysFilter.contentKey
                 )
@@ -257,7 +256,7 @@ fun HomeScreenModalBottomSheet(
                 )
             },
             selectedMonthYearPeriod = selectedMonthYearPeriod,
-            cardTransactionsPeriodFilterContext = cardTransactionsPeriodFilterContext
+            cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
         )
     }
 }
