@@ -99,7 +99,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                     contentDescription = "Dot",
                     tint = Color.Unspecified
                 )
-                Spacer(modifier = Modifier.width(2.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_dot),
                     contentDescription = "Dot",
