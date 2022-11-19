@@ -18,6 +18,7 @@ import com.smartflowtech.cupidcustomerapp.model.domain.NotificationItem
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
 import com.smartflowtech.cupidcustomerapp.ui.utils.Util
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun Notification(data: NotificationItem) {
@@ -54,7 +55,10 @@ fun Notification(data: NotificationItem) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     Text(
-                        text = LocalDateTime.parse(data.createdAt).toString().replace("T", " "),
+                        text = LocalDateTime.parse(
+                            data.createdAt,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).format(DateTimeFormatter.ofPattern("E, dd MMM yyyy")).toString(),
                         fontSize = 12.sp,
                         color = grey
                     )

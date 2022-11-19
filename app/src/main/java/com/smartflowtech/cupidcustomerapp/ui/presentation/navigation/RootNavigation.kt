@@ -9,6 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.addfunds.AddFundsScreenModalBottomSheetLayer
 import com.smartflowtech.cupidcustomerapp.ui.presentation.home.HomeScreenModalBottomSheetLayer
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginScreen
@@ -27,9 +28,9 @@ fun RootNavigation(
     finishActivity: () -> Unit
 ) {
 
+    val homeViewModel = hiltViewModel<HomeViewModel>()
     val rootNavHostController = rememberAnimatedNavController()
     var verifiedEmail: String by rememberSaveable { mutableStateOf("") }
-    val homeViewModel = hiltViewModel<HomeViewModel>()
 
     AnimatedNavHost(
         navController = rootNavHostController,
@@ -108,8 +109,8 @@ fun RootNavigation(
                         )
                     })
             }
-
         }
+
         composable(route = Screen.GetStartedFirst.route) {
             GetStartedFirstScreen {
                 rootNavHostController.navigate(
@@ -118,6 +119,7 @@ fun RootNavigation(
                 )
             }
         }
+
         composable(route = Screen.GetStartedSecond.route) {
             hiltViewModel<GetStartedViewModel>().apply {
                 GetStartedSecondScreen(
@@ -130,8 +132,8 @@ fun RootNavigation(
                     getStarted = { updateStarted(true) }
                 )
             }
-
         }
+
         composable(route = Screen.Login.route) {
             hiltViewModel<LoginViewModel>().apply {
                 LoginScreen(
@@ -146,6 +148,11 @@ fun RootNavigation(
                         rootNavHostController.navigate(
                             Screen.Home.route,
                         )
+                        if (
+                            homeViewModel.homeScreenUiState.viewModelResult == ViewModelResult.ERROR
+                        ) {
+                            homeViewModel.getTransactionsAndWallets()
+                        }
                     },
                     goToResetPassword = {
                         rootNavHostController.navigate(
@@ -164,7 +171,6 @@ fun RootNavigation(
                     onboarded = appConfigPreferences.onBoarded
                 )
             }
-
         }
 
         composable(route = Screen.ResetPassword.route) {
@@ -185,7 +191,6 @@ fun RootNavigation(
                     }
                 )
             }
-
         }
 
         composable(route = Screen.VerifyEmail.route) {
@@ -238,9 +243,7 @@ fun RootNavigation(
                     }
                 )
             }
-
         }
-
 
         composable(route = Screen.Home.route) {
             val bottomNavBarNavHostController = rememberAnimatedNavController()
@@ -283,7 +286,6 @@ fun RootNavigation(
                             restoreState = true
                         }
                     }
-
                 },
                 goToAddFundsScreen = {
                     rootNavHostController.navigate(
@@ -291,7 +293,6 @@ fun RootNavigation(
                     )
                 }
             )
-
         }
 
         composable(route = Screen.AddFunds.route) {

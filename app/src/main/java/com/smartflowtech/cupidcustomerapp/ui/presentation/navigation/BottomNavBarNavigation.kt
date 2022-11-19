@@ -251,7 +251,8 @@ fun BottomNavBarNavigation(
             hiltViewModel<NotificationsViewModel>().apply {
                 Notifications(
                     onBackPressed = onBackPressed,
-                    uiState = notificationsScreenUiState
+                    uiState = notificationsScreenUiState,
+                    bottomSheetScaffoldState = bottomSheetScaffoldState,
                 )
             }
 

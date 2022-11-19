@@ -310,7 +310,8 @@ fun HomeScreen(
                 onNotificationsClicked = {
                     onBottomNavItemClicked(HomeScreen.Notifications.route)
                 },
-                getTransactions = getTransactions
+                getTransactions = getTransactions,
+                logOut = onLogOutClicked
             )
         }
     }

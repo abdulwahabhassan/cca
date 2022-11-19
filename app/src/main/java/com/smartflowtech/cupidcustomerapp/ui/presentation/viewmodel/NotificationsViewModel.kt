@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,17 +57,26 @@ class NotificationsViewModel @Inject constructor(
                         val notifications = notificationsResult.data?.filter {
                             when (prefs.notificationPeriodFilter) {
                                 Period.TODAY.name -> {
-                                    LocalDateTime.parse(it.createdAt)
+                                    LocalDateTime.parse(
+                                        it.createdAt,
+                                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                    )
                                         .toLocalDate() == LocalDateTime.now()
                                         .toLocalDate()
                                 }
                                 Period.ONE_WEEK.name -> {
-                                    LocalDateTime.parse(it.createdAt)
+                                    LocalDateTime.parse(
+                                        it.createdAt,
+                                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                    )
                                         .toLocalDate() >= LocalDateTime.now()
                                         .toLocalDate().minusDays(7)
                                 }
                                 Period.ONE_MONTH.name -> {
-                                    LocalDateTime.parse(it.createdAt)
+                                    LocalDateTime.parse(
+                                        it.createdAt,
+                                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                    )
                                         .toLocalDate() >= LocalDateTime.now()
                                         .toLocalDate().minusDays(30)
                                 }

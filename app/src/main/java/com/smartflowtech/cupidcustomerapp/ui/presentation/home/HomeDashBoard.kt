@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.home
 
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,7 +55,8 @@ fun HomeDashBoard(
     onProfileClicked: () -> Unit,
     onNotificationsClicked: () -> Unit,
     profilePicture: String,
-    getTransactions: () -> Unit
+    getTransactions: () -> Unit,
+    logOut: () -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -64,12 +67,21 @@ fun HomeDashBoard(
     var showSnackBar by rememberSaveable { mutableStateOf(false) }
     var showLoadingIndicator by rememberSaveable { mutableStateOf(false) }
     var showWallets by rememberSaveable { mutableStateOf(false) }
+    val ctx = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     when (homeScreenUiState.viewModelResult) {
         ViewModelResult.ERROR -> {
             showLoadingIndicator = false
             showWallets = false
             showSnackBar = true
+            if (homeScreenUiState.message?.contains("Token Expired", true) == true) {
+                logOut()
+                LaunchedEffect(key1 = Unit) {
+                    Toast.makeText(ctx, "Session Expired! Log in again!", Toast.LENGTH_LONG).show()
+                }
+
+            }
         }
         ViewModelResult.LOADING -> {
             showWallets = false
@@ -219,9 +231,12 @@ fun HomeDashBoard(
                                             onAddFundsClicked = onAddFundsClicked,
                                             walletBalanceVisibility = walletBalanceVisibility,
                                             updateWalletVisibility = updateWalletVisibility,
-                                            vendorName = homeScreenUiState.wallets[page].vendorName ?: "",
-                                            currentBalance = homeScreenUiState.wallets[page].currentBalance ?: "0.00",
-                                            nfcTagCode = homeScreenUiState.wallets[page].nfcTagCode ?: "",
+                                            vendorName = homeScreenUiState.wallets[page].vendorName
+                                                ?: "",
+                                            currentBalance = homeScreenUiState.wallets[page].currentBalance
+                                                ?: "0.00",
+                                            nfcTagCode = homeScreenUiState.wallets[page].nfcTagCode
+                                                ?: "",
                                             onCardSelected = { tagCode ->
                                                 if (!isCardSelected) {
                                                     onCardSelected(true, tagCode)
@@ -313,7 +328,8 @@ fun PreviewHomeDashBoard() {
             onProfileClicked = {},
             onNotificationsClicked = {},
             profilePicture = "",
-            getTransactions = { }
+            getTransactions = { },
+            logOut = { }
         )
     }
 }
