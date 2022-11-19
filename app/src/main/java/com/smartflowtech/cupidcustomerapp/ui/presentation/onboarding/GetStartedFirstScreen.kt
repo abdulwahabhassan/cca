@@ -87,10 +87,28 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
             }
         }
 
+
         Column(
             Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
+
+            Row {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_dash),
+                    contentDescription = "Dot",
+                    tint = Color.Unspecified
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_dot),
+                    contentDescription = "Dot",
+                    tint = Color.Unspecified
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             Text(
                 text = "Payments made easy",
                 color = Color.White,
@@ -111,7 +129,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
                 onClick = {
                     enabled = false
                     goToGetStartedSecondScreen()
-                          },
+                },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {

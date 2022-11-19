@@ -4,10 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +52,22 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
             Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Bottom,
         ) {
+            Row {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_dash),
+                    contentDescription = "Dot",
+                    tint = Color.Unspecified
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_dot),
+                    contentDescription = "Dot",
+                    tint = Color.Unspecified
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             Text(
                 text = "Payments made easy",
                 color = Color.White,
