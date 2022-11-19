@@ -414,7 +414,7 @@ fun CardTransactionHistory(
                             Icon(
                                 modifier = Modifier
                                     .size(50.dp),
-                                painter = painterResource(id = R.drawable.ic_no_transactions),
+                                painter = painterResource(id = R.drawable.ic_no_data),
                                 contentDescription = "No analytics available icon",
                                 tint = Color.Unspecified
                             )

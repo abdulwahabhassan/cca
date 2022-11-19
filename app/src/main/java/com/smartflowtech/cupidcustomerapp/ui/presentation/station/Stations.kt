@@ -387,7 +387,25 @@ fun Stations(
                         }
                     }
                     ViewModelResult.ERROR -> {
+
                         showSnackBar = true
+
+                        Column(
+                            Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(50.dp),
+                                painter = painterResource(id = R.drawable.ic_no_data),
+                                contentDescription = "No stations icon",
+                                tint = Color.Unspecified
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(text = "There are no stations currently available")
+                        }
                     }
                     ViewModelResult.SUCCESS -> {
 
@@ -417,7 +435,7 @@ fun Stations(
                                 Icon(
                                     modifier = Modifier
                                         .size(50.dp),
-                                    painter = painterResource(id = R.drawable.ic_notification),
+                                    painter = painterResource(id = R.drawable.ic_no_data),
                                     contentDescription = "No stations icon",
                                     tint = Color.Unspecified
                                 )
@@ -430,12 +448,9 @@ fun Stations(
                         }
                     }
                 }
-
             }
         }
-
     }
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -145,7 +145,7 @@ fun Home(
                     Icon(
                         modifier = Modifier
                             .size(50.dp),
-                        painter = painterResource(id = R.drawable.ic_no_transactions),
+                        painter = painterResource(id = R.drawable.ic_no_data),
                         contentDescription = "No transactions icon",
                         tint = Color.Unspecified
                     )

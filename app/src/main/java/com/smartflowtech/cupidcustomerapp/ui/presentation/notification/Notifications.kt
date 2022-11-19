@@ -63,8 +63,8 @@ fun Notifications(
                 Icon(
                     modifier = Modifier
                         .size(50.dp),
-                    painter = painterResource(id = R.drawable.ic_notification),
-                    contentDescription = "No notification icon",
+                    painter = painterResource(id = R.drawable.ic_no_data),
+                    contentDescription = "No notifications icon",
                     tint = Color.Unspecified
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -116,8 +116,8 @@ fun Notifications(
                         Icon(
                             modifier = Modifier
                                 .size(50.dp),
-                            painter = painterResource(id = R.drawable.ic_notification),
-                            contentDescription = "No notification icon",
+                            painter = painterResource(id = R.drawable.ic_no_data),
+                            contentDescription = "No notifications icon",
                             tint = Color.Unspecified
                         )
                         Spacer(modifier = Modifier.height(16.dp))

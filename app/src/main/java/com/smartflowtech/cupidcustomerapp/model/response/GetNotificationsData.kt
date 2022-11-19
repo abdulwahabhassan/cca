@@ -33,6 +33,6 @@ fun NotificationData.mapToNotificationItem(): NotificationItem {
         this.messageBody,
         this.createdAt,
         this.updatedAt,
-        R.drawable.ic_debit_notification
+        R.drawable.ic_notification
     )
 }

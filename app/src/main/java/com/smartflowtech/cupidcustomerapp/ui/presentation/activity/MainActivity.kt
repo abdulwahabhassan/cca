@@ -9,12 +9,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
@@ -28,8 +40,10 @@ import com.smartflowtech.cupidcustomerapp.service.CupidCustomerFirebaseMessaging
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.RootNavigation
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder.Companion.DATA_PAYLOAD_BODY_KEY
 import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationBuilder.Companion.DATA_PAYLOAD_TITLE_KEY
+import com.smartflowtech.cupidcustomerapp.ui.presentation.notification.NotificationDialog
 import com.smartflowtech.cupidcustomerapp.ui.presentation.viewmodel.MainActivityViewModel
 import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeFirstLetter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -39,6 +53,9 @@ import timber.log.Timber
 class MainActivity : ComponentActivity() {
 
     private lateinit var activityViewModel: MainActivityViewModel
+    private var showNotificationDialog = mutableStateOf(false)
+    private var notificationTitle = ""
+    private var notificationBody = ""
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -68,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 // FCM SDK (and your app) can post notifications.
                 initFCMPushNotification()
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                AlertDialog.Builder(this,  R.style.AlertDialogStyle)
+                AlertDialog.Builder(this, R.style.AlertDialogStyle)
                     .setTitle("Enable Notifications")
                     .setMessage(
                         "Notifications allow us to be able to deliver urgent information " +
@@ -123,6 +140,48 @@ class MainActivity : ComponentActivity() {
                         showNotificationDialog(title, body)
                     }
 
+                    if (
+                        showNotificationDialog.value &&
+                        notificationTitle.isNotEmpty() &&
+                        notificationBody.isNotEmpty()
+                    ) {
+                        Dialog(
+                            onDismissRequest = {
+                                showNotificationDialog.value = false
+                                notificationTitle = ""
+                                notificationBody = ""
+                            },
+                            properties = DialogProperties(dismissOnClickOutside = false)
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        color = Color.White,
+                                        shape = RoundedCornerShape(10.dp)
+                                    )
+                                    .padding(vertical = 32.dp, horizontal = 16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+
+                            ) {
+                                item {
+                                    NotificationDialog(
+                                        title = notificationTitle,
+                                        body = notificationBody,
+                                        onOkayPressed = {
+                                            showNotificationDialog.value = false
+                                            notificationTitle = ""
+                                            notificationBody = ""
+                                        }
+                                    )
+                                }
+
+                            }
+
+                        }
+                    }
+
                 }
             }
         }
@@ -174,16 +233,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     private fun showNotificationDialog(title: String, body: String) {
-        AlertDialog.Builder(this, R.style.AlertDialogStyle)
-            .setTitle(title)
-            .setMessage(body.capitalizeFirstLetter())
-            .setPositiveButton("Ok") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setCancelable(false)
-            .setIcon(R.drawable.ic_smartflow)
-            .show()
+        showNotificationDialog.value = true
+        notificationTitle = title.capitalizeEachWord()
+        notificationBody = body.capitalizeFirstLetter()
     }
 
     private fun checkGooglePlayServices(): Boolean {
