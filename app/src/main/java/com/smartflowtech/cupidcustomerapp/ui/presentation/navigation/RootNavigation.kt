@@ -164,8 +164,8 @@ fun RootNavigation(
                         finishActivity()
                     },
                     login = { email, password -> login(email, password) },
-                    userEmail = appConfigPreferences.userEmail,
-                    username = appConfigPreferences.userName.ifEmpty {
+                    currentUserEmail = appConfigPreferences.userEmail,
+                    currentUserName = appConfigPreferences.userName.ifEmpty {
                         appConfigPreferences.fullName.split(" ")[0]
                     },
                     onboarded = appConfigPreferences.onBoarded

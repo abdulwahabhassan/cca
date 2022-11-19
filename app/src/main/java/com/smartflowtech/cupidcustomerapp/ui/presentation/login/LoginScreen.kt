@@ -38,15 +38,15 @@ fun LoginScreen(
     goToResetPassword: (String) -> Unit,
     finishActivity: () -> Unit,
     login: suspend (email: String, password: String) -> LoginState,
-    username: String,
-    userEmail: String,
+    currentUserName: String,
+    currentUserEmail: String,
     onboarded: Boolean
 ) {
 
     val scaffoldState = rememberScaffoldState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var notMe by rememberSaveable { mutableStateOf(false) }
-    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else userEmail) }
+    var email by rememberSaveable(notMe) { mutableStateOf(if (notMe) "" else currentUserEmail) }
     var password by rememberSaveable(notMe) { mutableStateOf("") }
     var isEmailError by rememberSaveable(notMe) { mutableStateOf(false) }
     var isPasswordError by rememberSaveable(notMe) { mutableStateOf(false) }
@@ -174,8 +174,8 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.CenterStart),
-                        text = if (!notMe && username.isNotEmpty())
-                            "Welcome Back, $username"
+                        text = if (!notMe && currentUserName.isNotEmpty())
+                            "Welcome Back, $currentUserName"
                         else
                             "Login to your account",
                         style = MaterialTheme.typography.h6,
@@ -333,21 +333,23 @@ fun LoginScreen(
                             }
                             .padding(8.dp),
                     ) {
-                        if (notMe) {
-                            Text(
-                                text = "Remember me",
-                                style = MaterialTheme.typography.body1
-                            )
-                        } else {
-                            Text(
-                                text = "Not me? ",
-                                style = MaterialTheme.typography.body1
-                            )
-                            Text(
-                                text = "Login",
-                                style = MaterialTheme.typography.body1,
-                                fontWeight = FontWeight.Bold
-                            )
+                        if (currentUserEmail.isNotEmpty()) {
+                            if (notMe) {
+                                Text(
+                                    text = "Remember me",
+                                    style = MaterialTheme.typography.body1
+                                )
+                            } else {
+                                Text(
+                                    text = "Not me? ",
+                                    style = MaterialTheme.typography.body1
+                                )
+                                Text(
+                                    text = "Login",
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }
@@ -376,8 +378,8 @@ fun LoginScreenPreview() {
             goToResetPassword = {},
             finishActivity = {},
             login = { _, _ -> LoginState((ViewModelResult.SUCCESS)) },
-            username = "Hassan Abdulwahab",
-            userEmail = "abc@gmail.com",
+            currentUserName = "Hassan Abdulwahab",
+            currentUserEmail = "abc@gmail.com",
             onboarded = true
         )
     }
