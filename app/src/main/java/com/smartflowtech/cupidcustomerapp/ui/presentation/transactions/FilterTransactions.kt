@@ -56,7 +56,7 @@ fun FilterTransactions(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = "Filter Preferences",
+            text = "Filter",
             color = Color.Black,
             fontFamily = AthleticsFontFamily,
             fontSize = 16.sp,
