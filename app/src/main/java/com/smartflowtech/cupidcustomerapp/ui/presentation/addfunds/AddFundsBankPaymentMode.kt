@@ -70,10 +70,17 @@ fun AddFundsBankPaymentMode(
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = bankName, fontWeight = FontWeight.Bold, color = grey)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Money sent to this account number will automatically top up your Cupid wallet",
-            color = grey
-        )
+        if (accountNumber.isNotEmpty() && bankName.isNotEmpty()) {
+            Text(
+                text = "Money sent to this account number will automatically top up your Cupid wallet",
+                color = grey
+            )
+        } else {
+            Text(
+                text = "We are sorry, bank transfer is currently unavailable",
+                color = grey
+            )
+        }
     }
 
 }

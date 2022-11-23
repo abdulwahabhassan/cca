@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +40,7 @@ fun ResetPasswordScreen(
     var emailErrorLabel by rememberSaveable { mutableStateOf("") }
     var showLoadingIndicator: Boolean by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
     fun resetErrorsAndLabels() {
         emailErrorLabel = ""
@@ -221,6 +223,7 @@ fun ResetPasswordScreen(
                                 validateEmail(trimmedEmail)
 
                                 if (!isEmailError) {
+                                    focusManager.clearFocus()
                                     showLoadingIndicator = true
                                     doResetPassword(trimmedEmail)
                                 }

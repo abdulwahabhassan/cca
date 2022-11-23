@@ -128,7 +128,7 @@ fun HomeScreenModalBottomSheet(
                                 printTransactionReport = printTransactionReport,
                                 showSuccess = { message ->
                                     successTitle = "Sent"
-                                    successMessage = message
+                                    successMessage = "We've sent the requested statement to your email"
                                     setModalBottomSheetContent(
                                         HomeScreenModalBottomSheetContent.Success.contentKey
                                     )

@@ -315,14 +315,10 @@ fun CardTransactionHistory(
                                 tint = Color.Unspecified
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "Debit", color = grey)
+                            Text(text = "Credit", color = grey)
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "₦${
-                                    Util.formatAmount(transactions.values.sumOf { list ->
-                                        list.sumOf { it.amount?.toDouble() ?: 0.00 }
-                                    })
-                                }",
+                                text = "₦0.00",
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -348,9 +344,13 @@ fun CardTransactionHistory(
                                 tint = Color.Unspecified
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "Credit", color = grey)
+                            Text(text = "Debit", color = grey)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "₦0.00", fontWeight = FontWeight.Bold)
+                            Text(text = "₦${
+                                Util.formatAmount(transactions.values.sumOf { list ->
+                                    list.sumOf { it.amount?.toDouble() ?: 0.00 }
+                                })
+                            }", fontWeight = FontWeight.Bold)
                         }
                     }
                 }

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +44,7 @@ fun DownloadTransactions(
     var showLoadingIndicator: Boolean by rememberSaveable { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
     val ctx = LocalContext.current
+    val focusManager = LocalFocusManager.current
 
 
     fun resetErrorsAndLabels() {
@@ -277,25 +279,22 @@ fun DownloadTransactions(
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
+                                focusManager.clearFocus()
                                 showLoadingIndicator = true
                                 doPrintTransactionReport(
                                     dateFrom = trimmedStartDate,
                                     trimmedEndDate
                                 )
                             }
-
                         }
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                 ) {
-                    Text(text = "Print")
+                    Text(text = "Get")
                 }
             }
-
-
         }
-
     }
 }
 

@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +62,7 @@ fun Profile(
     val scaffoldState = rememberScaffoldState()
     var showLoadingIndicator by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
     fun resetErrorsAndLabels() {
         firstNameErrorLabel = ""
@@ -297,6 +299,7 @@ fun Profile(
                             validateEmail(trimmedEmail)
 
                             if (!emailError) {
+                                focusManager.clearFocus()
                                 showLoadingIndicator = true
                                 doUpdateProfile(
                                     firstname.trim().capitalizeFirstLetter(),

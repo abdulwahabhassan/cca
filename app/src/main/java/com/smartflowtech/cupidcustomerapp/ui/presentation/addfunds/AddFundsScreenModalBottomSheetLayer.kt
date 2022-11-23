@@ -5,6 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
+import com.smartflowtech.cupidcustomerapp.model.domain.PaymentMode
 import com.smartflowtech.cupidcustomerapp.model.request.FundWallet
 import com.smartflowtech.cupidcustomerapp.ui.presentation.navigation.AddFundsModalBottomSheetContent
 import kotlinx.coroutines.launch
@@ -49,7 +50,11 @@ fun AddFundsScreenModalBottomSheetLayer(
         onSelectPaymentMode = {
             selectedPaymentMode.value = it.name
             coroutineScope.launch {
-                modalBottomSheetState.show()
+                if (it == PaymentMode.USSD) {
+                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                } else {
+                    modalBottomSheetState.show()
+                }
             }
         },
         goToHome = { goBackToHomeScreen(true) },

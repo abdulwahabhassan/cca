@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -77,6 +78,7 @@ fun ChangePasswordScreen(
     val coroutineScope = rememberCoroutineScope()
     var showLoadingIndicator: Boolean? by rememberSaveable { mutableStateOf(false) }
     var successMessage: String by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
 
     fun resetErrorsAndLabels() {
         currentPasswordErrorLabel = ""
@@ -465,6 +467,7 @@ fun ChangePasswordScreen(
                                     val trimmedOldPassword = currentPassword.trim()
 
                                     if (trimmedNewPassword == trimmedConfirmedPassword) {
+                                        focusManager.clearFocus()
                                         showLoadingIndicator = true
                                         doChangePassword(trimmedOldPassword, trimmedNewPassword)
 
