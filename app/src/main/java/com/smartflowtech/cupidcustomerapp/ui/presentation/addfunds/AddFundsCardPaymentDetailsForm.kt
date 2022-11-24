@@ -46,8 +46,8 @@ fun AddFundsCardPaymentDetailsForm(
     fundWalletAfterPayStackPayment: suspend (amount: Int, reference: String) -> FundWalletState,
 ) {
 
-    var cardNumber by rememberSaveable { mutableStateOf("5060666666666666666") }
-    var cvv by rememberSaveable { mutableStateOf("123") }
+    var cardNumber by rememberSaveable { mutableStateOf("") }
+    var cvv by rememberSaveable { mutableStateOf("") }
     var month by rememberSaveable { mutableStateOf("") }
     var year by rememberSaveable { mutableStateOf("") }
     val cardNumberErrorLabel by rememberSaveable { mutableStateOf("") }
