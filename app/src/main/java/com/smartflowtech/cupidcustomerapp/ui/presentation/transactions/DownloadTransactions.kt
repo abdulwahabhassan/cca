@@ -3,6 +3,7 @@ package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -201,6 +203,10 @@ fun DownloadTransactions(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .background(color = lightGrey, shape = RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            printFormatSelection = "PDF"
+                        }
                         .border(
                             width = 1.dp,
                             color = if (printFormatSelection == "PDF") darkBlue else lightGrey,
@@ -228,6 +234,16 @@ fun DownloadTransactions(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = lightGrey, shape = RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            Toast
+                                .makeText(
+                                    ctx,
+                                    "This option is currently unavailable",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
                         .border(
                             width = 1.dp,
                             color = if (printFormatSelection == "Excel") darkBlue else lightGrey,
@@ -240,8 +256,15 @@ fun DownloadTransactions(
                     RadioButton(
                         selected = printFormatSelection == "Excel",
                         onClick = {
-                            printFormatSelection = "Excel"
+                            Toast
+                                .makeText(
+                                    ctx,
+                                    "This option is currently unavailable",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
                         },
+                        enabled = false,
                         colors = RadioButtonDefaults.colors(selectedColor = darkBlue)
                     )
                     Spacer(modifier = Modifier.width(2.dp))

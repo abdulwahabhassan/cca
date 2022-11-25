@@ -131,13 +131,33 @@ fun Stations(
                     mutableStateOf(MapProperties(mapType = MapType.NORMAL))
                 }
 
-                val cameraPositionState = remember(currentDeviceLat, currentDeviceLong) {
-                    CameraPositionState(
-                        CameraPosition.fromLatLngZoom(
-                            LatLng(currentDeviceLat, currentDeviceLong),
-                            zoom
+                val cameraPositionState = remember(currentDeviceLat, currentDeviceLong, queryText) {
+                    val filteredStations = stations
+                        .filter {
+                            it.latitude?.isNotEmpty() == true &&
+                                    it.longitude?.isNotEmpty() == true
+                        }
+                    if (queryText.isNotEmpty() && filteredStations.isNotEmpty()) {
+                        val searchedStationLat = filteredStations[0].latitude
+                        val searchedStationLong = filteredStations[0].longitude
+                        CameraPositionState(
+                            CameraPosition.fromLatLngZoom(
+                                LatLng(
+                                    searchedStationLat!!.toDouble(),
+                                    searchedStationLong!!.toDouble()
+                                ),
+                                11.5f
+                            )
                         )
-                    )
+                    } else {
+                        CameraPositionState(
+                            CameraPosition.fromLatLngZoom(
+                                LatLng(currentDeviceLat, currentDeviceLong),
+                                zoom
+                            )
+                        )
+                    }
+
                 }
 
                 GoogleMap(
@@ -246,23 +266,27 @@ fun Stations(
                 applyBorder = true,
                 maxWidthFraction = 0.85f
             )
-            IconButton(
-                onClick = {
-                    onStationFilterClicked()
-                },
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .background(
-                        brush = Brush.horizontalGradient(gradientBluePurple),
-                        shape = RoundedCornerShape(12.dp)
+
+            if (selectedTab == "List"){
+                IconButton(
+                    onClick = {
+                        onStationFilterClicked()
+                    },
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(gradientBluePurple),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.FilterList,
+                        contentDescription = "Filter",
+                        tint = Color.White
                     )
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.FilterList,
-                    contentDescription = "Filter",
-                    tint = Color.White
-                )
+                }
             }
+
         }
 
         Spacer(modifier = Modifier.height(24.dp))
