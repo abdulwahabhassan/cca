@@ -71,8 +71,8 @@ fun HomeScreen(
 
     var sheetPeekHeight by remember {
         mutableStateOf(
-            if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.50f
-            else localConfig.screenHeightDp.dp * 0.40f
+            if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.49f
+            else localConfig.screenHeightDp.dp * 0.39f
         )
     }
 
@@ -146,8 +146,8 @@ fun HomeScreen(
             sheetPeekHeight *= 1.08f
         } else {
             sheetPeekHeight =
-                if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.50f
-                else localConfig.screenHeightDp.dp * 0.40f
+                if (localConfig.screenWidthDp.dp > 320.dp) localConfig.screenHeightDp.dp * 0.49f
+                else localConfig.screenHeightDp.dp * 0.39f
         }
     })
 
@@ -256,7 +256,11 @@ fun HomeScreen(
                             if (modalBottomSheetState.isVisible) {
                                 onBackPressed()
                             } else {
-                                if (isCardSelected && bottomNavBarNavHostController.currentDestination?.route == HomeScreen.Home.route) {
+                                if (
+                                    isCardSelected &&
+                                    bottomNavBarNavHostController.currentDestination?.route ==
+                                    HomeScreen.Home.route
+                                ) {
                                     isCardSelected = false
                                     selectedCardNfcTagCode = ""
                                 } else {

@@ -159,17 +159,17 @@ fun Home(
                         .fillMaxHeight(),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    HorizontalPager(
-                        count = 2,
-                        state = pagerState,
-                        contentPadding = PaddingValues(start = 16.dp, end = 32.dp),
-                        itemSpacing = 16.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 32.dp)
-                    ) { page: Int ->
-                        AdsCard(page)
-                    }
+//                    HorizontalPager(
+//                        count = 2,
+//                        state = pagerState,
+//                        contentPadding = PaddingValues(start = 16.dp, end = 32.dp),
+//                        itemSpacing = 16.dp,
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 32.dp)
+//                    ) { page: Int ->
+//                        AdsCard(page)
+//                    }
                     Row(
                         modifier = Modifier
                             .padding(start = 16.dp, end = 4.dp)

@@ -314,7 +314,7 @@ fun DownloadTransactions(
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                 ) {
-                    Text(text = "Get")
+                    Text(text = "Request")
                 }
             }
         }
