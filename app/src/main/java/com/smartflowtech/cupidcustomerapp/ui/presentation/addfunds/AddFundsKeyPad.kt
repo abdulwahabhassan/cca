@@ -189,30 +189,19 @@ fun AddFundsKeyPad(
                                     displayValue
                                         .replace(",", "") + item
                                 ).substringBefore(".")
-                                val value = amount.substringBefore(".").replace(",", "").toInt()
-                                if(value < 1_000_000) {
+                                val value = amount.substringBefore(".")
+                                    .replace(",", "").toInt()
+                                if (value < 1_000_000) {
                                     onDisplayValueUpdated(amount)
                                 } else {
                                     showSnackBar("Maximum limit exceeded")
                                 }
-//                                if (displayValue.length < 7) {
-//                                    val amount = Util.formatAmount(
-//                                        displayValue
-//                                            .replace(",", "") + item
-//                                    ).substringBefore(".")
-//                                    onDisplayValueUpdated(amount)
-//                                } else {
-//                                    showSnackBar("Maximum limit exceeded")
-//                                }
-
                             }
                         }
-
-
                     },
 
                     modifier = Modifier
-                        .height(LocalConfiguration.current.screenWidthDp.dp * 0.18f)
+                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.09f)
                         .padding(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(

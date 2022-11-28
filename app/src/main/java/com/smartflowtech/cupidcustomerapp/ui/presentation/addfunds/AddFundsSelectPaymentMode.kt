@@ -45,7 +45,6 @@ fun AddFundsSelectPaymentMode(
         ) {
             items(
                 listOf(
-                    PaymentMode.BANK_TRANSFER,
                     PaymentMode.CARD
                 )
             ) { paymentMode ->

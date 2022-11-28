@@ -159,7 +159,6 @@ fun AddFundsScreen(
                             tint = Color.White,
                         )
                     }
-
                 }
 
                 //Keypad
@@ -217,7 +216,6 @@ fun AddFundsScreen(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
