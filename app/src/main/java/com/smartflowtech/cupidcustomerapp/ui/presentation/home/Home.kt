@@ -32,8 +32,7 @@ import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.CardTransactionHistory
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.Receipt
 import com.smartflowtech.cupidcustomerapp.ui.presentation.transactions.TransactionsList
-import com.smartflowtech.cupidcustomerapp.ui.theme.AthleticsFontFamily
-import com.smartflowtech.cupidcustomerapp.ui.theme.grey
+import com.smartflowtech.cupidcustomerapp.ui.theme.*
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -50,11 +49,13 @@ fun Home(
     bottomNavBarNavHostController: NavHostController,
     bottomSheetState: BottomSheetState,
     onBottomNavItemClicked: (String) -> Unit,
-    onGraphFilterClicked:  (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
+    onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
+    onCompleteOnBoarding: () -> Unit,
+    isOnBoarded: Boolean
 ) {
-    val pagerState = rememberPagerState()
+    var letsGoButtonTapCount: Int by remember { mutableStateOf(0) }
 
     BackHandler {
         onBackPressed()
@@ -159,6 +160,7 @@ fun Home(
                         .fillMaxHeight(),
                     horizontalAlignment = Alignment.Start
                 ) {
+//                    val pagerState = rememberPagerState()
 //                    HorizontalPager(
 //                        count = 2,
 //                        state = pagerState,
@@ -208,13 +210,105 @@ fun Home(
         }
     }
 
+    if (!isOnBoarded) {
+        Dialog(
+            onDismissRequest = { },
+        ) {
 
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(shape = RoundedCornerShape(8.dp), color = Color.White)
+                    .padding(20.dp)
+
+            ) {
+                Text(
+                    text = when (letsGoButtonTapCount) {
+                        0 -> "Welcome to Cupid"
+                        1 -> "Analytics"
+                        2 -> "Customization"
+                        else -> ""
+                    },
+                    color = darkBlue,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = when (letsGoButtonTapCount) {
+                        0 -> "Hi, I am Hassan from Cupid. Looks like you are new here. " +
+                                "Let me show you around"
+                        1 -> "Tap on your wallet card to view daily and monthly analytics " +
+                                "of your transactions"
+                        2 -> "Go into the 'Settings' to personalize your Cupid experience"
+                        else -> ""
+                    },
+                    color = grey,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = when (letsGoButtonTapCount) {
+                            0 -> "Let's go"
+                            1 -> "Next"
+                            2 -> "Finish"
+                            else -> ""
+                        },
+                        color = darkBlue,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .background(
+                                shape = RoundedCornerShape(6.dp),
+                                color = faintBlue
+                            )
+                            .clip(RoundedCornerShape(6.dp))
+                            .clickable {
+                                when (letsGoButtonTapCount) {
+                                    0 -> letsGoButtonTapCount += 1
+                                    1 -> letsGoButtonTapCount += 1
+                                    2 -> onCompleteOnBoarding()
+                                }
+                            }
+                            .padding(8.dp)
+                    )
+
+                    if (letsGoButtonTapCount != 2) {
+                        Text(
+                            text = "Skip",
+                            color = darkBlue,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier
+                                .background(
+                                    shape = RoundedCornerShape(6.dp),
+                                    color = Color.White
+                                )
+                                .clip(RoundedCornerShape(6.dp))
+                                .clickable {
+                                    onCompleteOnBoarding()
+                                }
+                                .padding(8.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     if (showReceipt) {
         Dialog(
             onDismissRequest = { showReceipt = false },
         ) {
-
             LazyColumn(
                 modifier = Modifier
                     .background(

@@ -32,4 +32,5 @@ val lightYellow = Color(0xFFFFFAEA)
 val red = Color(0xFFC9252D)
 val cardBlue = Color(0xFFE1EBFA)
 val cardYellow = Color(0xFFFFFAEA)
+val faintBlue = Color(0xFFEDEFFB)
 

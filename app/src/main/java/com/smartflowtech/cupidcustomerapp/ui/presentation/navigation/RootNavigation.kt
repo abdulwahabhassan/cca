@@ -121,17 +121,14 @@ fun RootNavigation(
         }
 
         composable(route = Screen.GetStartedSecond.route) {
-            hiltViewModel<GetStartedViewModel>().apply {
-                GetStartedSecondScreen(
-                    goToLoginScreen = {
-                        rootNavHostController.navigate(
-                            Screen.Login.route,
-                            NavOptions.Builder().setLaunchSingleTop(true).build()
-                        )
-                    },
-                    getStarted = { updateStarted(true) }
-                )
-            }
+            GetStartedSecondScreen(
+                goToLoginScreen = {
+                    rootNavHostController.navigate(
+                        Screen.Login.route,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
+                    )
+                }
+            )
         }
 
         composable(route = Screen.Login.route) {
@@ -291,7 +288,11 @@ fun RootNavigation(
                     rootNavHostController.navigate(
                         Screen.AddFunds.route
                     )
-                }
+                },
+                onCompleteOnBoarding = {
+                    homeViewModel.updateOnboarded(true)
+                },
+                isOnBoarded = homeViewModel.appConfigPreferences.onBoarded
             )
         }
 

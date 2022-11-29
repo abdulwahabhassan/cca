@@ -20,7 +20,7 @@ import com.smartflowtech.cupidcustomerapp.ui.theme.CupidCustomerAppTheme
 import com.smartflowtech.cupidcustomerapp.ui.theme.gradientWhiteBlue
 
 @Composable
-fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) {
+fun GetStartedSecondScreen(goToLoginScreen: () -> Unit) {
 
     var enabled by remember { mutableStateOf(true) }
 
@@ -54,14 +54,14 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
         ) {
             Row {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_dash),
+                    painter = painterResource(id = R.drawable.ic_dot),
                     contentDescription = "Dot",
                     tint = Color.Unspecified
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_dot),
-                    contentDescription = "Dot",
+                    painter = painterResource(id = R.drawable.ic_dash),
+                    contentDescription = "Dash",
                     tint = Color.Unspecified
                 )
             }
@@ -87,7 +87,6 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
                 enabled = enabled,
                 onClick = {
                     enabled = false
-                    getStarted()
                     goToLoginScreen()
                 },
                 shape = RoundedCornerShape(10.dp),
@@ -104,6 +103,6 @@ fun GetStartedSecondScreen(goToLoginScreen: () -> Unit, getStarted: () -> Unit) 
 @Composable
 fun GetStartedSecondScreenPreview() {
     CupidCustomerAppTheme {
-        GetStartedSecondScreen({}, {})
+        GetStartedSecondScreen({})
     }
 }

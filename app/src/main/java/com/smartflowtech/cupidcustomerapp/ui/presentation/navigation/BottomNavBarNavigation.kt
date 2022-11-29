@@ -47,7 +47,9 @@ fun BottomNavBarNavigation(
     onStationSelected: (VendorStation) -> Unit,
     onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
+    onCompleteOnBoarding: () -> Unit,
+    isOnBoarded: Boolean
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -133,7 +135,9 @@ fun BottomNavBarNavigation(
                 onBottomNavItemClicked = onBottomNavItemClicked,
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
+                cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
+                onCompleteOnBoarding = onCompleteOnBoarding,
+                isOnBoarded = isOnBoarded
             )
         }
         composable(HomeScreen.Transactions.route) {

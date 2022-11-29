@@ -43,6 +43,12 @@ class HomeViewModel @Inject constructor(
         getTransactionsAndWallets()
     }
 
+    fun updateOnboarded(bool: Boolean) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateOnboarded(bool)
+        }
+    }
+
     fun getTransactionsAndWallets() {
         homeScreenUiState = HomeScreenUiState(viewModelResult = ViewModelResult.LOADING)
         viewModelScope.launch {

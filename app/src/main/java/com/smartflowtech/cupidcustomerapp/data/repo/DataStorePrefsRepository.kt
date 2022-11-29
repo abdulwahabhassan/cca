@@ -110,7 +110,7 @@ class DataStorePrefsRepository @Inject constructor(private val dataStore: DataSt
         }
     }
 
-    suspend fun updateStarted(bool: Boolean) {
+    suspend fun updateOnboarded(bool: Boolean) {
         dataStore.edit { mutablePreferences ->
             mutablePreferences[PreferencesKeys.ONBOARDED] = bool
         }

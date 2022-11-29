@@ -25,7 +25,9 @@ fun HomeScreenModalBottomSheetLayer(
     isNavDestinationSelected: (String) -> Boolean,
     popBackStackOrFinishActivity: () -> Unit,
     goToDestination: (String) -> Unit,
-    goToAddFundsScreen: () -> Unit
+    goToAddFundsScreen: () -> Unit,
+    onCompleteOnBoarding: () -> Unit,
+    isOnBoarded: Boolean
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -115,6 +117,8 @@ fun HomeScreenModalBottomSheetLayer(
         printTransactionReport = { from, to ->
             viewModel.getTransactionReport(dateFrom = from, dateTo = to)
         },
-        selectedMonthYearPeriod = selectedMonthYearPeriod
+        selectedMonthYearPeriod = selectedMonthYearPeriod,
+        onCompleteOnBoarding = onCompleteOnBoarding,
+        isOnBoarded = isOnBoarded
     )
 }

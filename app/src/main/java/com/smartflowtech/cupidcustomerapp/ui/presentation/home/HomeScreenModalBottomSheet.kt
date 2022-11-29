@@ -52,7 +52,9 @@ fun HomeScreenModalBottomSheet(
     setModalBottomSheetContent: (String) -> Unit,
     onDaysPeriodFilterSelected: (String, CardHistoryPeriodFilterContext) -> Unit,
     selectedMonthYearPeriod: String,
-    printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState
+    printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState,
+    onCompleteOnBoarding: () -> Unit,
+    isOnBoarded: Boolean
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
@@ -256,7 +258,9 @@ fun HomeScreenModalBottomSheet(
                 )
             },
             selectedMonthYearPeriod = selectedMonthYearPeriod,
-            cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
+            cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
+            onCompleteOnBoarding = onCompleteOnBoarding,
+            isOnBoarded = isOnBoarded
         )
     }
 }

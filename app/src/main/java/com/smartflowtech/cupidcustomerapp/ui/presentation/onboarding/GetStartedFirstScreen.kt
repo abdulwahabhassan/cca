@@ -96,7 +96,7 @@ fun GetStartedFirstScreen(goToGetStartedSecondScreen: () -> Unit) {
             Row {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_dash),
-                    contentDescription = "Dot",
+                    contentDescription = "Dash",
                     tint = Color.Unspecified
                 )
                 Spacer(modifier = Modifier.width(4.dp))

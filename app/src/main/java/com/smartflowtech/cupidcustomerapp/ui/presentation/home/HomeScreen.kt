@@ -53,7 +53,9 @@ fun HomeScreen(
     onStationSelected: (VendorStation) -> Unit,
     onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
+    onCompleteOnBoarding: () -> Unit,
+    isOnBoarded: Boolean
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -290,7 +292,9 @@ fun HomeScreen(
                         onStationSelected = onStationSelected,
                         onGraphFilterClicked = onGraphFilterClicked,
                         selectedMonthYearPeriod = selectedMonthYearPeriod,
-                        cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
+                        cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
+                        onCompleteOnBoarding = onCompleteOnBoarding,
+                        isOnBoarded = isOnBoarded
                     )
                 }
             }) { paddingValues ->
