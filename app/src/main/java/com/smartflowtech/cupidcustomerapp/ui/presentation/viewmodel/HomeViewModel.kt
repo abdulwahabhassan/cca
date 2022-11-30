@@ -233,4 +233,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updateLoginState(bool: Boolean) {
+        viewModelScope.launch {
+            dataStorePrefsRepository.updateLoggedIn(bool)
+        }
+    }
+
 }

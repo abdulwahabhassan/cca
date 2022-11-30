@@ -250,6 +250,7 @@ fun RootNavigation(
                 viewModel = homeViewModel,
                 bottomNavBarNavHostController = bottomNavBarNavHostController,
                 goToLogin = {
+                    homeViewModel.updateLoginState(false)
                     rootNavHostController.navigate(
                         Screen.Login.route,
                         NavOptions
