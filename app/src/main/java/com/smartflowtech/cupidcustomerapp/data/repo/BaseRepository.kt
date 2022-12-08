@@ -34,8 +34,8 @@ open class BaseRepository {
                             ?: response?.error?.capitalizeFirstLetter()
                     )
                 } catch (e: Exception) {
-                    Timber.d("Exception Error ${e.message}")
-                    NetworkResult.Error(message = e.localizedMessage)
+                    Timber.d("Exception Error ${e.localizedMessage}")
+                    NetworkResult.Error(message = "Oops! Something went wrong")
                 }
             }
         }
@@ -52,7 +52,7 @@ open class BaseRepository {
             }
         } catch (t: Throwable) {
             Timber.d("Error while handling httpException $t")
-            CupidApiErrorResponse(message = "Oops! Service is unavailable (${e.code()})")
+            CupidApiErrorResponse(message = "Oops! An error occurred (${e.code()})")
         }
     }
 
