@@ -378,6 +378,7 @@ fun ReceiptPreview() {
     CupidCustomerAppTheme {
         Receipt(
             transaction = Transaction(
+                id = 1,
                 authType = "Mobile Transfer",
                 transactionSeqNumber = "TRS90399291",
                 date = "2022-08-31 08:21AM",

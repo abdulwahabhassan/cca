@@ -2,6 +2,7 @@ package com.smartflowtech.cupidcustomerapp.di
 
 import android.content.Context
 import com.smartflowtech.cupidcustomerapp.database.AppRoomDatabase
+import com.smartflowtech.cupidcustomerapp.database.TransactionsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +20,12 @@ object DatabaseModule {
         @ApplicationContext appContext: Context
     ): AppRoomDatabase {
         return AppRoomDatabase.getDatabase(appContext)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTransactionsDao(appDatabase: AppRoomDatabase): TransactionsDao {
+        return appDatabase.getTransactionsDao()
     }
 
 }

@@ -111,6 +111,7 @@ fun TransactionPreview() {
     CupidCustomerAppTheme {
         Transaction(
             data = Transaction(
+                id = 4,
                 "Completed",
                 "11:24PM",
                 "Transaction",

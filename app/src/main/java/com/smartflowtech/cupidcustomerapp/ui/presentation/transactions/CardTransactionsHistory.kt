@@ -525,6 +525,7 @@ fun CardTransactionHistoryPreview() {
                 viewModelResult = ViewModelResult.SUCCESS,
                 transactions = listOf(
                     Transaction(
+                        id = 4,
                         "Completed",
                         "11:00:02",
                         "Transaction",

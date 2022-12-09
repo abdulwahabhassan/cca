@@ -348,6 +348,7 @@ object Util {
     fun getListOfTransactions(): List<Transaction> {
         return listOf(
             Transaction(
+                id = 1,
                 "Completed",
                 "12:24AM",
                 "Transaction",
@@ -361,6 +362,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 2,
                 "Pending",
                 "11:24PM",
                 "Transaction",
@@ -374,6 +376,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 3,
                 "Completed",
                 "11:20AM",
                 "Transaction",
@@ -387,6 +390,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 4,
                 "Failed",
                 "01:24PM",
                 "Transaction",
@@ -400,6 +404,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 5,
                 "Completed",
                 "11:24PM",
                 "Transaction",
@@ -413,6 +418,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 6,
                 "Completed",
                 "11:24PM",
                 "Transaction",
@@ -426,6 +432,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 7,
                 "Pending",
                 "08:24PM",
                 "Transaction",
@@ -439,6 +446,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 8,
                 "Failed",
                 "11:24PM",
                 "Transaction",
@@ -452,6 +460,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 9,
                 "Completed",
                 "11:24PM",
                 "Transaction",
@@ -465,6 +474,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 10,
                 "Pending",
                 "02:45PM",
                 "Transaction",
@@ -478,6 +488,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 11,
                 "Pending",
                 "11:24PM",
                 "Transaction",
@@ -491,6 +502,7 @@ object Util {
                 dateTime = "2022-01-01 12:00:00"
             ),
             Transaction(
+                id = 12,
                 "Pending",
                 "05:30PM",
                 "Transaction",

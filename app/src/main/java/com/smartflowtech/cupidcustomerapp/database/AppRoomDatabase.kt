@@ -12,6 +12,8 @@ import androidx.room.RoomDatabase
 )
 public abstract class AppRoomDatabase : RoomDatabase() {
 
+    abstract fun getTransactionsDao(): TransactionsDao
+
     companion object {
         @Volatile
         private var INSTANCE: AppRoomDatabase? = null

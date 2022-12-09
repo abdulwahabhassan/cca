@@ -87,6 +87,7 @@ class HomeViewModel @Inject constructor(
                             )
                                 ?: emptyList(),
                             wallets = wallets ?: emptyList(),
+                            message = transactionsResult.message
                         )
                     }
                     is RepositoryResult.Error -> {
@@ -109,10 +110,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun mapTransactionsResponseData(
-        result: List<TransactionsData>?,
+        result: List<Transaction>?,
         prefs: AppConfigPreferences
     ): List<Transaction>? {
-        return result?.map { it.mapToTransaction() }?.filter { transaction ->
+        return result?.filter { transaction ->
             Timber.d("$transaction")
             LocalDate.parse(transaction.date) >= LocalDate.now()
                 .minusDays(

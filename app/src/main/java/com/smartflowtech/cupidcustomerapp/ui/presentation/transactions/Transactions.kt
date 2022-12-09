@@ -78,6 +78,7 @@ fun Transactions(
     var selectedTransaction: Transaction by remember {
         mutableStateOf(
             Transaction(
+                id = 4,
                 "",
                 "",
                 "",

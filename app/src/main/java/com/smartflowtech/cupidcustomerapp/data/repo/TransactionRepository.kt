@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.data.repo
 
 import com.smartflowtech.cupidcustomerapp.data.datasource.RemoteDatasource
+import com.smartflowtech.cupidcustomerapp.database.TransactionsDao
 import com.smartflowtech.cupidcustomerapp.model.request.LoginRequestBody
 import com.smartflowtech.cupidcustomerapp.model.request.TransactionReportRequestBody
 import com.smartflowtech.cupidcustomerapp.model.result.NetworkResult
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class TransactionRepository @Inject constructor(
     private val remoteDatasource: RemoteDatasource,
     private val networkConnectivityManager: NetworkConnectivityManager,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
+    private val transactionsDao: TransactionsDao
 ) : BaseRepository() {
 
     suspend fun getTransactions(token: String, companyId: String) = withContext(dispatcher) {
@@ -32,8 +34,14 @@ class TransactionRepository @Inject constructor(
             is NetworkResult.Success -> {
                 Timber.d("Success -> ${networkResult.payload}")
                 if (networkResult.payload.status) {
+                    //cache remote data locally
+                    transactionsDao.insertTransactions(
+                        networkResult.payload.data?.map { it.mapToTransactionEntity() }
+                            ?: emptyList()
+                    )
+                    //serve data from local storage
                     RepositoryResult.Success(
-                        data = networkResult.payload.data,
+                        data = transactionsDao.getTransactions().map { it.mapToTransaction() },
                         message = networkResult.payload.message
                     )
                 } else {
@@ -41,8 +49,16 @@ class TransactionRepository @Inject constructor(
                 }
             }
             is NetworkResult.Error -> {
+                //fetch from local storage if available
                 Timber.d("Error -> ${networkResult.message}")
-                RepositoryResult.Error(message = networkResult.message)
+                val localTransactions = transactionsDao.getTransactions().map {
+                    it.mapToTransaction()
+                }
+                if (localTransactions.isNotEmpty()) {
+                    RepositoryResult.Success(data = localTransactions, message = networkResult.message)
+                } else {
+                    RepositoryResult.Error(message = networkResult.message)
+                }
             }
         }
     }

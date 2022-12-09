@@ -80,7 +80,6 @@ fun HomeDashBoard(
                 LaunchedEffect(key1 = Unit) {
                     Toast.makeText(ctx, "Session Expired! Log in again!", Toast.LENGTH_LONG).show()
                 }
-
             }
         }
         ViewModelResult.LOADING -> {
@@ -89,9 +88,23 @@ fun HomeDashBoard(
             showLoadingIndicator = true
         }
         ViewModelResult.SUCCESS -> {
-            showLoadingIndicator = false
-            showSnackBar = false
-            showWallets = true
+            //since we may have success response that holds cached data,
+            //users still needs to know when they are not connected to the internet
+            if (homeScreenUiState.message?.contains(
+                    "Check your internet connection!",
+                    true
+                ) == true
+            ) {
+                showLoadingIndicator = false
+                showSnackBar = true
+                showWallets = false
+            } else {
+                showLoadingIndicator = false
+                showSnackBar = false
+                showWallets = true
+            }
+
+
         }
     }
 
@@ -210,7 +223,11 @@ fun HomeDashBoard(
                         }
 
                         HorizontalPager(
-                            count = if (homeScreenUiState.viewModelResult == ViewModelResult.SUCCESS)
+                            count = if (
+                                homeScreenUiState.viewModelResult ==
+                                ViewModelResult.SUCCESS &&
+                                homeScreenUiState.wallets.isNotEmpty()
+                            )
                                 homeScreenUiState.wallets.size else 1,
                             state = pagerState,
                             itemSpacing = 16.dp,
@@ -246,7 +263,7 @@ fun HomeDashBoard(
                                         )
                                     } else {
                                         Text(
-                                            "No cards found",
+                                            text = "No cards found",
                                             color = purple,
                                             fontSize = 14.sp,
                                             modifier = Modifier

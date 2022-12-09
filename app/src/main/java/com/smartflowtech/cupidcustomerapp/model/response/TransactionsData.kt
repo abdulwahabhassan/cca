@@ -1,5 +1,6 @@
 package com.smartflowtech.cupidcustomerapp.model.response
 
+import com.smartflowtech.cupidcustomerapp.database.TransactionEntity
 import com.smartflowtech.cupidcustomerapp.model.domain.Transaction
 import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.capitalizeEachWord
 import com.squareup.moshi.Json
@@ -73,6 +74,33 @@ data class TransactionsData(
 ) {
     fun mapToTransaction(): Transaction {
         return Transaction(
+            id = this.id,
+            status = when (this.isBalanced) {
+                true -> "Completed"
+                false -> "Failed"
+                else -> "Pending"
+            },
+//            status = when (this.isBalanced) {
+//                "1" -> "Completed"
+//                "0" -> "Failed"
+//                else -> "Pending"
+//            },
+            time = this.createdAt?.substring(11),
+            title = this.product + ", " + this.vendorStationName?.capitalizeEachWord(),
+            amount = this.verifiedAmount,
+            date = this.createdAt?.substring(0, 10),
+            authType = this.authType,
+            transactionSeqNumber = this.transactionSeqNumber ?: this.id.toString(),
+            vendorStationName = this.vendorStationName,
+            product = this.product,
+            nfcTagCode = this.nfctag?.nfctagCode,
+            dateTime = this.createdAt
+        )
+    }
+
+    fun mapToTransactionEntity() : TransactionEntity {
+        return TransactionEntity(
+            id = this.id,
             status = when (this.isBalanced) {
                 true -> "Completed"
                 false -> "Failed"

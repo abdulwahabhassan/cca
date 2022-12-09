@@ -1,6 +1,7 @@
 package com.smartflowtech.cupidcustomerapp.model.domain
 
 data class Transaction (
+    val id: Long?,
     val status: String?,
     val time: String?,
     val title: String?,
