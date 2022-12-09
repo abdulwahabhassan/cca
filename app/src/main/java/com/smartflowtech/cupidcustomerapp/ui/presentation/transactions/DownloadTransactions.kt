@@ -209,7 +209,9 @@ fun DownloadTransactions(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
+                        errorIndicatorColor = Color.Transparent,
+                        disabledTextColor = darkBlue,
+                        errorLabelColor = red
                     )
                 )
 
@@ -249,7 +251,9 @@ fun DownloadTransactions(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
+                        errorIndicatorColor = Color.Transparent,
+                        disabledTextColor = darkBlue,
+                        errorLabelColor = red
                     )
                 )
             }
