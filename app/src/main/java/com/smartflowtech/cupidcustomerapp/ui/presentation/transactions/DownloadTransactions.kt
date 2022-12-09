@@ -1,9 +1,13 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
+import android.app.DatePickerDialog
+import android.widget.CalendarView
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,11 +25,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
+import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.findActivity
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.*
 
 @Composable
 fun DownloadTransactions(
@@ -47,7 +56,7 @@ fun DownloadTransactions(
     val scaffoldState = rememberScaffoldState()
     val ctx = LocalContext.current
     val focusManager = LocalFocusManager.current
-
+    var isShowingDatePickerDialog by remember { mutableStateOf(false) }
 
     fun resetErrorsAndLabels() {
         startDateErrorLabel = ""
@@ -56,16 +65,54 @@ fun DownloadTransactions(
         isEndDateError = false
     }
 
+    fun showDatePicker(field: String) {
+        if (!isShowingDatePickerDialog) {
+            val mCalendar = Calendar.getInstance()
+            val year = mCalendar.get(Calendar.YEAR)
+            val month = mCalendar.get(Calendar.MONTH)
+            val day = mCalendar.get(Calendar.DAY_OF_MONTH)
+            mCalendar.time = Date()
+
+            val mDatePickerDialog = DatePickerDialog(
+                ctx,
+                R.style.DatePickerDialog,
+                { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+
+                    val twoDigitInt = if (mDayOfMonth < 10) "0$mDayOfMonth" else "$mDayOfMonth"
+
+                    if (field == "startDate") {
+                        startDate = "$mYear-${mMonth + 1}-$twoDigitInt"
+                    } else if (field == "endDate") {
+                        endDate = "$mYear-${mMonth + 1}-$twoDigitInt"
+                    }
+
+                },
+                year, month, day
+            )
+//            if (field == "startDate") {
+//                mDatePickerDialog.setTitle("Select Start Date")
+//            } else if (field == "endDate") {
+//                mDatePickerDialog.setTitle("Select End Date")
+//            }
+            mDatePickerDialog.setOnDismissListener {
+                isShowingDatePickerDialog = false
+            }
+            mDatePickerDialog.show()
+            isShowingDatePickerDialog = true
+        }
+    }
+
+
     fun validateInput(trimmedStartDate: String, trimmedEndDate: String) {
         if (trimmedStartDate.isEmpty() ||
-            !trimmedStartDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
+            !trimmedStartDate.matches(Regex("\\d{4}-\\d{2}-\\d{1,2}"))
         ) {
             startDateErrorLabel = "Input valid date format"
             isStartDateError = true
         }
 
         if (trimmedEndDate.isEmpty() ||
-            !trimmedEndDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
+            !trimmedEndDate.matches(Regex("\\d{4}-\\d{2}-\\d{1,2}"))
         ) {
             endDateErrorLabel = "Input valid date format"
             isEndDateError = true
@@ -137,63 +184,89 @@ fun DownloadTransactions(
             Spacer(modifier = Modifier.height(24.dp))
 
             //Start date
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = startDate,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                onValueChange = { text ->
-                    startDate = text
-                },
-                placeholder = { Text("YYYY-MM-DD") },
-                singleLine = true,
-                label = {
-                    if (isStartDateError) {
-                        Text(text = startDateErrorLabel)
-                    } else {
-                        Text(text = "Start date")
-                    }
-                },
-                isError = isStartDateError,
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = lightGrey,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .clickable {
+                    Toast
+                        .makeText(ctx, "Clicked Start Date", Toast.LENGTH_SHORT)
+                        .show()
+                    showDatePicker("startDate")
+                }
+            ) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = false,
+                    value = startDate,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { text ->
+                        startDate = text
+                    },
+                    placeholder = { Text("YYYY-MM-DD") },
+                    singleLine = true,
+                    label = {
+                        if (isStartDateError) {
+                            Text(text = startDateErrorLabel)
+                        } else {
+                            Text(text = "Start date")
+                        }
+                    },
+                    isError = isStartDateError,
+                    shape = RoundedCornerShape(10.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = lightGrey,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent
+                    )
                 )
-            )
 
+            }
             Spacer(modifier = Modifier.height(16.dp))
 
             //End date
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = endDate,
-                onValueChange = { text ->
-                    endDate = text
-                },
-                placeholder = { Text("YYYY-MM-DD") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = {
-                    if (isEndDateError) {
-                        Text(text = endDateErrorLabel)
-                    } else {
-                        Text(text = "End date")
-                    }
-                },
-                singleLine = true,
-                isError = isEndDateError,
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = lightGrey,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .clickable {
+                    Toast
+                        .makeText(ctx, "Clicked End Date", Toast.LENGTH_SHORT)
+                        .show()
+                    showDatePicker("endDate")
+                }
+            ) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = false,
+                    value = endDate,
+                    onValueChange = { text ->
+                        endDate = text
+                    },
+                    placeholder = { Text("YYYY-MM-DD") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    label = {
+                        if (isEndDateError) {
+                            Text(text = endDateErrorLabel)
+                        } else {
+                            Text(text = "End date")
+                        }
+                    },
+                    singleLine = true,
+                    isError = isEndDateError,
+                    shape = RoundedCornerShape(10.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = lightGrey,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent
+                    )
                 )
-            )
+            }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -298,7 +371,7 @@ fun DownloadTransactions(
                             if (LocalDate.parse(trimmedStartDate) > LocalDate.parse(trimmedEndDate)) {
                                 Toast.makeText(
                                     ctx,
-                                    "Invalid input! Check dates",
+                                    "Invalid input! Check dates order",
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
