@@ -48,9 +48,7 @@ fun DownloadTransactions(
     var endDateErrorLabel by rememberSaveable { mutableStateOf("") }
     var isStartDateError by rememberSaveable { mutableStateOf(false) }
     var isEndDateError by rememberSaveable { mutableStateOf(false) }
-    var printFormatSelection by rememberSaveable {
-        mutableStateOf("PDF")
-    }
+    var printFormatSelection by rememberSaveable { mutableStateOf("PDF") }
     val coroutineScope = rememberCoroutineScope()
     var showLoadingIndicator: Boolean by rememberSaveable { mutableStateOf(false) }
     val scaffoldState = rememberScaffoldState()
@@ -89,11 +87,6 @@ fun DownloadTransactions(
                 },
                 year, month, day
             )
-//            if (field == "startDate") {
-//                mDatePickerDialog.setTitle("Select Start Date")
-//            } else if (field == "endDate") {
-//                mDatePickerDialog.setTitle("Select End Date")
-//            }
             mDatePickerDialog.setOnDismissListener {
                 isShowingDatePickerDialog = false
             }
@@ -188,9 +181,6 @@ fun DownloadTransactions(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
                 .clickable {
-                    Toast
-                        .makeText(ctx, "Clicked Start Date", Toast.LENGTH_SHORT)
-                        .show()
                     showDatePicker("startDate")
                 }
             ) {
@@ -231,9 +221,6 @@ fun DownloadTransactions(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
                 .clickable {
-                    Toast
-                        .makeText(ctx, "Clicked End Date", Toast.LENGTH_SHORT)
-                        .show()
                     showDatePicker("endDate")
                 }
             ) {
