@@ -1,13 +1,11 @@
 package com.smartflowtech.cupidcustomerapp.ui.presentation.transactions
 
 import android.app.DatePickerDialog
-import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,13 +23,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
-import com.smartflowtech.cupidcustomerapp.ui.presentation.login.LoginState
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
-import com.smartflowtech.cupidcustomerapp.ui.utils.Extension.findActivity
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.*
@@ -76,12 +70,13 @@ fun DownloadTransactions(
                 R.style.DatePickerDialog,
                 { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
 
-                    val twoDigitInt = if (mDayOfMonth < 10) "0$mDayOfMonth" else "$mDayOfMonth"
+                    val twoDigitIntDayOfMonth = if (mDayOfMonth < 10) "0$mDayOfMonth" else "$mDayOfMonth"
+                    val twoDigitIntMonth = if (mMonth < 10) "0$mMonth" else "$mMonth"
 
                     if (field == "startDate") {
-                        startDate = "$mYear-${mMonth + 1}-$twoDigitInt"
+                        startDate = "$mYear-${twoDigitIntMonth + 1}-$twoDigitIntDayOfMonth"
                     } else if (field == "endDate") {
-                        endDate = "$mYear-${mMonth + 1}-$twoDigitInt"
+                        endDate = "$mYear-${twoDigitIntMonth + 1}-$twoDigitIntDayOfMonth"
                     }
 
                 },

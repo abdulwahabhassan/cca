@@ -22,7 +22,7 @@ interface CupidApiService {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd")
             ),
         @Query("end_date") endDate: String =
-            LocalDate.now().format(
+            LocalDate.now().plusDays(1).format(
                 DateTimeFormatter.ofPattern("yyyy-MM-dd")
             ),
         @Query("vendor_id") vendorId: String = "",

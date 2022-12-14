@@ -124,7 +124,7 @@ fun Receipt(
 
             Text(text = "Amount", color = grey, modifier = Modifier.padding(bottom = 2.dp))
             Text(
-                text = """₦${transaction?.amount?.let { Util.formatAmount(it) }}""",
+                text = """₦${transaction?.amount?.ifEmpty { "0.00" }?.let { Util.formatAmount(it) }}""",
                 color = darkBlue,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium

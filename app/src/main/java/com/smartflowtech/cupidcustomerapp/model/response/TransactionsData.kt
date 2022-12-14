@@ -46,10 +46,10 @@ data class TransactionsData(
     @Json(name = "last_amount_paid")
     val lastAmountPaid: String?,
 
-    @Json(name = "is_balanced")
-    val isBalanced: Boolean?,
 //    @Json(name = "is_balanced")
-//    val isBalanced: String?,
+//    val isBalanced: Boolean?,
+    @Json(name = "is_balanced")
+    val isBalanced: String?,
 
     @Json(name = "verified_volume")
     val verifiedVolume: String?,
@@ -75,16 +75,16 @@ data class TransactionsData(
     fun mapToTransaction(): Transaction {
         return Transaction(
             id = this.id,
-            status = when (this.isBalanced) {
-                true -> "Completed"
-                false -> "Failed"
-                else -> "Pending"
-            },
 //            status = when (this.isBalanced) {
-//                "1" -> "Completed"
-//                "0" -> "Failed"
+//                true -> "Completed"
+//                false -> "Failed"
 //                else -> "Pending"
 //            },
+            status = when (this.isBalanced) {
+                "1" -> "Completed"
+                "0" -> "Failed"
+                else -> "Pending"
+            },
             time = this.createdAt?.substring(11),
             title = this.product + ", " + this.vendorStationName?.capitalizeEachWord(),
             amount = this.verifiedAmount,
@@ -101,16 +101,16 @@ data class TransactionsData(
     fun mapToTransactionEntity() : TransactionEntity {
         return TransactionEntity(
             id = this.id,
-            status = when (this.isBalanced) {
-                true -> "Completed"
-                false -> "Failed"
-                else -> "Pending"
-            },
 //            status = when (this.isBalanced) {
-//                "1" -> "Completed"
-//                "0" -> "Failed"
+//                true -> "Completed"
+//                false -> "Failed"
 //                else -> "Pending"
 //            },
+            status = when (this.isBalanced) {
+                "1" -> "Completed"
+                "0" -> "Failed"
+                else -> "Pending"
+            },
             time = this.createdAt?.substring(11),
             title = this.product + ", " + this.vendorStationName?.capitalizeEachWord(),
             amount = this.verifiedAmount,

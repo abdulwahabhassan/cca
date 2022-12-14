@@ -88,7 +88,7 @@ fun Transaction(data: Transaction, onClick: (transaction: Transaction) -> Unit) 
                 }
             }
             Text(
-                """₦${data.amount?.let { Util.formatAmount(it) }}""",
+                """₦${data.amount?.ifEmpty { "0.00" }?.let { Util.formatAmount(it) }}""",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,
                 fontFamily = AthleticsFontFamily,
