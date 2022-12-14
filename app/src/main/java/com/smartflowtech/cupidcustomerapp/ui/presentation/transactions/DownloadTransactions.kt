@@ -70,13 +70,14 @@ fun DownloadTransactions(
                 R.style.DatePickerDialog,
                 { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
 
+                    val actualMonth = mMonth + 1
                     val twoDigitIntDayOfMonth = if (mDayOfMonth < 10) "0$mDayOfMonth" else "$mDayOfMonth"
-                    val twoDigitIntMonth = if (mMonth < 10) "0$mMonth" else "$mMonth"
+                    val twoDigitIntMonth = if (actualMonth < 10) "0${actualMonth}" else "$actualMonth"
 
                     if (field == "startDate") {
-                        startDate = "$mYear-${twoDigitIntMonth + 1}-$twoDigitIntDayOfMonth"
+                        startDate = "$mYear-${twoDigitIntMonth}-$twoDigitIntDayOfMonth"
                     } else if (field == "endDate") {
-                        endDate = "$mYear-${twoDigitIntMonth + 1}-$twoDigitIntDayOfMonth"
+                        endDate = "$mYear-${twoDigitIntMonth}-$twoDigitIntDayOfMonth"
                     }
 
                 },
