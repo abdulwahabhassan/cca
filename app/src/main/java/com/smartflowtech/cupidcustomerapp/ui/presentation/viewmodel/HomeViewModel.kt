@@ -94,8 +94,8 @@ class HomeViewModel @Inject constructor(
                         HomeScreenUiState(
                             viewModelResult = ViewModelResult.ERROR,
                             transactions = emptyList(),
-                            message = transactionsResult.message,
                             wallets = wallets ?: emptyList(),
+                            message = transactionsResult.message
                         )
                     }
                 }

@@ -46,6 +46,9 @@ data class TransactionsData(
     @Json(name = "last_amount_paid")
     val lastAmountPaid: String?,
 
+    @Json(name = "fdc_amount")
+    val fdcAmount: String?,
+
 //    @Json(name = "is_balanced")
 //    val isBalanced: Boolean?,
     @Json(name = "is_balanced")

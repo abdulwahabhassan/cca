@@ -119,48 +119,48 @@ fun CardTransactionHistory(
 
                 Spacer(modifier = Modifier.width(24.dp))
 
-                Column(
-                    modifier = Modifier
-                        .wrapContentWidth(unbounded = true)
-                        .background(color = Color.Transparent, shape = RoundedCornerShape(3.dp))
-                        .clip(RoundedCornerShape(3.dp))
-                        .clipToBounds()
-                        .clickable(
-                            interactionSource = remember {
-                                MutableInteractionSource()
-                            },
-                            indication = null
-                        ) {
-                            onTabSelected("Analytics")
-                        }
-                        .padding(top = 4.dp, start = 8.dp, end = 8.dp),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Analytics",
-                        color = Color.Black,
-                        fontFamily = AthleticsFontFamily,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    Divider(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth()
-                            .width(50.dp)
-                            .height(2.dp)
-                            .background(
-                                color = if (selectedTab == "Analytics")
-                                    darkBlue
-                                else
-                                    Color.Transparent,
-                                shape = RoundedCornerShape(50)
-                            ),
-                        color = if (selectedTab == "Analytics") darkBlue else Color.Transparent
-                    )
-                }
+//                Column(
+//                    modifier = Modifier
+//                        .wrapContentWidth(unbounded = true)
+//                        .background(color = Color.Transparent, shape = RoundedCornerShape(3.dp))
+//                        .clip(RoundedCornerShape(3.dp))
+//                        .clipToBounds()
+//                        .clickable(
+//                            interactionSource = remember {
+//                                MutableInteractionSource()
+//                            },
+//                            indication = null
+//                        ) {
+//                            onTabSelected("Analytics")
+//                        }
+//                        .padding(top = 4.dp, start = 8.dp, end = 8.dp),
+//                    horizontalAlignment = Alignment.Start,
+//                    verticalArrangement = Arrangement.Center
+//                ) {
+//                    Text(
+//                        text = "Analytics",
+//                        color = Color.Black,
+//                        fontFamily = AthleticsFontFamily,
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight.Bold
+//                    )
+//                    Spacer(modifier = Modifier.padding(4.dp))
+//                    Divider(
+//                        modifier = Modifier
+//                            .align(Alignment.CenterHorizontally)
+//                            .fillMaxWidth()
+//                            .width(50.dp)
+//                            .height(2.dp)
+//                            .background(
+//                                color = if (selectedTab == "Analytics")
+//                                    darkBlue
+//                                else
+//                                    Color.Transparent,
+//                                shape = RoundedCornerShape(50)
+//                            ),
+//                        color = if (selectedTab == "Analytics") darkBlue else Color.Transparent
+//                    )
+//                }
             }
 
             if (selectedTab != "Transactions") {
@@ -279,6 +279,7 @@ fun CardTransactionHistory(
             val averageTransactions = remember(transactions) {
                 transactions.mapValues { entry ->
                     val totalAmount = entry.value.filterNot { it.amount == null }
+                        .map { if (it.amount?.isEmpty() == true) it.copy(amount = "0.00") else it }
                         .sumOf { it.amount?.toDouble()!! }
                     totalAmount / entry.value.size
                 }
@@ -346,11 +347,15 @@ fun CardTransactionHistory(
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(text = "Debit", color = grey)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "₦${
-                                Util.formatAmount(transactions.values.sumOf { list ->
-                                    list.sumOf { it.amount?.toDouble() ?: 0.00 }
-                                })
-                            }", fontWeight = FontWeight.Bold)
+                            Text(
+                                text = "₦${
+                                    Util.formatAmount(transactions.values.sumOf { list ->
+                                        list.sumOf {
+                                            it.amount?.ifEmpty { "0.00" }?.toDouble() ?: 0.00
+                                        }
+                                    })
+                                }", fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }

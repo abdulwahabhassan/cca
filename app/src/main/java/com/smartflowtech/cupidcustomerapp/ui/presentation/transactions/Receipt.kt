@@ -250,7 +250,7 @@ fun Receipt(
 
                             canvas.drawText("Amount", 109F, 440F, titleGreyPaint)
                             canvas.drawText(
-                                """₦${transaction?.amount?.let { Util.formatAmount(it) }}""" ?: "",
+                                """₦${transaction?.amount?.ifEmpty { "0.00" }?.let { Util.formatAmount(it) }}""",
                                 109F,
                                 465F,
                                 textDarkBluePaint

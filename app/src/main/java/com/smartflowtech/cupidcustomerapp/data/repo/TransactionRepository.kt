@@ -49,15 +49,22 @@ class TransactionRepository @Inject constructor(
                 }
             }
             is NetworkResult.Error -> {
-                //fetch from local storage if available
-                Timber.d("Error -> ${networkResult.message}")
-                val localTransactions = transactionsDao.getTransactions().map {
-                    it.mapToTransaction()
-                }
-                if (localTransactions.isNotEmpty()) {
-                    RepositoryResult.Success(data = localTransactions, message = networkResult.message)
-                } else {
+                if (networkResult.message?.contains("Token Expired", true) == true) {
                     RepositoryResult.Error(message = networkResult.message)
+                } else {
+                    //fetch from local storage if available
+                    Timber.d("Error -> ${networkResult.message}")
+                    val localTransactions = transactionsDao.getTransactions().map {
+                        it.mapToTransaction()
+                    }
+                    if (localTransactions.isNotEmpty()) {
+                        RepositoryResult.Success(
+                            data = localTransactions,
+                            message = networkResult.message
+                        )
+                    } else {
+                        RepositoryResult.Error(message = networkResult.message)
+                    }
                 }
             }
         }
