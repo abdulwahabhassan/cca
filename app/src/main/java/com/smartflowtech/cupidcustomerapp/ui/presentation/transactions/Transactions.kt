@@ -42,7 +42,8 @@ fun Transactions(
     currentBottomNavDestination: String,
     onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardTransactionsPeriodFilterContext: CardHistoryPeriodFilterContext
+    cardTransactionsPeriodFilterContext: CardHistoryPeriodFilterContext,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
 
     BackHandler(true) {
@@ -114,7 +115,8 @@ fun Transactions(
                 currentBottomNavDestination = currentBottomNavDestination,
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardHistoryPeriodFilterContext = cardTransactionsPeriodFilterContext
+                cardHistoryPeriodFilterContext = cardTransactionsPeriodFilterContext,
+                refreshTransactionsAndWallets = refreshTransactionsAndWallets
             )
         } else {
             Column(
@@ -163,7 +165,8 @@ fun Transactions(
                     },
                     bottomSheetScaffoldState = bottomSheetScaffoldState,
                     currentBottomNavDestination = currentBottomNavDestination,
-                    selectedCardNfcTagCode = selectedCardNfcTagCode
+                    selectedCardNfcTagCode = selectedCardNfcTagCode,
+                    refreshTransactionsAndWallets = refreshTransactionsAndWallets
                 )
 
 
@@ -223,7 +226,8 @@ fun TransactionsPreview() {
             "Transactions",
             {_, _ -> },
             "",
-            CardHistoryPeriodFilterContext.DEFAULT
+            CardHistoryPeriodFilterContext.DEFAULT,
+            {}
         )
     }
 }

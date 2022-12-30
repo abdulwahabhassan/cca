@@ -55,7 +55,8 @@ fun HomeScreen(
     selectedMonthYearPeriod: String,
     cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
     onCompleteOnBoarding: () -> Unit,
-    isOnBoarded: Boolean
+    isOnBoarded: Boolean,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -294,7 +295,8 @@ fun HomeScreen(
                         selectedMonthYearPeriod = selectedMonthYearPeriod,
                         cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
                         onCompleteOnBoarding = onCompleteOnBoarding,
-                        isOnBoarded = isOnBoarded
+                        isOnBoarded = isOnBoarded,
+                        refreshTransactionsAndWallets = refreshTransactionsAndWallets
                     )
                 }
             }) { paddingValues ->

@@ -54,7 +54,8 @@ fun HomeScreenModalBottomSheet(
     selectedMonthYearPeriod: String,
     printTransactionReport: suspend (dateFrom: String, dateTo: String) -> PrintTransactionReportState,
     onCompleteOnBoarding: () -> Unit,
-    isOnBoarded: Boolean
+    isOnBoarded: Boolean,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
 
     var successTitle: String by rememberSaveable { mutableStateOf("Success") }
@@ -260,7 +261,8 @@ fun HomeScreenModalBottomSheet(
             selectedMonthYearPeriod = selectedMonthYearPeriod,
             cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
             onCompleteOnBoarding = onCompleteOnBoarding,
-            isOnBoarded = isOnBoarded
+            isOnBoarded = isOnBoarded,
+            refreshTransactionsAndWallets = refreshTransactionsAndWallets
         )
     }
 }

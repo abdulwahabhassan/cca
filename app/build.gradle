@@ -81,6 +81,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:$compose_accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-animation:$compose_accompanist_version"
     implementation "com.google.accompanist:accompanist-permissions:$compose_accompanist_version"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$compose_accompanist_version"
     //Compose View Model
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
     //Timber

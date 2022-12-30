@@ -48,7 +48,8 @@ fun CardTransactionHistory(
     currentBottomNavDestination: String,
     onGraphFilterClicked: (context: CardHistoryPeriodFilterContext, periods: List<String>) -> Unit,
     selectedMonthYearPeriod: String,
-    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext
+    cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
 
     val monthYearPeriodFilterList = remember {
@@ -200,6 +201,7 @@ fun CardTransactionHistory(
                 selectedCardNfcTagCode = selectedCardNfcTagCode,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 currentBottomNavDestination = currentBottomNavDestination,
+                refreshTransactionsAndWallets = refreshTransactionsAndWallets
             )
         } else {
 
@@ -569,7 +571,8 @@ fun CardTransactionHistoryPreview() {
             currentBottomNavDestination = "",
             onGraphFilterClicked = { _, _ -> },
             selectedMonthYearPeriod = "May 2022",
-            cardHistoryPeriodFilterContext = CardHistoryPeriodFilterContext.DEFAULT
+            cardHistoryPeriodFilterContext = CardHistoryPeriodFilterContext.DEFAULT,
+            refreshTransactionsAndWallets = {  }
         )
     }
 }

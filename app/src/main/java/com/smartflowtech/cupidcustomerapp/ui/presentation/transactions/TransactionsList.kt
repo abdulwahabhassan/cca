@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +38,8 @@ fun TransactionsList(
     onSelectTransaction: (transaction: Transaction) -> Unit,
     selectedCardNfcTagCode: String,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    currentBottomNavDestination: String
+    currentBottomNavDestination: String,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
 
     when (homeScreenUiState.viewModelResult) {
@@ -147,32 +151,47 @@ fun TransactionsList(
                         }
                     }
                 } else {
-//                    val ls =  LazyListState().
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(),
-                        userScrollEnabled = true,
-//                    userScrollEnabled = currentBottomNavDestination != HomeScreen.Home.route,
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        groupedTransactions.forEach { (date, transactions) ->
-                            stickyHeader {
-                                Header(
-                                    LocalDate.parse(date)
-                                        .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
-                                )
-                            }
-                            items(transactions) { transaction ->
-                                Transaction(
-                                    transaction
-                                ) { data: Transaction ->
-                                    onSelectTransaction(data)
-                                }
-                            }
 
+                    val refreshing = homeScreenUiState.viewModelResult == ViewModelResult.LOADING
+
+                    val pullRefreshState = rememberPullRefreshState(
+                        refreshing = refreshing,
+                        onRefresh = { refreshTransactionsAndWallets() })
+
+                    Box(modifier = Modifier.pullRefresh(pullRefreshState, true)) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(),
+                            userScrollEnabled = true,
+                            //userScrollEnabled = currentBottomNavDestination != HomeScreen.Home.route,
+                            verticalArrangement = Arrangement.Top,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            groupedTransactions.forEach { (date, transactions) ->
+                                stickyHeader {
+                                    Header(
+                                        LocalDate.parse(date)
+                                            .format(DateTimeFormatter.ofPattern("E, dd MMM yyyy"))
+                                    )
+                                }
+                                items(transactions) { transaction ->
+                                    Transaction(
+                                        transaction
+                                    ) { data: Transaction ->
+                                        onSelectTransaction(data)
+                                    }
+                                }
+
+                            }
                         }
+
+                        PullRefreshIndicator(
+                            refreshing,
+                            pullRefreshState,
+                            Modifier.align(Alignment.TopCenter)
+                        )
+
                     }
                 }
             }

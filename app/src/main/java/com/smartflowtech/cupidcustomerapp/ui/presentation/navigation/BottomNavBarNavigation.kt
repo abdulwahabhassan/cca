@@ -49,7 +49,8 @@ fun BottomNavBarNavigation(
     selectedMonthYearPeriod: String,
     cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
     onCompleteOnBoarding: () -> Unit,
-    isOnBoarded: Boolean
+    isOnBoarded: Boolean,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
 
     var selectedTab by remember { mutableStateOf("Transactions") }
@@ -137,7 +138,8 @@ fun BottomNavBarNavigation(
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
                 cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
                 onCompleteOnBoarding = onCompleteOnBoarding,
-                isOnBoarded = isOnBoarded
+                isOnBoarded = isOnBoarded,
+                refreshTransactionsAndWallets = refreshTransactionsAndWallets
             )
         }
         composable(HomeScreen.Transactions.route) {
@@ -157,7 +159,8 @@ fun BottomNavBarNavigation(
                     ?: "",
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardTransactionsPeriodFilterContext = cardHistoryPeriodFilterContext
+                cardTransactionsPeriodFilterContext = cardHistoryPeriodFilterContext,
+                refreshTransactionsAndWallets = refreshTransactionsAndWallets
             )
         }
         composable(HomeScreen.Stations.route) {

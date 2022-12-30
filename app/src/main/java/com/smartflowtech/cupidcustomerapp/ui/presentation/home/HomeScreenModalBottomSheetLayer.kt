@@ -119,6 +119,9 @@ fun HomeScreenModalBottomSheetLayer(
         },
         selectedMonthYearPeriod = selectedMonthYearPeriod,
         onCompleteOnBoarding = onCompleteOnBoarding,
-        isOnBoarded = isOnBoarded
+        isOnBoarded = isOnBoarded,
+        refreshTransactionsAndWallets = {
+            viewModel.getTransactionsAndWallets()
+        }
     )
 }

@@ -53,7 +53,8 @@ fun Home(
     selectedMonthYearPeriod: String,
     cardHistoryPeriodFilterContext: CardHistoryPeriodFilterContext,
     onCompleteOnBoarding: () -> Unit,
-    isOnBoarded: Boolean
+    isOnBoarded: Boolean,
+    refreshTransactionsAndWallets: () -> Unit
 ) {
     var letsGoButtonTapCount: Int by remember { mutableStateOf(0) }
 
@@ -117,7 +118,8 @@ fun Home(
                 currentBottomNavDestination = currentBottomNavDestination,
                 onGraphFilterClicked = onGraphFilterClicked,
                 selectedMonthYearPeriod = selectedMonthYearPeriod,
-                cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext
+                cardHistoryPeriodFilterContext = cardHistoryPeriodFilterContext,
+                refreshTransactionsAndWallets = refreshTransactionsAndWallets
             )
         } else {
             if (homeScreenUiState.transactions.isEmpty()) {
@@ -203,7 +205,8 @@ fun Home(
                         },
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
                         currentBottomNavDestination = currentBottomNavDestination,
-                        selectedCardNfcTagCode = selectedCardNfcTagCode
+                        selectedCardNfcTagCode = selectedCardNfcTagCode,
+                        refreshTransactionsAndWallets = refreshTransactionsAndWallets
                     )
                 }
             }
