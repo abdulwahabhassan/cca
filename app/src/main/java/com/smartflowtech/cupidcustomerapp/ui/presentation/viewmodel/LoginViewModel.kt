@@ -15,6 +15,9 @@ class LoginViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Login View Model"
+
     suspend fun login(email: String, password: String): LoginState {
         return when (
             val repositoryResult = loginRepository.login(

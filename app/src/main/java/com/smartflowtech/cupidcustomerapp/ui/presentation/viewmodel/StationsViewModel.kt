@@ -19,6 +19,9 @@ class StationsViewModel @Inject constructor(
     private val stationsRepository: StationsRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Stations View Model"
+
     var stationsScreenUiState by mutableStateOf(StationsScreenUiState(ViewModelResult.LOADING))
         private set
 

@@ -16,6 +16,9 @@ class MainActivityViewModel @Inject constructor(
     private val notificationsRepository: NotificationsRepository
 ) : BaseViewModel(dataStorePrefsRepository = dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Main View Model"
+
     fun addDeviceToken(fcmToken: String) {
         viewModelScope.launch {
             val result = notificationsRepository.addDeviceToken(

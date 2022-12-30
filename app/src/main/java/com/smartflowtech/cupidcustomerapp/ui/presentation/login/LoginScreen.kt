@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.smartflowtech.cupidcustomerapp.BuildConfig
 import com.smartflowtech.cupidcustomerapp.R
 import com.smartflowtech.cupidcustomerapp.model.result.ViewModelResult
 import com.smartflowtech.cupidcustomerapp.ui.theme.*
@@ -359,11 +360,19 @@ fun LoginScreen(
 
                 item {
                     //Powered by Smartflow
-                    Text(
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        text = "Powered by Smartflow Technologies",
-                        style = MaterialTheme.typography.caption,
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(bottom = 16.dp),
+                            text = "Powered by Smartflow Technologies (v${BuildConfig.VERSION_NAME}" +
+                                    "${if (BuildConfig.DEBUG) " debug" else ""})",
+                            style = MaterialTheme.typography.caption,
+                        )
+                    }
                 }
             }
         }

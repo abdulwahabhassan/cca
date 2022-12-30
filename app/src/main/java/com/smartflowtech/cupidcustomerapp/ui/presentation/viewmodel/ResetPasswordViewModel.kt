@@ -15,6 +15,9 @@ class ResetPasswordViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Reset View Model"
+
     suspend fun forgotPasswordVerifyEmail(email: String): ResetPasswordState {
         return when (val repositoryResult = passwordRepository.forgotPasswordVerifyEmail(
             token = appConfigPreferences.token,

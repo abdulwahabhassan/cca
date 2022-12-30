@@ -8,6 +8,7 @@ import com.smartflowtech.cupidcustomerapp.R
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -146,6 +147,7 @@ fun TransactionsList(
                         }
                     }
                 } else {
+//                    val ls =  LazyListState().
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()

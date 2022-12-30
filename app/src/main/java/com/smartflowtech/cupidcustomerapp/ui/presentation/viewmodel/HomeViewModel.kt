@@ -32,6 +32,9 @@ class HomeViewModel @Inject constructor(
     private val walletRepository: WalletRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Home View Model"
+
     var homeScreenUiState by mutableStateOf(
         HomeScreenUiState(
             viewModelResult = ViewModelResult.LOADING

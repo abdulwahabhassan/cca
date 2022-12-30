@@ -19,39 +19,49 @@ class AddFundsViewModel @Inject constructor(
     private val paymentRepository: PaymentRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Add Funds View Model"
+
     suspend fun initiatePayStackPayment(amountToPay: Int): PayStackPaymentState {
-        return when (val repositoryResult = paymentRepository.initiatePayStackPayment(
-            token = appConfigPreferences.token,
-            payStackPaymentRequestBody = PayStackPaymentRequestBody(
-                payStackPayment = PayStackPayment(
-                    paymentModeID = appConfigPreferences.paymentModeId.toLong(),
-                    companyID = appConfigPreferences.companyId.toLong(),
-                    paymentInitiatedBy = appConfigPreferences.fullName,
-                    amountToPay = amountToPay
+        return try {
+            when (val repositoryResult = paymentRepository.initiatePayStackPayment(
+                token = appConfigPreferences.token,
+                payStackPaymentRequestBody = PayStackPaymentRequestBody(
+                    payStackPayment = PayStackPayment(
+                        paymentModeID = appConfigPreferences.paymentModeId.toLong(),
+                        companyID = appConfigPreferences.companyId.toLong(),
+                        paymentInitiatedBy = appConfigPreferences.fullName,
+                        amountToPay = amountToPay
+                    )
                 )
-            )
-        )) {
-            is RepositoryResult.Success -> {
-                repositoryResult.data?.let { data ->
+            )) {
+                is RepositoryResult.Success -> {
+                    repositoryResult.data?.let { data ->
+                        PayStackPaymentState(
+                            viewModelResult = ViewModelResult.SUCCESS,
+                            data = data,
+                            userEmail = appConfigPreferences.userEmail
+                        )
+
+                    } ?: PayStackPaymentState(
+                        viewModelResult = ViewModelResult.ERROR,
+                        message = "Response data not found!"
+                    )
+                }
+                is RepositoryResult.Error -> {
                     PayStackPaymentState(
-                        viewModelResult = ViewModelResult.SUCCESS,
-                        data = data,
-                        userEmail = appConfigPreferences.userEmail
+                        viewModelResult = ViewModelResult.ERROR,
+                        message = repositoryResult.message
                     )
 
-                } ?: PayStackPaymentState(
-                    viewModelResult = ViewModelResult.ERROR,
-                    message = "Response data not found!"
-                )
-            }
-            is RepositoryResult.Error -> {
-                PayStackPaymentState(
-                    viewModelResult = ViewModelResult.ERROR,
-                    message = repositoryResult.message
-                )
+                }
 
             }
-
+        } catch (e: Exception) {
+            PayStackPaymentState(
+                viewModelResult = ViewModelResult.ERROR,
+                message = e.localizedMessage
+            )
         }
     }
 

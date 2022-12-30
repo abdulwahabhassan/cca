@@ -11,6 +11,10 @@ class SettingsViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+
+    override val viewModelName: String
+        get() = "Settings View Model"
+
     fun logOut() {
         viewModelScope.launch {
             dataStorePrefsRepository.updateLoggedIn(loggedIn = false)

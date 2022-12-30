@@ -27,6 +27,9 @@ class NotificationsViewModel @Inject constructor(
     private val notificationsRepository: NotificationsRepository,
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Notifications View Model"
+
     var notificationsScreenUiState by mutableStateOf(
         NotificationsScreenUiState(
             viewModelResult = ViewModelResult.LOADING,

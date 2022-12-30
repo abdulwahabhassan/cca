@@ -10,4 +10,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CardHistoryViewModel @Inject constructor(
     private val dataStorePrefsRepository: DataStorePrefsRepository
-) : BaseViewModel(dataStorePrefsRepository)
+) : BaseViewModel(dataStorePrefsRepository) {
+
+    override val viewModelName: String
+        get() = "Card History View Model"
+}

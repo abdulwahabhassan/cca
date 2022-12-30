@@ -284,11 +284,11 @@ object Util {
                 "Choose default payment method",
                 R.drawable.ic_payment
             ),
-            SettingsItem(
-                "Appearance",
-                "Switch between light and dark theme",
-                R.drawable.ic_appearance
-            ),
+//            SettingsItem(
+//                "Appearance",
+//                "Switch between light and dark theme",
+//                R.drawable.ic_appearance
+//            ),
             SettingsItem(
                 "Logout",
                 "Log out of app",

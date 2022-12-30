@@ -10,4 +10,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     dataStorePrefsRepository: DataStorePrefsRepository
-) : BaseViewModel(dataStorePrefsRepository)
+) : BaseViewModel(dataStorePrefsRepository) {
+
+    override val viewModelName: String
+        get() = "Splash View Model"
+}

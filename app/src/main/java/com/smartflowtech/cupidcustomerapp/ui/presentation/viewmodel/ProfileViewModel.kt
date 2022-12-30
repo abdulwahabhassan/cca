@@ -16,6 +16,9 @@ class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Profile View Model"
+
     suspend fun updateProfile(firstName: String, lastName: String, email: String): UpdateProfileState {
         return when (val repositoryResult = profileRepository.updateProfile(
             token = appConfigPreferences.token,

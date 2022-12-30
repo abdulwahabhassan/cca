@@ -20,6 +20,9 @@ class ChangePasswordViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ) : BaseViewModel(dataStorePrefsRepository) {
 
+    override val viewModelName: String
+        get() = "Change Password View Model"
+
     suspend fun changePassword(currentPassword: String, newPassword: String): ChangePasswordState {
         //Attempt to log the user in first, using email persisted in reset password view model,
         //if successful, persist login data including the token from the response

@@ -10,6 +10,7 @@ import com.smartflowtech.cupidcustomerapp.model.domain.AppConfigPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,8 +20,10 @@ open class BaseViewModel @Inject constructor(
 
     var appConfigPreferences by mutableStateOf(AppConfigPreferences())
         private set
+    open val viewModelName: String = "Base View Model"
 
     init {
+        Timber.d("$viewModelName initialized!")
         collectAppConfigPreferences()
     }
 
